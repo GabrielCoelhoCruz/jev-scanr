@@ -2,7 +2,7 @@
 
 The [free baseline](../../docs/BASELINE.md) found that function length ranks the LLM-labeled cells about as well as Jev's P. Those cells were picked by Jev's own P and labeled by an LLM, so the test could not separate judgment from length. This evaluation removes both problems. The ground truth comes from a mechanical change to real code, not from a labeler, and the free heuristic's own feature is matched between the classes. A score that beats chance here has to come from something other than that feature.
 
-Status: a hypothesis test, not a verdict on Jev. Every finding below is a hypothesis about these 300 constructed units.
+Status: a hypothesis test, not a verdict on Jev. Every finding is a hypothesis about these 300 constructed units. The one live run (2026-09-30, 300 requests, calculated US$0.0171) is in [`results/live-1/`](results/live-1/) with its reading in [`results/README.md`](results/README.md).
 
 ## The three sets
 

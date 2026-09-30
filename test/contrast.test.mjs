@@ -504,3 +504,31 @@ test("the live runner takes no key on the command line", () => {
   );
   assert.match(r.stderr, /Unknown option/);
 });
+
+test("the committed live run reproduces its stored analysis, every answer has an escape option and the served model", () => {
+  const dir = join(root, "evals/contrast/results/live-1");
+  const journal = readFileSync(join(dir, "journal.jsonl"), "utf8");
+  const stored = JSON.parse(readFileSync(join(dir, "result.json"), "utf8"));
+  const again = analyzeContrast(doc, scoresFromJournal(journal, doc), {
+    resamples: stored.resamples,
+  });
+  assert.deepEqual(again, stored);
+  const finished = journal
+    .trim()
+    .split("\n")
+    .map((l) => JSON.parse(l))
+    .filter((e) => e.type === "finished");
+  assert.equal(finished.length, 300);
+  for (const e of finished) {
+    assert.equal(e.status, "succeeded");
+    assert.equal(e.response.model, POLICY.model);
+    assert.ok(
+      "insufficient" in Object.values(e.response.answers)[0].probabilities,
+    );
+  }
+  assert.ok(
+    stored.sets.A.diff.lo > 0 &&
+      stored.sets.B.diff.lo > 0 &&
+      stored.sets.C.diff.lo > 0,
+  );
+});

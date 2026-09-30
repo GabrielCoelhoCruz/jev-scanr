@@ -1,0 +1,257 @@
+{
+  "schema": "contrast-result/1",
+  "cut": 0.7,
+  "resamples": 2000,
+  "seed": 20260930,
+  "sets": {
+    "A": {
+      "signal": "function_should_split",
+      "units": 100,
+      "scored": 100,
+      "unscored": 0,
+      "positives": 50,
+      "controls": 50,
+      "mainHeuristic": "lines",
+      "jev": {
+        "auc": 0.8092,
+        "lo": 0.7205222358221134,
+        "hi": 0.888398233641108
+      },
+      "heuristics": {
+        "lines": {
+          "auc": 0.4962,
+          "lo": 0.38455382152861145,
+          "hi": 0.6067708333333334,
+          "main": true
+        },
+        "statements": {
+          "auc": 0.5026,
+          "lo": 0.38466183574879226,
+          "hi": 0.6155394524959742,
+          "main": false
+        },
+        "cyclomatic": {
+          "auc": 0.512,
+          "lo": 0.4022,
+          "hi": 0.6218386190285026,
+          "main": false
+        },
+        "params": {
+          "auc": 0.5634,
+          "lo": 0.4557165861513688,
+          "hi": 0.6764585883312934,
+          "main": false
+        },
+        "tokens": {
+          "auc": 0.5034,
+          "lo": 0.3937575030012005,
+          "hi": 0.6208350060216781,
+          "main": false
+        }
+      },
+      "diff": {
+        "value": 0.31300000000000006,
+        "lo": 0.21333333333333337,
+        "hi": 0.41286057692307687
+      },
+      "matched": true,
+      "meanP": {
+        "positive": 0.3882000000000001,
+        "control": 0.11559999999999998
+      },
+      "atCut": {
+        "positiveRate": 0.16,
+        "controlRate": 0.02
+      },
+      "sensitivity": {
+        "excludingInsufficient": {
+          "n": 100,
+          "auc": 0.8092
+        }
+      },
+      "verdict": [
+        "Matched: lines AUC 0.50 (0.38 to 0.61) includes 0.5, as constructed.",
+        "Jev separates the classes: AUC 0.81 (0.72 to 0.89), interval above 0.5.",
+        "Jev ahead of lines: AUC difference 0.31 (0.21 to 0.41)."
+      ]
+    },
+    "B": {
+      "signal": "clone_same_policy",
+      "units": 100,
+      "scored": 100,
+      "unscored": 0,
+      "positives": 50,
+      "controls": 50,
+      "mainHeuristic": "shingleJaccard",
+      "jev": {
+        "auc": 0.9968,
+        "lo": 0.9892,
+        "hi": 1
+      },
+      "heuristics": {
+        "shingleJaccard": {
+          "auc": 0.4976,
+          "lo": 0.38223938223938225,
+          "hi": 0.6080432172869148,
+          "main": true
+        },
+        "tokenCoverage10": {
+          "auc": 0.4862,
+          "lo": 0.38455382152861145,
+          "hi": 0.5978391356542617,
+          "main": false
+        },
+        "rawJaccard5": {
+          "auc": 0.3868,
+          "lo": 0.27564102564102566,
+          "hi": 0.5048076923076923,
+          "main": false
+        },
+        "vocabJaccard": {
+          "auc": 0.6828,
+          "lo": 0.5680354267310789,
+          "hi": 0.7832125603864735,
+          "main": false
+        },
+        "minLines": {
+          "auc": 0.484,
+          "lo": 0.37766830870279144,
+          "hi": 0.5948,
+          "main": false
+        },
+        "sizeRatio": {
+          "auc": 0.6916,
+          "lo": 0.5791513667890656,
+          "hi": 0.7936571657968687,
+          "main": false
+        },
+        "minTokens": {
+          "auc": 0.5712,
+          "lo": 0.4619391025641026,
+          "hi": 0.68,
+          "main": false
+        }
+      },
+      "diff": {
+        "value": 0.49920000000000003,
+        "lo": 0.3903561424569828,
+        "hi": 0.6135265700483092
+      },
+      "matched": true,
+      "meanP": {
+        "positive": 0.9563999999999999,
+        "control": 0.1671999999999999
+      },
+      "atCut": {
+        "positiveRate": 0.98,
+        "controlRate": 0.04
+      },
+      "sensitivity": {
+        "excludingInsufficient": {
+          "n": 100,
+          "auc": 0.9968
+        }
+      },
+      "diffSecondary": {
+        "against": "vocabJaccard",
+        "value": 0.31400000000000006,
+        "lo": 0.21393939393939387,
+        "hi": 0.4307070707070707
+      },
+      "verdict": [
+        "Matched: shingleJaccard AUC 0.50 (0.38 to 0.61) includes 0.5, as constructed.",
+        "Jev separates the classes: AUC 1.00 (0.99 to 1.00), interval above 0.5.",
+        "Jev ahead of shingleJaccard: AUC difference 0.50 (0.39 to 0.61).",
+        "Against the pre-registered secondary comparison vocabJaccard: AUC difference 0.31 (0.21 to 0.43), Jev ahead.",
+        "Unmatched features that separate the classes: vocabJaccard 0.68 (0.57 to 0.78); sizeRatio 0.69 (0.58 to 0.79). A score that tracks these is not evidence of judgment."
+      ]
+    },
+    "C": {
+      "signal": "name_vs_behavior",
+      "units": 100,
+      "scored": 100,
+      "unscored": 0,
+      "positives": 50,
+      "controls": 50,
+      "mainHeuristic": "lines",
+      "jev": {
+        "auc": 0.9654,
+        "lo": 0.9356,
+        "hi": 0.9888
+      },
+      "heuristics": {
+        "lines": {
+          "auc": 0.5,
+          "lo": 0.5,
+          "hi": 0.5,
+          "main": true
+        },
+        "statements": {
+          "auc": 0.5,
+          "lo": 0.5,
+          "hi": 0.5,
+          "main": false
+        },
+        "cyclomatic": {
+          "auc": 0.5,
+          "lo": 0.5,
+          "hi": 0.5,
+          "main": false
+        },
+        "params": {
+          "auc": 0.5,
+          "lo": 0.5,
+          "hi": 0.5,
+          "main": false
+        },
+        "tokens": {
+          "auc": 0.5,
+          "lo": 0.5,
+          "hi": 0.5,
+          "main": false
+        },
+        "nameWordsMissingFromBody": {
+          "auc": 0.5,
+          "lo": 0.5,
+          "hi": 0.5,
+          "main": false
+        }
+      },
+      "diff": {
+        "value": 0.46540000000000004,
+        "lo": 0.4356,
+        "hi": 0.4888
+      },
+      "matched": true,
+      "meanP": {
+        "positive": 0.5532,
+        "control": 0.041999999999999975
+      },
+      "atCut": {
+        "positiveRate": 0.38,
+        "controlRate": 0
+      },
+      "sensitivity": {
+        "excludingInsufficient": {
+          "n": 100,
+          "auc": 0.9654
+        }
+      },
+      "paired": {
+        "pairs": 50,
+        "meanDelta": 0.5112000000000001,
+        "lo": 0.41679999999999995,
+        "hi": 0.5986,
+        "higher": 49,
+        "lower": 1,
+        "tied": 0,
+        "signTestP": 9.059419880941277e-14
+      },
+      "verdict": [
+        "Matched: lines AUC 0.50 (0.50 to 0.50) includes 0.5, as constructed.",
+        "Jev separates the classes: AUC 0.97 (0.94 to 0.99), interval above 0.5.",
+        "Jev ahead of lines: AUC difference 0.47 (0.44 to 0.49)."
+      ]
+    }
+  }
+}
