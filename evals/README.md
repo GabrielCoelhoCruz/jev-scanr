@@ -26,6 +26,10 @@ node evals/cli.mjs --help
 
 `baseline/` compares Jev's stored P with free heuristics (function length, complexity, token similarity) on the labeled cells, from stored answers and labels only. Result and caveats: [`docs/BASELINE.md`](../docs/BASELINE.md). `node evals/baseline/analyze.mjs` reruns it offline.
 
+## Constructed contrast
+
+`contrast/` tests Jev against free heuristics on units built by mechanical change (chimeras, rewritten copies, swapped names), with the heuristic's own feature matched between the classes. Design, limits and the analysis rules fixed before the live run: [`contrast/README.md`](contrast/README.md).
+
 ## P variance
 
 Jev's probabilities are rounded to two decimals and are not reproducible from call to call, so a cut on P has a blurry edge. `variance` re-sends N answered requests once (chosen by a frozen seed) and reports how many cells moved by more than 0.05, the largest move, choice flips and cut crossings. The registered rule: if more than 20% of cells move by more than 0.05, show a range instead of a number and require P at or above the cut in two calls.
