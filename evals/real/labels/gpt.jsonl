@@ -1,0 +1,400 @@
+{"id":"409e0ef1","label":"fits","note":"Renders a kanban column with header, tasks, count, and overflow."}
+{"id":"bb7e1c4d","label":"fits","note":"Builds an optional relay-client OpenTelemetry tracing layer."}
+{"id":"a63fc654","label":"fits","note":"Removes a tab session and recalculates active preview state."}
+{"id":"55edb94f","label":"fits","note":"Assigns stable numeric slots to present sessions within buckets."}
+{"id":"753394c2","label":"fits","note":"Resolves and validates OAuth callback flow options."}
+{"id":"4b56834d","label":"fits","note":"Extracts Ollama num_ctx from runtime parameter text."}
+{"id":"bd68b034","label":"fits","note":"Fetches preferences, returning an empty object on failure."}
+{"id":"58a50a01","label":"fits","note":"Renders a configurable responsive CSS grid element."}
+{"id":"9c07f1de","label":"fits","note":"Applies configured global or flood-fill chroma-key removal."}
+{"id":"b18dd3c7","label":"fits","note":"Renders a styled native select with placeholder state."}
+{"id":"8f240773","label":"fits","note":"Validates a value against ArkType or JSON Schema context."}
+{"id":"92f779f2","label":"fits","note":"Decodes GitLab merge-request diffs JSON into a patch."}
+{"id":"76b2a816","label":"fits","note":"Renders and manages a context-triggered dropdown menu."}
+{"id":"9cd34a30","label":"fits","note":"Renders a styled table and supplies a default body."}
+{"id":"6d500915","label":"fits","note":"Converts raw comments and reviews into sorted pull-request comments."}
+{"id":"33850fe3","label":"fits","note":"Renders and manages visibility of a carousel navigation control."}
+{"id":"fb1d8cfc","label":"fits","note":"Creates boss-related game store state and update actions."}
+{"id":"10163c25","label":"fits","note":"Checks that a memory bank contains only records for one cwd."}
+{"id":"9d02caac","label":"fits","note":"Handles marketplace add, remove, update, and list commands."}
+{"id":"76e03ae1","label":"fits","note":"Determines an agent spawn position and arrival behavior."}
+{"id":"4aaf62ae","label":"fits","note":"Maps generic pull-request states to Azure status names."}
+{"id":"ac81b9dd","label":"fits","note":"Marks a matching elevator spawn position as occupied."}
+{"id":"e6418455","label":"fits","note":"Renders active attention toasts and handles interaction."}
+{"id":"a5f40161","label":"fits","note":"Renders a compact fetch-tool result summary."}
+{"id":"0a6671fd","label":"fits","note":"Filters launch arguments to those supported by Codex exec."}
+{"id":"9631adfa","label":"fits","note":"Renders zoom-in, zoom-out, and reset controls."}
+{"id":"70de33ae","label":"fits","note":"Transforms a font-weight token into a variable descriptor."}
+{"id":"f079904e","label":"fits","note":"Parses a nonnegative integer string or returns null."}
+{"id":"4264dc1e","label":"fits","note":"Renders one dismissible, optionally auto-dismissing toast."}
+{"id":"25681dbd","label":"fits","note":"Wraps a controlled toggle button with internal checked state."}
+{"id":"7e187e70","label":"fits","note":"Computes a color expression for a visualization layer."}
+{"id":"0679d18a","label":"fits","note":"Draws building silhouettes and lit or dark windows."}
+{"id":"f5652b6a","label":"fits","note":"Draws seasonally visible stars with transition coloring."}
+{"id":"7e345d86","label":"fits","note":"Transforms typography data into multiple CSS variable tokens."}
+{"id":"561a339d","label":"fits","note":"Renders a pull-request icon reflecting resolved lifecycle state."}
+{"id":"743ee753","label":"fits","note":"Scores a command-palette item against search terms."}
+{"id":"d98d12ef","label":"imprecise","note":"Sets terminal visibility, creating a default terminal when opening."}
+{"id":"359d1b29","label":"fits","note":"Selects controlled or uncontrolled slider rendering from props."}
+{"id":"0736ee7a","label":"fits","note":"Replaces or inserts a plist key using JSON serialization."}
+{"id":"756f6993","label":"fits","note":"Renders children inside a styled button group container."}
+{"id":"f9a75a72","label":"fits","note":"Renders compact status segments for a multi-step task."}
+{"id":"6806c7a4","label":"fits","note":"Renders a controlled toggle button with group integration."}
+{"id":"b956f6a6","label":"fits","note":"Builds gallery preview entries for composer shape options."}
+{"id":"bbe356cb","label":"fits","note":"Parses and validates video input reference records."}
+{"id":"dcf0cd51","label":"imprecise","note":"Transforms a theme definition, writes output files, and logs compilation."}
+{"id":"3fea087a","label":"fits","note":"Normalizes a keyboard event into a lowercase key identifier."}
+{"id":"4cb69ad9","label":"fits","note":"Returns a random work-acceptance quote."}
+{"id":"777e7c9b","label":"fits","note":"Builds a generated benchmark schema from named definitions."}
+{"id":"9f9930ed","label":"fits","note":"Generates seven abbreviated weekday names in configured order."}
+{"id":"7b9f83e9","label":"fits","note":"Adds external packages referenced by bundled modules to a collection."}
+{"id":"41a323f4","label":"fits","note":"Discovers the preferred project or user system-prompt override."}
+{"id":"c9d49464","label":"fits","note":"Converts supported cron expressions into structured editor state."}
+{"id":"caa43b4e","label":"fits","note":"Builds a deduplicated desktop-preview status report payload."}
+{"id":"9a7fc0db","label":"imprecise","note":"Detects only EPERM errors, deliberately excluding other permission denials."}
+{"id":"5a9bd3d0","label":"fits","note":"Writes prefixed arguments to stderr when debugging is enabled."}
+{"id":"86b17961","label":"fits","note":"Detects private and other special-purpose IPv4 address ranges."}
+{"id":"ea31e02d","label":"fits","note":"Computes themed appearance properties for a thread-list row."}
+{"id":"1b363536","label":"fits","note":"Renders a popover-based theme color picker."}
+{"id":"693005cf","label":"fits","note":"Releases a matching persisted upload and deletes its pending record."}
+{"id":"a4dc2145","label":"fits","note":"Maps utilization thresholds to an animation frame index."}
+{"id":"dac09623","label":"fits","note":"Stores nonempty thread timeline entries with a valid key."}
+{"id":"a8b6fc06","label":"fits","note":"Returns the ready position for an arrival or departure queue."}
+{"id":"4fa9149e","label":"fits","note":"Checks whether a new usage-price draft has no entered values."}
+{"id":"32fbf81d","label":"fits","note":"Renders one release as a linked status table row."}
+{"id":"065a0d8a","label":"fits","note":"Renders children in a constrained configurable view container."}
+{"id":"b2885423","label":"fits","note":"Renders a selectable month grid for a calendar year."}
+{"id":"a4dd1561","label":"fits","note":"Reads text from the X11 clipboard using available utilities."}
+{"id":"580986be","label":"fits","note":"Visits each comma-separated hotkey and invokes a callback."}
+{"id":"94aa2296","label":"fits","note":"Renders scrolling desk text when text is present."}
+{"id":"c2e7cb96","label":"fits","note":"Delegates finding a unique workspace path suffix via glob."}
+{"id":"711f1639","label":"fits","note":"Renders the latest activity state as a pill."}
+{"id":"a839259b","label":"fits","note":"Renders contextual building navigation breadcrumbs."}
+{"id":"69026f8e","label":"fits","note":"Renders and manages an inspectable positioned toast region."}
+{"id":"621f44f2","label":"fits","note":"Resolves alignment values into responsive CSS variables."}
+{"id":"1b3532f4","label":"fits","note":"JSON-quotes and safely escapes an MCP guidance label."}
+{"id":"6273ca5e","label":"mismatch","note":"Registers dismissible layers and returns a callback checking topmost eligibility."}
+{"id":"f0a486e2","label":"fits","note":"Resolves width values into responsive classes and variables."}
+{"id":"e4f9506b","label":"fits","note":"Calculates a grid position from a one-based desk number."}
+{"id":"f058de06","label":"fits","note":"Hashes multiplexed server connection parameters into a stable key."}
+{"id":"5ce74c16","label":"fits","note":"Maps a viewport click index to matching span candidates."}
+{"id":"c3b0d86e","label":"fits","note":"Waits for a snapshot animation destination request or timeout."}
+{"id":"776eb827","label":"fits","note":"Resolves block-axis inset values into responsive styling."}
+{"id":"fd875d13","label":"fits","note":"Finds a grid path and converts it to world coordinates."}
+{"id":"2a6e1f22","label":"fits","note":"Aggregates cost-series points into totals and per-model summaries."}
+{"id":"a5f9ac1c","label":"fits","note":"Checks whether two keybindings share a nonempty shortcut context."}
+{"id":"ddfb6b59","label":"fits","note":"Draws a shadowed thought or speech bubble."}
+{"id":"2f9b8bff","label":"fits","note":"Renders a hidden input containing a serialized select value."}
+{"id":"78a503e4","label":"fits","note":"Provides manual and automatic usage-limit refresh state and actions."}
+{"id":"c6f6888c","label":"fits","note":"Imports SARIF or security-bundle findings into the security store."}
+{"id":"90c8eebd","label":"fits","note":"Stops shared infrastructure and shuts down all active or pending clients."}
+{"id":"647efca8","label":"fits","note":"Saves debug settings to browser local storage when available."}
+{"id":"468040b3","label":"fits","note":"Returns a theme color with the requested alpha channel."}
+{"id":"0dae9bb2","label":"fits","note":"Renders a task as a styled sticky note."}
+{"id":"3eb3a7b6","label":"fits","note":"Draws a simple fallback desk rectangle."}
+{"id":"7e29374a","label":"fits","note":"Renders a mobile boss sprite with optional accessories and label."}
+{"id":"5c1d5f0b","label":"fits","note":"Restores expected whitespace on otherwise equivalent changed lines."}
+{"id":"0c2b0014","label":"fits","note":"Checks whether a session project matches any room on a floor."}
+{"id":"35dd83b3","label":"fits","note":"Renders a selected section or full textual merge-conflict region."}
+{"id":"713d7f33","label":"fits","note":"Removes provider compaction keys from preserved data."}
+{"id":"5edb4550","label":"fits","note":"Renders a radio input integrated with form and group contexts."}
+{"id":"66df2ae5","label":"fits","note":"Resolves border-color values into responsive class names."}
+{"id":"e1d47a45","label":"fits","note":"Checks whether agent coordinates fall within elevator bounds."}
+{"id":"694caa53","label":"fits","note":"Renders a safety board with success count and incident age."}
+{"id":"2eb2ad13","label":"fits","note":"Renders desk and keyboard surfaces at calculated positions."}
+{"id":"da5325e1","label":"fits","note":"Converts a viewed-file overlay map into batch records."}
+{"id":"7cbc3911","label":"fits","note":"Renders a thread Markdown video with refreshed asset playback."}
+{"id":"8282a487","label":"fits","note":"Checks whether a file is within an immutable source path."}
+{"id":"e0292f42","label":"fits","note":"Builds transport options by removing undefined and non-wire keys."}
+{"id":"9136de88","label":"fits","note":"Renders a resizable right sidebar with status and tabbed content."}
+{"id":"edeb213b","label":"fits","note":"Formats structured search directives for scraper-compatible query syntax."}
+{"id":"ca90cd04","label":"fits","note":"Provides state and mouse handlers for bounded drag resizing."}
+{"id":"b5a5c369","label":"fits","note":"Renders an expandable pull-request comment body with overflow detection."}
+{"id":"e4c55578","label":"fits","note":"Loads configured skills and warnings for the skills command."}
+{"id":"355cb678","label":"fits","note":"Provides controlled checkbox-group state and change handling."}
+{"id":"9d65e804","label":"fits","note":"Finds the ending index of a terminal control string."}
+{"id":"9428f4e3","label":"fits","note":"Converts a model object into its JSON representation."}
+{"id":"13119b99","label":"fits","note":"Renders a configured popover-backed dropdown menu provider."}
+{"id":"3d2e9fbf","label":"fits","note":"Calculates vertical and horizontal grid-line coordinates."}
+{"id":"1b6d2706","label":"fits","note":"Records a run file in a bounded recency set."}
+{"id":"8693c38f","label":"fits","note":"Converts legacy selector syntax to modern syntax."}
+{"id":"6d26e108","label":"fits","note":"Reads tab context and derives panel and button IDs."}
+{"id":"1f90cb94","label":"fits","note":"Records an in-memory file snapshot for specified seen lines."}
+{"id":"86ebf1d6","label":"fits","note":"Generates HTML by injecting theme styles and encoded session data."}
+{"id":"136f4292","label":"fits","note":"Restores and integrity-checks a compressed database backup."}
+{"id":"9f688182","label":"fits","note":"Renders tool usage as a pizza chart and legend."}
+{"id":"66e04c75","label":"fits","note":"Builds a pairing URL carrying the token in its fragment."}
+{"id":"b4f19afc","label":"fits","note":"Calculates the next focusable element and overflow state."}
+{"id":"760f1d5f","label":"fits","note":"Returns a date copy with its year changed."}
+{"id":"c48acaee","label":"fits","note":"Renders judgment state fields as tagged text."}
+{"id":"2f6a785b","label":"fits","note":"Toggles a pending answer option and clears custom text."}
+{"id":"cf37bc32","label":"fits","note":"Checks whether an enabled provider has a supported newer version."}
+{"id":"cb13506b","label":"fits","note":"Smooths a path through collinear removal, funneling, and Bezier curves."}
+{"id":"9363abc9","label":"fits","note":"Builds ordered placement fallbacks around a requested position."}
+{"id":"93192005","label":"fits","note":"Provides scroll-lock state and lock or unlock callbacks."}
+{"id":"3f045f2d","label":"fits","note":"Groups sessions by project and sorts groups and members."}
+{"id":"9dffb471","label":"fits","note":"Parses a remote-prefixed ref using known remote names."}
+{"id":"2fdaf623","label":"imprecise","note":"Synchronizes motion targets, positions, paths, removal, publication, and animation."}
+{"id":"3dc6d31d","label":"fits","note":"Creates a controller for dragging file-tree selections as composer mentions."}
+{"id":"40243e83","label":"fits","note":"Prompts for Cloudflare gateway credentials and serializes them."}
+{"id":"90d84fcd","label":"imprecise","note":"Checks whether visual transitions are currently permitted."}
+{"id":"64af2982","label":"fits","note":"Derives a metaphorical weather condition from recent operational health."}
+{"id":"1eb35c1b","label":"fits","note":"Maps an Antigravity authentication method to a display label."}
+{"id":"4950531f","label":"fits","note":"Transforms a radius token into a pixel-valued variable."}
+{"id":"a7b1d1bc","label":"fits","note":"Chooses a usage report account label from metadata or scopes."}
+{"id":"47bb5b86","label":"fits","note":"Builds a native text or error view from a tool result."}
+{"id":"bf3ba91b","label":"mismatch","note":"JSON-clones values but converts every Date to the string true."}
+{"id":"cce72350","label":"fits","note":"Resolves a responsive value for the current client viewport."}
+{"id":"cc6c39dd","label":"fits","note":"Transforms shadow parts into light and optional dark-mode tokens."}
+{"id":"14097ad0","label":"fits","note":"Formats a date as a local YYYY-MM-DD string."}
+{"id":"9d7c9318","label":"fits","note":"Parses slash or dollar-token skill invocations and arguments."}
+{"id":"994c7fae","label":"fits","note":"Converts grid path coordinates to world positions."}
+{"id":"4a505ee6","label":"fits","note":"Reads source text represented by supported editor atom nodes."}
+{"id":"7e6a275a","label":"fits","note":"Builds bucketed account-utilization chart data."}
+{"id":"7b1278dd","label":"fits","note":"Extracts a safe content extension from a URL path."}
+{"id":"c0dddd95","label":"fits","note":"Removes repeated sanitization prefixes from a fragment ID."}
+{"id":"ed65a4bf","label":"fits","note":"Renders a pulsing floor-loading placeholder."}
+{"id":"9a3b7455","label":"fits","note":"Renders a compact utilization legend row with reset details."}
+{"id":"07f86c5b","label":"fits","note":"Parses hex or OKLCH colors into light and dark values."}
+{"id":"3b428e2f","label":"fits","note":"Updates agent collision position and calculates an avoiding path."}
+{"id":"0dd75d00","label":"fits","note":"Renders an accessible clickable and keyboard-operable settings switch."}
+{"id":"633f2e1d","label":"fits","note":"Triggers a browser download for a data URL and filename."}
+{"id":"f6e91c60","label":"fits","note":"Calculates overflow-aware flyout position and size adjustments."}
+{"id":"00002ce4","label":"fits","note":"Encodes glyph-bearing context and provides matching stream and handler wrappers."}
+{"id":"1da088d8","label":"fits","note":"Renders form-control helper text inheriting disabled state."}
+{"id":"56ad13ed","label":"imprecise","note":"Returns a thread's normalized worktree path only when unshared."}
+{"id":"02442712","label":"fits","note":"Wraps a controlled flyout with internal active state."}
+{"id":"c00f94bf","label":"fits","note":"Compiles scan rules into scopes, regexes, globs, and AST prefilters."}
+{"id":"b97da96a","label":"fits","note":"Renders a microphone SVG icon."}
+{"id":"79b73866","label":"fits","note":"Formats a date or timestamp for a picker display."}
+{"id":"089beaa0","label":"fits","note":"Builds Gemini tool declarations from request tool parameters."}
+{"id":"60f1d72a","label":"fits","note":"Debounces and executes composer path searches across environments."}
+{"id":"be3d446a","label":"fits","note":"Computes usage series and per-window insights from snapshots."}
+{"id":"27896552","label":"fits","note":"Finds and smooths a command-center path between positions."}
+{"id":"1955cac9","label":"fits","note":"Tokenizes a small expression language into typed tokens."}
+{"id":"f225bf75","label":"fits","note":"Resolves inline border presence into responsive width variables."}
+{"id":"f673b9d9","label":"fits","note":"Wraps normalized document text into two-column page strings."}
+{"id":"5f8d5cb9","label":"fits","note":"Renders a labeled checkbox-based switch integrated with form context."}
+{"id":"e9f78cc5","label":"fits","note":"Returns a project's parseable update or creation timestamp."}
+{"id":"4c9d7d79","label":"fits","note":"Encrypts a cache snapshot into a versioned binary payload."}
+{"id":"bdc799af","label":"fits","note":"Renders an expandable tool execution card with status and partial output."}
+{"id":"9472d826","label":"fits","note":"Renders thread activities as rows or a grouped work list."}
+{"id":"80d798f8","label":"fits","note":"Parses owner and repository path from a Git remote URL."}
+{"id":"7e8ae8c8","label":"fits","note":"Reads the active drag coordinate from mouse or touch events."}
+{"id":"066ef27d","label":"fits","note":"Draws a colored capsule-shaped agent with a white border."}
+{"id":"3b48f40c","label":"fits","note":"Parses supported namespaced repository shorthand into a Git source."}
+{"id":"fb497511","label":"fits","note":"Normalizes table cell paragraphs and promotes the first row to header."}
+{"id":"b9f3eb3b","label":"fits","note":"Returns the appropriate missing macOS permission message."}
+{"id":"d87bc520","label":"fits","note":"Decodes named and octal escapes from a byte-oriented body string."}
+{"id":"84f81bf7","label":"fits","note":"Animates and returns a door's scale for open state."}
+{"id":"fb00178e","label":"fits","note":"Stops runtime systems, clears state, and destroys the graphics application."}
+{"id":"f328d895","label":"fits","note":"Renders mobile boss status and active agent activity."}
+{"id":"9ebf707f","label":"fits","note":"Resolves a prompt cache key from body or headers."}
+{"id":"8d965f11","label":"fits","note":"Adds or removes a server from persisted disabled configuration."}
+{"id":"3b963ab1","label":"fits","note":"Provides controlled tabs state, panel registration, and selection animation context."}
+{"id":"9e7646ef","label":"fits","note":"Loads a pretrained text-to-speech model on a selected device."}
+{"id":"7f23c745","label":"fits","note":"Plans order-key updates for moving a pinned thread one position."}
+{"id":"ea0af5f1","label":"fits","note":"Tracks which horizontal scroll edges need fade indicators."}
+{"id":"0614767d","label":"fits","note":"Renders operational health as weather with supporting statistics."}
+{"id":"ebf72600","label":"fits","note":"Returns source diff length while preserving a larger cached count."}
+{"id":"2cda45b3","label":"fits","note":"Sets an input value and dispatches a bubbling change event."}
+{"id":"fc9007e7","label":"fits","note":"Renders loader text that can transition to completed text."}
+{"id":"a676811c","label":"fits","note":"Renders an accessible styled progress bar."}
+{"id":"a784b558","label":"fits","note":"Loads user and project settings, collecting invalid-JSON warnings."}
+{"id":"ff3d7070","label":"fits","note":"Normalizes a DPoP HTU URL or returns an effect failure."}
+{"id":"bd0a70d6","label":"mismatch","note":"Renders a styled combobox list without any visible virtualization."}
+{"id":"36bb0ebd","label":"fits","note":"Renders accessible calendar navigation and month-selection controls."}
+{"id":"c6ca56ee","label":"fits","note":"Scans compressed archives into statistics session records."}
+{"id":"8d230ea0","label":"fits","note":"Parses and validates response heuristic rules from KDL."}
+{"id":"7b2868a4","label":"mismatch","note":"Simply multiplies grid dimensions by cell sizes without optimization."}
+{"id":"d17f50c5","label":"fits","note":"Returns the default state for the surrounding state machine."}
+{"id":"74c2e121","label":"fits","note":"Converts numeric, bigint, or string row values to numbers."}
+{"id":"e2ae9e67","label":"fits","note":"Renders children in a visually hidden container."}
+{"id":"cdae08a4","label":"fits","note":"Renders a searchable pull-request label picker and toggles labels."}
+{"id":"8c40dd8e","label":"fits","note":"Executes code in a retained VM context with reset coordination."}
+{"id":"5ccacb7c","label":"fits","note":"Normalizes string or string-array answers into trimmed values."}
+{"id":"84a3417f","label":"fits","note":"Maps ACP tool status to runtime item status."}
+{"id":"84293547","label":"fits","note":"Requests older turns for an environment-specific thread."}
+{"id":"2182ff09","label":"fits","note":"Renders synchronized number and range inputs."}
+{"id":"a0fcacc0","label":"fits","note":"Renders a hover-triggered nested dropdown menu."}
+{"id":"e4000bbf","label":"fits","note":"Scores a search token directly and through alphanumeric variants."}
+{"id":"dc7c221e","label":"fits","note":"Filters an unknown object to nonempty boolean-valued entries."}
+{"id":"294c1a75","label":"fits","note":"Checks whether a JSON schema permits a section label."}
+{"id":"50fa11d7","label":"fits","note":"Provides controlled radio-group state and change handling."}
+{"id":"a36e40f6","label":"fits","note":"Checks whether toast filtering is enabled for an event type."}
+{"id":"a3c33dfa","label":"fits","note":"Renders a styled table body."}
+{"id":"5824b1bb","label":"fits","note":"Converts a hex color to OKLCH or throws."}
+{"id":"b4d41dcb","label":"fits","note":"Releases the first elevator position occupied by an agent."}
+{"id":"86d09a95","label":"fits","note":"Renders a themed control-pill menu with long-press coordination."}
+{"id":"af865bd0","label":"fits","note":"Starts the animation system on mount and stops it on cleanup."}
+{"id":"367b536f","label":"fits","note":"Renders a row for enabling Cursor in an environment."}
+{"id":"4168d383","label":"fits","note":"Renders a live analog or digital wall clock."}
+{"id":"dbce32d0","label":"fits","note":"Ensures only the root hotkeys provider installs global handling."}
+{"id":"12f2e12f","label":"fits","note":"Attempts to create a private gist and returns its identity."}
+{"id":"c30aee7b","label":"fits","note":"Removes path waypoints bypassable by walkable straight lines."}
+{"id":"cd6d6491","label":"fits","note":"Renders top edited files as heat bars."}
+{"id":"088bcbcd","label":"fits","note":"Maps tool choice to model-compatible OpenAI Responses syntax."}
+{"id":"3ced9e7a","label":"fits","note":"Disables wheel, touch scrolling, and body text selection."}
+{"id":"99f8b2eb","label":"fits","note":"Refreshes device registration using agent-awareness preference overrides."}
+{"id":"710374fd","label":"fits","note":"Renders a titled card containing an example."}
+{"id":"8e77a73e","label":"fits","note":"Collects non-floor navigation grid tiles as obstacle rectangles."}
+{"id":"bbb5909e","label":"fits","note":"Installs unmount cleanup for motion animation and related shared state."}
+{"id":"3b728bf2","label":"fits","note":"Renders an inline-default menu-item aligner."}
+{"id":"4d2f965e","label":"fits","note":"Maps task status to a display icon."}
+{"id":"8f33af01","label":"imprecise","note":"Selects a session display label with ID fallback."}
+{"id":"be1e5baa","label":"fits","note":"Derives a project grouping key from a session."}
+{"id":"c372f6bc","label":"fits","note":"Collects eligible prompt regions for context shaking."}
+{"id":"e9c1d523","label":"fits","note":"Converts a message into a title-generation conversation turn."}
+{"id":"04e09f1e","label":"fits","note":"Creates queue reservation state and mutation actions."}
+{"id":"834459e9","label":"fits","note":"Handles plugin discovery and prints available marketplace plugins."}
+{"id":"eb31b4db","label":"fits","note":"Resolves static or viewport-specific values into stylesheet class names."}
+{"id":"8381ecbb","label":"fits","note":"Normalizes and deduplicates condition regexes or returns an error."}
+{"id":"64f5e948","label":"fits","note":"Fetches a media blob and rejects errors or HTML responses."}
+{"id":"23c51343","label":"fits","note":"Chooses the first sorted sibling thread after deletion."}
+{"id":"2b1065d8","label":"fits","note":"Reads a finite number at a JSON path."}
+{"id":"4c1a19fb","label":"fits","note":"Renders a styled alert or status with optional actions."}
+{"id":"baa298f9","label":"fits","note":"Manages browse-path input and coordinated remote directory navigation."}
+{"id":"7ef75baf","label":"fits","note":"Renders a styled textarea with optional automatic growth."}
+{"id":"060d2474","label":"fits","note":"Builds furniture nodes appropriate to a zone."}
+{"id":"1c62a733","label":"fits","note":"Transforms color data into light and optional dark-mode tokens."}
+{"id":"3e4a6c61","label":"fits","note":"Renders form-control error text only when errored."}
+{"id":"4e860538","label":"fits","note":"Renders conversation entries by role and an optional bottom anchor."}
+{"id":"033345fd","label":"fits","note":"Fetches and normalizes Devin models with legacy discovery fallback."}
+{"id":"a426884f","label":"fits","note":"Reads a nonnegative axis offset from an element transform."}
+{"id":"b1208e56","label":"fits","note":"Parses valid ID-text items from a possibly fenced JSON response."}
+{"id":"f6e71812","label":"fits","note":"Opens a pull-request number link context menu at pointer position."}
+{"id":"c6a1fe84","label":"fits","note":"Maps agent phases to movement categories."}
+{"id":"57168bb0","label":"fits","note":"Hashes a name to an unsigned 32-bit number."}
+{"id":"fb31e881","label":"fits","note":"Generates a placeholder guaranteed absent from supplied values."}
+{"id":"85dd683f","label":"fits","note":"Builds an OpenAI live sideband WebSocket URL."}
+{"id":"c71873ee","label":"fits","note":"Loads office textures and reports completion with fallback support."}
+{"id":"ac695b69","label":"fits","note":"Checks whether an agent lies within the configured elevator."}
+{"id":"041aa536","label":"fits","note":"Performs browser-based Perplexity SSO and validates the captured session."}
+{"id":"0eaf510d","label":"fits","note":"Restores context records and inline references for attached files."}
+{"id":"406f1457","label":"fits","note":"Converts camel-case text to lowercase kebab case."}
+{"id":"32257c58","label":"fits","note":"Maps an edit-count ratio to a heat-map color."}
+{"id":"cbf7fbd7","label":"fits","note":"Decodes SPARC branch addresses in place."}
+{"id":"6ea3ffab","label":"fits","note":"Filters out file diffs matching configured exclusions."}
+{"id":"b5d0c6c2","label":"fits","note":"Renders a tooltip-backed worktree indicator for a thread."}
+{"id":"28a14e8f","label":"fits","note":"Renders decorative command-center wall and floor objects."}
+{"id":"3742473b","label":"fits","note":"Returns a supported visual node's row index or minus one."}
+{"id":"208a6c1b","label":"fits","note":"Renders aggregate process telemetry in a metric card."}
+{"id":"c64187ae","label":"fits","note":"Loads project and user system prompt text and templates."}
+{"id":"65da6497","label":"fits","note":"Formats reaction actors and emoji into a pull-request tooltip."}
+{"id":"fa670092","label":"fits","note":"Chooses a light or dark foreground using WCAG contrast."}
+{"id":"5d4543bd","label":"fits","note":"Renders tasks grouped into kanban columns."}
+{"id":"90952d66","label":"fits","note":"Resolves spring motion into duration and CSS easing samples."}
+{"id":"5563d35a","label":"fits","note":"Renders a diagnostics settings screen for startup crash logs."}
+{"id":"d5eb16ba","label":"fits","note":"Renders a systemd user service unit from a boot plan."}
+{"id":"bc9a7f1f","label":"fits","note":"Waits for evaluation handles while emitting progress and handling aborts."}
+{"id":"12dc1a5b","label":"fits","note":"Renders all command-center zone furniture."}
+{"id":"d6e7d1a6","label":"fits","note":"Implements keyboard focus navigation across calendar dates and months."}
+{"id":"ad36cba3","label":"fits","note":"Chooses the foreground with greater APCA luminance contrast."}
+{"id":"f8b3ae32","label":"mismatch","note":"Only wraps children in a styled span without triggering file upload."}
+{"id":"6feab50a","label":"fits","note":"Derives a stable daemon name and IPC endpoint for text prediction."}
+{"id":"6d1eb2f0","label":"fits","note":"Reference-counts a retained background scope and returns its release callback."}
+{"id":"0529a23a","label":"fits","note":"Draws an animated curved left arm and hand."}
+{"id":"a819d72f","label":"fits","note":"Renders children in a configurable placeholder box."}
+{"id":"142ddcfa","label":"fits","note":"Renders command-center zone columns with counts and overflow."}
+{"id":"c9348db1","label":"fits","note":"Builds JSON event headers with an optional API key."}
+{"id":"24946d01","label":"fits","note":"Renders a labeled statistic with optional tooltip and tone."}
+{"id":"cead198a","label":"fits","note":"Reference-counts a scroll lock and returns an idempotent unlock callback."}
+{"id":"da00baea","label":"fits","note":"Builds a piecewise scale giving anchor intervals equal widths."}
+{"id":"83eeb96a","label":"fits","note":"Converts same-minute daily times into a cron expression."}
+{"id":"6aeac473","label":"fits","note":"Reduces toast add, show, hide, and remove actions."}
+{"id":"991a84e2","label":"fits","note":"Marks an object seen and reports whether it was already present."}
+{"id":"feca2e90","label":"fits","note":"Renders an accented floor sign above the elevator."}
+{"id":"327fc3b2","label":"fits","note":"Finds the newest available named iOS simulator."}
+{"id":"a727cf22","label":"fits","note":"Returns the current language and its translation function."}
+{"id":"c38013a9","label":"fits","note":"Parses file-read path, selection, offset, and limit arguments."}
+{"id":"b18d1325","label":"fits","note":"Projects project and thread data into agent-awareness state."}
+{"id":"732a84ed","label":"fits","note":"Creates an environment command around a unary RPC request."}
+{"id":"153f5f8b","label":"fits","note":"Parses a cell ID into row and column coordinates."}
+{"id":"488464c2","label":"fits","note":"Renders a native or custom select based on its children."}
+{"id":"ff530819","label":"fits","note":"Selects controlled or uncontrolled pagination from props."}
+{"id":"5aa9998d","label":"fits","note":"Parses and validates a blob-savings JSON record."}
+{"id":"e228d5c9","label":"fits","note":"Extracts Mermaid code blocks and hashes their sources."}
+{"id":"6dca5233","label":"fits","note":"Filters and categorizes rules into rulebook and always-apply buckets."}
+{"id":"5c8adef3","label":"fits","note":"Reads a supported authentication method with a default."}
+{"id":"f3dd36d1","label":"fits","note":"Returns the previous render's value, optionally copied."}
+{"id":"746a16c5","label":"fits","note":"Creates debug store state with persisted settings actions."}
+{"id":"50cbcd54","label":"fits","note":"Returns the initial state for Codex usage scanning."}
+{"id":"fd19491f","label":"fits","note":"Resolves activity-publishing startup state from relay and preference flags."}
+{"id":"89b7082c","label":"fits","note":"Extracts remote-related fields from version-control status."}
+{"id":"1cfcc62b","label":"fits","note":"Maps pull-request actions to Azure CLI arguments."}
+{"id":"f410b38d","label":"fits","note":"Chooses input end-padding class from browse-state indicators."}
+{"id":"058ec24b","label":"fits","note":"Draws the boss body as a dark outlined capsule."}
+{"id":"da536cc7","label":"fits","note":"Stores a bounded, recency-ordered timeline position."}
+{"id":"76e181a0","label":"fits","note":"Summarizes a conversation window locally or through remote compaction."}
+{"id":"c50e3856","label":"fits","note":"Converts OKLCH theme colors to native hex or RGBA colors."}
+{"id":"7c1151cf","label":"fits","note":"Renders a desk, chair, keyboard, monitor, and accessory."}
+{"id":"05e806a0","label":"fits","note":"Checks whether a value has array content like an agent tool result."}
+{"id":"70caa8fe","label":"fits","note":"Debounces and searches pull requests for composer suggestions."}
+{"id":"80c36c91","label":"fits","note":"Decides whether a new thread stays in the current project."}
+{"id":"1057ad4c","label":"fits","note":"Renders a compact conversation tool entry."}
+{"id":"ba028ff4","label":"fits","note":"Renders refreshable workspace audio with loading and failure states."}
+{"id":"0210e9d5","label":"fits","note":"Merges a new handoff prompt while replacing the previous handoff contribution."}
+{"id":"6a270709","label":"fits","note":"Collects providers having an enabled account policy."}
+{"id":"1005b062","label":"fits","note":"Selects a load-balanced environment from refreshed host resources."}
+{"id":"9efbdf58","label":"fits","note":"Loads debug settings from browser local storage."}
+{"id":"9698d6f2","label":"fits","note":"Renders an input-group addon that focuses its sibling input."}
+{"id":"2b72fe7a","label":"fits","note":"Detects direct or globalThis process object expressions."}
+{"id":"0c70773f","label":"fits","note":"Initializes the API key from URL or session storage."}
+{"id":"cef575df","label":"fits","note":"Renders an image, icon, or initials avatar."}
+{"id":"027bb789","label":"fits","note":"Registers scoped hotkeys and exposes their pressed-state checker."}
+{"id":"d9bc9207","label":"fits","note":"Renders a lightning-bolt SVG icon."}
+{"id":"dc11fb1a","label":"fits","note":"Creates and synchronizes a pending database-restore marker."}
+{"id":"caf7890a","label":"fits","note":"Removes a dismissible item while reparenting queue descendants."}
+{"id":"47b10762","label":"fits","note":"Applies real or pseudo focus after clearing prior pseudo focus."}
+{"id":"5c93b873","label":"fits","note":"Builds Ollama Cloud model-manager options with dynamic discovery."}
+{"id":"44e17b60","label":"fits","note":"Builds task lifecycle events from Grok background-tool outputs."}
+{"id":"6247ddd2","label":"fits","note":"Opens and handshakes a local framed stream socket."}
+{"id":"3abdd0e2","label":"fits","note":"Checks whether the system dark-color media query matches."}
+{"id":"b8135e86","label":"fits","note":"Converts a settings display entry into an appropriate UI definition."}
+{"id":"9a3a2c72","label":"fits","note":"Extracts a project name from the final directory segment."}
+{"id":"61dfa51e","label":"fits","note":"Draws daylight sun motion and midday clouds."}
+{"id":"05c1bc0a","label":"fits","note":"Generates a complete theme color palette from optional hues."}
+{"id":"50f78049","label":"fits","note":"Converts floor form data into configuration with repository rooms."}
+{"id":"d957cb4d","label":"fits","note":"Calculates recent coordinate velocity from sampled state."}
+{"id":"8fee8223","label":"fits","note":"Converts floor configuration into editable form data."}
+{"id":"63d8ca38","label":"fits","note":"Selects controlled or uncontrolled number-field rendering."}
+{"id":"77b82e3d","label":"fits","note":"Renders and registers a constrained resizable layout item."}
+{"id":"f5c20874","label":"fits","note":"Renders the sized and disabled-aware select arrow."}
+{"id":"2c4ddf31","label":"fits","note":"Returns arrival or departure queue positions."}
+{"id":"fe186d67","label":"fits","note":"Reads and parses a JSON file, returning null on failure."}
+{"id":"18f06de5","label":"fits","note":"Renders an accessible themed Material button with loading state."}
+{"id":"37422431","label":"fits","note":"Renders a responsive item within a View layout."}
+{"id":"02cf4c44","label":"fits","note":"Checks whether query characters occur in text order."}
+{"id":"8b9a8e2f","label":"fits","note":"Scans a session directory without writes and returns collected sessions."}
+{"id":"912ecf0d","label":"fits","note":"Computes seasonal day phase and transition progress for an hour."}
+{"id":"2bf0b5df","label":"fits","note":"Wraps controlled tabs with internal selected-value state."}
+{"id":"f1e5f4b8","label":"fits","note":"Subscribes a confirmation-dialog listener and returns its unsubscribe callback."}
+{"id":"4d063744","label":"fits","note":"Provides controlled toggle-group selection and keyboard navigation."}
+{"id":"f2c4c9ae","label":"fits","note":"Computes session context composition with optional compaction savings."}
+{"id":"505011aa","label":"fits","note":"Renders a presence item and completes exit after animation."}
+{"id":"3e7a5a76","label":"fits","note":"Maps known tool names to emoji icons."}
+{"id":"97d2ba87","label":"fits","note":"Checks whether a flyout fits completely inside its container."}
+{"id":"d32a9d0a","label":"fits","note":"Hydrates client settings once from persisted storage with status tracking."}
+{"id":"6ff8a648","label":"fits","note":"Evaluates and parses React Fiber inspection data from a page."}
+{"id":"76f02e49","label":"fits","note":"Provides toast queues and actions while rendering toast regions."}
+{"id":"f9e608cd","label":"fits","note":"Builds a hierarchical file and directory tree from paths."}
+{"id":"0c29bf02","label":"fits","note":"Calculates clamped exit-animation progress from a recorded start time."}
+{"id":"6e6ce77a","label":"fits","note":"Reads the stored follow-system theme preference with legacy fallback."}
+{"id":"72373d82","label":"fits","note":"Renders gallery sections into one or more screenshot files."}
+{"id":"24308049","label":"fits","note":"Mixes four numbers into a deterministic hash modulo 100."}
+{"id":"3382c0f2","label":"fits","note":"Builds or reuses cached native review diff data."}
+{"id":"932a8af5","label":"fits","note":"Renders a styled command-center zone column and overflow count."}
+{"id":"99d63932","label":"fits","note":"Returns the current singleton viewport value."}
+{"id":"7ffd85e2","label":"fits","note":"Generates scaled unit tokens from a base unit."}
+{"id":"365b7429","label":"fits","note":"Sorts active threads by order key with deterministic fallbacks."}
+{"id":"b3fc85b7","label":"fits","note":"Checks whether a session matches at least one floor."}
+{"id":"73bdd9be","label":"fits","note":"Provides controlled accordion state and IDs to child components."}
+{"id":"ceaba061","label":"fits","note":"Formats a terminal label with its selected line range."}
+{"id":"740ebd54","label":"fits","note":"Quotes a shell word when unsafe for the target platform."}
+{"id":"f1ed8080","label":"fits","note":"Removes adjacent path points closer than a small threshold."}
+{"id":"fbc8f26e","label":"fits","note":"Converts a six-digit hexadecimal color to RGB channels."}
+{"id":"322371a4","label":"fits","note":"Prompts interactively for approval, revision feedback, or abort."}
+{"id":"3c3819b7","label":"fits","note":"Formats a usage limit amount and percentage description."}
+{"id":"694dc117","label":"fits","note":"Clears OpenAI effort values and transition history in place."}
+{"id":"b08ef3bd","label":"fits","note":"Renders command-center walls, floor, trim, and optional tiles."}
+{"id":"4a21b93e","label":"fits","note":"Transforms an OKLCH color for visible dark-mode use."}

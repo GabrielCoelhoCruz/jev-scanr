@@ -42,6 +42,21 @@ Reading rules:
 
 Power, stated before the data: real code is mostly well named, so positives will be few. With about 20 positives, an AUC interval is roughly 0.15 wide on each side. A difference under about 0.2 will not be detectable.
 
+## Labels received (before any Jev call)
+
+Both labelers finished before a Jev request existed. Files: `labels/claude.jsonl`, `labels/gpt.jsonl`.
+
+| Labeler                    | fits | imprecise | mismatch | cannot_tell |
+| -------------------------- | ---- | --------- | -------- | ----------- |
+| claude (claude-sonnet-5-5) | 391  | 9         | 0        | 0           |
+| gpt (gpt-5.6-sol)          | 388  | 7         | 5        | 0           |
+
+- **A protocol failure, fixed once.** The first Claude pass (`labels/claude-round1-truncated.jsonl`: 393 fits, 7 imprecise) reported that its tool output cut many items off at 600 to 900 characters, so it labeled partial code. It was rerun in a fresh task with items split into 40 files of 10 and an instruction to read each function in full; the rerun is `labels/claude.jsonl` (raw agreement with the first pass 0.985). The GPT labeler read every item in full and opened no other path (its own statement; its directory was the only one it was given). The reason for the rerun was the truncation, stated before the rerun; it was not a response to the label counts, and the Claude counts did not change in the ways that matter (still 0 mismatches). Both rounds are committed.
+- **Agreement.** Raw agreement 0.965 on four labels, 0.9875 on mismatch / ok / cannot_tell; Cohen's kappa 0.32 on four labels and 0 on three (the two never both said mismatch, and one said it never). The GPT mismatches are `useIsDismissible`, `copy`, `ComboboxListVirtualized`, `optimalDimensions` and `FileUploadTrigger`; Claude called three of them imprecise and the other two fits.
+- **Consequence for the pre-registered analysis.** Positives: 0 in `agreement_only`, 0 in claude, 5 in gpt. Every primary view has fewer than 15 positives, so the rules above give **"No conclusion"** on AUC, and this sample cannot say whether Jev ranks mismatched names better than length does. Real code in these four repositories is almost all well named: about 1% of 400 functions drew a mismatch from either reader, and none from both.
+- **What the live pass can still show.** The default-cut alert rate on 400 ordinary functions (nearly all well named, so each flag is close to a false alarm), and where Jev puts the 16 or so functions a labeler found imprecise or mismatched. The analyzer lists both by name in a "Descriptive readout", marked as not part of the conclusion. That readout is added after the labels and before any Jev call; the AUC conclusion is unchanged.
+- **Ways to get power, if wanted.** A larger random sample (about 15 positives at 1% needs roughly 1,500 functions labeled by both readers; Jev's own cost is small, the labeling is the cost), or a selection that does not use Jev's P, such as functions whose name words appear nowhere in the body (45 of the 400, 11%), which would enrich positives but favors that one heuristic.
+
 ## Receipt for the live pass
 
 Built by `../contrast/requests.mjs` from the scanner's own code: 400 requests, one question each, one pass, no retries, concurrency 1, stop on the first error, key from `TYPESAFE_API_KEY` or the `jevs auth` file and never from arguments. Serialized 1,300,715 bytes, estimated 433,572 input tokens (bytes divided by 3), **US$0.0182**; earlier runs came in 15 to 18% above that estimate, so expect about 512,000 tokens and **US$0.0215**. Worst case (one token per byte plus one reservation) US$0.0574. Hard cap **US$0.15**.

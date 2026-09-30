@@ -245,6 +245,30 @@ export function analyzeReal(
       ]),
     ),
   };
+  const byId = new Map(doc.units.map((u) => [u.id, u]));
+  const row = (id) => ({
+    id,
+    name: byId.get(id).source[0].name,
+    lines: byId.get(id).features.lines,
+    p: scores.get(id)?.p ?? null,
+    [first.name]: first.labels.get(id),
+    [second.name]: second.labels.get(id),
+  });
+  result.descriptive = {
+    note: "Not part of the conclusion. Flagged: units at or above the cut. Labeled: units either labeler called mismatch or imprecise. Names only, from public repositories.",
+    flagged: doc.units
+      .filter((u) => (scores.get(u.id)?.p ?? 0) >= cut)
+      .map((u) => row(u.id))
+      .sort((x, y) => y.p - x.p),
+    labeled: doc.units
+      .filter((u) =>
+        [first, second].some((l) =>
+          ["mismatch", "imprecise"].includes(l.labels.get(u.id)),
+        ),
+      )
+      .map((u) => row(u.id))
+      .sort((x, y) => (y.p ?? -1) - (x.p ?? -1)),
+  };
   result.conclusion = conclude(result);
   return result;
 }
@@ -269,6 +293,25 @@ export function markdown(result) {
     `Raw agreement ${f(g.rawAgreement4)} on four labels, ${f(g.rawAgreement3)} on mismatch / ok / cannot_tell. Cohen kappa ${f(g.kappa4)} and ${f(g.kappa3)}. Mismatch: ${g.mismatchByFirst} by ${a}, ${g.mismatchBySecond} by ${b}, ${g.mismatchByBoth} by both. Cannot tell by either: ${g.cannotTellByEither}.`,
     "",
   ];
+  const table = (rows) => [
+    `| id | name | lines | P | ${a} | ${b} |`,
+    "| --- | --- | --- | --- | --- | --- |",
+    ...rows.map(
+      (r) =>
+        `| ${r.id} | ${r.name} | ${r.lines} | ${f(r.p)} | ${r[a]} | ${r[b]} |`,
+    ),
+    "",
+  ];
+  lines.push(
+    "## Descriptive readout (not part of the conclusion)",
+    "",
+    `Units at or above the cut (${result.descriptive.flagged.length}):`,
+    "",
+    ...table(result.descriptive.flagged),
+    `Units either labeler called mismatch or imprecise (${result.descriptive.labeled.length}):`,
+    "",
+    ...table(result.descriptive.labeled),
+  );
   for (const [name, v] of Object.entries(result.views)) {
     lines.push(
       `## View: ${name}${v.primary ? "" : " (exploratory)"}`,

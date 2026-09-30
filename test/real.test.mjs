@@ -216,3 +216,41 @@ test("lenient views count imprecise as a mismatch and stay out of the conclusion
   assert.equal(r.views.first_labeler_lenient.positives, 40);
   assert.equal(r.views.first_labeler_lenient.primary, false);
 });
+
+test("committed labels cover all 400 units with known labels; the truncated first round is kept apart", () => {
+  const read = (name) =>
+    parseLabels(
+      readFileSync(join(root, `evals/real/labels/${name}.jsonl`), "utf8"),
+      doc,
+    );
+  const claude = read("claude"),
+    gpt = read("gpt"),
+    round1 = read("claude-round1-truncated");
+  assert.equal(claude.size, 400);
+  assert.deepEqual(
+    [claude, gpt].map(
+      (m) => [...m.values()].filter((l) => l === "mismatch").length,
+    ),
+    [0, 5],
+  );
+  assert.ok(agreement(round1, claude).rawAgreement4 > 0.95);
+});
+
+test("descriptive readout lists flagged and labeled units by name", () => {
+  const a = labelsFrom((u, i) => (i === 7 ? "imprecise" : "fits"));
+  const b = labelsFrom((u, i) => (i === 7 ? "mismatch" : "fits"));
+  const r = run(
+    scoresOf((u, i) => (i === 7 || i === 9 ? 0.8 : 0.1)),
+    a,
+    b,
+  );
+  assert.deepEqual(
+    r.descriptive.flagged.map((x) => x.id).sort(),
+    [ids[7], ids[9]].sort(),
+  );
+  assert.deepEqual(
+    r.descriptive.labeled.map((x) => [x.id, x.a, x.b]),
+    [[ids[7], "imprecise", "mismatch"]],
+  );
+  assert.match(markdown(r), /Descriptive readout/);
+});
