@@ -26,6 +26,7 @@ import {
 } from "./runner.mjs";
 import { buildReport, queueMarkdown, reportMarkdown } from "./report.mjs";
 import { continuationPlan, combineRuns } from "./continuation.mjs";
+import { demoText } from "./demo.mjs";
 import {
   credentialsPath,
   readSecret,
@@ -49,6 +50,7 @@ Ranks refactoring candidates in a TypeScript/JavaScript project by asking the Je
 
 Usage
   jevs --version                              print the version
+  jevs demo                                   replay a recorded run on the bundled demo app: no key, no network
   jevs auth [--remove]                        save your TypeSafe API key (owner-only file), or delete it
   jevs skill [--global] [--yes]               install the agent skill for this version, from its release tag (uses npx skills)
   jevs scan PATH [options]         dry run: shows units, requests and estimated cost, sends nothing
@@ -418,6 +420,11 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     return console.log(
       `Saved to ${file} (owner-only). TYPESAFE_API_KEY in the environment overrides it.`,
     );
+  }
+  if (command === "demo") {
+    if (positionals.length)
+      throw Error("demo takes no arguments; it replays the recorded run");
+    return console.log(demoText());
   }
   if (command === "skill") {
     const args = [

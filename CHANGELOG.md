@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- **`jevs demo`** replays the recorded run of `examples/demo-app` (the files in `examples/demo-app/expected/`) with no key and no network. It prints a banner that says it is a recording, with the model, date, request count, tokens and calculated cost, then the recorded `queue.md`. The package now ships the three recorded files it reads (`queue.md`, `RECEIPT.json`, `RESULT.json`) and still leaves out the journal and the reports.
+- **README opening rewritten.** One sentence names the decision Jev makes, a measured real-run line follows, and the no-key path comes first, with an image of the recorded queue (`docs/images/demo-queue.png`, drawn from the recording by `scripts/render-demo-image.mjs`). A comparison table sets jev-scanr beside ESLint, `jscpd` and asking a general LLM; every jev-scanr cell points to a measured run or `EVIDENCE.md`, and no accuracy comparison is claimed. The README now says "Jev owns the probabilities; your code owns the policy".
+- No change to questions, scoring or scan behavior.
+
 ## 0.3.1-alpha
 
 - **The recorded demo matches the defaults.** `examples/demo-app/expected/` is one new real run (`jev-1.13.0`, 15 of 15 requests, US$0.0008 calculated) that asks only the three default signals. It flagged four of the five questions seeded on purpose and missed one (`registerUser` for `function_should_split`, 0.52); no clean function reached the cut. Before recording, two demo functions that belonged to now-experimental signals (`tally`, `findTagged`) were replaced by `registerUser` and a long but cohesive `renderInvoiceText`, keeping the request count at 15. The drift test and the README snippets follow the recording.
