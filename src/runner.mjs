@@ -44,7 +44,12 @@ export function makeClient({ fetch, apiKey } = {}) {
   return client;
 }
 
-export function readJournal(directory, plan, descriptor) {
+export function readJournal(
+  directory,
+  plan,
+  descriptor,
+  { rebind = false } = {},
+) {
   const path = join(directory, "journal.jsonl");
   let fd = descriptor,
     text;
@@ -86,12 +91,18 @@ export function readJournal(directory, plan, descriptor) {
       previousHash = eventHash;
       return event;
     });
+  const [first] = events;
   if (
-    !["live", "synthetic"].includes(events[0]?.mode) ||
-    events[0].type !== "initialized" ||
-    events[0].planHash !== plan.planHash
+    !["live", "synthetic"].includes(first?.mode) ||
+    first.type !== "initialized"
   )
-    throw Error("WAL plan/mode mismatch");
+    throw Error(
+      `${path} is not a run journal (it does not start with a run header), or it is damaged`,
+    );
+  if (first.planHash !== plan.planHash && !rebind)
+    throw Error(
+      `This journal was recorded for plan ${first.planHash.slice(0, 12)}…, but the plan given is ${plan.planHash.slice(0, 12)}… (scanner ${plan.scannerVersion}, root ${plan.root}). Use the plan.json stored next to the run`,
+    );
   const requests = new Map(plan.requests.map((r) => [r.unitId, r]));
   const reserved = new Set(),
     finished = new Set();
@@ -100,10 +111,13 @@ export function readJournal(directory, plan, descriptor) {
   for (const event of events.slice(1)) {
     if (terminal) throw Error("Events after terminal WAL state");
     if (event.type === "reserved") {
+      if (event.requestHash !== requests.get(event.unitId)?.requestHash)
+        throw Error(
+          `The plan given has no request with the content this run answered (unit ${event.unitId.slice(0, 12)}…). It was not built from the same code, so the stored answers do not belong to it`,
+        );
       if (
         reserved.has(event.unitId) ||
-        event.requestHash !== requests.get(event.unitId)?.requestHash ||
-        event.clientRequestId !== hash([plan.planHash, event.unitId]) ||
+        event.clientRequestId !== hash([first.planHash, event.unitId]) ||
         event.reservedUSD !== reservationUSD
       )
         throw Error("Invalid WAL reservation");

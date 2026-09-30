@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 
 const recorded = new URL("../examples/demo-app/expected/", import.meta.url);
 const read = (name) => readFileSync(new URL(name, recorded), "utf8");
@@ -21,12 +22,19 @@ export function demoBanner({ receipt, result }) {
   ].join("\n");
 }
 
-export const DEMO_FOOTER = [
-  "End of the replay. The items above are hypotheses from one Jev answer each, not confirmed bugs.",
-  "Try your own code with a free dry run that sends nothing: jevs scan .",
-].join("\n");
+export const NPX_COMMAND = "npx github:GabrielCoelhoCruz/jev-scanr";
 
-export function demoText() {
+export function demoFooter({ viaNpx = false } = {}) {
+  const command = viaNpx ? NPX_COMMAND : "jevs";
+  const folder = fileURLToPath(recorded).replace(/\/$/, "");
+  return [
+    "End of the replay. The items above are hypotheses from one Jev answer each, not confirmed bugs.",
+    `Try your own code with a free dry run that sends nothing: ${command} scan .`,
+    `Re-cut these recorded answers, no key and no API call: ${command} rescore '${folder.replaceAll("'", "'\\''")}' --cut 0.6 --out ./demo-rescored`,
+  ].join("\n");
+}
+
+export function demoText(options) {
   const run = recordedRun();
-  return `${demoBanner(run)}\n\n${run.queue.trimEnd()}\n\n${DEMO_FOOTER}`;
+  return `${demoBanner(run)}\n\n${run.queue.trimEnd()}\n\n${demoFooter(options)}`;
 }

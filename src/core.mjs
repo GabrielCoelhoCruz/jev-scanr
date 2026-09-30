@@ -29,10 +29,17 @@ export const POLICY = Object.freeze({
   concurrency: 1,
   retries: 0,
 });
+const SECRET_PATTERNS = [
+  /-----BEGIN (?:[A-Z ]*PRIVATE KEY)-----/i,
+  /(?:api[_-]?key|password|secret|token)['"`]?\s*[:=]\s*['"`][^'"`\s]{12,}['"`]/i,
+  /\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9_-]{20,}|AKIA[A-Z0-9]{16})\b/i,
+  /\b[sr]k_live_[A-Za-z0-9]{16,}/,
+  /\bxox[abprs]-[A-Za-z0-9-]{10,}/,
+  /\beyJ[A-Za-z0-9_-]{8,}\.eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}/,
+  /\b[a-z][a-z0-9+.-]{1,20}:\/\/[^\s:/@'"`${}<>]+:(?!(?:pass|password|secret|changeme)@)[^\s:/@'"`${}<>]{3,}@[^\s'"`/]+/i,
+];
 export const secretLike = (source) =>
-  /-----BEGIN (?:[A-Z ]*PRIVATE KEY)-----|(?:api[_-]?key|password|secret|token)\s*[:=]\s*['"`][^'"`\s]{12,}['"`]|\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9_-]{20,}|AKIA[A-Z0-9]{16})\b/i.test(
-    source,
-  );
+  SECRET_PATTERNS.some((pattern) => pattern.test(source));
 
 export function physical(path) {
   const full = resolve(path);

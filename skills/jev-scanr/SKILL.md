@@ -33,7 +33,7 @@ Use it when the user wants candidates for refactoring in a TypeScript or JavaScr
    jevs scan <project-root> --list-files
    ```
 
-   Read the coverage line. A scan reads at most 500 files, so for a larger project pick a slice with `--paths dir1,dir2`. If the dry run says `NOT INDEXED` or `NOT PACKED`, narrow the slice.
+   `--list-files` separates the files asked about from the files sent only as context (callers, tests that use them, imports); `--exclude` keeps any of them out. Read the coverage line. A scan reads at most 500 files, so for a larger project pick a slice with `--paths dir1,dir2`. If the dry run says `NOT INDEXED` or `NOT PACKED`, narrow the slice.
 
 2. **Show the user the scope and cost, and get an explicit cap.** A live run sends source excerpts of the listed files to the Jev API. Do not start one without the user saying yes to that, to the files (use `--exclude` for anything sensitive), and to a dollar cap.
 

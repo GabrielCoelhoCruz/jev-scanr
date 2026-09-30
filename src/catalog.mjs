@@ -23,6 +23,12 @@ if (
   throw Error("signals/*.json must match catalog.json order exactly");
 
 export const STATUSES = ["default", "experimental"];
+export const signalStatusLabel = (signal) =>
+  signal.status === "default" ? "default (experimental, alpha)" : signal.status;
+export const signalCaveat = (signal) =>
+  signal.id === "function_multiple_responsibilities"
+    ? `the ${signal.independentTest.reviewedAboveCut} reviewed items all came from one repository; the gate asks for two (evals/results/validation-gate-2026-09-30.md)`
+    : undefined;
 export const allSignals = meta.order.map((id) => loaded.get(id));
 export const fullCatalog = { ...meta, signals: allSignals };
 export const catalogHash = hash(fullCatalog);

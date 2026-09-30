@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+Fixes from a cold review of 0.4.0-alpha. No change to questions, scoring or the catalog, so plans from earlier versions still verify.
+
+- **The secret filter catches more.** A file is skipped as possible secrets when it holds a quoted-key assignment (`"apiKey": "..."`), a Stripe `sk_live_` or `rk_live_` key, a Slack `xoxa-`, `xoxb-`, `xoxp-`, `xoxr-` or `xoxs-` token, a JWT, or a URL with a user and password (`postgres://admin:...@host`). Template URLs built from variables and the placeholder password `pass`, `password`, `secret` or `changeme` do not match. On 27,529 JavaScript and TypeScript files from two real dependency trees it flags 11 more files than before, all of them URL or JWT examples in test files and type comments. It is still a heuristic; `--list-files` and `--exclude` remain the control.
+- **`jevs rescore` works on what ships.** The package now includes `examples/demo-app/expected/plan.json` (a portable copy of the demo plan) and `journal.jsonl`, and `jevs demo` ends with the exact rescore command for the folder it uses. `rescore` matches stored answers to requests by content instead of by the plan hash, which covered the scanner version and the absolute root path, so a plan rebuilt by another version or from another folder re-bands a run whose requests are identical. Any other mismatch now reads "This journal was recorded for plan X, but the plan given is Y ..." instead of "WAL plan/mode mismatch". `scripts/regenerate-demo-reports.mjs` also writes `plan.json`; a test keeps it in step with the recording.
+- **`--list-files` splits two lists:** the files asked about, and the files sent only as context (callers, tests that use them, imports). `--include-tests` help now says test files can still be sent as context and that `--exclude` keeps them out.
+- **`jevs --help` says what code decides and what Jev decides,** with the real numbers (8 lines, 2:1 size ratio, 45% token overlap, 500 files), and the usage columns line up. A test ties those numbers to the pipeline's constants.
+- **`jevs demo` through npx** ends with the matching `npx github:GabrielCoelhoCruz/jev-scanr ...` commands, because `jevs` is not on the PATH there.
+- **`scan --run` without `--yes` or `--cap-usd`** refuses before it builds and prints the plan.
+- **Signal status is labeled honestly.** `jevs signals` and the README show the three defaults as "default (experimental, alpha)", and `jevs signals` notes that `function_multiple_responsibilities` reached its 8 reviewed items in one repository while the gate asks for two.
+- **Documentation tests check structure,** not sentences: links resolve, version pins agree, required sections exist, the figures quoted in the README match the recorded run and `docs/BASELINE.md`, and every `--flag` shown next to `jevs` exists.
+
 ## 0.4.0-alpha
 
 Released 2026-09-30.

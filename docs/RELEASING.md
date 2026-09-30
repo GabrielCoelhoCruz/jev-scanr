@@ -6,7 +6,7 @@
 
 1. Update `version` in `package.json` and `package-lock.json`, `SCANNER_VERSION` in `src/plan.mjs` (and add the old one to `COMPATIBLE_PLAN_VERSIONS`), and `CHANGELOG.md`.
 2. `npm ci && npm run ci && python3 -m unittest discover -s test -p test_pinned_config.py`.
-3. Update every place that names the version, then check none still names the old one: `grep -rn "<old version>" . --exclude-dir=node_modules --exclude-dir=.git --exclude=package-lock.json`. The ones that matter: the install command and the skill URL (`#vX.Y.Z`, `tree/vX.Y.Z/`) in `README.md`, the install command in `skills/jev-scanr/SKILL.md`, and `jevs skill`, which takes its source from `package.json` (`skillSource` in `src/cli.mjs`). `test/release-pins.test.mjs` fails when any of them lags. Leave `examples/demo-app/expected/` alone: it records the scanner version that made the recording, and `jevs demo` says so.
+3. Update every place that names the version, then check none still names the old one: `grep -rn "<old version>" . --exclude-dir=node_modules --exclude-dir=.git --exclude=package-lock.json`. The ones that matter: the install command and the skill URL (`#vX.Y.Z`, `tree/vX.Y.Z/`) in `README.md`, the install command in `skills/jev-scanr/SKILL.md`, and `jevs skill`, which takes its source from `package.json` (`skillSource` in `src/cli.mjs`). `test/release-pins.test.mjs` fails when any of them lags. Leave `examples/demo-app/expected/` alone: it records the scanner version that made the recording, and `jevs demo` says so. Its `plan.json` names the scanner that wrote it, so keep that version in `COMPATIBLE_PLAN_VERSIONS`; `test/demo-rescore.test.mjs` fails if it is missing.
 4. Commit, then `git tag -a vX.Y.Z -m "..."`. Do not move a tag after it is pushed.
 
 ## The publish workflow
