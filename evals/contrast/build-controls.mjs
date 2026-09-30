@@ -11,12 +11,13 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
-import { hash, secretLike } from "../../src/core.mjs";
+import { hash } from "../../src/core.mjs";
 import {
   analyze,
   functionFeatures,
   jaccard,
   pairFeatures,
+  secretLike,
 } from "./lib/code.mjs";
 import {
   PINNED,
@@ -99,7 +100,7 @@ function buildA2(ctx, reuse) {
       });
   return {
     units,
-    log: { consumedChimeras: kept.size, droppedIndices: dropped },
+    log: { consumedChimeras: kept.size, droppedIndices: dropped.join(",") },
   };
 }
 

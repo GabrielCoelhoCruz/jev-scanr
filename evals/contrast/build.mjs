@@ -11,7 +11,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { parseArgs } from "node:util";
-import { hash, secretLike } from "../../src/core.mjs";
+import { hash } from "../../src/core.mjs";
 import {
   FUNCTION_TYPES,
   analyze,
@@ -20,6 +20,7 @@ import {
   jaccard,
   nameWords,
   pairFeatures,
+  secretLike,
   walk,
 } from "./lib/code.mjs";
 import {

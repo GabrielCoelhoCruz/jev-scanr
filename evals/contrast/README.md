@@ -45,6 +45,8 @@ Paths inside a set are `u/<8 hex>.<ext>` or `u/<8 hex>/a|b.<ext>`. Nothing in a 
 
 Two features in B are not matched and separate the classes: vocabulary overlap (names of callees, properties and imports, locals excluded) and size ratio. A copy of a function keeps every name it does not declare itself, and the supply of different-function pairs with high vocabulary overlap and low token-shape overlap is small. Read Jev's B result against `vocabJaccard` too; the analyzer reports that comparison (`diffSecondary`).
 
+The generator uses a frozen copy of the 0.4.0-alpha secret filter (`lib/code.mjs`), not the one in `src/`. After the scanner's filter was widened, a rebuild with the new one changed 163 of 300 units, because a smaller pool reshuffles every seeded pick. Requests are still built through the current `src/` filter, so a unit that the current filter flags fails loudly in `requests.mjs` instead of being sent.
+
 ## Analysis, fixed before the live run
 
 Committed before any request was sent (see the commit history of this folder).

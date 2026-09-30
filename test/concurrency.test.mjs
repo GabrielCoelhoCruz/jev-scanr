@@ -245,9 +245,10 @@ test("a real spend that leaves no room stops after the in-flight requests are re
 test("the journal stays write-ahead and valid when requests overlap and finish out of order", async (t) => {
   const p = plan(t, many(6));
   const dir = join(scratch(t), "run");
-  const delays = [40, 5, 25, 1, 30, 10];
-  let n = 0;
-  const summary = await runPlan({
+  const held = [];
+  let resolveStarted;
+  const started = new Promise((r) => (resolveStarted = r));
+  const summaryPromise = runPlan({
     plan: p,
     directory: dir,
     mode: "synthetic",
@@ -255,10 +256,20 @@ test("the journal stays write-ahead and valid when requests overlap and finish o
     concurrency: 3,
     rateLimits: { requestsPerSecond: 1e6, tokensPerSecond: 1e12 },
     client: fake(async (request) => {
-      await new Promise((r) => setTimeout(r, delays[n++ % delays.length]));
+      if (held.length >= 3) return response(request, positive(0.9));
+      await new Promise((release) => {
+        held.push({ request, release });
+        if (held.length === 3) resolveStarted();
+      });
       return response(request, positive(0.9));
     }),
   });
+  await started;
+  for (const h of [...held].reverse()) {
+    h.release();
+    await new Promise((r) => setImmediate(r));
+  }
+  const summary = await summaryPromise;
   assert.equal(summary.complete, true);
   const events = readJournal(dir, p);
   const kinds = events.map((e) => e.type[0]);
@@ -277,6 +288,16 @@ test("the journal stays write-ahead and valid when requests overlap and finish o
   const order = events
     .filter((e) => e.type === "finished")
     .map((e) => e.unitId);
+  const unitOf = (request) =>
+    p.requests.find((r) => r.request === request).unitId;
+  const [first, second, third] = held.map((h) =>
+    order.indexOf(unitOf(h.request)),
+  );
+  assert.ok(
+    third < second && second < first,
+    "the three overlapping requests finish in the reverse of their start order",
+  );
+  assert.equal(order[0], unitOf(held[2].request));
   assert.notDeepEqual(
     order,
     p.requests.map((r) => r.unitId),
@@ -317,7 +338,10 @@ test("a first error stops new dispatch, still records what was in flight, and ne
   const p = plan(t, many(12));
   const dir = join(scratch(t), "run");
   let calls = 0;
-  const summary = await runPlan({
+  let resolveAllStarted, resolveSettled;
+  const allStarted = new Promise((r) => (resolveAllStarted = r));
+  const settled = new Promise((r) => (resolveSettled = r));
+  const summaryPromise = runPlan({
     plan: p,
     directory: dir,
     mode: "synthetic",
@@ -326,16 +350,23 @@ test("a first error stops new dispatch, still records what was in flight, and ne
     rateLimits: { requestsPerSecond: 1e6, tokensPerSecond: 1e12 },
     client: fake(async (request) => {
       const mine = ++calls;
-      await new Promise((r) => setTimeout(r, mine === 2 ? 1 : 15));
+      if (mine === 4) resolveAllStarted();
+      await allStarted;
       if (mine === 2) throw Object.assign(Error("boom"), { status: 500 });
+      await settled;
       return response(request);
     }),
   });
+  await allStarted;
+  await new Promise((r) => setImmediate(r));
+  resolveSettled();
+  const summary = await summaryPromise;
   assert.equal(summary.stoppedReason, "first_error");
   assert.equal(summary.unresolvedReservations, 0);
   assert.ok(summary.failed >= 1);
-  assert.ok(
-    calls <= 4 + 0,
+  assert.equal(
+    calls,
+    4,
     "no request is started after the failure was recorded",
   );
   const events = readJournal(dir, p);

@@ -2,8 +2,15 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "@babel/parser";
-import { hash, secretLike } from "../../../src/core.mjs";
+import { hash } from "../../../src/core.mjs";
 import { sourcePath, testPath } from "../../../src/snapshot.mjs";
+
+// Frozen copy of the scanner's 0.4.0-alpha secret filter. The generator must not follow later changes to
+// src/core.mjs, or the pool, and with it every unit, would change. Requests still go through the current filter.
+export const secretLike = (source) =>
+  /-----BEGIN (?:[A-Z ]*PRIVATE KEY)-----|(?:api[_-]?key|password|secret|token)\s*[:=]\s*['"`][^'"`\s]{12,}['"`]|\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9_-]{20,}|AKIA[A-Z0-9]{16})\b/i.test(
+    source,
+  );
 
 export const FUNCTION_TYPES = new Set([
   "FunctionDeclaration",

@@ -20,7 +20,7 @@
       "controls": 46,
       "log": {
         "consumedChimeras": 46,
-        "droppedIndices": [4, 6, 7, 38]
+        "droppedIndices": "4,6,7,38"
       }
     },
     "B2": {
