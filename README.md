@@ -45,7 +45,7 @@ The other columns describe how each approach generally works; we did not run the
 ## Quickstart
 
 ```sh
-npm install -g github:GabrielCoelhoCruz/jev-scanr#v0.3.1-alpha   # not on npm yet; needs Node.js 24+
+npm install -g github:GabrielCoelhoCruz/jev-scanr#v0.4.0-alpha   # not on npm yet; needs Node.js 24+
 jevs auth                                                        # saves your TypeSafe key, or: export TYPESAFE_API_KEY=...
 jevs scan .                                                      # dry run: units, requests, cost estimate; sends nothing
 ```
@@ -67,7 +67,7 @@ jevs skill            # run it in the project your agent works on; add --global 
 `jevs skill` shells out to the [skills CLI](https://github.com/vercel-labs/skills) at a fixed version (1.7.0) and installs the skill from this release's git tag, so the skill text always matches the installed CLI. It needs npm and network access, and it asks which agents to install for unless you pass `--yes`. The equivalent direct command is:
 
 ```sh
-npx skills@1.7.0 add https://github.com/GabrielCoelhoCruz/jev-scanr/tree/v0.3.1-alpha/skills/jev-scanr
+npx skills@1.7.0 add https://github.com/GabrielCoelhoCruz/jev-scanr/tree/v0.4.0-alpha/skills/jev-scanr
 ```
 
 Updating the CLI does not touch skills you already installed; run `jevs skill` again after an upgrade.

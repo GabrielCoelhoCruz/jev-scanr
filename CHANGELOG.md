@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.4.0-alpha
+
+Released 2026-09-30.
 
 - **`jevs demo`** replays the recorded run of `examples/demo-app` (the files in `examples/demo-app/expected/`) with no key and no network. It prints a banner that says it is a recording, with the model, date, request count, tokens and calculated cost, then the recorded `queue.md`. The package now ships the three recorded files it reads (`queue.md`, `RECEIPT.json`, `RESULT.json`) and still leaves out the journal and the reports.
 - **README opening rewritten.** One sentence names the decision Jev makes, a measured real-run line follows, and the no-key path comes first, with an image of the recorded queue (`docs/images/demo-queue.png`, drawn from the recording by `scripts/render-demo-image.mjs`). A comparison table sets jev-scanr beside ESLint, `jscpd` and asking a general LLM; every jev-scanr cell points to a measured run or `EVIDENCE.md`, and no accuracy comparison is claimed. The README now says "Jev owns the probabilities; your code owns the policy".

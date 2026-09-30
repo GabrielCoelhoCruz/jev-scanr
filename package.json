@@ -1,6 +1,6 @@
 {
   "name": "jev-scanr",
-  "version": "0.3.1-alpha",
+  "version": "0.4.0-alpha",
   "description": "A refactoring queue for TypeScript and JavaScript projects, judged by the Jev model. Unofficial, not affiliated with TypeSafe.",
   "keywords": [
     "jev",
