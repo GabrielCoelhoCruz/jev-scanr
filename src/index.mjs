@@ -74,7 +74,7 @@ export function ref(file, node, reason) {
     reason,
   };
 }
-function boundNames(node) {
+export function boundNames(node) {
   if (!node) return [];
   if (node.type === "Identifier") return [node.name];
   if (node.type === "RestElement") return boundNames(node.argument);

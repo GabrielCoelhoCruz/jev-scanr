@@ -64,9 +64,13 @@ export function pseudoMember(
 
 export function formUnits(
   index,
-  { includeTests = false, kinds = UNIT_ORDER } = {},
+  { includeTests = false, kinds = UNIT_ORDER, lowOverlap } = {},
 ) {
-  const base = generateCandidates(index, { includeTests, recordCapped: true });
+  const base = generateCandidates(index, {
+    includeTests,
+    recordCapped: true,
+    lowOverlap,
+  });
   const units = [];
   for (const f of kinds.includes("function")
     ? index.functions.filter(
@@ -90,6 +94,9 @@ export function formUnits(
         clusterId: c.clusterId,
         facts: {
           provenance: c.facts.provenance,
+          ...(c.facts.retrievalSource
+            ? { retrievalSource: c.facts.retrievalSource }
+            : {}),
           unitFormation: "retrieval grouping only; never a score",
         },
       });

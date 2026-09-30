@@ -254,6 +254,9 @@ export function buildReport(
       packId: c.packId,
       kind: c.kind,
       split: c.split,
+      ...(pack.facts?.retrievalSource
+        ? { retrievalSource: pack.facts.retrievalSource }
+        : {}),
       location: locate(pack),
       catchRange: pack.catchRange ?? null,
       verificationReads: pack.sections.map((s) => ({

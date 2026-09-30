@@ -29,6 +29,7 @@ export function buildPlan(root, options = {}) {
     hard = limits.maxHardRequestBytes;
   const generated = formUnits(index, {
     includeTests: !!options.retrieval?.includeTests,
+    lowOverlap: options.retrieval?.lowOverlap,
     kinds: UNIT_ORDER.filter((kind) =>
       catalog.signals.some((s) => s.kinds.includes(kind)),
     ),

@@ -1,10 +1,6 @@
-import { hash } from "./core.mjs";
+import { hash, jaccard } from "./core.mjs";
+import { lowOverlapPairs, LOW_OVERLAP_DEFAULTS } from "./low-overlap.mjs";
 
-export function jaccard(a, b) {
-  let count = 0;
-  for (const x of a) if (b.has(x)) count++;
-  return count / (a.size + b.size - count || 1);
-}
 export function generateCandidates(
   index,
   {
@@ -13,14 +9,22 @@ export function generateCandidates(
     minSizeRatio = 0.5,
     includeTests = false,
     recordCapped = false,
+    lowOverlap = {},
   } = {},
 ) {
+  const low = { ...LOW_OVERLAP_DEFAULTS, ...lowOverlap };
   if (
     !Number.isSafeInteger(minLines) ||
     minLines < 1 ||
-    ![minJaccard, minSizeRatio].every(
+    ![minJaccard, minSizeRatio, low.minScore].every(
       (n) => Number.isFinite(n) && n >= 0 && n <= 1,
-    )
+    ) ||
+    !Number.isSafeInteger(low.cap) ||
+    low.cap < 0 ||
+    !Number.isSafeInteger(low.minSurface) ||
+    low.minSurface < 1 ||
+    !Number.isSafeInteger(low.maxDocumentFrequency) ||
+    low.maxDocumentFrequency < 2
   )
     throw Error("Invalid retrieval options");
   const { maxCandidates, maxComparisons } = index.snapshot.limits,
@@ -60,6 +64,14 @@ export function generateCandidates(
     c.id = hash([c.kind, c.members.map((f) => f.id), null]);
     candidates.push(c);
   };
+  const propose = (members, facts) => {
+    if (candidates.length >= maxCandidates) {
+      omitted.push(capped({ kind: "clone_pair", members }));
+      return;
+    }
+    parents.set(find(members[0].id), find(members[1].id));
+    add({ kind: "clone_pair", members, facts });
+  };
   outer: for (let i = 0; i < pool.length; i++)
     for (let j = i + 1; j < pool.length; j++) {
       if (++comparisons > maxComparisons) {
@@ -82,23 +94,25 @@ export function generateCandidates(
       const similarity = jaccard(a.shingles, b.shingles);
       if (similarity < minJaccard) continue;
       eligiblePairs++;
-      if (candidates.length >= maxCandidates) {
-        omitted.push(capped({ kind: "clone_pair", members: [a, b] }));
-        continue;
-      }
-      parents.set(find(a.id), find(b.id));
-      add({
-        kind: "clone_pair",
-        members: [a, b],
-        facts: {
-          jaccard: similarity,
-          sizeRatio: ratio,
-          exactBody: a.bodyHash === b.bodyHash,
-          duplicatedLineProxy: Math.min(a.lines, b.lines),
-          provenance: "token_shingles_not_semantic_equivalence",
-        },
+      propose([a, b], {
+        jaccard: similarity,
+        sizeRatio: ratio,
+        exactBody: a.bodyHash === b.bodyHash,
+        duplicatedLineProxy: Math.min(a.lines, b.lines),
+        provenance: "token_shingles_not_semantic_equivalence",
       });
     }
+  let lowOverlapStats = null;
+  if (low.cap > 0) {
+    const found = lowOverlapPairs(
+      pool,
+      { minJaccard, minSizeRatio, budget: maxComparisons },
+      low,
+    );
+    for (const pair of found.pairs) propose(pair.members, pair.facts);
+    omitted.push(...found.omitted);
+    lowOverlapStats = found.stats;
+  }
   const groups = new Map();
   for (const x of parents.keys()) {
     const root = find(x);
@@ -128,7 +142,19 @@ export function generateCandidates(
       comparisons: Math.min(comparisons, maxComparisons),
       eligiblePairs,
       candidateCount: candidates.length,
+      lowOverlap: {
+        ...lowOverlapStats,
+        candidates: candidates.filter(
+          (c) => c.facts.retrievalSource === "low_overlap_surface",
+        ).length,
+      },
     },
-    options: { minLines, minJaccard, minSizeRatio, includeTests },
+    options: {
+      minLines,
+      minJaccard,
+      minSizeRatio,
+      includeTests,
+      lowOverlap: low,
+    },
   };
 }
