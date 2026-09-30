@@ -29,11 +29,16 @@ import {
 
 export const SKILL_SOURCE = "GabrielCoelhoCruz/jev-refactor";
 
-export const HELP = `jev-refactor (short alias: jr) ${JSON.parse(readFileSync(new URL("../package.json", import.meta.url))).version}
+export const VERSION = JSON.parse(
+  readFileSync(new URL("../package.json", import.meta.url)),
+).version;
+
+export const HELP = `jev-refactor (short alias: jr) ${VERSION}
 
 Ranks refactoring candidates in a TypeScript/JavaScript project by asking the Jev model a few narrow questions about each function or similar pair. Deterministic code only cuts the project into units and gathers context. It does not score, rank or filter. Every finding and its order come from Jev's probabilities.
 
 Usage
+  jr --version                              print the version
   jr auth [--remove]                        save your TypeSafe API key (owner-only file), or delete it
   jr skill [--global] [--yes]               install the agent skill for your coding agents (uses npx skills)
   jr scan PATH [options]         dry run: shows units, requests and estimated cost, sends nothing
@@ -90,6 +95,8 @@ const options = {
 
 export function parseArgs(args) {
   const [command, ...rest] = args;
+  if (command === "--version" || command === "-V" || command === "version")
+    return { command: "version", values: {}, positionals: [] };
   if (
     !command ||
     command === "--help" ||
@@ -336,6 +343,7 @@ async function execute(plan, values, deps) {
 
 export async function main(args = process.argv.slice(2), deps = {}) {
   const { command, values, positionals } = parseArgs(args);
+  if (command === "version") return console.log(`jev-refactor ${VERSION}`);
   if (command === "help") return console.log(HELP);
   if (command === "auth") {
     if (positionals.length)

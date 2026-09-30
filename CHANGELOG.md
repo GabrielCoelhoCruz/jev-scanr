@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.1-alpha
+
+- `jr --version`, `-V` and `jr version` print the version.
+- Documentation: never `npx jr` (an unrelated package on npm has that name); use the installed commands or `npx github:GabrielCoelhoCruz/jev-refactor`. A test fails if a tracked text file says `npx jr` or `npx jev-refactor`.
+- The README and the showcase write-up record that one showcase candidate led to a reproduced bug and an open, unmerged pull request (can1357/oh-my-pi#13847).
+- Plans from earlier versions still verify. No signal, question or scan behavior changed.
+
 ## 0.2.0-alpha
 
 - **Renamed to `jev-refactor`** (was `semantic-refactor-scan`). The command is `jev-refactor`, with the short alias `jr`. Schema identifiers (`semantic-refactor-scan-plan/1`, `semantic-refactor-scan-report/1`) keep their names, because plans and the recorded demo are bound to them by hash. Plans from 0.1.0-alpha and 0.1.1 still verify.

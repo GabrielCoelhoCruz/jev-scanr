@@ -293,3 +293,16 @@ test("the binary also runs through a symlink, as npm and npx install it", (t) =>
   });
   assert.match(out, /clone_same_policy@/);
 });
+
+test("--version, -V and version print the package version", () => {
+  const version = JSON.parse(
+    readFileSync(new URL("../package.json", import.meta.url)),
+  ).version;
+  for (const flag of ["--version", "-V", "version"]) {
+    const out = execFileSync(process.execPath, [cli, flag], {
+      env,
+      encoding: "utf8",
+    });
+    assert.equal(out.trim(), `jev-refactor ${version}`);
+  }
+});

@@ -9,7 +9,7 @@
 
 **Measured, not promised.** We started with 22 candidate questions and kept the 7 that survived a written review rule. In a pre-registered test on two repositories we had never scanned, 3 of those 7 reached a usefulness band by an LLM reviewer's labels (one above 50% actionable, two between 30% and 50%), and **no person has confirmed them yet**, so this is an alpha. [What we measured](#what-we-measured) has the numbers and the limits.
 
-<!-- TODO(after the pull request exists): add the confirmed oh-my-pi finding to this paragraph. Do not write "found a real bug in oh-my-pi" before a maintainer or a test confirms it. The showcase candidates are hypotheses today. -->
+One candidate from the showcase (two similar finalization paths in `oh-my-pi`) led to a bug reproduced with a regression test and an open pull request, [can1357/oh-my-pi#13847](https://github.com/can1357/oh-my-pi/pull/13847). It is **open and not merged**, and the maintainer has not confirmed it. The other candidates remain hypotheses.
 
 It cuts your project into functions and similar pairs of functions, asks [Jev](https://docs.typesafe.ai) a few narrow questions about each one ("does this function do two or more separable jobs?", "does it embed unexplained policy numbers?"), and gives you a list ordered by Jev's probability. You, or a coding agent, verify each item and act on the ones that hold. It is **not** a bug finder, a security scanner or an auto-fixer, and it changes no files.
 
@@ -18,6 +18,8 @@ npm install -g github:GabrielCoelhoCruz/jev-refactor    # not on npm yet; Node.j
 jr auth                                                 # saves your TypeSafe key; or: export TYPESAFE_API_KEY=...
 jr scan .                                               # dry run: units, requests, cost estimate; sends nothing
 ```
+
+`jr` is also the name of an unrelated package on npm, so **never run `npx jr`**: it would run someone else's code. To run without installing, use `npx github:GabrielCoelhoCruz/jev-refactor scan .`, or install as above and use the `jr` and `jev-refactor` commands.
 
 The dry run needs no key, so you can try the first and third command before you have one. `jr` is short for `jev-refactor`. A live run needs your own [TypeSafe](https://docs.typesafe.ai) API key and runs only when you add `--run --yes --cap-usd N`.
 
@@ -102,7 +104,7 @@ Every number has its limits next to it. All labels come from an LLM reviewer; no
 
 - **[Signal curation on one app](evals/results/signal-curation-daily-tracker.md).** 22 questions in, 7 kept by a rule written before the labels: on the top cells of the kept signals 21 of 29 were actionable (72%, an upper bound), against 1 of 41 for the rest, and 0 of 64 random cells below the cut. One project, the author's own.
 - **[Validation gate on two new repositories](evals/results/validation-gate-2026-09-30.md).** Pre-registered, random above-cut sample. 3 of 7 signals reached a default band (only `clone_same_policy` above 50%), the repositories disagree on two of the three, and the rule's outcome for exactly 3 was not registered. The project stays an alpha. The release code was not the code that ran (the prototype it derives from was).
-- **[Showcase on t3code and oh-my-pi](evals/results/showcase-t3code-oh-my-pi-2026-09-30.md).** Five candidates as hypotheses on 2.8% to 6.8% of two repositories, with pinned commits. We have not contacted the maintainers.
+- **[Showcase on t3code and oh-my-pi](evals/results/showcase-t3code-oh-my-pi-2026-09-30.md).** Five candidates as hypotheses on 2.8% to 6.8% of two repositories, with pinned commits. One of them led to an open, unmerged pull request ([can1357/oh-my-pi#13847](https://github.com/can1357/oh-my-pi/pull/13847)); we have opened nothing else and have not contacted the maintainers about the others.
 - **[One candidate, in detail](evals/results/daily-tracker-case-study.md).** What a useful item looks like, and what it takes to confirm one.
 
 ## Source, credentials, and local state

@@ -89,6 +89,7 @@ test("a plan from the alpha release, without scope or the hard cap, still verifi
     "0.1.0-alpha",
     "0.1.1",
     "0.2.0-alpha",
+    "0.2.1-alpha",
   ]);
   const wrong = structuredClone(p);
   delete wrong.limits.maxHardRequestBytes;

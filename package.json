@@ -1,6 +1,6 @@
 {
   "name": "jev-refactor",
-  "version": "0.2.0-alpha",
+  "version": "0.2.1-alpha",
   "description": "A refactoring queue for TypeScript and JavaScript projects, judged by the Jev model. Unofficial, not affiliated with TypeSafe.",
   "keywords": [
     "jev",

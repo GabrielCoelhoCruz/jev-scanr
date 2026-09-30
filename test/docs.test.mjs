@@ -97,3 +97,37 @@ test("no internal ticket ids or machine paths are in tracked text", () => {
     );
   }
 });
+
+test("no document runs an npm package named jr or jev-refactor through npx", () => {
+  for (const file of walk(root)) {
+    if (
+      !/\.(md|mjs|json|yml|txt)$/.test(file) ||
+      file.endsWith("package-lock.json") ||
+      file.endsWith("docs.test.mjs")
+    )
+      continue;
+    const text = readFileSync(file, "utf8");
+    for (const [, line] of text.matchAll(
+      /^(.*\bnpx\s+(?:--yes\s+|-y\s+)?(?:jr|jev-refactor)\b.*)$/gm,
+    ))
+      assert.ok(
+        /never (run )?`?npx jr/i.test(line),
+        `${relative(root, file)}: ${line.trim()}`,
+      );
+  }
+  const readme = read("README.md");
+  assert.match(readme, /never run `npx jr`/i);
+  assert.match(readme, /npx github:GabrielCoelhoCruz\/jev-refactor/);
+  assert.match(read("skills/jev-refactor/SKILL.md"), /Never run `npx jr`/);
+});
+
+test("the README reports the oh-my-pi pull request as open, not merged", () => {
+  const readme = read("README.md");
+  assert.ok(!/TODO/.test(readme));
+  assert.match(readme, /oh-my-pi#13847/);
+  assert.match(readme, /open and not merged/);
+  assert.match(
+    read("evals/results/showcase-t3code-oh-my-pi-2026-09-30.md"),
+    /13847[^\n]*not merged|not merged[^\n]*13847/,
+  );
+});

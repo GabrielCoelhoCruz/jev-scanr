@@ -267,10 +267,11 @@ function verifyUnitManifest(plan) {
   }
 }
 export const PLAN_SCHEMA = "semantic-refactor-scan-plan/1";
-export const SCANNER_VERSION = "0.2.0-alpha";
+export const SCANNER_VERSION = "0.2.1-alpha";
 export const COMPATIBLE_PLAN_VERSIONS = [
   "0.1.0-alpha",
   "0.1.1",
+  "0.2.0-alpha",
   SCANNER_VERSION,
 ];
 
