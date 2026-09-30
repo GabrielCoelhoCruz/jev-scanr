@@ -69,12 +69,36 @@ function scoredUnits() {
   return rows;
 }
 
+function realNameCells() {
+  const lines = (path) =>
+    text(path)
+      .trim()
+      .split("\n")
+      .map((l) => JSON.parse(l));
+  const labels = (path) =>
+    Object.fromEntries(lines(path).map((x) => [x.id, x.label]));
+  const claude = labels("../real/labels/claude.jsonl"),
+    gpt = labels("../real/labels/gpt.jsonl"),
+    p = {};
+  for (const e of lines("../real/results/live-3/journal.jsonl"))
+    if (e.type === "finished" && e.status === "succeeded")
+      p[e.unitId] =
+        e.response.answers.name_vs_behavior.probabilities.name_mismatch;
+  return read("../real/units.json").units.map((u) => ({
+    id: u.id,
+    p: p[u.id],
+    nameCue: u.features.nameMissing === 1,
+    claude: claude[u.id],
+    gpt: gpt[u.id],
+  }));
+}
+
 function realCells(baseline, id) {
   if (id !== "name_vs_behavior")
     return baseline
       .filter((c) => c.signalId === id)
       .map((c) => ({ p: c.p, positive: c.labels.pass1 === "actionable" }));
-  return read("real-name-cells.json").cells.map((c) => ({
+  return realNameCells().map((c) => ({
     p: c.p,
     positive: [c.claude, c.gpt].some(
       (l) => l === "mismatch" || l === "imprecise",
@@ -143,7 +167,7 @@ export function derive() {
                 RULE.realFloorMinActionable)),
       ) ?? RULE.default.floor;
     perSignal[id] = { cut: cut / 100, floor: Math.min(floor, cut) / 100 };
-    const sample = read("real-name-cells.json").cells;
+    const sample = realNameCells();
     const cueSummary = () => {
       const flagged = (c) =>
         [c.claude, c.gpt].some((l) => l === "mismatch" || l === "imprecise");

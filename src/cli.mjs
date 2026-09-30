@@ -84,8 +84,9 @@ Options for scan
                       names they call and read, and their string literals, but fewer than 45% of their token
                       sequences (default 50, 0 turns the source off). They go through clone_same_policy
   --name-cue          name_vs_behavior only: ask just the functions whose name words are all absent from the body
-                      (about 11% to 15% of them). Off by default: on a random real sample it skipped 13 of the 16
-                      functions that two model readers called imprecise or mismatched
+                      (about 11% to 15% of them). Off by default because it loses recall on real subtle cases: on a
+                      random real sample (evals/real) it skipped 13 of the 16 functions that two model readers
+                      called imprecise or mismatched, to save about US$0.02 per 400 functions
   --include-tests     also ask about test files (off by default). Test files that call or import an asked function are
                       still sent as context; add --exclude to keep them out
   --external-configs FILE
