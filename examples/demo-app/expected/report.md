@@ -9,10 +9,10 @@ Coverage: read 10 of 10 source files (100%).
 
 Cost (calculated from provider-returned usage, not an invoice): **US$0.0008** for 19,754 input tokens over 15 attempts, 3 s wall-clock at concurrency 8.
 
-| Signal | Status | Scored | At or above cut | Cut | Model said insufficient | Evidence so far |
-|---|---|---:|---:|---:|---:|---|
-| clone_same_policy@3.0.0 | default | 1 | 1 | 0.7 | 0 | 5/5 actionable above the cut (daily-tracker, LLM reviewer) |
-| function_should_split@1.0.0 | default | 14 | 1 | 0.7 | 0 | 4/5 actionable above the cut (daily-tracker, LLM reviewer) |
-| function_multiple_responsibilities@1.0.0 | default | 14 | 2 | 0.7 | 0 | 2/4 actionable above the cut (daily-tracker, LLM reviewer) |
+| Signal | Status | Scored | At or above cut | Uncertain band | Cut | Floor | Model said insufficient | Evidence so far |
+|---|---|---:|---:|---:|---:|---:|---:|---|
+| clone_same_policy@3.0.0 | default | 1 | 1 | 0 | 0.7 | 0.5 | 0 | 5/5 actionable above the cut (daily-tracker, LLM reviewer) |
+| function_should_split@1.0.0 | default | 14 | 1 | 1 | 0.7 | 0.5 | 0 | 4/5 actionable above the cut (daily-tracker, LLM reviewer) |
+| function_multiple_responsibilities@1.0.0 | default | 14 | 2 | 0 | 0.7 | 0.5 | 0 | 2/4 actionable above the cut (daily-tracker, LLM reviewer) |
 
 Next: open `queue.md`. Every item there is something to verify, not to apply.

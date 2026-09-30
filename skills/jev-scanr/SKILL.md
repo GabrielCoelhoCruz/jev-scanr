@@ -45,7 +45,7 @@ Use it when the user wants candidates for refactoring in a TypeScript or JavaScr
 
    There are no automatic retries and the first error stops the run. If it stops early, `jevs continue` plans only what is missing.
 
-4. **Read `<dir>/queue.md`.** It lists paths, line ranges, the question, Jev's answer and P for each item, ordered by P. `plan.json` in that directory contains source excerpts: do not commit it or paste it anywhere.
+4. **Read `<dir>/queue.md`.** It has three parts: "worth a look" (P at or above the cut), "uncertain, check" (P from 0.5 up to the cut) and a count of cells below the band (listed only in `report.json`). Each item gives paths, line ranges, the question, Jev's answer and P, ordered by P. To re-cut a finished run without the API, use `jevs rescore <dir> --cut N`; it writes a new folder and never overwrites. `plan.json` in that directory contains source excerpts: do not commit it or paste it anywhere.
 
 ## Verify each item before editing
 
@@ -57,7 +57,7 @@ Every item is a **hypothesis**. P is Jev's probability for one narrow question, 
 4. Decide: act, skip, or ask the user. Say which items you dropped and why. Do not refactor an item you could not confirm.
 5. Keep the change small and run the project's own tests before and after. If a test does not cover the code, say so.
 
-Do not treat the order as a priority list, and do not change everything above a threshold. The 0.7 cut is a display setting.
+Do not treat the order as a priority list, and do not change everything above a threshold. The 0.7 cut is a display setting, and the "uncertain" band has more items that turn out to need no change.
 
 ## What the numbers mean
 

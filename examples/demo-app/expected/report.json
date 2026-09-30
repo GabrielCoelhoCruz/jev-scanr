@@ -8,6 +8,11 @@
     "function_should_split": 0.7,
     "function_multiple_responsibilities": 0.7
   },
+  "floors": {
+    "clone_same_policy": 0.5,
+    "function_should_split": 0.5,
+    "function_multiple_responsibilities": 0.5
+  },
   "thresholdMeaning": "Display cut only. Jev probabilities are not bug confidence, impact or permission to edit.",
   "coverage": {
     "paths": [],
@@ -72,6 +77,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -88,6 +95,8 @@
           "positiveOption": "multiple",
           "pPositive": 0.01,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -136,6 +145,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -152,6 +163,8 @@
           "positiveOption": "multiple",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -200,6 +213,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -216,6 +231,8 @@
           "positiveOption": "multiple",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -264,6 +281,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0.9,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "worth_a_look",
           "shown": true,
           "missingReasons": []
         },
@@ -280,6 +299,8 @@
           "positiveOption": "multiple",
           "pPositive": 0.88,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "worth_a_look",
           "shown": true,
           "missingReasons": []
         }
@@ -328,6 +349,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0.14,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -344,6 +367,8 @@
           "positiveOption": "multiple",
           "pPositive": 0.06,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -392,6 +417,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -408,6 +435,8 @@
           "positiveOption": "multiple",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -456,6 +485,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -472,6 +503,8 @@
           "positiveOption": "multiple",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -520,6 +553,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0.52,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "uncertain",
           "shown": false,
           "missingReasons": []
         },
@@ -536,6 +571,8 @@
           "positiveOption": "multiple",
           "pPositive": 0.78,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "worth_a_look",
           "shown": true,
           "missingReasons": []
         }
@@ -584,6 +621,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0.21,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -600,6 +639,8 @@
           "positiveOption": "multiple",
           "pPositive": 0.04,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -648,6 +689,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -664,6 +707,8 @@
           "positiveOption": "multiple",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -712,6 +757,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -728,6 +775,8 @@
           "positiveOption": "multiple",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -776,6 +825,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -792,6 +843,8 @@
           "positiveOption": "multiple",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -840,6 +893,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -856,6 +911,8 @@
           "positiveOption": "multiple",
           "pPositive": 0.06,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -904,6 +961,8 @@
           "positiveOption": "split_candidate",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         },
@@ -920,6 +979,8 @@
           "positiveOption": "multiple",
           "pPositive": 0,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "below",
           "shown": false,
           "missingReasons": []
         }
@@ -982,6 +1043,8 @@
           "positiveOption": "same_policy",
           "pPositive": 0.98,
           "threshold": 0.7,
+          "floor": 0.5,
+          "band": "worth_a_look",
           "shown": true,
           "missingReasons": []
         }
@@ -991,6 +1054,7 @@
   "views": {
     "clone_same_policy": {
       "threshold": 0.7,
+      "floor": 0.5,
       "status": "default",
       "version": "3.0.0",
       "evidence": [
@@ -1035,10 +1099,12 @@
           ]
         }
       ],
+      "uncertain": [],
       "ordering": "Jev P(positive option) descending; ties by pack id. No deterministic score participates."
     },
     "function_should_split": {
       "threshold": 0.7,
+      "floor": 0.5,
       "status": "default",
       "version": "1.0.0",
       "evidence": [
@@ -1076,10 +1142,29 @@
           ]
         }
       ],
+      "uncertain": [
+        {
+          "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+          "unitId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+          "pPositive": 0.52,
+          "confidence": 0.28,
+          "choice": "split_candidate",
+          "location": [
+            {
+              "name": "registerUser",
+              "path": "src/signup.ts",
+              "startLine": 1,
+              "endLine": 27,
+              "role": "focus"
+            }
+          ]
+        }
+      ],
       "ordering": "Jev P(positive option) descending; ties by pack id. No deterministic score participates."
     },
     "function_multiple_responsibilities": {
       "threshold": 0.7,
+      "floor": 0.5,
       "status": "default",
       "version": "1.0.0",
       "evidence": [
@@ -1133,6 +1218,7 @@
           ]
         }
       ],
+      "uncertain": [],
       "ordering": "Jev P(positive option) descending; ties by pack id. No deterministic score participates."
     }
   },
@@ -1148,6 +1234,8 @@
       "pPositive": 0.98,
       "confidence": 0.97,
       "threshold": 0.7,
+      "floor": 0.5,
+      "band": "worth_a_look",
       "unitId": "ee151de3275ae37355e909dd52f530d9ff4cffed82de02d862f6273f342ab215",
       "packId": "ee151de3275ae37355e909dd52f530d9ff4cffed82de02d862f6273f342ab215",
       "kind": "clone_pair",
@@ -1221,6 +1309,8 @@
       "pPositive": 0.9,
       "confidence": 0.85,
       "threshold": 0.7,
+      "floor": 0.5,
+      "band": "worth_a_look",
       "unitId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
       "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
       "kind": "function",
@@ -1287,6 +1377,8 @@
       "pPositive": 0.88,
       "confidence": 0.82,
       "threshold": 0.7,
+      "floor": 0.5,
+      "band": "worth_a_look",
       "unitId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
       "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
       "kind": "function",
@@ -1353,6 +1445,8 @@
       "pPositive": 0.78,
       "confidence": 0.66,
       "threshold": 0.7,
+      "floor": 0.5,
+      "band": "worth_a_look",
       "unitId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
       "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
       "kind": "function",
@@ -1394,5 +1488,81 @@
       "notAPatchInstruction": true
     }
   ],
-  "reportHash": "4d5e30aec8c376f43c93c4a3a53ee5c918bad072b6eb779aede3e0f0277a7a05"
+  "uncertain": [
+    {
+      "signalId": "function_should_split",
+      "signalVersion": "1.0.0",
+      "signalStatus": "default",
+      "question": "Is the section labeled focus long or dense enough that a reader must track many distinct steps, and do cohesive visible blocks exist that could each stand as a separately named function? Length alone is not enough; name the blocks in your reasoning.",
+      "answer": "split_candidate",
+      "positiveOption": "split_candidate",
+      "pPositive": 0.52,
+      "confidence": 0.28,
+      "threshold": 0.7,
+      "floor": 0.5,
+      "band": "uncertain",
+      "unitId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+      "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+      "kind": "function",
+      "split": null,
+      "location": [
+        {
+          "name": "registerUser",
+          "path": "src/signup.ts",
+          "startLine": 1,
+          "endLine": 27,
+          "role": "focus"
+        }
+      ],
+      "catchRange": null,
+      "verificationReads": [
+        {
+          "path": "src/signup.ts",
+          "range": {
+            "startOffset": 7,
+            "endOffset": 1125,
+            "startLine": 1,
+            "endLine": 27,
+            "encoding": "UTF-16",
+            "endExclusive": true
+          },
+          "fileSHA256": "d5dcab8e531e3362fc2fbcf3df16304ef0e986ce510771f00241bed6825be1b5",
+          "sourceSHA256": "65bec70e623e37954d9940e16f82f02a05ba1f0d66f65f6013f2b91f63402023",
+          "roles": [
+            "focus"
+          ]
+        }
+      ],
+      "contextOmissions": [],
+      "packRef": {
+        "planHash": "65338442af640700791096d3e4c0ed853065e13abed3cc54d1cfde1346f2bb6e",
+        "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+        "contentHash": "cf44609dbf980a87bcb12ac8d5eb6fe9b18ccff918e36647323497916c0f48b5"
+      },
+      "notAPatchInstruction": true
+    }
+  ],
+  "bands": {
+    "meaning": "worth_a_look: P at or above the signal's cut. uncertain: P at or above the floor and below the cut. below: P under the floor, listed in report.json only. Bands sort cells for reading; they are not calibrated probabilities. See docs/BANDS.md.",
+    "edges": {
+      "clone_same_policy": {
+        "floor": 0.5,
+        "cut": 0.7
+      },
+      "function_should_split": {
+        "floor": 0.5,
+        "cut": 0.7
+      },
+      "function_multiple_responsibilities": {
+        "floor": 0.5,
+        "cut": 0.7
+      }
+    },
+    "counts": {
+      "worth_a_look": 4,
+      "uncertain": 1,
+      "below": 24
+    }
+  },
+  "reportHash": "2ed2e520e91a58a62c8f5705b285619d75d66c049ac469bacc3b1ee67cdbc761"
 }

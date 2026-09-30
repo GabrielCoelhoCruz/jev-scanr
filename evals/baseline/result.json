@@ -1,0 +1,859 @@
+{
+  "schema": "baseline-result/1",
+  "cut": 0.7,
+  "resamples": 2000,
+  "seed": 20260930,
+  "primary": {
+    "function_should_split": "lines",
+    "function_multiple_responsibilities": "lines",
+    "clone_same_policy": "jscpdCoverage10"
+  },
+  "cells": 95,
+  "views": {
+    "pass1": {
+      "function_should_split": {
+        "n": 36,
+        "actionable": 12,
+        "baseRate": 0.333,
+        "aboveCut": 28,
+        "aboveCutActionable": 10,
+        "jev": {
+          "auc": 0.707,
+          "precisionAtCut": 0.357,
+          "aucCI": [0.482, 0.895],
+          "precisionAtCutCI": [0.185, 0.538]
+        },
+        "heuristics": {
+          "lines": {
+            "description": "function length (lines)",
+            "auc": 0.875,
+            "aucCI": [0.745, 0.981],
+            "deltaAuc": -0.168,
+            "deltaAucCI": [-0.417, 0.064],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.429,
+            "precisionAtKCI": [0.241, 0.63],
+            "deltaPrecision": -0.071,
+            "deltaPrecisionCI": [-0.192, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "statements": {
+            "description": "statement count",
+            "auc": 0.849,
+            "aucCI": [0.718, 0.958],
+            "deltaAuc": -0.142,
+            "deltaAucCI": [-0.369, 0.065],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.429,
+            "precisionAtKCI": [0.241, 0.643],
+            "deltaPrecision": -0.071,
+            "deltaPrecisionCI": [-0.2, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "cyclomatic": {
+            "description": "cyclomatic complexity",
+            "auc": 0.786,
+            "aucCI": [0.608, 0.929],
+            "deltaAuc": -0.08,
+            "deltaAucCI": [-0.322, 0.158],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.429,
+            "precisionAtKCI": [0.231, 0.607],
+            "deltaPrecision": -0.071,
+            "deltaPrecisionCI": [-0.172, 0.038],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "params": {
+            "description": "parameter count",
+            "auc": 0.439,
+            "aucCI": [0.267, 0.63],
+            "deltaAuc": 0.267,
+            "deltaAucCI": [-0.012, 0.525],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.32,
+            "precisionAtKCI": [0.166, 0.483],
+            "deltaPrecision": 0.038,
+            "deltaPrecisionCI": [-0.072, 0.152],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "tokens": {
+            "description": "token count",
+            "auc": 0.865,
+            "aucCI": [0.735, 0.968],
+            "deltaAuc": -0.158,
+            "deltaAucCI": [-0.401, 0.062],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.429,
+            "precisionAtKCI": [0.241, 0.643],
+            "deltaPrecision": -0.071,
+            "deltaPrecisionCI": [-0.2, 0],
+            "precisionVerdict": "no_detectable_difference"
+          }
+        }
+      },
+      "function_multiple_responsibilities": {
+        "n": 23,
+        "actionable": 11,
+        "baseRate": 0.478,
+        "aboveCut": 15,
+        "aboveCutActionable": 9,
+        "jev": {
+          "auc": 0.697,
+          "precisionAtCut": 0.6,
+          "aucCI": [0.452, 0.912],
+          "precisionAtCutCI": [0.333, 0.846]
+        },
+        "heuristics": {
+          "lines": {
+            "description": "function length (lines)",
+            "auc": 0.795,
+            "aucCI": [0.577, 0.962],
+            "deltaAuc": -0.098,
+            "deltaAucCI": [-0.429, 0.223],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.667,
+            "precisionAtKCI": [0.364, 0.857],
+            "deltaPrecision": -0.067,
+            "deltaPrecisionCI": [-0.231, 0.2],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "statements": {
+            "description": "statement count",
+            "auc": 0.792,
+            "aucCI": [0.577, 0.947],
+            "deltaAuc": -0.095,
+            "deltaAucCI": [-0.437, 0.246],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.667,
+            "precisionAtKCI": [0.364, 0.833],
+            "deltaPrecision": -0.067,
+            "deltaPrecisionCI": [-0.222, 0.231],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "cyclomatic": {
+            "description": "cyclomatic complexity",
+            "auc": 0.75,
+            "aucCI": [0.508, 0.925],
+            "deltaAuc": -0.053,
+            "deltaAucCI": [-0.373, 0.288],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.6,
+            "precisionAtKCI": [0.3, 0.833],
+            "deltaPrecision": 0,
+            "deltaPrecisionCI": [-0.2, 0.308],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "params": {
+            "description": "parameter count",
+            "auc": 0.345,
+            "aucCI": [0.184, 0.524],
+            "deltaAuc": 0.352,
+            "deltaAucCI": [0.092, 0.587],
+            "aucVerdict": "jev_ahead",
+            "precisionAtK": 0.408,
+            "precisionAtKCI": [0.171, 0.641],
+            "deltaPrecision": 0.192,
+            "deltaPrecisionCI": [0.004, 0.413],
+            "precisionVerdict": "jev_ahead"
+          },
+          "tokens": {
+            "description": "token count",
+            "auc": 0.811,
+            "aucCI": [0.591, 0.976],
+            "deltaAuc": -0.114,
+            "deltaAucCI": [-0.447, 0.213],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.667,
+            "precisionAtKCI": [0.364, 0.867],
+            "deltaPrecision": -0.067,
+            "deltaPrecisionCI": [-0.25, 0.188],
+            "precisionVerdict": "no_detectable_difference"
+          }
+        }
+      },
+      "clone_same_policy": {
+        "n": 36,
+        "actionable": 19,
+        "baseRate": 0.528,
+        "aboveCut": 28,
+        "aboveCutActionable": 17,
+        "jev": {
+          "auc": 0.703,
+          "precisionAtCut": 0.607,
+          "aucCI": [0.517, 0.861],
+          "precisionAtCutCI": [0.435, 0.778]
+        },
+        "heuristics": {
+          "jscpdCoverage10": {
+            "description": "jscpd-style duplicated-token coverage (k=10)",
+            "auc": 0.734,
+            "aucCI": [0.537, 0.884],
+            "deltaAuc": -0.031,
+            "deltaAucCI": [-0.23, 0.176],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.679,
+            "precisionAtKCI": [0.471, 0.828],
+            "deltaPrecision": -0.071,
+            "deltaPrecisionCI": [-0.154, 0.08],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "retrievalJaccard": {
+            "description": "5-token shingle Jaccard (the scanner's pairing score)",
+            "auc": 0.514,
+            "aucCI": [0.316, 0.716],
+            "deltaAuc": 0.189,
+            "deltaAucCI": [-0.019, 0.4],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.571,
+            "precisionAtKCI": [0.375, 0.741],
+            "deltaPrecision": 0.036,
+            "deltaPrecisionCI": [-0.065, 0.2],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "rawJaccard5": {
+            "description": "raw-token 5-gram Jaccard",
+            "auc": 0.681,
+            "aucCI": [0.472, 0.847],
+            "deltaAuc": 0.022,
+            "deltaAucCI": [-0.194, 0.241],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.643,
+            "precisionAtKCI": [0.458, 0.806],
+            "deltaPrecision": -0.036,
+            "deltaPrecisionCI": [-0.138, 0.12],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "minLines": {
+            "description": "size of the smaller member (lines)",
+            "auc": 0.568,
+            "aucCI": [0.371, 0.746],
+            "deltaAuc": 0.135,
+            "deltaAucCI": [-0.179, 0.438],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.536,
+            "precisionAtKCI": [0.354, 0.706],
+            "deltaPrecision": 0.071,
+            "deltaPrecisionCI": [-0.042, 0.217],
+            "precisionVerdict": "no_detectable_difference"
+          }
+        }
+      }
+    },
+    "pass2": {
+      "function_should_split": {
+        "n": 36,
+        "actionable": 12,
+        "baseRate": 0.333,
+        "aboveCut": 28,
+        "aboveCutActionable": 10,
+        "jev": {
+          "auc": 0.707,
+          "precisionAtCut": 0.357,
+          "aucCI": [0.482, 0.895],
+          "precisionAtCutCI": [0.185, 0.538]
+        },
+        "heuristics": {
+          "lines": {
+            "description": "function length (lines)",
+            "auc": 0.875,
+            "aucCI": [0.745, 0.981],
+            "deltaAuc": -0.168,
+            "deltaAucCI": [-0.417, 0.064],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.429,
+            "precisionAtKCI": [0.241, 0.63],
+            "deltaPrecision": -0.071,
+            "deltaPrecisionCI": [-0.192, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "statements": {
+            "description": "statement count",
+            "auc": 0.849,
+            "aucCI": [0.718, 0.958],
+            "deltaAuc": -0.142,
+            "deltaAucCI": [-0.369, 0.065],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.429,
+            "precisionAtKCI": [0.241, 0.643],
+            "deltaPrecision": -0.071,
+            "deltaPrecisionCI": [-0.2, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "cyclomatic": {
+            "description": "cyclomatic complexity",
+            "auc": 0.786,
+            "aucCI": [0.608, 0.929],
+            "deltaAuc": -0.08,
+            "deltaAucCI": [-0.322, 0.158],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.429,
+            "precisionAtKCI": [0.231, 0.607],
+            "deltaPrecision": -0.071,
+            "deltaPrecisionCI": [-0.172, 0.038],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "params": {
+            "description": "parameter count",
+            "auc": 0.439,
+            "aucCI": [0.267, 0.63],
+            "deltaAuc": 0.267,
+            "deltaAucCI": [-0.012, 0.525],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.32,
+            "precisionAtKCI": [0.166, 0.483],
+            "deltaPrecision": 0.038,
+            "deltaPrecisionCI": [-0.072, 0.152],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "tokens": {
+            "description": "token count",
+            "auc": 0.865,
+            "aucCI": [0.735, 0.968],
+            "deltaAuc": -0.158,
+            "deltaAucCI": [-0.401, 0.062],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.429,
+            "precisionAtKCI": [0.241, 0.643],
+            "deltaPrecision": -0.071,
+            "deltaPrecisionCI": [-0.2, 0],
+            "precisionVerdict": "no_detectable_difference"
+          }
+        }
+      },
+      "function_multiple_responsibilities": {
+        "n": 23,
+        "actionable": 11,
+        "baseRate": 0.478,
+        "aboveCut": 15,
+        "aboveCutActionable": 9,
+        "jev": {
+          "auc": 0.697,
+          "precisionAtCut": 0.6,
+          "aucCI": [0.452, 0.912],
+          "precisionAtCutCI": [0.333, 0.846]
+        },
+        "heuristics": {
+          "lines": {
+            "description": "function length (lines)",
+            "auc": 0.795,
+            "aucCI": [0.577, 0.962],
+            "deltaAuc": -0.098,
+            "deltaAucCI": [-0.429, 0.223],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.667,
+            "precisionAtKCI": [0.364, 0.857],
+            "deltaPrecision": -0.067,
+            "deltaPrecisionCI": [-0.231, 0.2],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "statements": {
+            "description": "statement count",
+            "auc": 0.792,
+            "aucCI": [0.577, 0.947],
+            "deltaAuc": -0.095,
+            "deltaAucCI": [-0.437, 0.246],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.667,
+            "precisionAtKCI": [0.364, 0.833],
+            "deltaPrecision": -0.067,
+            "deltaPrecisionCI": [-0.222, 0.231],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "cyclomatic": {
+            "description": "cyclomatic complexity",
+            "auc": 0.75,
+            "aucCI": [0.508, 0.925],
+            "deltaAuc": -0.053,
+            "deltaAucCI": [-0.373, 0.288],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.6,
+            "precisionAtKCI": [0.3, 0.833],
+            "deltaPrecision": 0,
+            "deltaPrecisionCI": [-0.2, 0.308],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "params": {
+            "description": "parameter count",
+            "auc": 0.345,
+            "aucCI": [0.184, 0.524],
+            "deltaAuc": 0.352,
+            "deltaAucCI": [0.092, 0.587],
+            "aucVerdict": "jev_ahead",
+            "precisionAtK": 0.408,
+            "precisionAtKCI": [0.171, 0.641],
+            "deltaPrecision": 0.192,
+            "deltaPrecisionCI": [0.004, 0.413],
+            "precisionVerdict": "jev_ahead"
+          },
+          "tokens": {
+            "description": "token count",
+            "auc": 0.811,
+            "aucCI": [0.591, 0.976],
+            "deltaAuc": -0.114,
+            "deltaAucCI": [-0.447, 0.213],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.667,
+            "precisionAtKCI": [0.364, 0.867],
+            "deltaPrecision": -0.067,
+            "deltaPrecisionCI": [-0.25, 0.188],
+            "precisionVerdict": "no_detectable_difference"
+          }
+        }
+      },
+      "clone_same_policy": {
+        "n": 36,
+        "actionable": 22,
+        "baseRate": 0.611,
+        "aboveCut": 28,
+        "aboveCutActionable": 20,
+        "jev": {
+          "auc": 0.75,
+          "precisionAtCut": 0.714,
+          "aucCI": [0.58, 0.893],
+          "precisionAtCutCI": [0.538, 0.875]
+        },
+        "heuristics": {
+          "jscpdCoverage10": {
+            "description": "jscpd-style duplicated-token coverage (k=10)",
+            "auc": 0.76,
+            "aucCI": [0.564, 0.916],
+            "deltaAuc": -0.01,
+            "deltaAucCI": [-0.233, 0.214],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.75,
+            "precisionAtKCI": [0.571, 0.893],
+            "deltaPrecision": -0.036,
+            "deltaPrecisionCI": [-0.138, 0.107],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "retrievalJaccard": {
+            "description": "5-token shingle Jaccard (the scanner's pairing score)",
+            "auc": 0.578,
+            "aucCI": [0.372, 0.788],
+            "deltaAuc": 0.172,
+            "deltaAucCI": [-0.063, 0.395],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.679,
+            "precisionAtKCI": [0.48, 0.84],
+            "deltaPrecision": 0.036,
+            "deltaPrecisionCI": [-0.065, 0.2],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "rawJaccard5": {
+            "description": "raw-token 5-gram Jaccard",
+            "auc": 0.718,
+            "aucCI": [0.509, 0.89],
+            "deltaAuc": 0.032,
+            "deltaAucCI": [-0.208, 0.273],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.75,
+            "precisionAtKCI": [0.556, 0.88],
+            "deltaPrecision": -0.036,
+            "deltaPrecisionCI": [-0.129, 0.148],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "minLines": {
+            "description": "size of the smaller member (lines)",
+            "auc": 0.542,
+            "aucCI": [0.339, 0.731],
+            "deltaAuc": 0.208,
+            "deltaAucCI": [-0.094, 0.498],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.625,
+            "precisionAtKCI": [0.442, 0.791],
+            "deltaPrecision": 0.089,
+            "deltaPrecisionCI": [-0.027, 0.24],
+            "precisionVerdict": "no_detectable_difference"
+          }
+        }
+      }
+    },
+    "pass1-gate-only": {
+      "function_should_split": {
+        "n": 24,
+        "actionable": 8,
+        "baseRate": 0.333,
+        "aboveCut": 16,
+        "aboveCutActionable": 6,
+        "jev": {
+          "auc": 0.672,
+          "precisionAtCut": 0.375,
+          "aucCI": [0.382, 0.926],
+          "precisionAtCutCI": [0.133, 0.625]
+        },
+        "heuristics": {
+          "lines": {
+            "description": "function length (lines)",
+            "auc": 0.977,
+            "aucCI": [0.906, 1],
+            "deltaAuc": -0.305,
+            "deltaAucCI": [-0.589, -0.05],
+            "aucVerdict": "baseline_ahead",
+            "precisionAtK": 0.5,
+            "precisionAtKCI": [0.222, 0.857],
+            "deltaPrecision": -0.125,
+            "deltaPrecisionCI": [-0.385, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "statements": {
+            "description": "statement count",
+            "auc": 0.938,
+            "aucCI": [0.821, 1],
+            "deltaAuc": -0.266,
+            "deltaAucCI": [-0.556, -0.011],
+            "aucVerdict": "baseline_ahead",
+            "precisionAtK": 0.5,
+            "precisionAtKCI": [0.222, 0.824],
+            "deltaPrecision": -0.125,
+            "deltaPrecisionCI": [-0.364, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "cyclomatic": {
+            "description": "cyclomatic complexity",
+            "auc": 0.816,
+            "aucCI": [0.589, 0.986],
+            "deltaAuc": -0.145,
+            "deltaAucCI": [-0.505, 0.217],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.438,
+            "precisionAtKCI": [0.2, 0.714],
+            "deltaPrecision": -0.062,
+            "deltaPrecisionCI": [-0.286, 0.125],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "params": {
+            "description": "parameter count",
+            "auc": 0.305,
+            "aucCI": [0.138, 0.5],
+            "deltaAuc": 0.367,
+            "deltaAucCI": [0.023, 0.691],
+            "aucVerdict": "jev_ahead",
+            "precisionAtK": 0.263,
+            "precisionAtKCI": [0.083, 0.471],
+            "deltaPrecision": 0.112,
+            "deltaPrecisionCI": [-0.053, 0.32],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "tokens": {
+            "description": "token count",
+            "auc": 0.93,
+            "aucCI": [0.807, 1],
+            "deltaAuc": -0.258,
+            "deltaAucCI": [-0.548, 0],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.5,
+            "precisionAtKCI": [0.222, 0.846],
+            "deltaPrecision": -0.125,
+            "deltaPrecisionCI": [-0.385, 0],
+            "precisionVerdict": "no_detectable_difference"
+          }
+        }
+      },
+      "function_multiple_responsibilities": {
+        "n": 16,
+        "actionable": 5,
+        "baseRate": 0.313,
+        "aboveCut": 8,
+        "aboveCutActionable": 3,
+        "jev": {
+          "auc": 0.655,
+          "precisionAtCut": 0.375,
+          "aucCI": [0.333, 0.929],
+          "precisionAtCutCI": [0, 0.75]
+        },
+        "heuristics": {
+          "lines": {
+            "description": "function length (lines)",
+            "auc": 0.691,
+            "aucCI": [0.327, 0.964],
+            "deltaAuc": -0.036,
+            "deltaAucCI": [-0.542, 0.521],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.5,
+            "precisionAtKCI": [0.1, 0.833],
+            "deltaPrecision": -0.125,
+            "deltaPrecisionCI": [-0.5, 0.333],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "statements": {
+            "description": "statement count",
+            "auc": 0.627,
+            "aucCI": [0.321, 0.897],
+            "deltaAuc": 0.027,
+            "deltaAucCI": [-0.476, 0.538],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.375,
+            "precisionAtKCI": [0, 0.7],
+            "deltaPrecision": 0,
+            "deltaPrecisionCI": [-0.333, 0.5],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "cyclomatic": {
+            "description": "cyclomatic complexity",
+            "auc": 0.582,
+            "aucCI": [0.286, 0.855],
+            "deltaAuc": 0.073,
+            "deltaAucCI": [-0.392, 0.538],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.375,
+            "precisionAtKCI": [0, 0.727],
+            "deltaPrecision": 0,
+            "deltaPrecisionCI": [-0.375, 0.6],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "params": {
+            "description": "parameter count",
+            "auc": 0.291,
+            "aucCI": [0.071, 0.538],
+            "deltaAuc": 0.364,
+            "deltaAucCI": [0.033, 0.69],
+            "aucVerdict": "jev_ahead",
+            "precisionAtK": 0.205,
+            "precisionAtKCI": [0, 0.462],
+            "deltaPrecision": 0.17,
+            "deltaPrecisionCI": [-0.083, 0.5],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "tokens": {
+            "description": "token count",
+            "auc": 0.691,
+            "aucCI": [0.292, 0.979],
+            "deltaAuc": -0.036,
+            "deltaAucCI": [-0.564, 0.517],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.5,
+            "precisionAtKCI": [0.1, 0.833],
+            "deltaPrecision": -0.125,
+            "deltaPrecisionCI": [-0.5, 0.333],
+            "precisionVerdict": "no_detectable_difference"
+          }
+        }
+      },
+      "clone_same_policy": {
+        "n": 24,
+        "actionable": 14,
+        "baseRate": 0.583,
+        "aboveCut": 16,
+        "aboveCutActionable": 12,
+        "jev": {
+          "auc": 0.743,
+          "precisionAtCut": 0.75,
+          "aucCI": [0.521, 0.934],
+          "precisionAtCutCI": [0.529, 0.938]
+        },
+        "heuristics": {
+          "jscpdCoverage10": {
+            "description": "jscpd-style duplicated-token coverage (k=10)",
+            "auc": 0.664,
+            "aucCI": [0.379, 0.889],
+            "deltaAuc": 0.079,
+            "deltaAucCI": [-0.177, 0.378],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.688,
+            "precisionAtKCI": [0.4, 0.889],
+            "deltaPrecision": 0.063,
+            "deltaPrecisionCI": [-0.1, 0.308],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "retrievalJaccard": {
+            "description": "5-token shingle Jaccard (the scanner's pairing score)",
+            "auc": 0.571,
+            "aucCI": [0.322, 0.801],
+            "deltaAuc": 0.171,
+            "deltaAucCI": [-0.085, 0.454],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.625,
+            "precisionAtKCI": [0.357, 0.833],
+            "deltaPrecision": 0.125,
+            "deltaPrecisionCI": [-0.059, 0.385],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "rawJaccard5": {
+            "description": "raw-token 5-gram Jaccard",
+            "auc": 0.621,
+            "aucCI": [0.345, 0.852],
+            "deltaAuc": 0.121,
+            "deltaAucCI": [-0.13, 0.416],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.625,
+            "precisionAtKCI": [0.357, 0.867],
+            "deltaPrecision": 0.125,
+            "deltaPrecisionCI": [-0.062, 0.357],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "minLines": {
+            "description": "size of the smaller member (lines)",
+            "auc": 0.468,
+            "aucCI": [0.238, 0.707],
+            "deltaAuc": 0.275,
+            "deltaAucCI": [-0.118, 0.63],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.525,
+            "precisionAtKCI": [0.286, 0.778],
+            "deltaPrecision": 0.225,
+            "deltaPrecisionCI": [0, 0.467],
+            "precisionVerdict": "no_detectable_difference"
+          }
+        }
+      }
+    },
+    "second-llm": {
+      "function_should_split": {
+        "n": 8,
+        "actionable": 0,
+        "baseRate": 0,
+        "aboveCut": 7,
+        "aboveCutActionable": 0,
+        "note": "one class only: AUC is undefined",
+        "heuristics": {}
+      },
+      "function_multiple_responsibilities": {
+        "n": 7,
+        "actionable": 4,
+        "baseRate": 0.571,
+        "aboveCut": 6,
+        "aboveCutActionable": 3,
+        "jev": {
+          "auc": 0.25,
+          "precisionAtCut": 0.5,
+          "aucCI": [0, 0.833],
+          "precisionAtCutCI": [0.143, 0.833]
+        },
+        "heuristics": {
+          "lines": {
+            "description": "function length (lines)",
+            "auc": 0.75,
+            "aucCI": [0.2, 1],
+            "deltaAuc": -0.5,
+            "deltaAucCI": [-1, 0.5],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.667,
+            "precisionAtKCI": [0.167, 1],
+            "deltaPrecision": -0.167,
+            "deltaPrecisionCI": [-0.5, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "statements": {
+            "description": "statement count",
+            "auc": 0.833,
+            "aucCI": [0.333, 1],
+            "deltaAuc": -0.583,
+            "deltaAucCI": [-1, 0.25],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.667,
+            "precisionAtKCI": [0.167, 1],
+            "deltaPrecision": -0.167,
+            "deltaPrecisionCI": [-0.5, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "cyclomatic": {
+            "description": "cyclomatic complexity",
+            "auc": 0.833,
+            "aucCI": [0.333, 1],
+            "deltaAuc": -0.583,
+            "deltaAucCI": [-1, -0.083],
+            "aucVerdict": "baseline_ahead",
+            "precisionAtK": 0.667,
+            "precisionAtKCI": [0.167, 1],
+            "deltaPrecision": -0.167,
+            "deltaPrecisionCI": [-0.5, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "params": {
+            "description": "parameter count",
+            "auc": 0.25,
+            "aucCI": [0, 0.5],
+            "deltaAuc": 0,
+            "deltaAucCI": [-0.417, 0.5],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.5,
+            "precisionAtKCI": [0.143, 0.857],
+            "deltaPrecision": 0,
+            "deltaPrecisionCI": [-0.222, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "tokens": {
+            "description": "token count",
+            "auc": 0.667,
+            "aucCI": [0.167, 1],
+            "deltaAuc": -0.417,
+            "deltaAucCI": [-1, 0.583],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.5,
+            "precisionAtKCI": [0.167, 1],
+            "deltaPrecision": 0,
+            "deltaPrecisionCI": [-0.5, 0],
+            "precisionVerdict": "no_detectable_difference"
+          }
+        }
+      },
+      "clone_same_policy": {
+        "n": 5,
+        "actionable": 4,
+        "baseRate": 0.8,
+        "aboveCut": 5,
+        "aboveCutActionable": 4,
+        "jev": {
+          "auc": 0,
+          "precisionAtCut": 0.8,
+          "aucCI": [0, 0],
+          "precisionAtCutCI": [0.4, 0.8]
+        },
+        "heuristics": {
+          "jscpdCoverage10": {
+            "description": "jscpd-style duplicated-token coverage (k=10)",
+            "auc": 0.125,
+            "aucCI": [0, 0.375],
+            "deltaAuc": -0.125,
+            "deltaAucCI": [-0.375, 0],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.8,
+            "precisionAtKCI": [0.4, 0.8],
+            "deltaPrecision": 0,
+            "deltaPrecisionCI": [0, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "retrievalJaccard": {
+            "description": "5-token shingle Jaccard (the scanner's pairing score)",
+            "auc": 0.25,
+            "aucCI": [0, 0.5],
+            "deltaAuc": -0.25,
+            "deltaAucCI": [-0.5, 0],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.8,
+            "precisionAtKCI": [0.4, 0.8],
+            "deltaPrecision": 0,
+            "deltaPrecisionCI": [0, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "rawJaccard5": {
+            "description": "raw-token 5-gram Jaccard",
+            "auc": 0.125,
+            "aucCI": [0, 0.375],
+            "deltaAuc": -0.125,
+            "deltaAucCI": [-0.375, 0],
+            "aucVerdict": "no_detectable_difference",
+            "precisionAtK": 0.8,
+            "precisionAtKCI": [0.4, 0.8],
+            "deltaPrecision": 0,
+            "deltaPrecisionCI": [0, 0],
+            "precisionVerdict": "no_detectable_difference"
+          },
+          "minLines": {
+            "description": "size of the smaller member (lines)",
+            "auc": 1,
+            "aucCI": [1, 1],
+            "deltaAuc": -1,
+            "deltaAucCI": [-1, -1],
+            "aucVerdict": "baseline_ahead",
+            "precisionAtK": 0.8,
+            "precisionAtKCI": [0.4, 0.8],
+            "deltaPrecision": 0,
+            "deltaPrecisionCI": [0, 0],
+            "precisionVerdict": "no_detectable_difference"
+          }
+        }
+      }
+    }
+  }
+}

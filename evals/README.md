@@ -22,6 +22,10 @@ node evals/cli.mjs --help
   - **An error is not a zero.** An API failure is written to `errors.jsonl` with a failure class and stops the run. It is not a graded failure. There are no retries.
   - **Served model.** A response from any model other than `jev-1.13.0` is rejected and recorded as `served_model_mismatch`.
 
+## Free baseline
+
+`baseline/` compares Jev's stored P with free heuristics (function length, complexity, token similarity) on the labeled cells, from stored answers and labels only. Result and caveats: [`docs/BASELINE.md`](../docs/BASELINE.md). `node evals/baseline/analyze.mjs` reruns it offline.
+
 ## P variance
 
 Jev's probabilities are rounded to two decimals and are not reproducible from call to call, so a cut on P has a blurry edge. `variance` re-sends N answered requests once (chosen by a frozen seed) and reports how many cells moved by more than 0.05, the largest move, choice flips and cut crossings. The registered rule: if more than 20% of cells move by more than 0.05, show a range instead of a number and require P at or above the cut in two calls.
