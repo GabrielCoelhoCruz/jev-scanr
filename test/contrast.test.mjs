@@ -29,6 +29,7 @@ import { fakeScores } from "../evals/contrast/lib/fake.mjs";
 import {
   analyzeContrast,
   markdown,
+  retest,
   scoresFromJournal,
 } from "../evals/contrast/analyze.mjs";
 import { makeChimera, PINNED } from "../evals/contrast/build.mjs";
@@ -531,4 +532,143 @@ test("the committed live run reproduces its stored analysis, every answer has an
       stored.sets.B.diff.lo > 0 &&
       stored.sets.C.diff.lo > 0,
   );
+});
+
+test("a consumed chimera feeds the first half's result to the second and leaves no unreachable return", () => {
+  const mk = (text) => ({ text, ext: "ts", info: analyze(text, "ts") });
+  const a = mk(
+    "function sumCells(grid: number[][]) {\n  let total = 0;\n  for (const row of grid) total += row.length;\n  return total;\n}\n",
+  );
+  const b = mk(
+    "function loadPrefs(path: string) {\n  const res = fetchIt(path);\n  return res.json();\n}\n",
+  );
+  const c = makeChimera(a, b, { consume: true });
+  assert.match(c.text, /const sumCellsResult = total;/);
+  assert.match(c.text, /return \[sumCellsResult, res\.json\(\)\];/);
+  const voidB = mk("function logIt(path: string) {\n  console.log(path);\n}\n");
+  assert.match(
+    makeChimera(a, voidB, { consume: true }).text,
+    /console\.log\(path\);\n {2}return sumCellsResult;\n\}/,
+  );
+  const branchy = mk(
+    "function pick(x: number) {\n  if (x) {\n    return 1;\n  }\n  switch (x) {\n    case 1:\n      return 2;\n    default:\n      return 3;\n  }\n}\n",
+  );
+  assert.equal(makeChimera(a, branchy, { consume: true }), null);
+});
+
+const controls = JSON.parse(
+  readFileSync(join(root, "evals/contrast/controls.json"), "utf8"),
+);
+
+test("controls.json: A2 and B2 are complete, balanced and tied to units.json by text hash", () => {
+  const byId = new Map(doc.units.map((u) => [u.id, u]));
+  const count = (set, label) =>
+    controls.units.filter((u) => u.set === set && u.label === label).length;
+  assert.deepEqual(
+    [count("A2", 1), count("A2", 0), count("B2", 1), count("B2", 0)],
+    [46, 46, 50, 50],
+  );
+  for (const u of controls.units.filter((x) => x.reuses)) {
+    const old = byId.get(u.reuses);
+    assert.ok(old, `${u.id} reuses an unknown unit`);
+    assert.deepEqual(
+      u.files.map((f) => f.sha256),
+      old.files.map((f) => f.sha256),
+    );
+  }
+  assert.ok(
+    controls.units
+      .filter((u) => u.set === "A2" && u.label === 0)
+      .every((u) => u.reuses && byId.get(u.reuses).set === "A"),
+  );
+  assert.ok(
+    controls.units
+      .filter((u) => u.set === "B2" && u.label === 1)
+      .every((u) => u.reuses && byId.get(u.reuses).set === "B"),
+  );
+  assert.equal(
+    new Set([...doc.units, ...controls.units].map((u) => u.id)).size,
+    300 + 192,
+  );
+  assert.ok(controls.units.every((u) => !("texts" in u)));
+});
+
+test("analyzer on controls: oracle is perfect, matched features stay at chance, the surface leak is named", () => {
+  const oracle = analyzeContrast(controls, fakeScores(controls, "oracle"), {
+    resamples: 200,
+  });
+  assert.equal(oracle.sets.A2.jev.auc, 1);
+  assert.equal(oracle.sets.B2.jev.auc, 1);
+  assert.equal(oracle.sets.B2.diffSecondary.against, "surfaceJaccard");
+  const surface = analyzeContrast(
+    controls,
+    fakeScores(controls, "feature", { feature: "surfaceJaccard" }),
+    { resamples: 300 },
+  );
+  assert.ok(surface.sets.B2.jev.lo > 0.5);
+  assert.match(surface.sets.B2.verdict.join(" "), /surfaceJaccard/);
+  const length = analyzeContrast(
+    controls,
+    fakeScores(controls, "feature", { feature: "lines" }),
+    { resamples: 300 },
+  );
+  assert.ok(
+    length.sets.A2.matched &&
+      length.sets.A2.jev.lo <= 0.5 &&
+      length.sets.A2.jev.hi >= 0.5,
+  );
+  assert.ok(oracle.sets.B2.hardNegatives.n > 0);
+});
+
+test("the committed live-2 run reproduces its stored analysis and its test-retest summary", () => {
+  const dir = join(root, "evals/contrast/results/live-2");
+  const journal = readFileSync(join(dir, "journal.jsonl"), "utf8");
+  const stored = JSON.parse(readFileSync(join(dir, "result.json"), "utf8"));
+  const scores = scoresFromJournal(journal, controls);
+  assert.deepEqual(
+    analyzeContrast(controls, scores, { resamples: stored.resamples }),
+    stored,
+  );
+  const earlier = scoresFromJournal(
+    readFileSync(
+      join(root, "evals/contrast/results/live-1/journal.jsonl"),
+      "utf8",
+    ),
+    doc,
+  );
+  assert.deepEqual(
+    retest(controls, scores, earlier),
+    JSON.parse(readFileSync(join(dir, "retest.json"), "utf8")),
+  );
+  assert.equal(retest(controls, scores, earlier).all.n, 96);
+  assert.equal(
+    stored.sets.A2.jev.lo > 0.5 && stored.sets.B2.jev.lo > 0.5,
+    true,
+  );
+});
+
+test("retest compares identical inputs by their reuses link", () => {
+  const fake = {
+    units: [
+      { id: "n1", set: "X", label: 1, reuses: "o1" },
+      { id: "n2", set: "X", label: 0, reuses: "o2" },
+      { id: "n3", set: "X", label: 0, reuses: null },
+    ],
+  };
+  const now = new Map([
+    ["n1", { p: 0.72, choice: "a" }],
+    ["n2", { p: 0.4, choice: "b" }],
+    ["n3", { p: 0.9, choice: "a" }],
+  ]);
+  const before = new Map([
+    ["o1", { p: 0.68, choice: "a" }],
+    ["o2", { p: 0.55, choice: "a" }],
+  ]);
+  const out = retest(fake, now, before).all;
+  assert.equal(out.n, 2);
+  assert.ok(Math.abs(out.meanAbsChange - 0.095) < 1e-12);
+  assert.equal(out.changedByMoreThan005, 1);
+  assert.equal(out.choiceFlips, 1);
+  assert.equal(out.crossing05, 1);
+  assert.equal(out.crossing07, 1);
 });

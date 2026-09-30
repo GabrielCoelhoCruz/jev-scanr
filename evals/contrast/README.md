@@ -45,6 +45,8 @@ Paths inside a set are `u/<8 hex>.<ext>` or `u/<8 hex>/a|b.<ext>`. Nothing in a 
 
 Two features in B are not matched and separate the classes: vocabulary overlap (names of callees, properties and imports, locals excluded) and size ratio. A copy of a function keeps every name it does not declare itself, and the supply of different-function pairs with high vocabulary overlap and low token-shape overlap is small. Read Jev's B result against `vocabJaccard` too; the analyzer reports that comparison (`diffSecondary`).
 
+The generator uses a frozen copy of the 0.4.0-alpha secret filter (`lib/code.mjs`), not the one in `src/`. After the scanner's filter was widened, a rebuild with the new one changed 163 of 300 units, because a smaller pool reshuffles every seeded pick. Requests are still built through the current `src/` filter, so a unit that the current filter flags fails loudly in `requests.mjs` instead of being sent.
+
 ## Analysis, fixed before the live run
 
 Committed before any request was sent (see the commit history of this folder).
@@ -59,6 +61,22 @@ Committed before any request was sent (see the commit history of this folder).
 - No heuristic is chosen after seeing the answers. Every feature in `units.json` is reported.
 
 With 50 and 50 units an AUC difference under roughly 0.15 cannot be detected. A null result is "no detectable difference", not "equal".
+
+## Follow-up controls (prepared, not run)
+
+Two objections to live-1 (see `results/README.md`) get their own sets in `controls.json`, built by `build-controls.mjs` from the same pinned repositories and the same seed. They were prepared offline and need a separate go-ahead for a paid run.
+
+- **A2, consumed result.** The 46 chimeras of A whose first half yields a value, with the second half changed to use it: `return [xResult, <expr>]`, or `return xResult;` when the second half returns nothing. No dangling local remains. Chimeras whose second half has returns before its last statement are dropped, because appending a return would leave unreachable code (4 of 50 dropped, 46 remain, with their 46 controls). Controls are the same untouched functions as in A and are asked again, which also gives a test-retest read of Jev on identical inputs (`reuses` points at the `units.json` unit with the same text).
+- **B2, surface-matched negatives.** The 50 rewritten copies of B, asked again, against 50 new pairs of different functions chosen to share string literals, property names and type names as a copy does (`surfaceJaccard`), together with scanner overlap, vocabulary, size and raw-token overlap.
+
+Measured before any request (`node evals/contrast/analyze.mjs --units evals/contrast/controls.json --balance`): in A2 length is matched (AUC 0.50, 0.38 to 0.62) and params still leaks (0.56). In B2 scanner overlap reads 0.56 (0.44 to 0.67), but **surface overlap is not matched: 0.79 (0.71 to 0.86)**, and vocabulary 0.71, size ratio 0.67. Natural pairs of different functions rarely share as much surface as a copy does, so B2 narrows the gap (vocabulary 0.68 in B) without closing it. Some high-surface negatives are near-duplicates that could truly share a policy (for example two URL normalizers), so a high P on them is not automatically an error; the analyzer reports them as "hard negatives" (surface overlap at least 0.8) separately.
+
+Rules for reading them, fixed before the run:
+
+- A2: if Jev's AUC stays within the live-1 interval of A (0.72 to 0.89), the dangling local was not what Jev read. If it drops to the interval of a chance-level score, it was.
+- B2: if Jev's AUC stays above the lower end of the B interval (0.99) the surface cue is unlikely to explain B. A fall toward the surface-overlap AUC (0.79) means Jev tracks surface overlap at least in part. Any value between is reported as partial. The secondary comparison is `surfaceJaccard`.
+- The retest pairs report the mean absolute change in P between identical inputs in live-1 and the follow-up.
+- Run with `run.mjs --units controls.json --project PROJECT_CONTROLS`, same caps as live-1. Receipt: 192 requests, 240,116 estimated input tokens (bytes/3; live-1 ran 18% above that, so expect about 285,000), calculated US$0.010 to 0.012, worst case US$0.033, cap US$0.50.
 
 ## Attribution
 

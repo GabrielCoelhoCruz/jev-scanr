@@ -2,8 +2,15 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "@babel/parser";
-import { hash, secretLike } from "../../../src/core.mjs";
+import { hash } from "../../../src/core.mjs";
 import { sourcePath, testPath } from "../../../src/snapshot.mjs";
+
+// Frozen copy of the scanner's 0.4.0-alpha secret filter. The generator must not follow later changes to
+// src/core.mjs, or the pool, and with it every unit, would change. Requests still go through the current filter.
+export const secretLike = (source) =>
+  /-----BEGIN (?:[A-Z ]*PRIVATE KEY)-----|(?:api[_-]?key|password|secret|token)\s*[:=]\s*['"`][^'"`\s]{12,}['"`]|\b(?:gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|sk-[A-Za-z0-9_-]{20,}|AKIA[A-Z0-9]{16})\b/i.test(
+    source,
+  );
 
 export const FUNCTION_TYPES = new Set([
   "FunctionDeclaration",
@@ -203,6 +210,27 @@ export function analyze(text, ext) {
   const shingles = new Set();
   for (let i = 0; i + 5 <= norm.length; i++)
     shingles.add(norm.slice(i, i + 5).join("\u001f"));
+  const surface = new Set();
+  walk(fn, (n, parent, key) => {
+    if (n.type === "StringLiteral" && n.value.length >= 2)
+      surface.add(`s:${n.value}`);
+    else if (n.type === "TemplateElement" && n.value.cooked?.trim().length >= 2)
+      surface.add(`s:${n.value.cooked}`);
+    else if (
+      n.type === "Identifier" &&
+      ((parent?.type.endsWith("MemberExpression") &&
+        key === "property" &&
+        !parent.computed) ||
+        (["ObjectProperty", "ObjectMethod", "TSPropertySignature"].includes(
+          parent?.type,
+        ) &&
+          key === "key" &&
+          !parent.computed))
+    )
+      surface.add(`p:${n.name}`);
+    else if (n.type === "Identifier" && parent?.type === "TSTypeReference")
+      surface.add(`t:${n.name}`);
+  });
   const locals = localNames(fn);
   const vocab = new Set(
     toks
@@ -223,6 +251,7 @@ export function analyze(text, ext) {
     norm,
     shingles,
     vocab,
+    surface,
     locals,
     words: new Set(splitWords(bodyText)),
     usesThis,

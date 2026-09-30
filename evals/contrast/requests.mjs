@@ -123,7 +123,7 @@ export function receipt(requests, capUSD = CAP_USD) {
   const total = requests.reduce((n, r) => n + r.serializedBytes, 0);
   const estTokens = Math.ceil(total / 3);
   const perSet = Object.fromEntries(
-    ["A", "B", "C"].map((s) => {
+    [...new Set(requests.map((r) => r.set))].sort().map((s) => {
       const rs = requests.filter((r) => r.set === s);
       return [
         s,

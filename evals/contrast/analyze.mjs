@@ -31,7 +31,9 @@ export const HEURISTICS = {
   ],
 };
 
-export const SECONDARY = { B: "vocabJaccard" };
+HEURISTICS.A2 = HEURISTICS.A;
+HEURISTICS.B2 = [...HEURISTICS.B, "surfaceJaccard"];
+export const SECONDARY = { B: "vocabJaccard", B2: "surfaceJaccard" };
 
 const quantile = (sorted, q) =>
   sorted.length
@@ -180,6 +182,18 @@ export function analyzeContrast(
       },
       sensitivity,
     };
+    if (id === "B2") {
+      const hard = neg.filter((r) => r.u.features.surfaceJaccard >= 0.8);
+      entry.hardNegatives = {
+        n: hard.length,
+        surfaceThreshold: 0.8,
+        meanP: mean(hard.map((r) => r.s.p)),
+        atCut: hard.length
+          ? hard.filter((r) => r.s.p >= cut).length / hard.length
+          : null,
+        note: "Different functions that share most literals, property names and type names. Some may truly share a policy, so a high P here is not automatically an error.",
+      };
+    }
     if (id === "C") {
       const byPair = Map.groupBy(scored, (r) => r.u.pairId);
       const deltas = [...byPair.values()]
@@ -217,6 +231,50 @@ export function analyzeContrast(
     result.sets[id] = entry;
   }
   return result;
+}
+
+export function retest(doc, scores, earlierScores) {
+  const rows = doc.units
+    .filter((u) => u.reuses && scores.has(u.id) && earlierScores.has(u.reuses))
+    .map((u) => ({
+      set: u.set,
+      label: u.label,
+      a: earlierScores.get(u.reuses),
+      b: scores.get(u.id),
+    }));
+  const summarize = (list) => {
+    const d = list.map((r) => r.b.p - r.a.p);
+    const n = list.length;
+    const mean = (xs) => xs.reduce((x, y) => x + y, 0) / (xs.length || 1);
+    const ma = mean(list.map((r) => r.a.p)),
+      mb = mean(list.map((r) => r.b.p));
+    const cov = mean(list.map((r) => (r.a.p - ma) * (r.b.p - mb)));
+    const va = mean(list.map((r) => (r.a.p - ma) ** 2)),
+      vb = mean(list.map((r) => (r.b.p - mb) ** 2));
+    const crossing = (t) =>
+      list.filter((r) => r.a.p >= t !== r.b.p >= t).length;
+    return {
+      n,
+      meanAbsChange: mean(d.map(Math.abs)),
+      maxAbsChange: Math.max(0, ...d.map(Math.abs)),
+      meanSignedChange: mean(d),
+      changedByMoreThan005: d.filter((x) => Math.abs(x) > 0.05).length,
+      correlation: va && vb ? cov / Math.sqrt(va * vb) : null,
+      choiceFlips: list.filter((r) => r.a.choice !== r.b.choice).length,
+      crossing05: crossing(0.5),
+      crossing07: crossing(0.7),
+    };
+  };
+  return {
+    schema: "contrast-retest/1",
+    all: summarize(rows),
+    bySet: Object.fromEntries(
+      [...new Set(rows.map((r) => r.set))].map((set) => [
+        set,
+        summarize(rows.filter((r) => r.set === set)),
+      ]),
+    ),
+  };
 }
 
 const f = (x) => (x === null || x === undefined ? "n/a" : x.toFixed(2));
@@ -290,6 +348,11 @@ export function markdown(result) {
         `Paired view (same body, renamed against original): ${e.paired.pairs} pairs, mean P difference ${f(e.paired.meanDelta)} (${f(e.paired.lo)} to ${f(e.paired.hi)}); renamed higher in ${e.paired.higher}, lower in ${e.paired.lower}, tied in ${e.paired.tied}; two-sided sign test p = ${f(e.paired.signTestP)}.`,
         "",
       );
+    if (e.hardNegatives)
+      lines.push(
+        `Hard negatives (surface overlap at least ${e.hardNegatives.surfaceThreshold}): ${e.hardNegatives.n} units, mean P ${f(e.hardNegatives.meanP)}, ${f(e.hardNegatives.atCut)} at the cut. ${e.hardNegatives.note}`,
+        "",
+      );
     lines.push(...e.verdict.map((v) => `- ${v}`), "");
   }
   return lines.join("\n");
@@ -320,6 +383,7 @@ function main() {
       out: { type: "string" },
       markdown: { type: "boolean" },
       balance: { type: "boolean" },
+      "retest-of": { type: "string" },
       resamples: { type: "string", default: "2000" },
     },
   });
@@ -332,6 +396,16 @@ function main() {
     const [kind, feature] = values.fake.split(":");
     scores = fakeScores(doc, kind, { feature });
   } else throw Error("Give --journal FILE or --fake KIND");
+  if (values["retest-of"]) {
+    const earlier = scoresFromJournal(
+      readFileSync(values["retest-of"], "utf8"),
+      JSON.parse(
+        readFileSync(new URL("./units.json", import.meta.url), "utf8"),
+      ),
+    );
+    const out = retest(doc, scores, earlier);
+    return console.log(JSON.stringify(out, null, 2));
+  }
   const result = analyzeContrast(doc, scores, {
     resamples: Number(values.resamples),
   });
