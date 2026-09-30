@@ -43,7 +43,6 @@
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
-    "!examples/demo-app/expected/journal.jsonl",
     "!examples/demo-app/expected/report.json",
     "!examples/demo-app/expected/report.md",
     "!examples/demo-app/expected/RECORDED-RUN.md"

@@ -40,7 +40,7 @@ This is `queue.md` from one recorded run on a demo app we wrote with problems pu
 
 The other columns describe how each approach generally works; we did not run them against jev-scanr on the same code. The last row holds the one measurement we have, which is not a run of those tools: Jev's probability against our own re-implementations of a length score and a token-coverage score, computed on the cells an LLM reviewer labeled (n = 95, two samples, the labeled cells were chosen by Jev's P, so this is not a neutral test). The table compares what each one does, not how often it is right, and it claims no advantage in accuracy. When the cheaper tools are the better choice, [say so](#when-to-use-something-else).
 
-**Jev owns the probabilities; your code owns the policy.** Code only cuts the project into functions and gathers context. Whether an item exists, and where it sits in the order, comes from Jev's answers alone; which questions are asked (`--signals`), where the display cut sits (`--threshold`) and what to do with an item (verify it first, often change nothing) stay with you and your agent. [`docs/architecture.md`](docs/architecture.md) has the pipeline.
+**Jev owns the probabilities; your code owns the policy.** Code decides which functions and similar pairs are asked about (for example, pairs need similar token sequences, and a scan reads at most 500 files) and gathers their context. Whether an item is listed, and where it sits in the order, comes from Jev's answers alone; which questions are asked (`--signals`), where the display cut sits (`--threshold`) and what to do with an item (verify it first, often change nothing) stay with you and your agent. [`docs/architecture.md`](docs/architecture.md) has the pipeline.
 
 ## Quickstart
 
@@ -76,7 +76,7 @@ Updating the CLI does not touch skills you already installed; run `jevs skill` a
 
 ```sh
 jevs scan .                                    # dry run: units, requests, coverage, estimated and worst-case cost
-jevs scan . --list-files                       # every file whose source would be sent, and which files were skipped and why
+jevs scan . --list-files                       # files asked about, files sent only as context, and files skipped and why
 jevs scan . --exclude private,legacy/keys --run --yes --cap-usd 0.5    # live run
 ```
 
@@ -111,20 +111,20 @@ The two functions clamp a number to a range (0 to 100 and 0 to 10), send NaN to 
 
 ## Signals
 
-Three signals are on by default. The others are experimental: ask for them with `--experimental` (all of them) or `--signals a,b` (exactly those). The other fourteen questions tried in the prototype were dropped: [`signals/retired.md`](signals/retired.md) says why, with the numbers.
+Three signals are on by default, and in this alpha "default" means only that: under the written gate in [`EVIDENCE.md`](EVIDENCE.md) every signal is still experimental, because no person has labeled anything. `function_multiple_responsibilities` also reached its 8 reviewed items in one repository, while the gate asks for two. The others are experimental: ask for them with `--experimental` (all of them) or `--signals a,b` (exactly those). The other fourteen questions tried in the prototype were dropped: [`signals/retired.md`](signals/retired.md) says why, with the numbers.
 
 The first numeric column is the independent test: a random sample of above-cut items from two repositories the questions were never tuned on. The second is the dev run on the author's own app, which took the highest-probability items and is therefore an upper bound. Both count items an LLM reviewer judged worth a closer look; no person has labeled any of them.
 
-| Signal                               | Asks about                                                       | Status       | Independent test | Dev run |
-| ------------------------------------ | ---------------------------------------------------------------- | ------------ | ---------------- | ------- |
-| `clone_same_policy`                  | a similar pair: do both implement the same rule?                 | default      | 12/16            | 5/5     |
-| `function_should_split`              | is one function long and dense, with cohesive blocks to extract? | default      | 6/16             | 4/5     |
-| `function_multiple_responsibilities` | two or more separable jobs in one function                       | default      | 3/8              | 2/4     |
-| `internal_duplication`               | near-identical blocks inside one function                        | experimental | 4/16             | 3/5     |
-| `magic_policy_literal`               | unexplained numbers or strings that encode policy                | experimental | 3/16             | 3/5     |
-| `unused_local_or_parameter`          | a local or parameter that is never read                          | experimental | 1/9              | 2/3     |
-| `deep_nesting`                       | control flow nested three or more levels                         | experimental | no items         | 2/2     |
-| `unreachable_code`                   | statements that can never run                                    | experimental | no items         | 1/1     |
+| Signal                               | Asks about                                                       | Status                        | Independent test | Dev run |
+| ------------------------------------ | ---------------------------------------------------------------- | ----------------------------- | ---------------- | ------- |
+| `clone_same_policy`                  | a similar pair: do both implement the same rule?                 | default (experimental, alpha) | 12/16            | 5/5     |
+| `function_should_split`              | is one function long and dense, with cohesive blocks to extract? | default (experimental, alpha) | 6/16             | 4/5     |
+| `function_multiple_responsibilities` | two or more separable jobs in one function                       | default (experimental, alpha) | 3/8              | 2/4     |
+| `internal_duplication`               | near-identical blocks inside one function                        | experimental                  | 4/16             | 3/5     |
+| `magic_policy_literal`               | unexplained numbers or strings that encode policy                | experimental                  | 3/16             | 3/5     |
+| `unused_local_or_parameter`          | a local or parameter that is never read                          | experimental                  | 1/9              | 2/3     |
+| `deep_nesting`                       | control flow nested three or more levels                         | experimental                  | no items         | 2/2     |
+| `unreachable_code`                   | statements that can never run                                    | experimental                  | no items         | 1/1     |
 
 The rule for going default was written before the test: at least 8 reviewed items and at least 30% worth a look (above 50% for the plain "default" band; 30-50% carries a low-precision warning). `jevs signals` prints the same numbers. Each question lives in one file under [`signals/`](signals/); adding one is described in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
@@ -135,6 +135,8 @@ P is Jev's probability for the positive option of one narrow question, rounded t
 `queue.md` has three parts instead of one hard cut: **worth a look** (P at or above the signal's cut, 0.7 by default), **uncertain, check** (from the floor, 0.5, up to the cut) and **below the band**, which is listed only in `report.json`. In the recorded demo, `registerUser` for `function_should_split` (P = 0.52) lands in "uncertain". Jev's P moves from call to call, so a cell just under 0.7 may be just over it next time; the middle band keeps it in view without ranking it with the first list.
 
 `jevs rescore RUN --cut 0.6` re-bands a finished run from its stored answers: no API call, no key. It writes a new `rescored-…/queue.md` next to the old one and never overwrites. Where the edges come from, what `report.json` gained and the options are in [`docs/BANDS.md`](docs/BANDS.md).
+
+**Try rescore on the demo, free and offline.** The package ships the recorded demo run with its `plan.json`. From a clone of this repository: `jevs rescore examples/demo-app/expected --cut 0.5 --out /tmp/demo-rescored` (the 0.52 item moves from "uncertain" to "worth a look"). Installed or through npx, `jevs demo` ends with the same command for the folder it uses.
 
 Does Jev's P rank better than free heuristics? On the labeled cells we have, no evidence that it does: function length ranked `function_should_split` and `function_multiple_responsibilities` at least as well, and token coverage did the same for `clone_same_policy`. The sample is 95 cells with LLM labels, so this is weak in both directions. [`docs/BASELINE.md`](docs/BASELINE.md) has the numbers, the intervals and what they do not show.
 
@@ -156,7 +158,7 @@ We started with 22 candidate questions and kept the 7 that survived a review rul
 ## Privacy and cost
 
 - **What is sent:** each analyzed function or pair, with bounded context (callers, imported declarations, one hop), to `https://api.typesafe.ai` under your own key. Nothing else. A dry run sends nothing.
-- **What is never read:** `node_modules`, dot-directories, build output, generated files, symlinks, and anything you pass to `--exclude`. Files whose path contains `secret` or `credential`, or whose content looks like a key or token, are skipped. That guard is a heuristic, so check `--list-files` and choose a root you are willing to send.
+- **What is never read:** `node_modules`, dot-directories, build output, generated files, symlinks, and anything you pass to `--exclude`. Files whose path contains `secret` or `credential`, or whose content looks like a key, token, JWT, private key or a URL with a password in it, are skipped. That guard is a heuristic, so check `--list-files` and choose a root you are willing to send.
 - **Your key:** `TYPESAFE_API_KEY` in the environment wins. Otherwise `jevs auth` keeps it in an owner-only file (`$XDG_CONFIG_HOME/jev-scanr/credentials.json`, default `~/.config/jev-scanr/`, mode 0600; a file other users can read is refused). The key is never accepted as a command-line option, printed, or written into a report. `jevs auth --remove` deletes it.
 - **Cost:** `jev-1.13.0` at US$0.042 per million input tokens. The dry run prints a central estimate and a worst case. `--cap-usd` refuses to start if the worst case exceeds the cap, and a run stops before any request that could pass it. Up to 8 requests run at once (`--concurrency`), paced under Jev's documented rate limits. There are no automatic retries, and the first error stops the run, a 429 included. Costs are calculated from the tariff and the token counts the API returns; they are not an invoice.
 - **Local files:** only what you ask for, in the output folder. Nothing runs your project's code.

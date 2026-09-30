@@ -24,6 +24,8 @@ import {
 } from "./helpers.mjs";
 
 const cli = new URL("../src/cli.mjs", import.meta.url).pathname;
+const demoExpected = new URL("../examples/demo-app/expected", import.meta.url)
+  .pathname;
 const env = { PATH: process.env.PATH };
 const spawn = (args, cwd, extra = {}) =>
   spawnSync(process.execPath, [cli, ...args], {
@@ -64,7 +66,62 @@ test("a scan is a dry run by default: it prints the estimate, needs no key and w
   const listed = spawn(["scan", root, "--list-files"], cwd);
   assert.match(
     listed.stdout,
-    /Files whose source would be sent:\na\.ts\nb\.ts/,
+    /Files asked about \(2\), source sent:\na\.ts\nb\.ts\n/,
+  );
+  assert.match(listed.stdout, /Files sent only as context for those \(0;/);
+});
+
+test("--list-files separates the files asked about from the files sent only as context, and test files can be context", async (t) => {
+  const dir = project(t, {
+    "src/price.ts": clone("price"),
+    "test/price.test.ts":
+      'import { price } from "../src/price";\nexport const seen = price(3);\n',
+  });
+  const lines = [];
+  t.mock.method(console, "log", (line) => lines.push(line));
+  await main(["scan", dir, "--list-files"], {
+    env: { XDG_CACHE_HOME: scratch(t) },
+  });
+  const text = lines.join("\n");
+  assert.match(text, /Files asked about \(1\), source sent:\nsrc\/price\.ts\n/);
+  assert.match(
+    text,
+    /Files sent only as context for those \(1; callers, tests that use them, imports\)\. Use --exclude to keep any of them out:\ntest\/price\.test\.ts\n/,
+  );
+  lines.length = 0;
+  await main(["scan", dir, "--list-files", "--exclude", "test"], {
+    env: { XDG_CACHE_HOME: scratch(t) },
+  });
+  assert.match(lines.join("\n"), /Files sent only as context for those \(0;/);
+});
+
+test("the help lines up every command description in one column", () => {
+  const usage = HELP.split("Usage\n")[1].split("\n\n")[0].split("\n");
+  const columns = usage.map((line) => {
+    if (/^ {20,}\S/.test(line)) return line.search(/\S/);
+    const inline = line.match(/^(  jevs \S.*?) {2,}(?=\S)/);
+    return inline ? inline[0].length : null;
+  });
+  assert.deepEqual([...new Set(columns.filter((c) => c !== null))], [48]);
+  columns.forEach((column, i) => {
+    if (column === null) assert.equal(columns[i + 1], 48, usage[i]);
+  });
+});
+
+test("the help says what code decides and what Jev decides, with the numbers the pipeline really uses", (t) => {
+  const plan = buildPlan(project(t, twoFiles));
+  const first = HELP.split("\n\n")[1];
+  assert.ok(!/does not score, rank or filter/.test(first));
+  for (const fact of [
+    `at least ${plan.retrieval.minLines} lines`,
+    `within a ${1 / plan.retrieval.minSizeRatio}:1 size ratio`,
+    `at least ${plan.retrieval.minJaccard * 100}% of their token sequences`,
+    `at most ${plan.limits.maxFiles} files per scan`,
+  ])
+    assert.ok(first.includes(fact), fact);
+  assert.match(
+    first,
+    /Jev's probabilities decide what is listed and in what order/,
   );
 });
 
@@ -93,6 +150,8 @@ test("a live run needs consent, a cap, a credential and a worst case that fits t
     assert.equal(result.status, 1);
     assert.match(result.stderr, message);
     assert.ok(!result.stderr.includes("k\n"), "the credential is never echoed");
+    if (/--yes|--cap-usd$/.test(String(message)))
+      assert.equal(result.stdout, "", "no plan is printed before the refusal");
   }
   assert.deepEqual(readdirSync(cwd), []);
   assert.throws(() => parseArgs(["scan", root, "--api-key", "x"]));
@@ -203,8 +262,14 @@ test("signals lists each signal with the independent test first and the dev run 
   const text = lines.join("\n");
   assert.match(
     text,
-    /clone_same_policy@\S+\s+\[default\]\n\s+independent test: 12\/16 actionable/,
+    /clone_same_policy@\S+\s+\[default \(experimental, alpha\)\]\n\s+independent test: 12\/16 actionable/,
   );
+  assert.match(
+    text,
+    /function_multiple_responsibilities@\S+\s+\[default \(experimental, alpha\)\]\n\s+independent test: 3\/8 actionable[^\n]*\n\s+dev run:[^\n]*\n\s+caveat:\s+the 8 reviewed items all came from one repository; the gate asks for two/,
+  );
+  assert.equal(text.match(/caveat:/g).length, 1);
+  assert.equal(text.match(/\[default \(experimental, alpha\)\]/g).length, 3);
   assert.match(text, /dev run:\s+5\/5 \(daily-tracker/);
   assert.match(
     text,
@@ -444,8 +509,37 @@ test("demo replays the recorded run offline: no key, nothing written, labeled as
     ],
   );
   assert.match(result.stdout, /hypotheses from one Jev answer each/);
-  assert.match(result.stdout, /jevs scan \.\n$/);
+  assert.deepEqual(
+    lines.slice(-3, -1).map((l) => l.split(": ").at(-1)),
+    [
+      "jevs scan .",
+      `jevs rescore '${demoExpected}' --cut 0.6 --out ./demo-rescored`,
+    ],
+  );
   assert.deepEqual(readdirSync(cwd), []);
+});
+
+test("demo run through npx shows the npx commands, because jevs is not on the PATH there", (t) => {
+  const cwd = scratch(t);
+  const result = spawn(["demo"], cwd, { HOME: cwd, npm_command: "exec" });
+  assert.equal(result.status, 0, result.stderr);
+  const npx = "npx github:GabrielCoelhoCruz/jev-scanr";
+  assert.deepEqual(
+    result.stdout
+      .trimEnd()
+      .split("\n")
+      .slice(-2)
+      .map((l) => l.split(": ").at(-1)),
+    [
+      `${npx} scan .`,
+      `${npx} rescore '${demoExpected}' --cut 0.6 --out ./demo-rescored`,
+    ],
+  );
+  assert.ok(
+    !/(^|[^-\w])jevs (scan|rescore)/.test(
+      result.stdout.split("End of the replay")[1],
+    ),
+  );
 });
 
 test("demo takes no arguments and is listed in the help", (t) => {
@@ -458,7 +552,7 @@ test("demo takes no arguments and is listed in the help", (t) => {
   );
   assert.match(
     HELP,
-    /jevs demo {35}replay a recorded run on the bundled demo app: no key, no network/,
+    /^  jevs demo +replay a recorded run on the bundled demo app/m,
   );
   assert.equal(
     spawn(["demo", "--help"], cwd).stdout.includes("jevs demo"),

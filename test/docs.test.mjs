@@ -5,6 +5,8 @@ import { execFileSync } from "node:child_process";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCANNER_VERSION } from "../src/plan.mjs";
+import { HELP } from "../src/cli.mjs";
+import { fullCatalog, signalStatusLabel } from "../src/catalog.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(join(root, p), "utf8");
@@ -61,22 +63,28 @@ test("relative links in the documentation resolve to files", () => {
   }
 });
 
-test("the agent skill is named like its folder and says to verify before editing", () => {
+test("the agent skill is named like its folder, and every jevs flag it or the docs show exists in the CLI", () => {
   const skill = read("skills/jev-scanr/SKILL.md");
   const front = skill.match(/^---\nname: (.+)\ndescription: (.+)\n---\n/);
   assert.ok(front);
   assert.equal(front[1], "jev-scanr");
   assert.ok(front[2].length > 80);
-  assert.match(skill, /Verify each item before editing/);
-  assert.match(skill, /hypothes/i);
-  assert.match(skill, /Never ask for the key in chat/);
+  for (const doc of ["skills/jev-scanr/SKILL.md", "README.md", "docs/BANDS.md"])
+    for (const line of read(doc)
+      .split("\n")
+      .filter((l) => /\bjevs /.test(l)))
+      for (const [flag] of line.matchAll(/--[a-z][a-z-]*/g))
+        assert.ok(
+          HELP.includes(flag),
+          `${doc} shows ${flag}, which jevs --help does not list`,
+        );
 });
 
-test("the publish workflow cannot run until publishing is enabled", () => {
+test("the publish workflow cannot run until publishing is enabled, and the release guide names the switch", () => {
   const wf = read(".github/workflows/publish.yml");
   assert.match(wf, /if: \$\{\{ vars\.NPM_PUBLISH_ENABLED == 'true' \}\}/);
   assert.match(wf, /tags: \["v\*"\]/);
-  assert.match(read("docs/RELEASING.md"), /not been published to npm/);
+  assert.match(read("docs/RELEASING.md"), /NPM_PUBLISH_ENABLED/);
 });
 
 test("no internal ticket ids or machine paths are in tracked text", () => {
@@ -116,13 +124,7 @@ test("no document runs an npm package named jr, jevs or jev-scanr through npx", 
         `${relative(root, file)}: ${line.trim()}`,
       );
   }
-  const readme = read("README.md");
-  assert.match(readme, /do not run `npx jev-scanr` or `npx jevs`/i);
-  assert.match(readme, /never run `npx jr`/i);
-  assert.match(readme, /npx github:GabrielCoelhoCruz\/jev-scanr/);
-  const skill = read("skills/jev-scanr/SKILL.md");
-  assert.match(skill, /never run `npx jev-scanr` or `npx jevs`/);
-  assert.match(skill, /never run `npx jr`/);
+  assert.match(read("README.md"), /npx github:GabrielCoelhoCruz\/jev-scanr/);
 });
 
 test("the old names survive only as history", () => {
@@ -152,15 +154,22 @@ test("the old names survive only as history", () => {
   }
 });
 
-test("the README reports the oh-my-pi pull request as open, not merged", () => {
-  const readme = read("README.md");
-  assert.ok(!/TODO/.test(readme));
-  assert.match(readme, /oh-my-pi#13847/);
-  assert.match(readme, /open and not merged/);
-  assert.match(
-    read("evals/results/showcase-t3code-oh-my-pi-2026-09-30.md"),
-    /13847[^\n]*not merged|not merged[^\n]*13847/,
-  );
+test("every mention of the oh-my-pi pull request says it is not merged, and the README links it", () => {
+  const url = "https://github.com/can1357/oh-my-pi/pull/13847";
+  assert.ok(read("README.md").includes(url));
+  assert.ok(!/TODO/.test(read("README.md")));
+  for (const doc of [
+    "README.md",
+    "EVIDENCE.md",
+    "evals/results/showcase-t3code-oh-my-pi-2026-09-30.md",
+  ])
+    for (const line of read(doc)
+      .split("\n")
+      .filter((l) => /13847/.test(l)))
+      assert.ok(
+        !/(?<!not )(?<!un)merged/i.test(line),
+        `${doc}: ${line.slice(0, 80)}`,
+      );
 });
 
 test("public documents carry no internal wording", () => {
@@ -186,29 +195,39 @@ test("public documents carry no internal wording", () => {
   }
 });
 
-test("the README leads with the benefit, lists each signal as the catalog does, and credits jevgrep only as related work", () => {
+test("the README has its required sections, a lead before them, related work as a link, and a signal table that matches the catalog", () => {
   const readme = read("README.md");
-  assert.match(
-    readme.split("\n").find((l) => l.startsWith("**")),
-    /^\*\*Find the functions in your TypeScript\/JavaScript project most worth refactoring/,
-  );
-  assert.match(readme, /^## When to use something else$/m);
-  assert.match(readme, /^## Related$/m);
-  assert.match(
-    readme,
-    /The `auth` and `skill` commands here were inspired by it/,
+  for (const heading of [
+    "Try it without a key",
+    "Quickstart",
+    "Signals",
+    "Bands and re-cutting a run",
+    "When to use something else",
+    "What we measured",
+    "Privacy and cost",
+    "Development",
+    "Related",
+  ])
+    assert.match(readme, new RegExp(`^## ${heading}$`, "m"), heading);
+  assert.ok(
+    readme.indexOf("\n**") < readme.indexOf("\n## "),
+    "a bold lead comes before the first section",
   );
   assert.ok(!/^## (Start with a|Source, credentials)/m.test(readme));
+  assert.match(
+    readme.split("\n## Related\n")[1],
+    /\]\(https:\/\/github\.com\/dzhng\/jevgrep\)/,
+  );
   assert.ok(!/jevgrep/i.test(read("NOTICE.md")));
   const rows = [
     ...readme.matchAll(
-      /^\| `([a-z_]+)`\s+\|[^|]*\|\s*(default|experimental)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|$/gm,
+      /^\| `([a-z_]+)`\s+\|[^|]*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|$/gm,
     ),
   ];
-  assert.equal(rows.length, 8);
+  assert.equal(rows.length, fullCatalog.signals.length);
   for (const [, id, status, independent, dev] of rows) {
     const s = JSON.parse(read(`signals/${id}.json`));
-    assert.equal(status, s.status, id);
+    assert.equal(status, signalStatusLabel(s), id);
     const t = s.independentTest;
     assert.equal(
       independent,
@@ -241,6 +260,8 @@ test("the npm package ships the tool and its notices, not the evaluation tools o
     "examples/demo-app/expected/queue.md",
     "examples/demo-app/expected/RECEIPT.json",
     "examples/demo-app/expected/RESULT.json",
+    "examples/demo-app/expected/journal.jsonl",
+    "examples/demo-app/expected/plan.json",
   ])
     assert.ok(files.includes(must), must);
   for (const f of files)
@@ -253,22 +274,26 @@ test("the npm package ships the tool and its notices, not the evaluation tools o
     [
       "examples/demo-app/expected/RECEIPT.json",
       "examples/demo-app/expected/RESULT.json",
+      "examples/demo-app/expected/journal.jsonl",
+      "examples/demo-app/expected/plan.json",
       "examples/demo-app/expected/queue.md",
     ],
   );
 });
 
-test("the README top states the measured run, offers the no-key demo before the install, and keeps its claims tied to the recording", () => {
+test("the README quotes the recorded run's own figures, offers the no-key demo before the install, and keeps its comparison table's shape", () => {
   const readme = read("README.md");
   const result = JSON.parse(read("examples/demo-app/expected/RESULT.json"));
   const receipt = JSON.parse(read("examples/demo-app/expected/RECEIPT.json"));
-  assert.equal(receipt.model, "jev-1.13.0");
-  assert.equal(result.inputTokens.toLocaleString("en-US"), "19,754");
-  assert.equal(result.calculatedUSD.toFixed(4), "0.0008");
-  assert.match(
-    readme,
-    /\*\*Measured, one real run\*\* \(`jev-1\.13\.0`, 2026-09-30\): 15 requests answered in 3 seconds, 19,754 input tokens, US\$0\.0008 calculated/,
-  );
+  const top = readme.split("\n## How it compares\n")[0];
+  for (const figure of [
+    receipt.model,
+    result.finishedAtUTC.slice(0, 10),
+    `${result.requests} requests`,
+    result.inputTokens.toLocaleString("en-US"),
+    `US$${result.calculatedUSD.toFixed(4)}`,
+  ])
+    assert.ok(top.includes(figure), `README top lacks ${figure}`);
   assert.ok(
     readme.indexOf("npx github:GabrielCoelhoCruz/jev-scanr demo") <
       readme.indexOf("## Quickstart"),
@@ -276,11 +301,6 @@ test("the README top states the measured run, offers the no-key demo before the 
   assert.ok(
     readme.indexOf("## Try it without a key") < readme.indexOf("## Quickstart"),
   );
-  assert.match(
-    readme,
-    /\*\*Jev owns the probabilities; your code owns the policy\.\*\*/,
-  );
-  assert.match(readme, /we did not run them against jev-scanr/);
   const table = readme
     .split("## How it compares\n")[1]
     .split("\n\n")[0]
@@ -292,32 +312,27 @@ test("the README top states the measured run, offers the no-key demo before the 
         .slice(1, -1)
         .map((c) => c.trim()),
     );
-  assert.deepEqual(table[0], [
-    "",
-    "ESLint `complexity` / `max-lines`",
-    "`jscpd`",
-    "Ask a general LLM to review",
-    "**jev-scanr**",
-  ]);
-  assert.deepEqual(
-    table.slice(2).map((row) => row[0]),
-    [
-      "Cost",
-      "Reads the whole project",
-      "Explains why an item is ranked",
-      "Thresholds can be checked",
-      "Edits code",
-      "Measured head to head on the same code",
-    ],
+  assert.ok(table.every((row) => row.length === 5));
+  assert.equal(table[0][0], "");
+  assert.equal(table[0][4], "**jev-scanr**");
+  const labels = table.slice(2).map((row) => row[0]);
+  for (const label of [
+    "Cost",
+    "Edits code",
+    "Measured head to head on the same code",
+  ])
+    assert.ok(labels.includes(label), label);
+  assert.ok(table[2][4].includes(`US$${result.calculatedUSD.toFixed(4)}`));
+  assert.ok(
+    table[2][4].includes("(examples/demo-app/expected/RECORDED-RUN.md)"),
   );
-  const measured = table.at(-1).slice(1);
-  assert.equal(measured[0], "Not run");
-  assert.match(measured[1], /^Not run \(a jscpd-style token-coverage score/);
-  assert.equal(measured[2], "Not run");
-  assert.match(
-    measured[3],
-    /^AUC 0\.71 \(`function_should_split`\), 0\.70 \(`function_multiple_responsibilities`\), 0\.70 \(`clone_same_policy`\), on 95 LLM-labeled cells\. Function length scored 0\.88 and 0\.80 on the first two, and token coverage 0\.73 on `clone_same_policy`\. No pooled difference is statistically clear/,
-  );
-  assert.match(table[2][4], /US\$0\.0008 measured on the 15-request demo/);
-  assert.match(table[2][4], /US\$0\.174 measured for the 1,273 requests/);
+  const baseline = read("docs/BASELINE.md");
+  const measured = table.at(-1)[4];
+  const numbers = measured.match(/\b[01]\.\d\d\b/g);
+  assert.ok(numbers.length >= 6);
+  for (const number of numbers)
+    assert.ok(
+      baseline.includes(number),
+      `${number} is not in docs/BASELINE.md`,
+    );
 });

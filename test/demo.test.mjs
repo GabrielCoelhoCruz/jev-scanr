@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { buildPlan } from "../src/build-plan.mjs";
-import { recordedRun, demoText } from "../src/demo.mjs";
+import { recordedRun, demoText, demoFooter } from "../src/demo.mjs";
 import { renderDemoSvg, parseQueue } from "../scripts/render-demo-image.mjs";
 
 const demo = new URL("../examples/demo-app/", import.meta.url).pathname;
@@ -82,9 +82,13 @@ test("the replay text is the recorded queue between a banner and a footer", () =
   const text = demoText();
   assert.ok(text.includes(read("expected/queue.md").trimEnd()));
   assert.ok(text.startsWith("RECORDED RUN."));
+  assert.ok(text.endsWith(demoFooter()));
   assert.ok(
-    text.endsWith(
-      "Try your own code with a free dry run that sends nothing: jevs scan .",
+    demoFooter().includes("free dry run that sends nothing: jevs scan ."),
+  );
+  assert.ok(
+    demoFooter({ viaNpx: true }).includes(
+      "free dry run that sends nothing: npx github:GabrielCoelhoCruz/jev-scanr scan .",
     ),
   );
 });

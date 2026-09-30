@@ -13,7 +13,12 @@ import { pathToFileURL } from "node:url";
 import { parseArgs as nodeParseArgs } from "node:util";
 import { writeNew, outside, POLICY } from "./core.mjs";
 import { verifyPlan } from "./plan.mjs";
-import { allSignals, defaultSignalIds } from "./catalog.mjs";
+import {
+  allSignals,
+  defaultSignalIds,
+  signalCaveat,
+  signalStatusLabel,
+} from "./catalog.mjs";
 import { buildPlan } from "./build-plan.mjs";
 import {
   makeClient,
@@ -46,17 +51,18 @@ export const skillSource = (version = VERSION) =>
 
 export const HELP = `jev-scanr (short alias: jevs) ${VERSION}
 
-Ranks refactoring candidates in a TypeScript/JavaScript project by asking the Jev model a few narrow questions about each function or similar pair. Deterministic code only cuts the project into units and gathers context. It does not score, rank or filter. Every finding and its order come from Jev's probabilities.
+Ranks refactoring candidates in a TypeScript/JavaScript project by asking the Jev model a few narrow questions about each function or similar pair. Code decides which units are asked: it cuts the project into functions, pairs two functions only when both have at least 8 lines, are within a 2:1 size ratio and share at least 45% of their token sequences (Jaccard), reads at most 500 files per scan and skips files that look like secrets. Jev's probabilities decide what is listed and in what order.
 
 Usage
-  jevs --version                              print the version
-  jevs demo                                   replay a recorded run on the bundled demo app: no key, no network
-  jevs auth [--remove]                        save your TypeSafe API key (owner-only file), or delete it
-  jevs skill [--global] [--yes]               install the agent skill for this version, from its release tag (uses npx skills)
-  jevs scan PATH [options]         dry run: shows units, requests and estimated cost, sends nothing
+  jevs --version                                print the version
+  jevs demo                                     replay a recorded run on the bundled demo app: no key, no network
+  jevs auth [--remove]                          save your TypeSafe API key (owner-only file), or delete it
+  jevs skill [--global] [--yes]                 install the agent skill for this version, from its release tag (uses npx skills)
+  jevs scan PATH [options]                      dry run: shows units, requests and estimated cost, sends nothing
   jevs scan PATH --run --yes --cap-usd N [options]
                                                 sends source excerpts to the Jev API and writes the report
   jevs report --plan PLAN --run-dir RUN --out DIR [--threshold 0.7] [--floor 0.5]
+                                                write the report for a stored plan and run, from its stored answers
   jevs rescore RUN [--cut N] [--floor N] [--cut-signal ID=N] [--floor-signal ID=N]
                                                 re-cut an existing run folder from its stored answers: no API call, no key;
                                                 writes RUN/rescored-<settings>/ (queue.md, report.md, report.json), never overwrites
@@ -64,7 +70,7 @@ Usage
                                                 plan only the requests without an accepted answer
   jevs run --plan PLAN --out DIR --cap-usd N --yes
                                                 run an existing plan
-  jevs signals                                list the catalog and its evidence
+  jevs signals                                  list the catalog and its evidence
 
 Options for scan
   --exclude a,b,c     paths (files or directories, relative to PATH) that are never read or sent
@@ -72,11 +78,13 @@ Options for scan
                       come only from them. A scan reads at most 500 files, so scan a large project in slices
   --experimental      also ask the experimental signals (off by default; jevs signals shows which are which)
   --signals a,b       ask exactly these signals instead of the defaults
-  --include-tests     also analyze test files (off by default)
+  --include-tests     also ask about test files (off by default). Test files that call or import an asked function are
+                      still sent as context; add --exclude to keep them out
   --external-configs FILE
                       offline JSON data for tsconfig files that live in packages (for example
                       "extends": "expo/tsconfig.base"). Never downloaded or executed; see docs/EXTERNAL-CONFIGS.md
-  --list-files        dry run: list every file whose source would be sent, and the files skipped and why
+  --list-files        dry run: list the files asked about, the files sent only as context (callers, tests, imports), and the
+                      files skipped and why
   --run               send the excerpts to the Jev API instead of a dry run; needs --yes and --cap-usd
   --yes               consent to send source excerpts to the Jev API
   --cap-usd N         refuse to start if the worst-case cost exceeds N US dollars
@@ -356,11 +364,16 @@ function printSummary(plan, s) {
 }
 
 function filesToSend(plan) {
-  return [
-    ...new Set(
-      plan.requests.flatMap((r) => r.request.state.sections.map((s) => s.path)),
-    ),
-  ].sort();
+  const asked = new Set(
+    plan.requests.flatMap((r) => r.request.state.members.map((m) => m.path)),
+  );
+  const sent = new Set(
+    plan.requests.flatMap((r) => r.request.state.sections.map((s) => s.path)),
+  );
+  return {
+    asked: [...asked].sort(),
+    contextOnly: [...sent].filter((path) => !asked.has(path)).sort(),
+  };
 }
 
 function writeReport(plan, events, out, extra = {}) {
@@ -376,7 +389,7 @@ function writeReport(plan, events, out, extra = {}) {
   return report;
 }
 
-async function execute(plan, values, deps) {
+function liveRunOptions(values) {
   const cap = Number(values["cap-usd"]);
   if (!values.yes || !Number.isFinite(cap) || cap <= 0)
     throw Error(
@@ -394,6 +407,11 @@ async function execute(plan, values, deps) {
     throw Error(
       `--concurrency must be an integer from 1 to ${MAX_CONCURRENCY}`,
     );
+  return { cap, concurrency };
+}
+
+async function execute(plan, values, deps) {
+  const { cap, concurrency } = liveRunOptions(values);
   const s = summary(plan);
   if (s.conservativeUSD > cap)
     throw Error(
@@ -465,7 +483,9 @@ export async function main(args = process.argv.slice(2), deps = {}) {
   if (command === "demo") {
     if (positionals.length)
       throw Error("demo takes no arguments; it replays the recorded run");
-    return console.log(demoText());
+    return console.log(
+      demoText({ viaNpx: (deps.env ?? process.env).npm_command === "exec" }),
+    );
   }
   if (command === "skill") {
     const args = [
@@ -497,21 +517,24 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     for (const sig of allSignals) {
       const t = sig.independentTest,
         d = sig.evidence[0];
-      console.log(`${sig.id}@${sig.version}  [${sig.status}]`);
+      console.log(`${sig.id}@${sig.version}  [${signalStatusLabel(sig)}]`);
       console.log(
         `  independent test: ${t.reviewedAboveCut ? `${t.actionableAboveCut}/${t.reviewedAboveCut} actionable above the cut (random sample, two repositories)` : "no cell above the cut, nothing reviewed"}`,
       );
       console.log(
         `  dev run:          ${d.actionableAboveCut}/${d.reviewedAboveCut} (${d.corpus.split(" (")[0]}, highest-probability cells: an upper bound)`,
       );
+      const caveat = signalCaveat(sig);
+      if (caveat) console.log(`  caveat:           ${caveat}`);
     }
     console.log(
-      "\nAll labels come from an LLM reviewer; no person has labeled them. See EVIDENCE.md.",
+      "\nAll labels come from an LLM reviewer; no person has labeled them. The defaults are alpha picks: under the written gate every signal is still experimental. See EVIDENCE.md.",
     );
     return;
   }
   if (command === "scan") {
     if (positionals.length !== 1) throw Error("scan needs one PATH");
+    if (values.run) liveRunOptions(values);
     const target = resolve(positionals[0]);
     if (!existsSync(target)) throw Error(`No such directory: ${target}`);
     if (!statSync(target).isDirectory())
@@ -534,8 +557,12 @@ export async function main(args = process.argv.slice(2), deps = {}) {
       throw Error("--paths matched no source files under PATH");
     printSummary(plan, summary(plan));
     if (values["list-files"]) {
+      const { asked, contextOnly } = filesToSend(plan);
       console.log(
-        `\nFiles whose source would be sent:\n${filesToSend(plan).join("\n")}`,
+        `\nFiles asked about (${asked.length}), source sent:\n${asked.join("\n")}`,
+      );
+      console.log(
+        `\nFiles sent only as context for those (${contextOnly.length}; callers, tests that use them, imports). Use --exclude to keep any of them out:\n${contextOnly.join("\n")}`,
       );
       const skipped = skippedFiles(plan);
       console.log(
@@ -632,7 +659,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     const journal = existsSync(join(run, "run", "journal.jsonl"))
       ? join(run, "run")
       : run;
-    const events = readJournal(journal, plan);
+    const events = readJournal(journal, plan, undefined, { rebind: true });
     if (!events.length) throw Error(`No recorded answers in ${journal}`);
     const cuts = thresholds(values, plan),
       lows = floors(values, plan);

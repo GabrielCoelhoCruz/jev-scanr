@@ -2,6 +2,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { buildPlan } from "../src/build-plan.mjs";
+import { verifyPlan } from "../src/plan.mjs";
 import { hash } from "../src/core.mjs";
 import { summarize } from "../src/runner.mjs";
 import { buildReport, queueMarkdown, reportMarkdown } from "../src/report.mjs";
@@ -30,6 +31,12 @@ const body = JSON.parse(
 );
 const report = { ...body, reportHash: hash(body) };
 
+const { planHash: _sealed, ...planBody } = plan;
+const portable = { ...planBody, root: "examples/demo-app" };
+writeFileSync(
+  join(expected, "plan.json"),
+  JSON.stringify(verifyPlan({ ...portable, planHash: hash(portable) })) + "\n",
+);
 writeFileSync(
   join(expected, "report.json"),
   JSON.stringify(report, null, 2) + "\n",
@@ -40,5 +47,5 @@ writeFileSync(
 );
 writeFileSync(join(expected, "queue.md"), queueMarkdown(report));
 console.log(
-  `Rewrote examples/demo-app/expected/{report.json,report.md,queue.md} from the recorded journal: ${report.findings.length} worth a look, ${report.uncertain.length} uncertain. No API call.`,
+  `Rewrote examples/demo-app/expected/{plan.json,report.json,report.md,queue.md} from the recorded journal: ${report.findings.length} worth a look, ${report.uncertain.length} uncertain. No API call.`,
 );

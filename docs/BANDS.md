@@ -36,7 +36,7 @@ jevs rescore RUN --cut 0.6 --floor 0.4
 jevs rescore RUN --cut-signal function_should_split=0.8 --floor-signal function_should_split=0.55
 ```
 
-`RUN` is the output folder of a scan (the one holding `plan.json` and `run/`). `rescore` reads the stored answers there and sends nothing: no API call, no key, no cost. It writes a new folder next to the old files, `RUN/rescored-<settings>/` (for example `rescored-cut-0.6` or `rescored-cut-0.6_floor-0.4`), with `queue.md`, `report.md` and `report.json`. It never overwrites: if that folder exists it stops and says so, and `--out DIR` chooses another. The original `queue.md`, `report.md` and `report.json` are not touched.
+`RUN` is the output folder of a scan (the one holding `plan.json` and `run/`). To try it without a key or a scan, use the recorded demo run that ships with the package (it holds `plan.json` and `journal.jsonl`): `jevs rescore examples/demo-app/expected --cut 0.5 --out /tmp/demo-rescored` from a clone, or the command `jevs demo` prints at its end for an installed copy. `rescore` reads the stored answers there and sends nothing: no API call, no key, no cost. It writes a new folder next to the old files, `RUN/rescored-<settings>/` (for example `rescored-cut-0.6` or `rescored-cut-0.6_floor-0.4`), with `queue.md`, `report.md` and `report.json`. It never overwrites: if that folder exists it stops and says so, and `--out DIR` chooses another. The original `queue.md`, `report.md` and `report.json` are not touched.
 
 | Option                                     | Meaning                                                                                                   |
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
@@ -47,6 +47,8 @@ jevs rescore RUN --cut-signal function_should_split=0.8 --floor-signal function_
 | `--out DIR`                                | write here instead of `RUN/rescored-<settings>/`                                                          |
 
 It needs at least one of the four cut and floor options. It cannot rescore a continuation plan (use `jevs report` with the base plan), and it cannot rescore a run folder that has no `plan.json`, because items under the old cut need the plan's context to be listed. Moving the cut changes only what is shown; it never changes an answer, and the same answers give the same report.
+
+`rescore` matches stored answers to the plan's requests by their content, not by the plan's hash. So a plan rebuilt later, by another scanner version or from another folder, still re-bands a run whose requests are identical to it. If they are not, `rescore` stops and says the plan has no request with the content the run answered.
 
 ## What changed in `report.json`
 
