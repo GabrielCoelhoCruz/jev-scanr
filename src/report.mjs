@@ -1,12 +1,13 @@
 import { hash } from "./core.mjs";
 import { VALIDATION_POLICY } from "./validation.mjs";
 import { verifyPlan, catalog, packSignals } from "./plan.mjs";
+import { defaultCut, defaultFloor } from "./cuts.mjs";
 
 export function resolveThresholds(overrides = {}) {
   if (!overrides || typeof overrides !== "object" || Array.isArray(overrides))
     throw Error("Thresholds must be an object");
   const thresholds = Object.fromEntries(
-    catalog.signals.map((s) => [s.id, catalog.displayThresholdDefault]),
+    catalog.signals.map((s) => [s.id, defaultCut(s.id)]),
   );
   for (const [id, value] of Object.entries(overrides)) {
     if (!(id in thresholds)) throw Error("Unknown signal in thresholds");
@@ -17,7 +18,6 @@ export function resolveThresholds(overrides = {}) {
   return thresholds;
 }
 
-export const FLOOR_DEFAULT = 0.5;
 export const BAND_MEANING =
   "worth_a_look: P at or above the signal's cut. uncertain: P at or above the floor and below the cut. below: P under the floor, listed in report.json only. Bands sort cells for reading; they are not calibrated probabilities. See docs/BANDS.md.";
 
@@ -27,7 +27,7 @@ export function resolveFloors(thresholds, overrides = {}) {
   const floors = Object.fromEntries(
     Object.entries(thresholds).map(([id, cut]) => [
       id,
-      Math.min(FLOOR_DEFAULT, cut),
+      Math.min(defaultFloor(id), cut),
     ]),
   );
   for (const [id, value] of Object.entries(overrides)) {

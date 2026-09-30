@@ -6,6 +6,7 @@ import {
   catalog,
   defaultSignalIds,
   fullCatalog,
+  optInSignalIds,
   selectSignals,
   STATUSES,
 } from "../src/catalog.mjs";
@@ -68,8 +69,10 @@ test("only the signals that reached a default band in the independent test are o
       "unused_local_or_parameter",
       "deep_nesting",
       "unreachable_code",
+      "name_vs_behavior",
     ],
   );
+  assert.deepEqual(optInSignalIds, ["name_vs_behavior"]);
   assert.deepEqual(
     catalog.signals.map((s) => s.id),
     defaultSignalIds,

@@ -534,8 +534,15 @@ export async function main(args = process.argv.slice(2), deps = {}) {
         `  independent test: ${t.reviewedAboveCut ? `${t.actionableAboveCut}/${t.reviewedAboveCut} actionable above the cut (random sample, two repositories)` : "no cell above the cut, nothing reviewed"}`,
       );
       console.log(
-        `  dev run:          ${d.actionableAboveCut}/${d.reviewedAboveCut} (${d.corpus.split(" (")[0]}, highest-probability cells: an upper bound)`,
+        d
+          ? `  dev run:          ${d.actionableAboveCut}/${d.reviewedAboveCut} (${d.corpus.split(" (")[0]}, highest-probability cells: an upper bound)`
+          : "  dev run:          none",
       );
+      const c = sig.constructedContrast;
+      if (c)
+        console.log(
+          `  constructed test: AUC ${c.jevAUC} (${c.jevAUCInterval.join(" to ")}), ${c.units}; planted mismatches only`,
+        );
       const caveat = signalCaveat(sig);
       if (caveat) console.log(`  caveat:           ${caveat}`);
     }

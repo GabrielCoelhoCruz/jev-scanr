@@ -59,15 +59,19 @@ const split = (list) =>
     .filter((f) => f.signalId === "function_should_split")
     .map((f) => [f.location[0].name, f.pPositive]);
 
-test("a scan puts P at or above the cut in worth a look, P from 0.5 up to the cut in uncertain, and the rest below", async (t) => {
+test("a scan puts P at or above the signal's cut in worth a look, P from its floor up to the cut in uncertain, and the rest below", async (t) => {
   const out = await scanned(t);
   const report = JSON.parse(readFileSync(join(out, "report.json")));
-  assert.deepEqual(split(report.findings), [["alpha", 0.95]]);
-  assert.deepEqual(split(report.uncertain), [["beta", 0.6]]);
+  assert.deepEqual(split(report.findings), [
+    ["alpha", 0.95],
+    ["beta", 0.6],
+  ]);
+  assert.deepEqual(split(report.uncertain), [["delta", 0.45]]);
   assert.equal(report.bands.counts.below >= 2, true);
-  assert.deepEqual(report.bands.edges.function_should_split, {
-    floor: 0.5,
-    cut: 0.7,
+  assert.deepEqual(report.bands.edges, {
+    clone_same_policy: { floor: 0.5, cut: 0.7 },
+    function_should_split: { floor: 0.35, cut: 0.5 },
+    function_multiple_responsibilities: { floor: 0.5, cut: 0.7 },
   });
   const cells = report.blocks
     .flatMap((b) => b.signals)
@@ -75,24 +79,24 @@ test("a scan puts P at or above the cut in worth a look, P from 0.5 up to the cu
     .map((c) => c.band);
   assert.deepEqual(cells.sort(), [
     "below",
-    "below",
     "uncertain",
+    "worth_a_look",
     "worth_a_look",
   ]);
   const queue = readFileSync(join(out, "queue.md"), "utf8");
   assert.ok(
-    queue.indexOf("**Worth a look (1).**") < queue.indexOf("alpha a.ts"),
+    queue.indexOf("**Worth a look (2).**") < queue.indexOf("alpha a.ts"),
+  );
+  assert.ok(queue.indexOf("alpha a.ts") < queue.indexOf("beta a.ts"));
+  assert.ok(
+    queue.indexOf("beta a.ts") < queue.indexOf("**Uncertain, check (1).**"),
   );
   assert.ok(
-    queue.indexOf("alpha a.ts") < queue.indexOf("**Uncertain, check (1).**"),
+    queue.indexOf("**Uncertain, check (1).**") < queue.indexOf("delta b.ts"),
   );
-  assert.ok(
-    queue.indexOf("**Uncertain, check (1).**") < queue.indexOf("beta a.ts"),
-  );
-  assert.ok(queue.indexOf("beta a.ts") < queue.indexOf("**Below the band ("));
+  assert.ok(queue.indexOf("delta b.ts") < queue.indexOf("**Below the band ("));
   assert.ok(!queue.includes("gamma a.ts"));
-  assert.ok(!queue.includes("delta b.ts"));
-  assert.match(queue, /P=0\.60 · uncertain/);
+  assert.match(queue, /P=0\.45 · uncertain/);
 });
 
 test("rescore re-bands stored answers into a new folder, needs no key and leaves the old files untouched", async (t) => {
@@ -111,7 +115,7 @@ test("rescore re-bands stored answers into a new folder, needs no key and leaves
     ["alpha", 0.95],
     ["beta", 0.6],
   ]);
-  assert.deepEqual(split(report.uncertain), []);
+  assert.deepEqual(split(report.uncertain), [["delta", 0.45]]);
   assert.deepEqual(
     Object.values(report.thresholds),
     Object.values(report.thresholds).map(() => 0.55),
@@ -173,10 +177,14 @@ test("rescore refuses a folder without a plan", async (t) => {
   );
 });
 
-test("the floor defaults to 0.5 or the cut when the cut is lower, and report.json keeps every earlier field", async (t) => {
+test("the floor defaults per signal or the cut when the cut is lower, and report.json keeps every earlier field", async (t) => {
   const out = await scanned(t);
   const report = JSON.parse(readFileSync(join(out, "report.json")));
   assert.deepEqual(resolveFloors({ a: 0.7, b: 0.3 }), { a: 0.5, b: 0.3 });
+  assert.deepEqual(
+    resolveFloors({ function_should_split: 0.6, name_vs_behavior: 0.25 }),
+    { function_should_split: 0.35, name_vs_behavior: 0.25 },
+  );
   assert.deepEqual(resolveFloors({ a: 0.7 }, { a: 0.6 }), { a: 0.6 });
   assert.throws(() => resolveFloors({ a: 0.7 }, { a: 0.8 }), /above its cut/);
   assert.throws(() => resolveFloors({ a: 0.7 }, { b: 0.1 }), /Unknown/);
@@ -203,5 +211,5 @@ test("the floor defaults to 0.5 or the cut when the cut is lower, and report.jso
   const plan = verifyPlan(JSON.parse(readFileSync(join(out, "plan.json"))));
   const again = buildReport(plan, readJournal(join(out, "run"), plan));
   assert.equal(again.reportHash, report.reportHash);
-  assert.match(queueMarkdown(again), /1 worth a look, 1 uncertain \(check\)/);
+  assert.match(queueMarkdown(again), /2 worth a look, 1 uncertain \(check\)/);
 });

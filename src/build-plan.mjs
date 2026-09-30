@@ -15,7 +15,7 @@ import {
   PLAN_SCHEMA,
   SCANNER_VERSION,
 } from "./plan.mjs";
-import { catalogHash, selectSignals } from "./catalog.mjs";
+import { catalogHashFor, selectSignals } from "./catalog.mjs";
 
 const PROMPT = { promptFormat: "shared-rules-v1" };
 const MIN_WINDOW_LINES = 5;
@@ -258,7 +258,7 @@ export function buildPlan(root, options = {}) {
     schema: PLAN_SCHEMA,
     scannerVersion: SCANNER_VERSION,
     catalogVersion: catalog.version,
-    catalogHash,
+    catalogHash: catalogHashFor(enabledSignals),
     enabledSignals,
     root: snapshot.root,
     policy: POLICY,

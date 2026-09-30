@@ -5,12 +5,12 @@
   "provenance": "live",
   "thresholds": {
     "clone_same_policy": 0.7,
-    "function_should_split": 0.7,
+    "function_should_split": 0.5,
     "function_multiple_responsibilities": 0.7
   },
   "floors": {
     "clone_same_policy": 0.5,
-    "function_should_split": 0.5,
+    "function_should_split": 0.35,
     "function_multiple_responsibilities": 0.5
   },
   "thresholdMeaning": "Display cut only. Jev probabilities are not bug confidence, impact or permission to edit.",
@@ -76,8 +76,8 @@
           "confidence": 0.99,
           "positiveOption": "split_candidate",
           "pPositive": 0,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -144,8 +144,8 @@
           "confidence": 1,
           "positiveOption": "split_candidate",
           "pPositive": 0,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -212,8 +212,8 @@
           "confidence": 1,
           "positiveOption": "split_candidate",
           "pPositive": 0,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -280,8 +280,8 @@
           "confidence": 0.85,
           "positiveOption": "split_candidate",
           "pPositive": 0.9,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "worth_a_look",
           "shown": true,
           "missingReasons": []
@@ -348,8 +348,8 @@
           "confidence": 0.78,
           "positiveOption": "split_candidate",
           "pPositive": 0.14,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -416,8 +416,8 @@
           "confidence": 1,
           "positiveOption": "split_candidate",
           "pPositive": 0,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -484,8 +484,8 @@
           "confidence": 1,
           "positiveOption": "split_candidate",
           "pPositive": 0,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -552,10 +552,10 @@
           "confidence": 0.28,
           "positiveOption": "split_candidate",
           "pPositive": 0.52,
-          "threshold": 0.7,
-          "floor": 0.5,
-          "band": "uncertain",
-          "shown": false,
+          "threshold": 0.5,
+          "floor": 0.35,
+          "band": "worth_a_look",
+          "shown": true,
           "missingReasons": []
         },
         {
@@ -620,8 +620,8 @@
           "confidence": 0.69,
           "positiveOption": "split_candidate",
           "pPositive": 0.21,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -688,8 +688,8 @@
           "confidence": 1,
           "positiveOption": "split_candidate",
           "pPositive": 0,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -756,8 +756,8 @@
           "confidence": 1,
           "positiveOption": "split_candidate",
           "pPositive": 0,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -824,8 +824,8 @@
           "confidence": 1,
           "positiveOption": "split_candidate",
           "pPositive": 0,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -892,8 +892,8 @@
           "confidence": 1,
           "positiveOption": "split_candidate",
           "pPositive": 0,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -960,8 +960,8 @@
           "confidence": 1,
           "positiveOption": "split_candidate",
           "pPositive": 0,
-          "threshold": 0.7,
-          "floor": 0.5,
+          "threshold": 0.5,
+          "floor": 0.35,
           "band": "below",
           "shown": false,
           "missingReasons": []
@@ -1103,8 +1103,8 @@
       "ordering": "Jev P(positive option) descending; ties by pack id. No deterministic score participates."
     },
     "function_should_split": {
-      "threshold": 0.7,
-      "floor": 0.5,
+      "threshold": 0.5,
+      "floor": 0.35,
       "status": "default",
       "version": "1.0.0",
       "evidence": [
@@ -1140,9 +1140,7 @@
               "role": "focus"
             }
           ]
-        }
-      ],
-      "uncertain": [
+        },
         {
           "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
           "unitId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
@@ -1160,6 +1158,7 @@
           ]
         }
       ],
+      "uncertain": [],
       "ordering": "Jev P(positive option) descending; ties by pack id. No deterministic score participates."
     },
     "function_multiple_responsibilities": {
@@ -1308,8 +1307,8 @@
       "positiveOption": "split_candidate",
       "pPositive": 0.9,
       "confidence": 0.85,
-      "threshold": 0.7,
-      "floor": 0.5,
+      "threshold": 0.5,
+      "floor": 0.35,
       "band": "worth_a_look",
       "unitId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
       "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
@@ -1486,9 +1485,7 @@
         "contentHash": "cf44609dbf980a87bcb12ac8d5eb6fe9b18ccff918e36647323497916c0f48b5"
       },
       "notAPatchInstruction": true
-    }
-  ],
-  "uncertain": [
+    },
     {
       "signalId": "function_should_split",
       "signalVersion": "1.0.0",
@@ -1498,9 +1495,9 @@
       "positiveOption": "split_candidate",
       "pPositive": 0.52,
       "confidence": 0.28,
-      "threshold": 0.7,
-      "floor": 0.5,
-      "band": "uncertain",
+      "threshold": 0.5,
+      "floor": 0.35,
+      "band": "worth_a_look",
       "unitId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
       "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
       "kind": "function",
@@ -1542,6 +1539,7 @@
       "notAPatchInstruction": true
     }
   ],
+  "uncertain": [],
   "bands": {
     "meaning": "worth_a_look: P at or above the signal's cut. uncertain: P at or above the floor and below the cut. below: P under the floor, listed in report.json only. Bands sort cells for reading; they are not calibrated probabilities. See docs/BANDS.md.",
     "edges": {
@@ -1550,8 +1548,8 @@
         "cut": 0.7
       },
       "function_should_split": {
-        "floor": 0.5,
-        "cut": 0.7
+        "floor": 0.35,
+        "cut": 0.5
       },
       "function_multiple_responsibilities": {
         "floor": 0.5,
@@ -1559,10 +1557,10 @@
       }
     },
     "counts": {
-      "worth_a_look": 4,
-      "uncertain": 1,
+      "worth_a_look": 5,
+      "uncertain": 0,
       "below": 24
     }
   },
-  "reportHash": "2ed2e520e91a58a62c8f5705b285619d75d66c049ac469bacc3b1ee67cdbc761"
+  "reportHash": "2dae899b5020a16cba8eb26dff94cad077c39cfbda0f59a5d51232b29636d605"
 }

@@ -14,7 +14,7 @@ import { join, resolve } from "node:path";
 import { POLICY } from "../src/core.mjs";
 import { buildPlan } from "../src/build-plan.mjs";
 import { reservationUSD, readJournal, summarize } from "../src/runner.mjs";
-import { catalogHash } from "../src/catalog.mjs";
+import { catalogHashFor } from "../src/catalog.mjs";
 import { main } from "../src/cli.mjs";
 
 const root = new URL("../", import.meta.url).pathname;
@@ -73,7 +73,7 @@ writeFileSync(
       scanner: {
         version: JSON.parse(readFileSync(join(root, "package.json"))).version,
         sourceContentSHA256: contentHash(["src", "signals"]),
-        catalogHash,
+        catalogHash: catalogHashFor(plan.enabledSignals),
       },
       demoContentSHA256: contentHash(["examples/demo-app/src"]),
       model: POLICY.model,

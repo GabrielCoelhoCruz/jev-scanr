@@ -1,0 +1,34 @@
+{
+  "id": "name_vs_behavior",
+  "version": "0.1.0",
+  "status": "experimental",
+  "family": "naming",
+  "kinds": ["function"],
+  "primitive": "choice",
+  "scope": "whole_unit",
+  "question": "Does the name recorded for the member labeled focus describe what the visible body of that section does? Judge the name against the visible behavior only. A generic or imprecise name that fits the behavior is not a mismatch.",
+  "criteria": {
+    "name_mismatch": "The name describes a different operation or domain than the visible body performs.",
+    "name_fits": "The name is consistent with what the visible body does, even if generic or imprecise.",
+    "insufficient": "The visible body is too partial or opaque to judge the name."
+  },
+  "presence": "name_mismatch",
+  "independentTest": {
+    "source": "none",
+    "corpus": "none: no real-code sample has been reviewed for this question",
+    "sample": "none",
+    "reviewer": "none",
+    "reviewedAboveCut": 0,
+    "actionableAboveCut": 0,
+    "questionVersion": "0.1.0",
+    "note": "No random sample of real above-cut items has been reviewed, by an LLM or a person. The only evidence is the constructed contrast (constructedContrast)."
+  },
+  "evidence": [],
+  "constructedContrast": {
+    "source": "evals/contrast/results/live-1/result.json (set C)",
+    "units": "50 functions renamed to another function's name against the same 50 untouched, from four public repositories",
+    "jevAUC": 0.97,
+    "jevAUCInterval": [0.94, 0.99],
+    "note": "Constructed positives are easier than real mismatches: this shows Jev registers a planted mismatch, not how often real names are wrong. One run, one day."
+  }
+}

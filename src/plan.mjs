@@ -1,5 +1,10 @@
 import { hash, POLICY, secretLike } from "./core.mjs";
-import { catalog, catalogHash, question, selectSignals } from "./catalog.mjs";
+import {
+  catalog,
+  catalogHashFor,
+  question,
+  selectSignals,
+} from "./catalog.mjs";
 import { LIMITS, safeRelative } from "./snapshot.mjs";
 
 export { catalog };
@@ -283,7 +288,7 @@ export function verifyPlan(plan) {
     planHash !== hash(body) ||
     plan.schema !== PLAN_SCHEMA ||
     !COMPATIBLE_PLAN_VERSIONS.includes(plan.scannerVersion) ||
-    plan.catalogHash !== catalogHash ||
+    plan.catalogHash !== catalogHashFor(plan.enabledSignals) ||
     hash(plan.policy) !== hash(POLICY)
   )
     throw Error("Plan/version integrity mismatch");
