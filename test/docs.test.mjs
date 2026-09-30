@@ -310,12 +310,14 @@ test("the README top states the measured run, offers the no-key demo before the 
       "Measured head to head on the same code",
     ],
   );
-  assert.deepEqual(table.at(-1).slice(1), [
-    "Not run",
-    "Not run",
-    "Not run",
-    "Not run",
-  ]);
+  const measured = table.at(-1).slice(1);
+  assert.equal(measured[0], "Not run");
+  assert.match(measured[1], /^Not run \(a jscpd-style token-coverage score/);
+  assert.equal(measured[2], "Not run");
+  assert.match(
+    measured[3],
+    /^AUC 0\.71 \(`function_should_split`\), 0\.70 \(`function_multiple_responsibilities`\), 0\.70 \(`clone_same_policy`\), on 95 LLM-labeled cells\. Function length scored 0\.88 and 0\.80 on the first two, and token coverage 0\.73 on `clone_same_policy`\. No pooled difference is statistically clear/,
+  );
   assert.match(table[2][4], /US\$0\.0008 measured on the 15-request demo/);
   assert.match(table[2][4], /US\$0\.174 measured for the 1,273 requests/);
 });

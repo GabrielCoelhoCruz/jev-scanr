@@ -56,7 +56,10 @@ Usage
   jevs scan PATH [options]         dry run: shows units, requests and estimated cost, sends nothing
   jevs scan PATH --run --yes --cap-usd N [options]
                                                 sends source excerpts to the Jev API and writes the report
-  jevs report --plan PLAN --run-dir RUN --out DIR [--threshold 0.7]
+  jevs report --plan PLAN --run-dir RUN --out DIR [--threshold 0.7] [--floor 0.5]
+  jevs rescore RUN [--cut N] [--floor N] [--cut-signal ID=N] [--floor-signal ID=N]
+                                                re-cut an existing run folder from its stored answers: no API call, no key;
+                                                writes RUN/rescored-<settings>/ (queue.md, report.md, report.json), never overwrites
   jevs continue --plan PLAN --run-dir RUN --out NEWPLAN
                                                 plan only the requests without an accepted answer
   jevs run --plan PLAN --out DIR --cap-usd N --yes
@@ -82,7 +85,9 @@ Options for scan
                       Any error, 429 included, stops the run; there are no automatic retries
   --out DIR           output directory, outside the project (default: a folder under ~/.cache/jev-scanr named after
                       the project and plan, printed by the dry run; rerunning the same plan resumes it)
-  --threshold N       display cut for every signal, 0 to 1 (default 0.7)
+  --threshold N       display cut for every signal, 0 to 1 (default 0.7): items at or above it are "worth a look"
+  --floor N           lower edge of the "uncertain, check" band, 0 to 1 (default 0.5, or the cut if that is lower).
+                      Items from the floor up to the cut go in the uncertain band; below it, report.json only
   --help              help (works after any command)
   --version           print the version
 
@@ -105,6 +110,10 @@ const options = {
   "external-configs": { type: "string" },
   "list-files": { type: "boolean" },
   threshold: { type: "string" },
+  floor: { type: "string" },
+  cut: { type: "string" },
+  "cut-signal": { type: "string", multiple: true },
+  "floor-signal": { type: "string", multiple: true },
   global: { type: "boolean" },
   remove: { type: "boolean" },
   "continuation-plan": { type: "string" },
@@ -145,12 +154,42 @@ function signalSelection(values) {
   return values.experimental ? allSignals.map((s) => s.id) : defaultSignalIds;
 }
 
+function unit(flag, text) {
+  const value = Number(text);
+  if (text === "" || !Number.isFinite(value) || value < 0 || value > 1)
+    throw Error(`${flag} must be within [0, 1]`);
+  return value;
+}
+
+function perSignal(flag, all, pairs, plan) {
+  const result =
+    all === undefined
+      ? {}
+      : Object.fromEntries(
+          plan.enabledSignals.map((id) => [id, unit(flag, all)]),
+        );
+  for (const pair of pairs ?? []) {
+    const [id, text] = pair.split("=");
+    if (!plan.enabledSignals.includes(id))
+      throw Error(`${flag}-signal names ${id}, which this plan did not ask`);
+    result[id] = unit(`${flag}-signal`, text ?? "");
+  }
+  return result;
+}
+
 function thresholds(values, plan) {
-  if (values.threshold === undefined) return {};
-  const cut = Number(values.threshold);
-  if (!Number.isFinite(cut) || cut < 0 || cut > 1)
-    throw Error("--threshold must be within [0, 1]");
-  return Object.fromEntries(plan.enabledSignals.map((id) => [id, cut]));
+  if (values.threshold !== undefined && values.cut !== undefined)
+    throw Error("Use either --threshold or --cut");
+  return perSignal(
+    values.cut === undefined ? "--threshold" : "--cut",
+    values.cut ?? values.threshold,
+    values["cut-signal"],
+    plan,
+  );
+}
+
+function floors(values, plan) {
+  return perSignal("--floor", values.floor, values["floor-signal"], plan);
 }
 
 export function unindexedByDirectory(plan) {
@@ -327,6 +366,7 @@ function filesToSend(plan) {
 function writeReport(plan, events, out, extra = {}) {
   const report = buildReport(plan, events, {
     thresholds: extra.thresholds ?? {},
+    floors: extra.floors ?? {},
   });
   mkdirSync(out, { recursive: true, mode: 0o700 });
   writeNew(join(out, "report.json"), report);
@@ -390,6 +430,7 @@ async function execute(plan, values, deps) {
   const events = readJournal(runDir, plan);
   const report = writeReport(plan, events, out, {
     thresholds: thresholds(values, plan),
+    floors: floors(values, plan),
     accounting: result,
   });
   console.log(
@@ -488,6 +529,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     });
     verifyPlan(plan);
     thresholds(values, plan);
+    floors(values, plan);
     if (values.paths && plan.coverage.sourceFiles?.inScope === 0)
       throw Error("--paths matched no source files under PATH");
     printSummary(plan, summary(plan));
@@ -565,11 +607,66 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     if (existsSync(out)) throw Error("Output must be new");
     const report = writeReport(plan, events, out, {
       thresholds: thresholds(values, plan),
+      floors: floors(values, plan),
       accounting,
       runs,
     });
     console.log(
       `${report.provenance}: ${report.cells} cells, ${report.findings.length} candidates. Read ${join(out, "queue.md")}`,
+    );
+    return;
+  }
+  if (command === "rescore") {
+    if (positionals.length !== 1) throw Error("rescore needs one RUN folder");
+    const run = resolve(positionals[0]);
+    const planPath = values.plan
+      ? resolve(values.plan)
+      : join(run, "plan.json");
+    if (!existsSync(planPath))
+      throw Error(
+        `No plan at ${planPath}. rescore reads the plan.json and run/ that a scan wrote, or pass --plan`,
+      );
+    const plan = verifyPlan(JSON.parse(readFileSync(planPath, "utf8")));
+    if (plan.continuationOf)
+      throw Error("Rescore a continuation with jevs report and its base plan");
+    const journal = existsSync(join(run, "run", "journal.jsonl"))
+      ? join(run, "run")
+      : run;
+    const events = readJournal(journal, plan);
+    if (!events.length) throw Error(`No recorded answers in ${journal}`);
+    const cuts = thresholds(values, plan),
+      lows = floors(values, plan);
+    const settings = (label, map) =>
+      new Set(Object.values(map)).size === 1 &&
+      Object.keys(map).length === plan.enabledSignals.length
+        ? [`${label}-${Object.values(map)[0]}`]
+        : Object.entries(map).map(([id, v]) => `${label}-${id}-${v}`);
+    const name = [...settings("cut", cuts), ...settings("floor", lows)].join(
+      "_",
+    );
+    if (!name)
+      throw Error(
+        "rescore needs at least one of --cut, --floor, --cut-signal, --floor-signal",
+      );
+    const out = resolve(values.out ?? join(run, `rescored-${name}`));
+    if (existsSync(out))
+      throw Error(
+        `${out} exists; choose a new --out or remove it. Nothing was overwritten`,
+      );
+    const report = buildReport(plan, events, {
+      thresholds: cuts,
+      floors: lows,
+    });
+    mkdirSync(out, { recursive: true, mode: 0o700 });
+    writeNew(join(out, "report.json"), report);
+    writeNew(
+      join(out, "report.md"),
+      reportMarkdown(report, summarize(events, plan)),
+    );
+    writeNew(join(out, "queue.md"), queueMarkdown(report));
+    const b = report.bands.counts;
+    console.log(
+      `Rescored from stored answers (no API call, no key): ${b.worth_a_look} worth a look, ${b.uncertain} uncertain, ${b.below} below the band. Read ${join(out, "queue.md")}`,
     );
     return;
   }

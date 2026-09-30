@@ -17,6 +17,42 @@ export function resolveThresholds(overrides = {}) {
   return thresholds;
 }
 
+export const FLOOR_DEFAULT = 0.5;
+export const BAND_MEANING =
+  "worth_a_look: P at or above the signal's cut. uncertain: P at or above the floor and below the cut. below: P under the floor, listed in report.json only. Bands sort cells for reading; they are not calibrated probabilities. See docs/BANDS.md.";
+
+export function resolveFloors(thresholds, overrides = {}) {
+  if (!overrides || typeof overrides !== "object" || Array.isArray(overrides))
+    throw Error("Floors must be an object");
+  const floors = Object.fromEntries(
+    Object.entries(thresholds).map(([id, cut]) => [
+      id,
+      Math.min(FLOOR_DEFAULT, cut),
+    ]),
+  );
+  for (const [id, value] of Object.entries(overrides)) {
+    if (!(id in floors)) throw Error("Unknown signal in floors");
+    if (!Number.isFinite(value) || value < 0 || value > 1)
+      throw Error("Floor must be within [0, 1]");
+    floors[id] = value;
+  }
+  for (const [id, floor] of Object.entries(floors))
+    if (floor > thresholds[id])
+      throw Error(
+        `Floor ${floor} for ${id} is above its cut ${thresholds[id]}`,
+      );
+  return floors;
+}
+
+const bandOf = (p, cut, floor) =>
+  p === null
+    ? null
+    : p >= cut
+      ? "worth_a_look"
+      : p >= floor
+        ? "uncertain"
+        : "below";
+
 function nearTie(answer) {
   if (!answer) return {};
   const maximum = Math.max(...Object.values(answer.probabilities)),
@@ -40,10 +76,11 @@ const locate = (pack) =>
 export function buildReport(
   plan,
   events = [],
-  { thresholds: overrides = {} } = {},
+  { thresholds: overrides = {}, floors: floorOverrides = {} } = {},
 ) {
   verifyPlan(plan);
   const thresholds = resolveThresholds(overrides);
+  const floors = resolveFloors(thresholds, floorOverrides);
   const outcomes = new Map(
     events.filter((e) => e.type === "finished").map((e) => [e.unitId, e]),
   );
@@ -88,6 +125,8 @@ export function buildReport(
         positiveOption: signal.presence,
         pPositive: p,
         threshold: thresholds[signal.id],
+        floor: floors[signal.id],
+        band: bandOf(p, thresholds[signal.id], floors[signal.id]),
         shown: p !== null && p >= thresholds[signal.id],
         missingReasons: eligibility.missingReasons,
       });
@@ -113,6 +152,15 @@ export function buildReport(
         .map(({ unitId: _u, ...c }) => c),
     };
   });
+  const viewEntry = (c) => ({
+    packId: c.packId,
+    unitId: c.unitId,
+    pPositive: c.pPositive,
+    confidence: c.confidence,
+    choice: c.choice,
+    ...tieFields(c),
+    location: locate(packById.get(c.packId)),
+  });
   const views = Object.fromEntries(
     catalog.signals.map((s) => {
       const scored = cells.filter(
@@ -125,21 +173,15 @@ export function buildReport(
         s.id,
         {
           threshold: thresholds[s.id],
+          floor: floors[s.id],
           status: s.status,
           version: s.version,
           evidence: s.evidence,
           scored: scored.length,
-          shown: scored
-            .filter((c) => c.shown)
-            .map((c) => ({
-              packId: c.packId,
-              unitId: c.unitId,
-              pPositive: c.pPositive,
-              confidence: c.confidence,
-              choice: c.choice,
-              ...tieFields(c),
-              location: locate(packById.get(c.packId)),
-            })),
+          shown: scored.filter((c) => c.shown).map(viewEntry),
+          uncertain: scored
+            .filter((c) => c.band === "uncertain")
+            .map(viewEntry),
           ordering:
             "Jev P(positive option) descending; ties by pack id. No deterministic score participates.",
         },
@@ -162,6 +204,7 @@ export function buildReport(
         choice: null,
         confidence: null,
         pPositive: null,
+        band: null,
         shown: false,
         missingReasons: [u.disposition],
       })),
@@ -176,6 +219,7 @@ export function buildReport(
         status: u.disposition,
         missingReasons: [u.disposition],
         pPositive: null,
+        band: null,
         shown: false,
       });
   }
@@ -190,50 +234,56 @@ export function buildReport(
       missingReasons: c.missingReasons,
       split: c.split,
     }));
+  const toFinding = (c) => {
+    const pack = packById.get(c.packId),
+      signal = catalog.signals.find((s) => s.id === c.signalId);
+    return {
+      signalId: c.signalId,
+      signalVersion: c.signalVersion,
+      signalStatus: c.signalStatus,
+      question: signal.question,
+      answer: c.choice,
+      ...tieFields(c),
+      positiveOption: c.positiveOption,
+      pPositive: c.pPositive,
+      confidence: c.confidence,
+      threshold: c.threshold,
+      floor: c.floor,
+      band: c.band,
+      unitId: c.unitId,
+      packId: c.packId,
+      kind: c.kind,
+      split: c.split,
+      location: locate(pack),
+      catchRange: pack.catchRange ?? null,
+      verificationReads: pack.sections.map((s) => ({
+        path: s.path,
+        range: s.range,
+        fileSHA256: s.fileSHA256,
+        sourceSHA256: s.sourceSHA256,
+        roles: s.roles,
+      })),
+      contextOmissions: pack.omitted,
+      packRef: {
+        planHash: plan.planHash,
+        packId: pack.id,
+        contentHash: pack.contentHash,
+      },
+      notAPatchInstruction: true,
+    };
+  };
+  const byP = (a, b) =>
+    b.pPositive - a.pPositive ||
+    a.signalId.localeCompare(b.signalId) ||
+    a.packId.localeCompare(b.packId);
   const findings = cells
     .filter((c) => c.shown)
-    .sort(
-      (a, b) =>
-        b.pPositive - a.pPositive ||
-        a.signalId.localeCompare(b.signalId) ||
-        a.packId.localeCompare(b.packId),
-    )
-    .map((c) => {
-      const pack = packById.get(c.packId),
-        signal = catalog.signals.find((s) => s.id === c.signalId);
-      return {
-        signalId: c.signalId,
-        signalVersion: c.signalVersion,
-        signalStatus: c.signalStatus,
-        question: signal.question,
-        answer: c.choice,
-        ...tieFields(c),
-        positiveOption: c.positiveOption,
-        pPositive: c.pPositive,
-        confidence: c.confidence,
-        threshold: c.threshold,
-        unitId: c.unitId,
-        packId: c.packId,
-        kind: c.kind,
-        split: c.split,
-        location: locate(pack),
-        catchRange: pack.catchRange ?? null,
-        verificationReads: pack.sections.map((s) => ({
-          path: s.path,
-          range: s.range,
-          fileSHA256: s.fileSHA256,
-          sourceSHA256: s.sourceSHA256,
-          roles: s.roles,
-        })),
-        contextOmissions: pack.omitted,
-        packRef: {
-          planHash: plan.planHash,
-          packId: pack.id,
-          contentHash: pack.contentHash,
-        },
-        notAPatchInstruction: true,
-      };
-    });
+    .sort(byP)
+    .map(toFinding);
+  const uncertain = cells
+    .filter((c) => c.band === "uncertain")
+    .sort(byP)
+    .map(toFinding);
   const statusCounts = cells.reduce(
     (a, c) => ((a[c.status] = (a[c.status] ?? 0) + 1), a),
     {},
@@ -244,6 +294,7 @@ export function buildReport(
     catalogVersion: plan.catalogVersion,
     provenance,
     thresholds,
+    floors,
     thresholdMeaning:
       "Display cut only. Jev probabilities are not bug confidence, impact or permission to edit.",
     coverage: {
@@ -267,6 +318,22 @@ export function buildReport(
     views,
     abstentions,
     findings,
+    uncertain,
+    bands: {
+      meaning: BAND_MEANING,
+      edges: Object.fromEntries(
+        Object.keys(thresholds).map((id) => [
+          id,
+          { floor: floors[id], cut: thresholds[id] },
+        ]),
+      ),
+      counts: Object.fromEntries(
+        ["worth_a_look", "uncertain", "below"].map((band) => [
+          band,
+          cells.filter((c) => c.band === band).length,
+        ]),
+      ),
+    },
   };
   const nearTies = cells
     .filter((c) => c.near_tie)
@@ -309,17 +376,21 @@ const evidenceLine = (view) => {
 };
 
 export function queueMarkdown(report) {
+  const uncertain = report.uncertain ?? [];
+  const below = report.bands?.counts.below ?? 0;
   const lines = [
     "# Refactor queue",
     "",
-    `${report.findings.length} candidates at or above each signal's display cut, ordered by Jev's probability for the positive option (highest first). Each item is a hypothesis from one Jev answer about one narrow question. It is not a bug report, and P is not the chance that a change is worth making.`,
+    `${report.findings.length} worth a look, ${uncertain.length} uncertain (check), ${below} below the band. Each item is a hypothesis from one Jev answer about one narrow question. It is not a bug report, and P is not the chance that a change is worth making.`,
     "",
     "**How to use this file.** Hand it to a person or a coding agent. For each item, read the listed lines, answer the question yourself, and change nothing if it does not hold. `no change` is a valid outcome. Verify before editing. Signals marked *experimental* have too little evidence to trust; see EVIDENCE.md.",
     "",
+    `**Worth a look (${report.findings.length}).** Candidates at or above each signal's cut, ordered by Jev's probability for the positive option (highest first).`,
+    "",
   ];
-  for (const [i, f] of report.findings.entries()) {
+  const item = (f, i, level, label = "") =>
     lines.push(
-      `## ${i + 1}. ${where(f.location)} · ${f.signalId}@${f.signalVersion}${f.signalStatus === "experimental" ? " (experimental)" : ""} · P=${f.pPositive.toFixed(2)}`,
+      `${level} ${i + 1}. ${where(f.location)} · ${f.signalId}@${f.signalVersion}${f.signalStatus === "experimental" ? " (experimental)" : ""} · P=${f.pPositive.toFixed(2)}${label}`,
       "",
       `- **Question:** ${display(f.question)}`,
       `- **Jev answer:** ${f.answer}${tie(f)}${f.split?.type === "line_window" ? `; judged on lines ${f.split.startLine}–${f.split.endLine} only` : ""}.`,
@@ -337,7 +408,26 @@ export function queueMarkdown(report) {
         : "- **Context Jev did not get:** none recorded; dynamic or external context may still be missing.",
       "",
     );
-  }
+  if (!report.findings.length) lines.push("None.", "");
+  report.findings.forEach((f, i) => item(f, i, "##"));
+  lines.push(
+    "---",
+    "",
+    `**Uncertain, check (${uncertain.length}).** P is at or above the signal's floor and under its cut: Jev leaned toward the positive option, not enough to rank with the list above. Read these after the first list, and expect more \`no change\` outcomes. In the evaluation samples an LLM reviewer judged some cells just under the cut worth a change, at a lower rate than above it (docs/BANDS.md).`,
+    "",
+  );
+  if (!uncertain.length) lines.push("None.", "");
+  uncertain.forEach((f, i) =>
+    item(f, report.findings.length + i, "###", " · uncertain"),
+  );
+  lines.push(
+    "---",
+    "",
+    below
+      ? `**Below the band (${below}).** ${below} scored cells are under their signal's floor. They are not listed here. Each one is in report.json (\`blocks[].signals[]\` with \`band: "below"\`).`
+      : "**Below the band (0).** No scored cell is under its signal's floor.",
+    "",
+  );
   return lines.join("\n");
 }
 
@@ -379,15 +469,15 @@ export function reportMarkdown(report, accounting = null) {
       "",
     );
   lines.push(
-    "| Signal | Status | Scored | At or above cut | Cut | Model said insufficient | Evidence so far |",
-    "|---|---|---:|---:|---:|---:|---|",
+    "| Signal | Status | Scored | At or above cut | Uncertain band | Cut | Floor | Model said insufficient | Evidence so far |",
+    "|---|---|---:|---:|---:|---:|---:|---:|---|",
   );
   for (const [id, v] of Object.entries(report.views)) {
     const cells = report.blocks
       .flatMap((b) => b.signals)
       .filter((c) => c.signalId === id);
     lines.push(
-      `| ${id}@${v.version} | ${v.status} | ${v.scored} | ${v.shown.length} | ${v.threshold} | ${cells.filter((c) => c.status === "model_insufficient").length} | ${evidenceLine(v)} |`,
+      `| ${id}@${v.version} | ${v.status} | ${v.scored} | ${v.shown.length} | ${v.uncertain?.length ?? 0} | ${v.threshold} | ${v.floor ?? "n/a"} | ${cells.filter((c) => c.status === "model_insufficient").length} | ${evidenceLine(v)} |`,
     );
   }
   lines.push("");

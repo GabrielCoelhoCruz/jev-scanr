@@ -33,3 +33,51 @@ export const withNoise = (k, n) =>
   n > 0
     ? `${k}/${n} = ${pct(k / n)} ±${pct(noiseFloor(n))} noise floor`
     : "n/a";
+
+export function auc(scores, labels) {
+  let wins = 0,
+    pairs = 0;
+  for (let i = 0; i < scores.length; i++)
+    for (let j = 0; j < scores.length; j++) {
+      if (!labels[i] || labels[j]) continue;
+      pairs++;
+      wins += scores[i] > scores[j] ? 1 : scores[i] === scores[j] ? 0.5 : 0;
+    }
+  return pairs ? wins / pairs : null;
+}
+
+export function precisionAtK(scores, labels, k) {
+  if (!k) return null;
+  const order = scores
+    .map((s, i) => [s, labels[i]])
+    .sort((a, b) => b[0] - a[0]);
+  const edge = order[k - 1][0];
+  const above = order.filter(([s]) => s > edge);
+  const tied = order.filter(([s]) => s === edge);
+  const hits =
+    above.reduce((n, [, y]) => n + y, 0) +
+    ((k - above.length) * tied.reduce((n, [, y]) => n + y, 0)) / tied.length;
+  return hits / k;
+}
+
+export function mulberry32(seed) {
+  let a = seed >>> 0;
+  return () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+export function bootstrap(items, resamples, seed, fn) {
+  const random = mulberry32(seed);
+  for (let b = 0; b < resamples; b++)
+    fn(
+      Array.from(
+        { length: items.length },
+        () => items[Math.floor(random() * items.length)],
+      ),
+    );
+}

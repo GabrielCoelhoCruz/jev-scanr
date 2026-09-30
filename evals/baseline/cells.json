@@ -1,0 +1,3117 @@
+{
+  "schema": "baseline-cells/1",
+  "meaning": "One row per labeled cell (unit x default signal) of two independent samples: the validation gate (claude-office, reshaped) and the showcase sample (t3code, oh-my-pi). p is Jev's stored P(positive option). Labels come from an LLM reviewer (pass1 sealed before repository access, pass2 anchored on pass1, second = a different LLM on some gate cells); no person has labeled them. Features are computed from the source at the pinned commit. No source text is stored and nothing here came from a new Jev call.",
+  "generatedBy": "evals/baseline/build-cells.mjs",
+  "inputs": {
+    "gateReceipt": "09cf4ee688d52191de720cb614c2a70483f124a6b3f27c1423dc5a8f5a20ef91",
+    "showReceipt": "cba9639103bfab5908d6ad51d06cb9e895070301d5c7b2565a5a0b3156a7a160",
+    "gateManifest:paulrobello/claude-office": "9509220dd28be4837eff9bf29e0203be4b898c92ef7dd29e99c5cafbc260726a",
+    "gateJournal:paulrobello/claude-office": "644d38c19875afae036fbbcac5556a1b93ddcd1d5c779e8b78ec1280fee8cb99",
+    "gateManifest:reshaped-ui/reshaped": "98ed4db687baabec01d58b87960df7450daf12492c4e265b44ac38d837cb8fbf",
+    "gateJournal:reshaped-ui/reshaped": "608e98516989de75f5eff308b15d20bcef587639a459878522776f5cff33b418",
+    "showReport:t3code/report.json": "1f250f7c453580e9eac29ae61c77c46012f1539d34bccc02caf60578600ac178",
+    "showReport:oh-my-pi/report.json": "a445fba4eab710921687350c34ca06ec8cf7f6284b283d8940dbf6d7892f90ea",
+    "showReport:t3code-web-chat/report.json": "12694b379f0099af882778b6014b38eb2aa3a5037def2fbe1e9ba4aca7aef291",
+    "showReport:t3code-server-provider/report.json": "aa546ffef672068a17609cf393785607adabcfe410fb8f0a728a297dc805b387",
+    "showReport:oh-my-pi-coding-agent-extensibility-commands/report.json": "1f119d8e55d586bbde43f4d67571574f4b8a1a1d76a9a2d574a88fdc91c3e0f4",
+    "gatePass1": "c8b4ce8fd132c00d564c43f8a3fc9fe86bdb3fa0bc44ef15239abb589aeb18dd",
+    "showPass1": "c0391f87618e9ee1dd588ced93a1eece998591411174e897e1f74e8dcb5e1a3f",
+    "gatePass2": "5a14b6f62592c8915705cad62fb7732012dfd8e5125657cb358d44e9f17cbed8",
+    "showPass2": "a6785c3f693b1c92f2104f9e63432e30d454aaee4171c4b7635a9f0849737daf",
+    "gateSecond": "582d6054f2c7c52a8ac6bac893d7f44469e71c70555b5e48ebad161b0b0a79d0",
+    "gateCards": "60e57aab09c276eb7eea0013164aa3c7488b03eca24a2246722899fd4a2bb56e",
+    "showCards": "81f8296cfc694fe6b0f39388d079d0e435562fc5f6496d78659c6e7a1c88f513",
+    "gateResult": "52827c27354caba06864bab98a658c31c4226d0a742722604e95a63468d075dc",
+    "showResult": "7f3d898c03cf88879384793d48cce4095ed1cf31db8f02184b857c34b38a7c77"
+  },
+  "pinned": {
+    "paulrobello/claude-office": {
+      "dir": "claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c"
+    },
+    "reshaped-ui/reshaped": {
+      "dir": "reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1"
+    },
+    "pingdotgg/t3code": {
+      "dir": "t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da"
+    },
+    "can1357/oh-my-pi": {
+      "dir": "oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395"
+    }
+  },
+  "droppedNonDefaultSignalCells": {
+    "internal_duplication": 36,
+    "unused_local_or_parameter": 29,
+    "deep_nesting": 20,
+    "magic_policy_literal": 36,
+    "unreachable_code": 8
+  },
+  "cells": [
+    {
+      "id": "0608d3eab2372892",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "navigateRight",
+          "path": "packages/reshaped/src/components/Carousel/Carousel.tsx",
+          "startLine": 121,
+          "endLine": 129,
+          "role": "pair.a"
+        },
+        {
+          "name": "navigateLeft",
+          "path": "packages/reshaped/src/components/Carousel/Carousel.tsx",
+          "startLine": 131,
+          "endLine": 139,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.79,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 0.6136363636363636,
+        "rawJaccard5": 0.6136363636363636,
+        "jscpdCoverage10": 0.8974358974358975,
+        "jscpdCoverage50": 0,
+        "minLines": 9,
+        "minTokens": 39
+      }
+    },
+    {
+      "id": "0a31ffa2e57b07a6",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "SliderControlled",
+          "path": "packages/reshaped/src/components/Slider/SliderControlled.tsx",
+          "startLine": 18,
+          "endLine": 354,
+          "role": "focus"
+        }
+      ],
+      "p": 0.53,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 337,
+        "statements": 161,
+        "cyclomatic": 70,
+        "params": 1,
+        "tokens": 1973
+      }
+    },
+    {
+      "id": "0c65bc5e343c349c",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "execute",
+          "path": "packages/coding-agent/src/extensibility/extensions/wrapper.ts",
+          "startLine": 215,
+          "endLine": 507,
+          "role": "focus"
+        }
+      ],
+      "p": 0.99,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 293,
+        "statements": 106,
+        "cyclomatic": 67,
+        "params": 5,
+        "tokens": 1571
+      }
+    },
+    {
+      "id": "0d885b196572b32c",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "handleStartWalking",
+          "path": "frontend/src/machines/agentMachineService.ts",
+          "startLine": 403,
+          "endLine": 451,
+          "role": "focus"
+        }
+      ],
+      "p": 0.69,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 49,
+        "statements": 29,
+        "cyclomatic": 13,
+        "params": 3,
+        "tokens": 288
+      }
+    },
+    {
+      "id": "1004746a807b251e",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "resolveSpringTransition",
+          "path": "packages/reshaped/src/utilities/animation.ts",
+          "startLine": 64,
+          "endLine": 108,
+          "role": "focus"
+        }
+      ],
+      "p": 0.72,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action",
+        "second": "no_action"
+      },
+      "features": {
+        "lines": 45,
+        "statements": 26,
+        "cyclomatic": 8,
+        "params": 1,
+        "tokens": 302
+      }
+    },
+    {
+      "id": "10d7436a7690ae20",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "BuildingTab",
+          "path": "frontend/src/components/settings/BuildingTab.tsx",
+          "startLine": 139,
+          "endLine": 421,
+          "role": "focus"
+        }
+      ],
+      "p": 0.65,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "actionable"
+      },
+      "features": {
+        "lines": 283,
+        "statements": 45,
+        "cyclomatic": 19,
+        "params": 1,
+        "tokens": 1471
+      }
+    },
+    {
+      "id": "1539d91aacb6d5f3",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "OpenInPicker",
+          "path": "apps/web/src/components/chat/OpenInPicker.tsx",
+          "startLine": 195,
+          "endLine": 388,
+          "role": "focus"
+        }
+      ],
+      "p": 0.84,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 194,
+        "statements": 49,
+        "cyclomatic": 36,
+        "params": 1,
+        "tokens": 1077
+      }
+    },
+    {
+      "id": "179fb15bdf54db98",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "PreviewPanel",
+          "path": "frontend/src/components/debug/sprite-debug/components/PreviewPanel.tsx",
+          "startLine": 42,
+          "endLine": 447,
+          "role": "focus"
+        }
+      ],
+      "p": 0.78,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "actionable"
+      },
+      "features": {
+        "lines": 406,
+        "statements": 94,
+        "cyclomatic": 26,
+        "params": 0,
+        "tokens": 2346
+      }
+    },
+    {
+      "id": "19c4b27476504c29",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "packages/reshaped/src/components/ScrollArea/ScrollArea.tsx",
+          "startLine": 99,
+          "endLine": 109,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "packages/reshaped/src/components/Slider/SliderControlled.tsx",
+          "startLine": 273,
+          "endLine": 285,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.67,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 0.6774193548387096,
+        "rawJaccard5": 0.13953488372093023,
+        "jscpdCoverage10": 0,
+        "jscpdCoverage50": 0,
+        "minLines": 11,
+        "minTokens": 55
+      }
+    },
+    {
+      "id": "23ff66dfbbcef7f1",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "Resizable",
+          "path": "packages/reshaped/src/components/Resizable/Resizable.tsx",
+          "startLine": 40,
+          "endLine": 209,
+          "role": "focus"
+        }
+      ],
+      "p": 0.89,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 170,
+        "statements": 70,
+        "cyclomatic": 25,
+        "params": 1,
+        "tokens": 1018
+      }
+    },
+    {
+      "id": "252d92da92b13fb0",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "packages/utilities/src/flyout/utilities/applyPosition.ts",
+          "startLine": 144,
+          "endLine": 151,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "packages/utilities/src/flyout/utilities/applyPosition.ts",
+          "startLine": 160,
+          "endLine": 167,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.76,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.7297297297297297,
+        "rawJaccard5": 0.5111111111111111,
+        "jscpdCoverage10": 0.6216216216216216,
+        "jscpdCoverage50": 0,
+        "minLines": 8,
+        "minTokens": 37
+      }
+    },
+    {
+      "id": "2a6e3aa14eaee3af",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "collectExtensionSpecifierReferences",
+          "path": "packages/coding-agent/src/extensibility/plugins/legacy-pi-compat.ts",
+          "startLine": 462,
+          "endLine": 537,
+          "role": "focus"
+        }
+      ],
+      "p": 0.8,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 76,
+        "statements": 45,
+        "cyclomatic": 34,
+        "params": 3,
+        "tokens": 585
+      }
+    },
+    {
+      "id": "2dd32a8afc5fe72f",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "ModelPickerContent",
+          "path": "apps/web/src/components/chat/ModelPickerContent.tsx",
+          "startLine": 150,
+          "endLine": 1056,
+          "role": "focus"
+        }
+      ],
+      "p": 0.8,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 907,
+        "statements": 304,
+        "cyclomatic": 146,
+        "params": 1,
+        "tokens": 5048
+      }
+    },
+    {
+      "id": "2ea8f107b6088cae",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "goToCommand",
+          "path": "frontend/src/stores/navigationStore.ts",
+          "startLine": 96,
+          "endLine": 103,
+          "role": "pair.a"
+        },
+        {
+          "name": "resetToSingle",
+          "path": "frontend/src/stores/navigationStore.ts",
+          "startLine": 153,
+          "endLine": 161,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.65,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 0.5294117647058824,
+        "jscpdCoverage10": 0.6071428571428571,
+        "jscpdCoverage50": 0,
+        "minLines": 8,
+        "minTokens": 28
+      }
+    },
+    {
+      "id": "328215b061e40581",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "apps/web/src/components/chat/ChatComposer.tsx",
+          "startLine": 5812,
+          "endLine": 5824,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "apps/web/src/components/chat/MessagesTimeline.tsx",
+          "startLine": 607,
+          "endLine": 614,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.78,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 0.5588235294117647,
+        "rawJaccard5": 0.11267605633802817,
+        "jscpdCoverage10": 0,
+        "jscpdCoverage50": 0,
+        "minLines": 8,
+        "minTokens": 39
+      }
+    },
+    {
+      "id": "35b6fcc763af5dfa",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "transformDefinition",
+          "path": "packages/theming/src/cli/index.ts",
+          "startLine": 12,
+          "endLine": 39,
+          "role": "focus"
+        }
+      ],
+      "p": 0.59,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 28,
+        "statements": 15,
+        "cyclomatic": 4,
+        "params": 3,
+        "tokens": 223
+      }
+    },
+    {
+      "id": "3702982ce99e1ec5",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "borderStart",
+          "path": "packages/reshaped/src/styles/resolvers/border/index.ts",
+          "startLine": 46,
+          "endLine": 56,
+          "role": "pair.a"
+        },
+        {
+          "name": "borderBlock",
+          "path": "packages/reshaped/src/styles/resolvers/border/index.ts",
+          "startLine": 70,
+          "endLine": 80,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.92,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 0.7777777777777778,
+        "jscpdCoverage10": 0.9777777777777777,
+        "jscpdCoverage50": 0,
+        "minLines": 11,
+        "minTokens": 45
+      }
+    },
+    {
+      "id": "38c39a7130ff9aa5",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "useSessionSwitch",
+          "path": "frontend/src/hooks/useSessionSwitch.ts",
+          "startLine": 38,
+          "endLine": 168,
+          "role": "focus"
+        }
+      ],
+      "p": 0.59,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 131,
+        "statements": 62,
+        "cyclomatic": 12,
+        "params": 1,
+        "tokens": 681
+      }
+    },
+    {
+      "id": "39d52f6ea3ed7c66",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "assembleSpriteSheet",
+          "path": "frontend/src/components/debug/sprite-debug/lib/imageProcessing.ts",
+          "startLine": 442,
+          "endLine": 480,
+          "role": "pair.a"
+        },
+        {
+          "name": "assembleSpriteSheetAsync",
+          "path": "frontend/src/components/debug/sprite-debug/lib/imageProcessing.ts",
+          "startLine": 485,
+          "endLine": 525,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.67,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.45754716981132076,
+        "rawJaccard5": 0.5171232876712328,
+        "jscpdCoverage10": 0.7692307692307693,
+        "jscpdCoverage50": 0.4230769230769231,
+        "minLines": 39,
+        "minTokens": 208
+      }
+    },
+    {
+      "id": "3becb642231b3337",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "AssistantSelectionToolbar",
+          "path": "apps/web/src/components/chat/AssistantSelectionToolbar.tsx",
+          "startLine": 21,
+          "endLine": 154,
+          "role": "focus"
+        }
+      ],
+      "p": 0.85,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 134,
+        "statements": 63,
+        "cyclomatic": 27,
+        "params": 1,
+        "tokens": 906
+      }
+    },
+    {
+      "id": "3c8f09922ab5a9eb",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "doctor",
+          "path": "packages/coding-agent/src/extensibility/plugins/manager.ts",
+          "startLine": 1047,
+          "endLine": 1228,
+          "role": "focus"
+        }
+      ],
+      "p": 0.92,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 182,
+        "statements": 72,
+        "cyclomatic": 45,
+        "params": 1,
+        "tokens": 1099
+      }
+    },
+    {
+      "id": "3cda0d8365ce99ce",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "useWebSocketEvents",
+          "path": "frontend/src/hooks/useWebSocketEvents.ts",
+          "startLine": 42,
+          "endLine": 244,
+          "role": "focus"
+        }
+      ],
+      "p": 0.62,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 203,
+        "statements": 72,
+        "cyclomatic": 37,
+        "params": 1,
+        "tokens": 959
+      }
+    },
+    {
+      "id": "3cfee2baf46f8d8a",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "RadioGroupUncontrolled",
+          "path": "packages/reshaped/src/components/RadioGroup/RadioGroupUncontrolled.tsx",
+          "startLine": 8,
+          "endLine": 27,
+          "role": "pair.a"
+        },
+        {
+          "name": "TabsUncontrolled",
+          "path": "packages/reshaped/src/components/Tabs/TabsUncontrolled.tsx",
+          "startLine": 8,
+          "endLine": 20,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.67,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 0.45161290322580644,
+        "rawJaccard5": 0.3284671532846715,
+        "jscpdCoverage10": 0.4065934065934066,
+        "jscpdCoverage50": 0,
+        "minLines": 13,
+        "minTokens": 91
+      }
+    },
+    {
+      "id": "3fed964355481a95",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": null,
+          "path": "packages/theming/src/cli/run.ts",
+          "startLine": 26,
+          "endLine": 63,
+          "role": "focus"
+        }
+      ],
+      "p": 0.71,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action",
+        "second": "no_action"
+      },
+      "features": {
+        "lines": 38,
+        "statements": 23,
+        "cyclomatic": 8,
+        "params": 1,
+        "tokens": 250
+      }
+    },
+    {
+      "id": "4a65aadb6afdba74",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "safeOnSpanStart",
+          "path": "packages/agent/src/telemetry.ts",
+          "startLine": 663,
+          "endLine": 675,
+          "role": "pair.a"
+        },
+        {
+          "name": "safeOnSpanEnd",
+          "path": "packages/agent/src/telemetry.ts",
+          "startLine": 677,
+          "endLine": 689,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.83,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 0.5949367088607594,
+        "jscpdCoverage10": 0.8805970149253731,
+        "jscpdCoverage50": 0,
+        "minLines": 13,
+        "minTokens": 67
+      }
+    },
+    {
+      "id": "4ae947c8011b6808",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "TextField",
+          "path": "packages/reshaped/src/components/TextField/TextField.tsx",
+          "startLine": 66,
+          "endLine": 174,
+          "role": "focus"
+        }
+      ],
+      "p": 0.73,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action",
+        "second": "no_action"
+      },
+      "features": {
+        "lines": 109,
+        "statements": 14,
+        "cyclomatic": 20,
+        "params": 1,
+        "tokens": 521
+      }
+    },
+    {
+      "id": "5291480980a18e76",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "ConversationHistory",
+          "path": "frontend/src/components/layout/ConversationHistory.tsx",
+          "startLine": 264,
+          "endLine": 393,
+          "role": "focus"
+        }
+      ],
+      "p": 0.7,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 130,
+        "statements": 24,
+        "cyclomatic": 12,
+        "params": 0,
+        "tokens": 744
+      }
+    },
+    {
+      "id": "590b611ec729b5ff",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": null,
+          "path": "apps/desktop/src/app/DesktopAppIdentity.ts",
+          "startLine": 70,
+          "endLine": 150,
+          "role": "focus"
+        }
+      ],
+      "p": 0.78,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 81,
+        "statements": 35,
+        "cyclomatic": 7,
+        "params": 0,
+        "tokens": 567
+      }
+    },
+    {
+      "id": "5ae1aff3799a470e",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "getAllRegisteredTools",
+          "path": "packages/coding-agent/src/extensibility/extensions/runner.ts",
+          "startLine": 1074,
+          "endLine": 1082,
+          "role": "pair.a"
+        },
+        {
+          "name": "getRegisteredCommands",
+          "path": "packages/coding-agent/src/extensibility/hooks/runner.ts",
+          "startLine": 198,
+          "endLine": 206,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.87,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 0.0967741935483871,
+        "jscpdCoverage10": 0,
+        "jscpdCoverage50": 0,
+        "minLines": 9,
+        "minTokens": 55
+      }
+    },
+    {
+      "id": "5bc9dae4d5b12124",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "ToastContainer",
+          "path": "packages/reshaped/src/components/Toast/ToastContainer.tsx",
+          "startLine": 22,
+          "endLine": 145,
+          "role": "focus"
+        }
+      ],
+      "p": 0.61,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 124,
+        "statements": 60,
+        "cyclomatic": 28,
+        "params": 1,
+        "tokens": 755
+      }
+    },
+    {
+      "id": "5bd54de7b2528f55",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "AssistantCitationChip",
+          "path": "apps/web/src/components/chat/AssistantCitationChip.tsx",
+          "startLine": 28,
+          "endLine": 232,
+          "role": "focus"
+        }
+      ],
+      "p": 0.74,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 205,
+        "statements": 64,
+        "cyclomatic": 36,
+        "params": 1,
+        "tokens": 1169
+      }
+    },
+    {
+      "id": "64ca32f849428bec",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "run",
+          "path": "packages/coding-agent/src/commands/token.ts",
+          "startLine": 86,
+          "endLine": 227,
+          "role": "focus"
+        }
+      ],
+      "p": 0.74,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 142,
+        "statements": 79,
+        "cyclomatic": 46,
+        "params": 0,
+        "tokens": 991
+      }
+    },
+    {
+      "id": "657d70fe332d246d",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "RadioGroupUncontrolled",
+          "path": "packages/reshaped/src/components/RadioGroup/RadioGroupUncontrolled.tsx",
+          "startLine": 8,
+          "endLine": 27,
+          "role": "pair.a"
+        },
+        {
+          "name": "ToggleButtonGroupUncontrolled",
+          "path": "packages/reshaped/src/components/ToggleButtonGroup/ToggleButtonGroupUncontrolled.tsx",
+          "startLine": 8,
+          "endLine": 27,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.77,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 0.8018867924528302,
+        "rawJaccard5": 0.8037383177570093,
+        "jscpdCoverage10": 0.98,
+        "jscpdCoverage50": 0,
+        "minLines": 20,
+        "minTokens": 100
+      }
+    },
+    {
+      "id": "6bc8ac5c73465209",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "transform",
+          "path": "packages/theming/src/generation/transform.ts",
+          "startLine": 16,
+          "endLine": 85,
+          "role": "focus"
+        }
+      ],
+      "p": 0.89,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action",
+        "second": "no_action"
+      },
+      "features": {
+        "lines": 70,
+        "statements": 24,
+        "cyclomatic": 11,
+        "params": 3,
+        "tokens": 463
+      }
+    },
+    {
+      "id": "77fd1afe89a4fcc9",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": null,
+          "path": "apps/desktop/src/app/DesktopClerk.ts",
+          "startLine": 92,
+          "endLine": 206,
+          "role": "focus"
+        }
+      ],
+      "p": 0.98,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 115,
+        "statements": 48,
+        "cyclomatic": 11,
+        "params": 0,
+        "tokens": 736
+      }
+    },
+    {
+      "id": "78619837603f3831",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "frontend/src/components/layout/MobileDrawer.tsx",
+          "startLine": 105,
+          "endLine": 112,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "frontend/src/components/layout/SessionSidebar.tsx",
+          "startLine": 189,
+          "endLine": 196,
+          "role": "pair.b"
+        }
+      ],
+      "p": 1,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 1,
+        "jscpdCoverage10": 1,
+        "jscpdCoverage50": 1,
+        "minLines": 8,
+        "minTokens": 54
+      }
+    },
+    {
+      "id": "8006eca0b1c8d9f2",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "apps/server/src/provider/AntigravityInstallation.ts",
+          "startLine": 538,
+          "endLine": 561,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "apps/server/src/provider/CodexInstallation.ts",
+          "startLine": 421,
+          "endLine": 445,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.72,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.7636363636363637,
+        "rawJaccard5": 0.24752475247524752,
+        "jscpdCoverage10": 0.4297520661157025,
+        "jscpdCoverage50": 0,
+        "minLines": 24,
+        "minTokens": 121
+      }
+    },
+    {
+      "id": "83c0c171f8934823",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "findPath",
+          "path": "frontend/src/systems/astar.ts",
+          "startLine": 126,
+          "endLine": 229,
+          "role": "focus"
+        }
+      ],
+      "p": 0.68,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 104,
+        "statements": 54,
+        "cyclomatic": 16,
+        "params": 4,
+        "tokens": 674
+      }
+    },
+    {
+      "id": "840afdd92130e7a3",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "CommandCenterCanvas",
+          "path": "frontend/src/components/command/CommandCenterCanvas.tsx",
+          "startLine": 46,
+          "endLine": 172,
+          "role": "focus"
+        }
+      ],
+      "p": 0.71,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 127,
+        "statements": 22,
+        "cyclomatic": 12,
+        "params": 1,
+        "tokens": 715
+      }
+    },
+    {
+      "id": "84d3b63c0be41172",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "FlyoutContent",
+          "path": "packages/reshaped/src/components/Flyout/FlyoutContent.tsx",
+          "startLine": 14,
+          "endLine": 134,
+          "role": "focus"
+        }
+      ],
+      "p": 0.68,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 121,
+        "statements": 27,
+        "cyclomatic": 25,
+        "params": 1,
+        "tokens": 584
+      }
+    },
+    {
+      "id": "85ac7148d6028d1d",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "AccordionUncontrolled",
+          "path": "packages/reshaped/src/components/Accordion/AccordionUncontrolled.tsx",
+          "startLine": 8,
+          "endLine": 18,
+          "role": "pair.a"
+        },
+        {
+          "name": "PinFieldUncontrolled",
+          "path": "packages/reshaped/src/components/PinField/PinFieldUncontrolled.tsx",
+          "startLine": 8,
+          "endLine": 18,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.8,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 0.5294117647058824,
+        "rawJaccard5": 0.09722222222222222,
+        "jscpdCoverage10": 0,
+        "jscpdCoverage50": 0,
+        "minLines": 11,
+        "minTokens": 82
+      }
+    },
+    {
+      "id": "8730eedbdeeb8418",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "FloorView",
+          "path": "frontend/src/components/views/FloorView.tsx",
+          "startLine": 49,
+          "endLine": 148,
+          "role": "focus"
+        }
+      ],
+      "p": 0.79,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "actionable"
+      },
+      "features": {
+        "lines": 100,
+        "statements": 37,
+        "cyclomatic": 20,
+        "params": 1,
+        "tokens": 560
+      }
+    },
+    {
+      "id": "8882ebf3c70bf55c",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "apps/server/src/provider/AntigravityInstallation.ts",
+          "startLine": 854,
+          "endLine": 870,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "apps/server/src/provider/CodexInstallation.ts",
+          "startLine": 627,
+          "endLine": 639,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.97,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.8076923076923077,
+        "rawJaccard5": 0.7415730337078652,
+        "jscpdCoverage10": 1,
+        "jscpdCoverage50": 1,
+        "minLines": 13,
+        "minTokens": 75
+      }
+    },
+    {
+      "id": "8b1afbb9ce904090",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "apps/server/src/provider/AntigravityAuth.ts",
+          "startLine": 182,
+          "endLine": 216,
+          "role": "pair.a"
+        },
+        {
+          "name": "withAccess",
+          "path": "apps/server/src/provider/ProviderAuthFlow.ts",
+          "startLine": 200,
+          "endLine": 235,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.7,
+      "labels": {
+        "pass1": "uncertain",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 0.4504950495049505,
+        "rawJaccard5": 0.24390243902439024,
+        "jscpdCoverage10": 0.35406698564593303,
+        "jscpdCoverage50": 0,
+        "minLines": 35,
+        "minTokens": 209
+      }
+    },
+    {
+      "id": "8b3504652bf23729",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "frontend/src/components/overlay/SettingsModal.tsx",
+          "startLine": 220,
+          "endLine": 237,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "frontend/src/components/overlay/SettingsModal.tsx",
+          "startLine": 323,
+          "endLine": 343,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.72,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.5759493670886076,
+        "rawJaccard5": 0.2597402597402597,
+        "jscpdCoverage10": 0.4230769230769231,
+        "jscpdCoverage50": 0,
+        "minLines": 18,
+        "minTokens": 156
+      }
+    },
+    {
+      "id": "8ca938c3e24b9c31",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "Whiteboard",
+          "path": "frontend/src/components/game/Whiteboard.tsx",
+          "startLine": 143,
+          "endLine": 245,
+          "role": "focus"
+        }
+      ],
+      "p": 0.83,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action",
+        "second": "no_action"
+      },
+      "features": {
+        "lines": 103,
+        "statements": 42,
+        "cyclomatic": 24,
+        "params": 1,
+        "tokens": 588
+      }
+    },
+    {
+      "id": "90f78d51c96fa0f7",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "frontend/src/components/layout/MobileDrawer.tsx",
+          "startLine": 47,
+          "endLine": 55,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "frontend/src/components/layout/SessionSidebar.tsx",
+          "startLine": 63,
+          "endLine": 71,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.97,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 1,
+        "jscpdCoverage10": 1,
+        "jscpdCoverage50": 1,
+        "minLines": 9,
+        "minTokens": 136
+      }
+    },
+    {
+      "id": "917d038ae86e6a04",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "IconChevronLeft",
+          "path": "packages/reshaped/src/icons/ChevronLeft.tsx",
+          "startLine": 1,
+          "endLine": 15,
+          "role": "pair.a"
+        },
+        {
+          "name": "IconChevronRight",
+          "path": "packages/reshaped/src/icons/ChevronRight.tsx",
+          "startLine": 1,
+          "endLine": 15,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.68,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 0.7872340425531915,
+        "jscpdCoverage10": 0.9782608695652174,
+        "jscpdCoverage50": 0,
+        "minLines": 15,
+        "minTokens": 46
+      }
+    },
+    {
+      "id": "92e512f82bd508ae",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "OutputPreview",
+          "path": "frontend/src/components/debug/sprite-debug/components/OutputPreview.tsx",
+          "startLine": 26,
+          "endLine": 267,
+          "role": "focus"
+        }
+      ],
+      "p": 0.76,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action",
+        "second": "no_action"
+      },
+      "features": {
+        "lines": 242,
+        "statements": 38,
+        "cyclomatic": 10,
+        "params": 1,
+        "tokens": 1009
+      }
+    },
+    {
+      "id": "92f003b99053411f",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "getMessageRenderer",
+          "path": "packages/coding-agent/src/extensibility/hooks/runner.ts",
+          "startLine": 185,
+          "endLine": 193,
+          "role": "pair.a"
+        },
+        {
+          "name": "getCommand",
+          "path": "packages/coding-agent/src/extensibility/hooks/runner.ts",
+          "startLine": 212,
+          "endLine": 220,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.81,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 0.1780821917808219,
+        "jscpdCoverage10": 0.2978723404255319,
+        "jscpdCoverage50": 0,
+        "minLines": 9,
+        "minTokens": 47
+      }
+    },
+    {
+      "id": "9685851e4406be68",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "onSshPasswordPrompt",
+          "path": "apps/desktop/src/preload.ts",
+          "startLine": 151,
+          "endLine": 161,
+          "role": "pair.a"
+        },
+        {
+          "name": "onInput",
+          "path": "apps/desktop/src/preload.ts",
+          "startLine": 340,
+          "endLine": 348,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.75,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.68,
+        "rawJaccard5": 0.30097087378640774,
+        "jscpdCoverage10": 0.35714285714285715,
+        "jscpdCoverage50": 0,
+        "minLines": 9,
+        "minTokens": 70
+      }
+    },
+    {
+      "id": "98077c35a4704407",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "generateColorValues",
+          "path": "packages/theming/src/generation/tokens/color/utilities/generateColors.ts",
+          "startLine": 78,
+          "endLine": 206,
+          "role": "focus"
+        }
+      ],
+      "p": 0.86,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 129,
+        "statements": 32,
+        "cyclomatic": 17,
+        "params": 2,
+        "tokens": 1023
+      }
+    },
+    {
+      "id": "990546bf53e3600e",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "sessionMatchesFloor",
+          "path": "frontend/src/components/command/sessionMatchesFloor.ts",
+          "startLine": 5,
+          "endLine": 17,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "frontend/src/components/views/FloorView.tsx",
+          "startLine": 88,
+          "endLine": 96,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.94,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.627906976744186,
+        "rawJaccard5": 0.40384615384615385,
+        "jscpdCoverage10": 0.5915492957746479,
+        "jscpdCoverage50": 0,
+        "minLines": 9,
+        "minTokens": 71
+      }
+    },
+    {
+      "id": "9b055b25b348ded1",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "MessagesTimeline",
+          "path": "apps/web/src/components/chat/MessagesTimeline.tsx",
+          "startLine": 477,
+          "endLine": 1366,
+          "role": "focus"
+        }
+      ],
+      "p": 0.83,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 890,
+        "statements": 320,
+        "cyclomatic": 148,
+        "params": 1,
+        "tokens": 4619
+      }
+    },
+    {
+      "id": "9cfbc5917b7651f7",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "borderEnd",
+          "path": "packages/reshaped/src/styles/resolvers/border/index.ts",
+          "startLine": 58,
+          "endLine": 68,
+          "role": "pair.a"
+        },
+        {
+          "name": "borderBlock",
+          "path": "packages/reshaped/src/styles/resolvers/border/index.ts",
+          "startLine": 70,
+          "endLine": 80,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.92,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 0.7777777777777778,
+        "jscpdCoverage10": 0.9777777777777777,
+        "jscpdCoverage50": 0,
+        "minLines": 11,
+        "minTokens": 45
+      }
+    },
+    {
+      "id": "9e566fc05c2d9c77",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": null,
+          "path": "frontend/src/stores/attentionStore.ts",
+          "startLine": 110,
+          "endLine": 199,
+          "role": "focus"
+        }
+      ],
+      "p": 0.9,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action",
+        "second": "no_action"
+      },
+      "features": {
+        "lines": 90,
+        "statements": 19,
+        "cyclomatic": 12,
+        "params": 2,
+        "tokens": 624
+      }
+    },
+    {
+      "id": "a453044598d399b4",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "useCompactionAnimation",
+          "path": "frontend/src/systems/compactionAnimation.ts",
+          "startLine": 116,
+          "endLine": 344,
+          "role": "focus"
+        }
+      ],
+      "p": 0.97,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 229,
+        "statements": 116,
+        "cyclomatic": 19,
+        "params": 0,
+        "tokens": 1100
+      }
+    },
+    {
+      "id": "a45dd1f293d0678c",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "ThinkingEntry",
+          "path": "frontend/src/components/layout/ConversationHistory.tsx",
+          "startLine": 46,
+          "endLine": 81,
+          "role": "pair.a"
+        },
+        {
+          "name": "AssistantEntry",
+          "path": "frontend/src/components/layout/ConversationHistory.tsx",
+          "startLine": 192,
+          "endLine": 234,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.62,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.6153846153846154,
+        "rawJaccard5": 0.4139941690962099,
+        "jscpdCoverage10": 0.711864406779661,
+        "jscpdCoverage50": 0,
+        "minLines": 36,
+        "minTokens": 236
+      }
+    },
+    {
+      "id": "aac56d4073e11e82",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "calculatePosition",
+          "path": "packages/utilities/src/flyout/utilities/calculatePosition.ts",
+          "startLine": 24,
+          "endLine": 133,
+          "role": "focus"
+        }
+      ],
+      "p": 0.67,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 110,
+        "statements": 41,
+        "cyclomatic": 26,
+        "params": 1,
+        "tokens": 394
+      }
+    },
+    {
+      "id": "af2535d1fd6c0c61",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "parseBinaryCookies",
+          "path": "apps/desktop/src/preview/BrowserImport/SafariCookies.ts",
+          "startLine": 71,
+          "endLine": 192,
+          "role": "focus"
+        }
+      ],
+      "p": 0.95,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 122,
+        "statements": 55,
+        "cyclomatic": 27,
+        "params": 1,
+        "tokens": 697
+      }
+    },
+    {
+      "id": "af49546883b4e2bf",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "height",
+          "path": "packages/reshaped/src/styles/resolvers/height/index.ts",
+          "startLine": 5,
+          "endLine": 16,
+          "role": "pair.a"
+        },
+        {
+          "name": "width",
+          "path": "packages/reshaped/src/styles/resolvers/width/index.ts",
+          "startLine": 5,
+          "endLine": 16,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.93,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 0.8611111111111112,
+        "jscpdCoverage10": 0.9859154929577465,
+        "jscpdCoverage50": 0.7183098591549296,
+        "minLines": 12,
+        "minTokens": 71
+      }
+    },
+    {
+      "id": "b33d1d20286b64ac",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "useSessions",
+          "path": "frontend/src/hooks/useSessions.ts",
+          "startLine": 49,
+          "endLine": 206,
+          "role": "focus"
+        }
+      ],
+      "p": 0.68,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "no_action"
+      },
+      "features": {
+        "lines": 158,
+        "statements": 60,
+        "cyclomatic": 27,
+        "params": 1,
+        "tokens": 811
+      }
+    },
+    {
+      "id": "b414a0ecc374a533",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "PinFieldControlled",
+          "path": "packages/reshaped/src/components/PinField/PinFieldControlled.tsx",
+          "startLine": 33,
+          "endLine": 258,
+          "role": "focus"
+        }
+      ],
+      "p": 0.53,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 226,
+        "statements": 81,
+        "cyclomatic": 37,
+        "params": 1,
+        "tokens": 1180
+      }
+    },
+    {
+      "id": "b610a01d3c76cd06",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "border",
+          "path": "packages/reshaped/src/styles/resolvers/border/index.ts",
+          "startLine": 10,
+          "endLine": 20,
+          "role": "pair.a"
+        },
+        {
+          "name": "borderTop",
+          "path": "packages/reshaped/src/styles/resolvers/border/index.ts",
+          "startLine": 22,
+          "endLine": 32,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.88,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 0.7777777777777778,
+        "jscpdCoverage10": 0.9777777777777777,
+        "jscpdCoverage50": 0,
+        "minLines": 11,
+        "minTokens": 45
+      }
+    },
+    {
+      "id": "bb73dc433849cf21",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "useSessions",
+          "path": "frontend/src/hooks/useSessions.ts",
+          "startLine": 49,
+          "endLine": 206,
+          "role": "focus"
+        }
+      ],
+      "p": 0.78,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "actionable"
+      },
+      "features": {
+        "lines": 158,
+        "statements": 60,
+        "cyclomatic": 27,
+        "params": 1,
+        "tokens": 811
+      }
+    },
+    {
+      "id": "bcd3284ed11dab97",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "CalendarDate",
+          "path": "packages/reshaped/src/components/Calendar/CalendarDate.tsx",
+          "startLine": 10,
+          "endLine": 142,
+          "role": "focus"
+        }
+      ],
+      "p": 0.85,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "no_action"
+      },
+      "features": {
+        "lines": 133,
+        "statements": 48,
+        "cyclomatic": 42,
+        "params": 1,
+        "tokens": 724
+      }
+    },
+    {
+      "id": "bf74272ac4592434",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "useCalendarKeyboardNavigation",
+          "path": "packages/reshaped/src/components/Calendar/useCalendarKeyboardNavigation.ts",
+          "startLine": 7,
+          "endLine": 91,
+          "role": "focus"
+        }
+      ],
+      "p": 0.6799999999999999,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 85,
+        "statements": 41,
+        "cyclomatic": 14,
+        "params": 1,
+        "tokens": 566
+      }
+    },
+    {
+      "id": "c06fc5160bd8068f",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "handleQueueJoined",
+          "path": "frontend/src/machines/agentMachineService.ts",
+          "startLine": 472,
+          "endLine": 518,
+          "role": "focus"
+        }
+      ],
+      "p": 0.74,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 47,
+        "statements": 19,
+        "cyclomatic": 9,
+        "params": 3,
+        "tokens": 256
+      }
+    },
+    {
+      "id": "c26ac29d5cde1689",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "useDoorAnimation",
+          "path": "frontend/src/components/game/Elevator.tsx",
+          "startLine": 49,
+          "endLine": 80,
+          "role": "pair.a"
+        },
+        {
+          "name": "usePrintAnimation",
+          "path": "frontend/src/components/game/PrinterStation.tsx",
+          "startLine": 33,
+          "endLine": 72,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.6799999999999999,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 0.5422885572139303,
+        "rawJaccard5": 0.13694267515923567,
+        "jscpdCoverage10": 0.1881720430107527,
+        "jscpdCoverage50": 0,
+        "minLines": 32,
+        "minTokens": 186
+      }
+    },
+    {
+      "id": "c9935d52b50a00fb",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "frontend/src/components/tour/PointerRing.tsx",
+          "startLine": 27,
+          "endLine": 44,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "frontend/src/components/tour/SpotlightDim.tsx",
+          "startLine": 27,
+          "endLine": 44,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.78,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.9012345679012346,
+        "rawJaccard5": 0.8837209302325582,
+        "jscpdCoverage10": 1,
+        "jscpdCoverage50": 0.6022727272727273,
+        "minLines": 18,
+        "minTokens": 88
+      }
+    },
+    {
+      "id": "cdac4c15608ac8f9",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "frontend/src/components/tour/PointerRing.tsx",
+          "startLine": 46,
+          "endLine": 59,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "frontend/src/components/tour/SpotlightDim.tsx",
+          "startLine": 46,
+          "endLine": 59,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.91,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 1,
+        "jscpdCoverage10": 1,
+        "jscpdCoverage50": 1,
+        "minLines": 14,
+        "minTokens": 88
+      }
+    },
+    {
+      "id": "cedb5018e57d7972",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "CalendarYear",
+          "path": "packages/reshaped/src/components/Calendar/CalendarYear.tsx",
+          "startLine": 11,
+          "endLine": 78,
+          "role": "focus"
+        }
+      ],
+      "p": 0.71,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 68,
+        "statements": 19,
+        "cyclomatic": 10,
+        "params": 1,
+        "tokens": 459
+      }
+    },
+    {
+      "id": "d517ef38c01173bb",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": null,
+          "path": "apps/server/src/provider/AntigravityAuth.ts",
+          "startLine": 131,
+          "endLine": 542,
+          "role": "focus"
+        }
+      ],
+      "p": 0.8,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 412,
+        "statements": 163,
+        "cyclomatic": 46,
+        "params": 1,
+        "tokens": 2626
+      }
+    },
+    {
+      "id": "d825662e3ad678cd",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "collectPluginsAtRoot",
+          "path": "packages/coding-agent/src/extensibility/plugins/loader.ts",
+          "startLine": 90,
+          "endLine": 212,
+          "role": "focus"
+        }
+      ],
+      "p": 0.79,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 123,
+        "statements": 65,
+        "cyclomatic": 28,
+        "params": 3,
+        "tokens": 658
+      }
+    },
+    {
+      "id": "d8bca1dd47258fd3",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "unicodeToByte",
+          "path": "crates/pi-natives/tools/pack-deepseek.ts",
+          "startLine": 19,
+          "endLine": 36,
+          "role": "pair.a"
+        },
+        {
+          "name": "unicodeToBytes",
+          "path": "crates/pi-natives/tools/pack-glm.ts",
+          "startLine": 14,
+          "endLine": 31,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.79,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.7697368421052632,
+        "rawJaccard5": 0.5642201834862385,
+        "jscpdCoverage10": 0.7761194029850746,
+        "jscpdCoverage50": 0.572139303482587,
+        "minLines": 18,
+        "minTokens": 201
+      }
+    },
+    {
+      "id": "dd0ca7865ae3834f",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "TraitsMenuContentImpl",
+          "path": "apps/web/src/components/chat/TraitsPicker.tsx",
+          "startLine": 282,
+          "endLine": 474,
+          "role": "focus"
+        }
+      ],
+      "p": 0.76,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 193,
+        "statements": 39,
+        "cyclomatic": 29,
+        "params": 1,
+        "tokens": 993
+      }
+    },
+    {
+      "id": "e1da1d659d092d6a",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "parseMarketplaceCatalog",
+          "path": "packages/coding-agent/src/extensibility/plugins/marketplace/fetcher.ts",
+          "startLine": 108,
+          "endLine": 201,
+          "role": "focus"
+        }
+      ],
+      "p": 0.82,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 94,
+        "statements": 45,
+        "cyclomatic": 32,
+        "params": 2,
+        "tokens": 784
+      }
+    },
+    {
+      "id": "e2d1f4e5eca1247c",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "useWebSocketEvents",
+          "path": "frontend/src/hooks/useWebSocketEvents.ts",
+          "startLine": 42,
+          "endLine": 244,
+          "role": "focus"
+        }
+      ],
+      "p": 0.9,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 203,
+        "statements": 72,
+        "cyclomatic": 37,
+        "params": 1,
+        "tokens": 959
+      }
+    },
+    {
+      "id": "e47ae484c4dc0854",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "apps/server/src/provider/AntigravityInstallation.ts",
+          "startLine": 875,
+          "endLine": 917,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "apps/server/src/provider/CodexInstallation.ts",
+          "startLine": 644,
+          "endLine": 684,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.76,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.62882096069869,
+        "rawJaccard5": 0.49382716049382713,
+        "jscpdCoverage10": 0.7142857142857143,
+        "jscpdCoverage50": 0.20300751879699247,
+        "minLines": 41,
+        "minTokens": 266
+      }
+    },
+    {
+      "id": "e64da162ef0ecbac",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "sessionMatchesAnyFloor",
+          "path": "frontend/src/components/views/FloorView.tsx",
+          "startLine": 67,
+          "endLine": 79,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "frontend/src/components/views/FloorView.tsx",
+          "startLine": 88,
+          "endLine": 96,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.78,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.8181818181818182,
+        "rawJaccard5": 0.6703296703296703,
+        "jscpdCoverage10": 0.9295774647887324,
+        "jscpdCoverage50": 0.9295774647887324,
+        "minLines": 9,
+        "minTokens": 71
+      }
+    },
+    {
+      "id": "e693166c3f56835b",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "packages/coding-agent/src/extensibility/plugins/manager.ts",
+          "startLine": 146,
+          "endLine": 154,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "packages/coding-agent/src/extensibility/plugins/marketplace/manager.ts",
+          "startLine": 910,
+          "endLine": 921,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.94,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.5339805825242718,
+        "rawJaccard5": 0.42857142857142855,
+        "jscpdCoverage10": 0.7407407407407407,
+        "jscpdCoverage50": 0,
+        "minLines": 9,
+        "minTokens": 81
+      }
+    },
+    {
+      "id": "e6b1eb374534a7d3",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": null,
+          "path": "packages/utilities/src/a11y/TrapFocus.ts",
+          "startLine": 45,
+          "endLine": 102,
+          "role": "focus"
+        }
+      ],
+      "p": 0.68,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 58,
+        "statements": 36,
+        "cyclomatic": 32,
+        "params": 1,
+        "tokens": 392
+      }
+    },
+    {
+      "id": "e929dc0120319b83",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "CityWindow",
+          "path": "frontend/src/components/game/CityWindow.tsx",
+          "startLine": 75,
+          "endLine": 333,
+          "role": "focus"
+        }
+      ],
+      "p": 0.8,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 259,
+        "statements": 107,
+        "cyclomatic": 12,
+        "params": 0,
+        "tokens": 1377
+      }
+    },
+    {
+      "id": "e93360daa5d2c4ee",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "SettingsModal",
+          "path": "frontend/src/components/overlay/SettingsModal.tsx",
+          "startLine": 74,
+          "endLine": 453,
+          "role": "focus"
+        }
+      ],
+      "p": 0.67,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 380,
+        "statements": 89,
+        "cyclomatic": 40,
+        "params": 1,
+        "tokens": 2154
+      }
+    },
+    {
+      "id": "ebf20b208fe13b31",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "TourOverlay",
+          "path": "frontend/src/components/tour/TourOverlay.tsx",
+          "startLine": 17,
+          "endLine": 116,
+          "role": "focus"
+        }
+      ],
+      "p": 0.94,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 100,
+        "statements": 58,
+        "cyclomatic": 27,
+        "params": 0,
+        "tokens": 730
+      }
+    },
+    {
+      "id": "ed33f9e11baefe86",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "CommandBar",
+          "path": "frontend/src/components/attention/CommandBar.tsx",
+          "startLine": 33,
+          "endLine": 250,
+          "role": "focus"
+        }
+      ],
+      "p": 0.59,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 218,
+        "statements": 71,
+        "cyclomatic": 13,
+        "params": 0,
+        "tokens": 1126
+      }
+    },
+    {
+      "id": "ef962d879a6ca6d6",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "emit",
+          "path": "packages/coding-agent/src/extensibility/extensions/runner.ts",
+          "startLine": 1565,
+          "endLine": 1627,
+          "role": "focus"
+        }
+      ],
+      "p": 0.77,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "lines": 63,
+        "statements": 40,
+        "cyclomatic": 27,
+        "params": 1,
+        "tokens": 406
+      }
+    },
+    {
+      "id": "f0d19cd289e668b8",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": "ChatHeader",
+          "path": "apps/web/src/components/chat/ChatHeader.tsx",
+          "startLine": 126,
+          "endLine": 528,
+          "role": "focus"
+        }
+      ],
+      "p": 0.8,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 403,
+        "statements": 128,
+        "cyclomatic": 69,
+        "params": 1,
+        "tokens": 2212
+      }
+    },
+    {
+      "id": "f475cf4c06c24f91",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "applyBezierSmoothing",
+          "path": "frontend/src/systems/pathSmoothing.ts",
+          "startLine": 168,
+          "endLine": 237,
+          "role": "focus"
+        }
+      ],
+      "p": 0.74,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action",
+        "second": "no_action"
+      },
+      "features": {
+        "lines": 70,
+        "statements": 34,
+        "cyclomatic": 8,
+        "params": 3,
+        "tokens": 484
+      }
+    },
+    {
+      "id": "f4fe3af937b7e528",
+      "sample": "showcase",
+      "repository": "can1357/oh-my-pi",
+      "commit": "2b023d1b80133c523d66412602d99b5427408395",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "showCodeReviewOverlay",
+          "path": "packages/coding-agent/src/extensibility/custom-commands/bundled/annotate/fullscreen.ts",
+          "startLine": 33,
+          "endLine": 46,
+          "role": "pair.a"
+        },
+        {
+          "name": "showTextReviewOverlay",
+          "path": "packages/coding-agent/src/extensibility/custom-commands/bundled/annotate/fullscreen.ts",
+          "startLine": 49,
+          "endLine": 62,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.79,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 0.8829787234042553,
+        "rawJaccard5": 0.5813953488372093,
+        "jscpdCoverage10": 0.8301886792452831,
+        "jscpdCoverage50": 0.5094339622641509,
+        "minLines": 14,
+        "minTokens": 106
+      }
+    },
+    {
+      "id": "f550597aee8950f4",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "BuildingTab",
+          "path": "frontend/src/components/settings/BuildingTab.tsx",
+          "startLine": 139,
+          "endLine": 421,
+          "role": "focus"
+        }
+      ],
+      "p": 0.74,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable",
+        "second": "no_action"
+      },
+      "features": {
+        "lines": 283,
+        "statements": 45,
+        "cyclomatic": 19,
+        "params": 1,
+        "tokens": 1471
+      }
+    },
+    {
+      "id": "fa86f4068ab4014d",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "function_should_split",
+      "kind": "function",
+      "members": [
+        {
+          "name": "reconcileState",
+          "path": "frontend/src/systems/stateReconciler.ts",
+          "startLine": 143,
+          "endLine": 289,
+          "role": "focus"
+        }
+      ],
+      "p": 0.97,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 147,
+        "statements": 60,
+        "cyclomatic": 39,
+        "params": 2,
+        "tokens": 760
+      }
+    },
+    {
+      "id": "faa621421f0d7ff0",
+      "sample": "gate",
+      "repository": "reshaped-ui/reshaped",
+      "commit": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": "IconChevronRight",
+          "path": "packages/reshaped/src/icons/ChevronRight.tsx",
+          "startLine": 1,
+          "endLine": 15,
+          "role": "pair.a"
+        },
+        {
+          "name": "IconChevronUp",
+          "path": "packages/reshaped/src/icons/ChevronUp.tsx",
+          "startLine": 1,
+          "endLine": 15,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.63,
+      "labels": {
+        "pass1": "no_action",
+        "pass2": "no_action"
+      },
+      "features": {
+        "retrievalJaccard": 1,
+        "rawJaccard5": 0.7872340425531915,
+        "jscpdCoverage10": 0.9782608695652174,
+        "jscpdCoverage50": 0,
+        "minLines": 15,
+        "minTokens": 46
+      }
+    },
+    {
+      "id": "fc0c234b59fb6455",
+      "sample": "showcase",
+      "repository": "pingdotgg/t3code",
+      "commit": "0fcd5f90611451cca842689faea53b5450c022da",
+      "signalId": "function_multiple_responsibilities",
+      "kind": "function",
+      "members": [
+        {
+          "name": null,
+          "path": "apps/server/src/provider/CodexChatGptAuth.ts",
+          "startLine": 101,
+          "endLine": 985,
+          "role": "focus"
+        }
+      ],
+      "p": 0.7,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "lines": 885,
+        "statements": 311,
+        "cyclomatic": 178,
+        "params": 1,
+        "tokens": 6117
+      }
+    },
+    {
+      "id": "fea16280c2f493f2",
+      "sample": "gate",
+      "repository": "paulrobello/claude-office",
+      "commit": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+      "signalId": "clone_same_policy",
+      "kind": "clone_pair",
+      "members": [
+        {
+          "name": null,
+          "path": "frontend/src/components/overlay/SettingsModal.tsx",
+          "startLine": 261,
+          "endLine": 300,
+          "role": "pair.a"
+        },
+        {
+          "name": null,
+          "path": "frontend/src/components/overlay/SettingsModal.tsx",
+          "startLine": 323,
+          "endLine": 343,
+          "role": "pair.b"
+        }
+      ],
+      "p": 0.84,
+      "labels": {
+        "pass1": "actionable",
+        "pass2": "actionable"
+      },
+      "features": {
+        "retrievalJaccard": 0.5882352941176471,
+        "rawJaccard5": 0.5210727969348659,
+        "jscpdCoverage10": 0.9005847953216374,
+        "jscpdCoverage50": 0.7953216374269005,
+        "minLines": 21,
+        "minTokens": 171
+      }
+    }
+  ]
+}
