@@ -14,6 +14,7 @@ import {
 import { join } from "node:path";
 import { hash, POLICY, outside, syncDirectory, writeNew } from "./core.mjs";
 import { verifyPlan } from "./plan.mjs";
+import { createLimiter, RATE_LIMITS } from "./limiter.mjs";
 import {
   knownUsage,
   validateResponse,
@@ -94,13 +95,12 @@ export function readJournal(directory, plan, descriptor) {
   const requests = new Map(plan.requests.map((r) => [r.unitId, r]));
   const reserved = new Set(),
     finished = new Set();
-  let pending = null,
-    terminal = false;
+  const pending = new Set();
+  let terminal = false;
   for (const event of events.slice(1)) {
     if (terminal) throw Error("Events after terminal WAL state");
     if (event.type === "reserved") {
       if (
-        pending ||
         reserved.has(event.unitId) ||
         event.requestHash !== requests.get(event.unitId)?.requestHash ||
         event.clientRequestId !== hash([plan.planHash, event.unitId]) ||
@@ -108,10 +108,10 @@ export function readJournal(directory, plan, descriptor) {
       )
         throw Error("Invalid WAL reservation");
       reserved.add(event.unitId);
-      pending = event.unitId;
+      pending.add(event.unitId);
     } else if (event.type === "finished") {
       if (
-        pending !== event.unitId ||
+        !pending.has(event.unitId) ||
         finished.has(event.unitId) ||
         !["succeeded", "failed"].includes(event.status)
       )
@@ -122,11 +122,11 @@ export function readJournal(directory, plan, descriptor) {
           throw Error("WAL usage mismatch");
       }
       finished.add(event.unitId);
-      pending = null;
+      pending.delete(event.unitId);
     } else if (event.type === "stopped") terminal = true;
     else if (
       event.type === "complete" &&
-      !pending &&
+      !pending.size &&
       finished.size === plan.requests.length
     )
       terminal = true;
@@ -179,10 +179,27 @@ export function summarize(events, plan) {
     budgetAccountedUSD: knownEstimatedUSD + unknownAttempts * reservationUSD,
     stoppedReason: events.find((e) => e.type === "stopped")?.reason ?? null,
     elapsedRequestMs: finished.reduce((n, e) => n + e.latencyMs, 0),
-    concurrency: 1,
+    concurrency: events[0]?.concurrency ?? 1,
+    wallClockMs:
+      events[0]?.recordedAt && finished.at(-1)?.recordedAt
+        ? Date.parse(finished.at(-1).recordedAt) -
+          Date.parse(events[0].recordedAt)
+        : null,
     sdkRetries: 0,
   };
 }
+
+export const DEFAULT_CONCURRENCY = 8;
+export const MAX_CONCURRENCY = 32;
+
+const retryAfter = (error) => {
+  const raw =
+    error?.headers?.get?.("retry-after") ?? error?.headers?.["retry-after"];
+  const seconds = Number(raw);
+  return Number.isFinite(seconds) && seconds >= 0 && seconds <= 86400
+    ? seconds
+    : null;
+};
 
 export async function runPlan({
   plan,
@@ -193,7 +210,9 @@ export async function runPlan({
   afterReserve,
   sleep = (ms) => new Promise((r) => setTimeout(r, ms)),
   clock = Date.now,
-  intervalMs = POLICY.minIntervalMs,
+  intervalMs = 0,
+  concurrency = 1,
+  rateLimits = RATE_LIMITS,
 }) {
   verifyPlan(plan);
   if (
@@ -202,6 +221,12 @@ export async function runPlan({
     capUSD <= 0
   )
     throw Error("Explicit mode and positive cap required");
+  if (
+    !Number.isInteger(concurrency) ||
+    concurrency < 1 ||
+    concurrency > MAX_CONCURRENCY
+  )
+    throw Error(`Concurrency must be an integer from 1 to ${MAX_CONCURRENCY}`);
   directory = outside(plan.root, directory);
   mkdirSync(directory, { recursive: true, mode: 0o700 });
   const lock = join(directory, "exclusive.lock");
@@ -259,30 +284,28 @@ export async function runPlan({
         mode,
         capUSD,
         policy: POLICY,
+        concurrency,
         recordedAt: new Date().toISOString(),
       });
     const done = new Set(
       events.filter((e) => e.type === "finished").map((e) => e.unitId),
     );
+    const queue = plan.requests.filter((r) => !done.has(r.unitId));
+    const limiter = createLimiter({
+      ...rateLimits,
+      minIntervalMs: intervalMs,
+      clock,
+      sleep,
+    });
     let accounted = stats.budgetAccountedUSD,
-      lastStart = clock();
-    for (const item of plan.requests) {
-      if (done.has(item.unitId)) continue;
-      if (accounted + reservationUSD > capUSD) {
-        append({ type: "stopped", reason: "budget_reservation_exceeds_cap" });
-        break;
-      }
-      await sleep(Math.max(0, intervalMs - (clock() - lastStart)));
-      append({
-        type: "reserved",
-        unitId: item.unitId,
-        requestHash: item.requestHash,
-        clientRequestId: hash([plan.planHash, item.unitId]),
-        reservedUSD: reservationUSD,
-        recordedAt: new Date().toISOString(),
-      });
+      inflight = 0,
+      next = 0,
+      stopping = null,
+      fatal = null;
+    const waiters = [];
+    const wake = () => waiters.splice(0).forEach((resolve) => resolve());
+    const dispatch = async (item) => {
       if (afterReserve) await afterReserve(item);
-      lastStart = clock();
       const started = performance.now();
       let data = null,
         response,
@@ -313,6 +336,12 @@ export async function runPlan({
           usage: knownUsage(data),
         };
       } catch (error) {
+        const status =
+          Number.isInteger(error.status) &&
+          error.status >= 100 &&
+          error.status <= 599
+            ? error.status
+            : null;
         failure = {
           kind:
             error instanceof ResponseValidationError
@@ -327,12 +356,8 @@ export async function runPlan({
           requestHash: item.requestHash,
           unitId: item.unitId,
           sourcePath: item.request.state.path,
-          httpStatus:
-            Number.isInteger(error.status) &&
-            error.status >= 100 &&
-            error.status <= 599
-              ? error.status
-              : null,
+          httpStatus: status,
+          ...(status === 429 ? { retryAfterSeconds: retryAfter(error) } : {}),
           rawErrorOmitted:
             "Error messages/headers/body may contain secrets; deliberately not persisted",
         };
@@ -349,15 +374,58 @@ export async function runPlan({
         response: response ?? null,
         rawResponseHash: data ? hash(data) : null,
         failure,
+        recordedAt: new Date().toISOString(),
         rawResultPolicy:
           "Preserves model, raw answer fields and usage; unknown fields and invalid payloads omitted to avoid credential echoes",
       });
-      if (failure) {
-        append({ type: "stopped", reason: "first_error" });
-        break;
+      inflight--;
+      if (failure) stopping ??= "first_error";
+      else accounted += (usage.input_tokens * POLICY.inputUSDPerMillion) / 1e6;
+      wake();
+    };
+    const worker = async () => {
+      try {
+        while (!stopping && !fatal) {
+          const item = queue[next];
+          if (!item) return;
+          next++;
+          await limiter.acquire(
+            Math.min(
+              Math.ceil(item.serializedBytes / 2),
+              POLICY.maxInputTokens,
+            ),
+          );
+          while (
+            !stopping &&
+            !fatal &&
+            accounted + (inflight + 1) * reservationUSD > capUSD &&
+            inflight > 0
+          )
+            await new Promise((resolve) => waiters.push(resolve));
+          if (stopping || fatal) return;
+          if (accounted + (inflight + 1) * reservationUSD > capUSD) {
+            stopping = "budget_reservation_exceeds_cap";
+            return;
+          }
+          append({
+            type: "reserved",
+            unitId: item.unitId,
+            requestHash: item.requestHash,
+            clientRequestId: hash([plan.planHash, item.unitId]),
+            reservedUSD: reservationUSD,
+            recordedAt: new Date().toISOString(),
+          });
+          inflight++;
+          await dispatch(item);
+        }
+      } catch (error) {
+        fatal ??= error;
+        wake();
       }
-      accounted += (usage.input_tokens * POLICY.inputUSDPerMillion) / 1e6;
-    }
+    };
+    await Promise.all(Array.from({ length: concurrency }, worker));
+    if (fatal) throw fatal;
+    if (stopping) append({ type: "stopped", reason: stopping });
     const result = summarize(events, plan);
     if (result.complete) append({ type: "complete" });
     return result;

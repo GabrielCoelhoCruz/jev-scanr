@@ -1,6 +1,6 @@
 {
   "name": "semantic-refactor-scan",
-  "version": "0.1.0-alpha",
+  "version": "0.1.1",
   "description": "Ranks refactoring candidates in TypeScript/JavaScript projects by asking the Jev model narrow, evidence-backed questions",
   "license": "MIT",
   "type": "module",

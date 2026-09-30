@@ -17,10 +17,11 @@ export const LIMITS = Object.freeze({
   maxEntries: 10000,
   maxFileBytes: 524288,
   maxTotalBytes: 16777216,
-  maxFunctions: 3000,
+  maxFunctions: 12000,
   maxComparisons: 500000,
   maxCandidates: 2000,
   maxRequestBytes: 24000,
+  maxHardRequestBytes: 64000,
   maxCallers: 3,
   maxImports: 8,
   maxTests: 2,
@@ -55,7 +56,7 @@ export function safeRelative(path) {
 }
 export function readSnapshot(
   root,
-  { excluded = [], limits = {}, externalConfigs = [] } = {},
+  { excluded = [], limits = {}, externalConfigs = [], paths = [] } = {},
 ) {
   root = realpathSync(root);
   limits = { ...LIMITS, ...limits };
@@ -67,9 +68,25 @@ export function readSnapshot(
       value > LIMITS[key]
     )
       throw Error("Invalid lowered limit");
+  if (limits.maxHardRequestBytes < limits.maxRequestBytes)
+    throw Error("maxHardRequestBytes must not be below maxRequestBytes");
   excluded = [...new Set(excluded)].sort();
   if (excluded.some((p) => !safeRelative(p)))
     throw Error("Unsafe exclusion path");
+  paths = [...new Set(paths)].sort();
+  if (paths.some((p) => !safeRelative(p)))
+    throw Error("Unsafe scan path (use paths relative to the project)");
+  for (const p of paths) {
+    let stat;
+    try {
+      stat = lstatSync(resolve(root, p));
+    } catch {
+      throw Error(`--paths: ${p} does not exist in the project`);
+    }
+    if (stat.isSymbolicLink()) throw Error(`--paths: ${p} is a symlink`);
+  }
+  const inScope = (path) =>
+    !paths.length || paths.some((p) => path === p || path.startsWith(p + "/"));
   externalConfigs = externalConfigData(externalConfigs, limits);
   const files = [],
     sources = new Map();
@@ -190,6 +207,10 @@ export function readSnapshot(
         files.push({ path, status: "non_source" });
         continue;
       }
+      if (sourcePath(path) && !inScope(path)) {
+        files.push({ path, status: "outside_paths" });
+        continue;
+      }
       const result = read(path),
         { source, ...record } = result;
       files.push({ path, ...record });
@@ -197,6 +218,7 @@ export function readSnapshot(
     }
   }
   visit(root);
+  const sourceFiles = files.filter((f) => sourcePath(f.path));
   const snapshot = {
     root,
     limits,
@@ -206,7 +228,16 @@ export function readSnapshot(
     read,
     admissible,
     externalConfigs,
+    paths,
     coverage: {
+      sourceFiles: {
+        inProject: sourceFiles.length,
+        inScope: sourceFiles.filter((f) => f.status !== "outside_paths").length,
+        read: sourceFiles.filter((f) => f.status === "read").length,
+        unreadByFileOrByteCap: sourceFiles.filter(
+          (f) => f.status === "file_or_byte_limit",
+        ).length,
+      },
       entriesVisited: Math.min(entries, limits.maxEntries),
       traversalComplete: entries <= limits.maxEntries,
       filesRead: readFiles,

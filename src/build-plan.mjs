@@ -25,7 +25,8 @@ export function buildPlan(root, options = {}) {
   const snapshot = readSnapshot(root, options),
     index = buildIndex(snapshot),
     limits = snapshot.limits,
-    cap = limits.maxRequestBytes;
+    cap = limits.maxRequestBytes,
+    hard = limits.maxHardRequestBytes;
   const generated = formUnits(index, {
     includeTests: !!options.retrieval?.includeTests,
     kinds: UNIT_ORDER.filter((kind) =>
@@ -65,7 +66,7 @@ export function buildPlan(root, options = {}) {
     pack.contextVersion = "0.3.1";
     applyQuestionEligibility(pack);
     pack.budget = packBudget(pack, limits);
-    if (pack.status === "eligible" && pack.budget.serializedRequestBytes > cap)
+    if (pack.status === "eligible" && pack.budget.serializedRequestBytes > hard)
       throw Error("Internal error: eligible pack exceeds the request cap");
     const { contentHash, ...body } = pack;
     pack.contentHash = hash(body);
@@ -82,11 +83,11 @@ export function buildPlan(root, options = {}) {
       },
     };
     const ids = packSignals(pack).map((s) => s.id);
-    if (ids.some((id) => bytes(probe, [id]) > cap)) return null;
+    if (ids.some((id) => bytes(probe, [id]) > hard)) return null;
     const groups = [[]];
     for (const id of ids) {
       const next = [...groups.at(-1), id];
-      if (bytes(probe, next) <= cap) groups[groups.length - 1] = next;
+      if (bytes(probe, next) <= hard) groups[groups.length - 1] = next;
       else groups.push([id]);
     }
     return groups;
@@ -114,7 +115,7 @@ export function buildPlan(root, options = {}) {
   };
   const partsFor = (unit) => {
     let pack = build(unit, unit.id);
-    if (bytes(pack) <= cap) return { parts: [finalize(pack)] };
+    if (bytes(pack) <= hard) return { parts: [finalize(pack)] };
     const groups = grouped(pack, unit.id);
     if (groups) return { parts: groups, groupedUnit: true };
     if (unit.kind !== "function")
@@ -172,14 +173,14 @@ export function buildPlan(root, options = {}) {
         return chunk;
       });
       if (
-        candidates.every((c) => bytes(c) <= cap) ||
+        candidates.every((c) => bytes(c) <= hard) ||
         maxLines === MIN_WINDOW_LINES
       )
         chunks = candidates;
       else maxLines = Math.max(MIN_WINDOW_LINES, Math.floor(maxLines / 2));
     }
     for (const chunk of chunks) {
-      if (bytes(chunk) <= cap) parts.push(finalize(chunk));
+      if (bytes(chunk) <= hard) parts.push(finalize(chunk));
       else
         parts.push(
           ...(grouped(chunk, unit.id, chunk.split) ?? [
@@ -262,6 +263,7 @@ export function buildPlan(root, options = {}) {
     policy: POLICY,
     limits,
     excluded: snapshot.excluded,
+    scope: { paths: snapshot.paths },
     retrieval: generated.options,
     configurationReading:
       "Bounded JSONC config data and proven static bindings; never require/eval target config",

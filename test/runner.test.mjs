@@ -281,11 +281,15 @@ test("an interruption between completed requests resumes only the untouched suff
     calls++;
     return response(request);
   });
+  let now = 0;
   await assert.rejects(
     run(p, dir, client, {
-      sleep: async () => {
+      intervalMs: 300,
+      clock: () => now,
+      sleep: async (ms) => {
         if (++sleeps === 2)
           throw Error("interruption before the next reservation");
+        now += ms;
       },
     }),
   );

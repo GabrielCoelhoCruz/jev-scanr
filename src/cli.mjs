@@ -13,6 +13,8 @@ import {
   readJournal,
   summarize,
   reservationUSD,
+  DEFAULT_CONCURRENCY,
+  MAX_CONCURRENCY,
 } from "./runner.mjs";
 import { buildReport, queueMarkdown, reportMarkdown } from "./report.mjs";
 import { continuationPlan, combineRuns } from "./continuation.mjs";
@@ -34,6 +36,8 @@ Usage
 
 Options for scan
   --exclude a,b,c     paths (files or directories, relative to PATH) that are never read or sent
+  --paths a,b         scan only these directories or files (relative to PATH). Units and their context
+                      come only from them. A scan reads at most 500 files, so scan a large project in slices
   --experimental      also ask the experimental signals (off by default)
   --signals a,b       ask exactly these signals instead of the defaults
   --include-tests     also analyze test files (off by default)
@@ -41,6 +45,9 @@ Options for scan
                       offline JSON data for tsconfig files that live in packages (for example
                       "extends": "expo/tsconfig.base"). Never downloaded or executed; see docs/EXTERNAL-CONFIGS.md
   --list-files        dry run: list every file whose source would be sent
+  --concurrency N     live runs: up to N requests in flight (1 to 32, default 8). A token-bucket limiter keeps the
+                      rate under Jev's documented limits (about 40 requests and 100K tokens per second, at 80%).
+                      Any error, 429 included, stops the run; there are no automatic retries
   --out DIR           output directory (default ./jev-scan-out; must not exist for a new run)
   --threshold N       display cut for every signal, 0 to 1 (default 0.7)
 
@@ -55,6 +62,8 @@ const options = {
   "cap-usd": { type: "string" },
   yes: { type: "boolean" },
   exclude: { type: "string" },
+  paths: { type: "string" },
+  concurrency: { type: "string" },
   experimental: { type: "boolean" },
   signals: { type: "string" },
   "include-tests": { type: "boolean" },
@@ -103,6 +112,83 @@ function thresholds(values, plan) {
   return Object.fromEntries(plan.enabledSignals.map((id) => [id, cut]));
 }
 
+export function unindexedByDirectory(plan) {
+  const files = new Set(
+    (plan.coverage.parseAndIndexOmissions ?? [])
+      .filter((o) => o.reason === "function_limit")
+      .map((o) => o.path),
+  );
+  const counts = new Map();
+  for (const path of files) {
+    const dir = path.split("/").slice(0, -1).slice(0, 4).join("/") || ".";
+    counts.set(dir, (counts.get(dir) ?? 0) + 1);
+  }
+  return {
+    files: files.size,
+    directories: [...counts.entries()].sort(
+      (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
+    ),
+  };
+}
+
+export function unreadByDirectory(plan) {
+  const depth = Math.max(
+    2,
+    ...(plan.scope?.paths ?? []).map((p) => p.split("/").length + 1),
+  );
+  const counts = new Map();
+  for (const f of plan.files)
+    if (
+      f.status === "file_or_byte_limit" &&
+      /\.(?:[cm]?[jt]s|[jt]sx)$/.test(f.path)
+    ) {
+      const dir =
+        f.path
+          .split("/")
+          .slice(0, Math.min(depth, f.path.split("/").length - 1))
+          .join("/") || ".";
+      counts.set(dir, (counts.get(dir) ?? 0) + 1);
+    }
+  return [...counts.entries()].sort(
+    (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
+  );
+}
+
+const n = (x) => x.toLocaleString("en-US");
+export function coverageLines(c, paths, unread, extra = {}) {
+  if (!c) return [];
+  const lines = [];
+  const pct = c.inScope ? Math.round((c.read / c.inScope) * 100) : 100;
+  if (paths.length)
+    lines.push(
+      `Scope: --paths ${paths.join(",")} covers ${n(c.inScope)} of ${n(c.inProject)} source files in the project.`,
+    );
+  lines.push(
+    `Coverage: read ${n(c.read)} of ${n(c.inScope)} source files${paths.length ? " in scope" : ""} (${pct}%).`,
+  );
+  if (c.unreadByFileOrByteCap > 0)
+    lines.push(
+      `NOT READ because of the ${n(500)}-file / size cap (files are taken in path order): ${n(c.unreadByFileOrByteCap)} source files, in ${unread
+        .slice(0, 8)
+        .map(([d, k]) => `${d} (${n(k)})`)
+        .join(
+          ", ",
+        )}${unread.length > 8 ? `, and ${unread.length - 8} more directories` : ""}. Narrow with --paths so each scan stays under the cap.`,
+    );
+  if (extra.unindexed?.files > 0)
+    lines.push(
+      `NOT INDEXED because the function index is capped at ${n(extra.functionLimit)} functions (nested functions and tests count): functions in ${n(extra.unindexed.files)} files, in ${extra.unindexed.directories
+        .slice(0, 6)
+        .map(([d, k]) => `${d} (${n(k)})`)
+        .join(", ")}. Use a smaller --paths.`,
+    );
+  if (extra.unitsNotPacked > 0)
+    lines.push(
+      `NOT PACKED: ${n(extra.unitsNotPacked)} units are beyond the ${n(extra.unitLimit)}-unit limit and get no answer. Use a smaller --paths.`,
+    );
+  return lines;
+}
+
 function summary(plan) {
   const e = plan.estimates,
     counts = plan.files.reduce(
@@ -117,6 +203,13 @@ function summary(plan) {
     units: plan.coverage.functionUnits + plan.coverage.pairUnits,
     functionUnits: plan.coverage.functionUnits,
     pairUnits: plan.coverage.pairUnits,
+    coverage: plan.coverage.sourceFiles ?? null,
+    paths: plan.scope?.paths ?? [],
+    unread: unreadByDirectory(plan),
+    unindexed: unindexedByDirectory(plan),
+    unitsNotPacked: plan.coverage.unitsNotPacked ?? 0,
+    functionLimit: plan.limits.maxFunctions,
+    unitLimit: plan.limits.maxCandidates,
     requests: e.requests,
     questions: e.questions,
     requestBytes: e.serializedRequestBytes,
@@ -136,6 +229,7 @@ function printSummary(plan, s) {
           .map(([k, v]) => `${v} ${k}`)
           .join(", ") || "none skipped"
       }`,
+      ...coverageLines(s.coverage, s.paths, s.unread, s),
       `Units: ${s.functionUnits} functions, ${s.pairUnits} similar pairs`,
       `Requests: ${s.requests} (${s.questions} questions, ${(s.requestBytes / 1e6).toFixed(2)} MB of request text)`,
       `Estimated cost: ${usd(s.estimatedUSD)} (bytes ÷ 3 per token); worst case ${usd(s.conservativeUSD)} (one token per byte, plus one reservation)`,
@@ -170,6 +264,18 @@ async function execute(plan, values, deps) {
     throw Error(
       "A live run needs --yes (consent to send source excerpts to the Jev API) and a positive --cap-usd",
     );
+  const concurrency =
+    values.concurrency === undefined
+      ? DEFAULT_CONCURRENCY
+      : Number(values.concurrency);
+  if (
+    !Number.isInteger(concurrency) ||
+    concurrency < 1 ||
+    concurrency > MAX_CONCURRENCY
+  )
+    throw Error(
+      `--concurrency must be an integer from 1 to ${MAX_CONCURRENCY}`,
+    );
   const s = summary(plan);
   if (s.conservativeUSD > cap)
     throw Error(
@@ -200,7 +306,7 @@ async function execute(plan, values, deps) {
     client: deps.client ?? makeClient({ apiKey: process.env.TYPESAFE_API_KEY }),
     mode: "live",
     capUSD: cap,
-    intervalMs: POLICY.minIntervalMs,
+    concurrency,
   });
   const events = readJournal(runDir, plan);
   const report = writeReport(plan, events, out, {
@@ -208,7 +314,7 @@ async function execute(plan, values, deps) {
     accounting: result,
   });
   console.log(
-    `${result.complete ? "Complete" : "STOPPED (" + result.stoppedReason + ")"}: ${result.succeeded}/${result.plannedRequests} requests answered, ${usd(result.knownEstimatedUSD)} calculated cost, ${report.findings.length} candidates. Read ${join(out, "queue.md")}`,
+    `${result.complete ? "Complete" : "STOPPED (" + result.stoppedReason + ")"}: ${result.succeeded}/${result.plannedRequests} requests answered, ${usd(result.knownEstimatedUSD)} calculated cost${result.wallClockMs ? `, ${(result.wallClockMs / 1000).toFixed(0)} s wall-clock with concurrency ${result.concurrency}` : ""}, ${report.findings.length} candidates. Read ${join(out, "queue.md")}`,
   );
   if (!result.complete) process.exitCode = 2;
 }
@@ -230,6 +336,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     const plan = buildPlan(positionals[0], {
       signals: signalSelection(values),
       excluded: values.exclude ? values.exclude.split(",").filter(Boolean) : [],
+      paths: values.paths ? values.paths.split(",").filter(Boolean) : [],
       externalConfigs: values["external-configs"]
         ? JSON.parse(readFileSync(resolve(values["external-configs"]), "utf8"))
         : [],

@@ -17,6 +17,8 @@ node src/cli.mjs scan ~/code/my-project                      # dry run: shows un
 
 `npm link` gives you a `semantic-refactor-scan` command instead of `node src/cli.mjs`. Once the package is on npm, `npx semantic-refactor-scan scan .` works the same way. It already runs from a packed tarball with `npx ./semantic-refactor-scan-0.1.0-alpha.tgz`.
 
+**A scan reads at most 500 files, in path order, and indexes at most 12,000 functions and packs at most 2,000 units.** The dry run says so right next to the cost (`Coverage: read 485 of 3,953 source files (12%)`) and lists which directories were not read, and it warns with `NOT INDEXED` or `NOT PACKED` if a function or unit cap cut a slice short. For a larger project, scan it in slices with `--paths apps/web/src/components,apps/server`. Units and their context come only from the paths you give, so keep related code in one slice. Each slice is a separate run with its own cost.
+
 If your `tsconfig.json` extends a config that lives in a package (Expo, Next, …), read [`docs/EXTERNAL-CONFIGS.md`](docs/EXTERNAL-CONFIGS.md) first: without it, imports through path aliases get less context.
 
 Try it on the bundled demo app first. The dry run sends nothing:
@@ -46,7 +48,7 @@ It writes `queue.md` (start here), `report.md` (counts, cost, per-signal table),
 
 - **Sent:** each analyzed function or pair, with bounded context (callers, imported declarations, one hop), to `https://api.typesafe.ai` under your own key. Nothing else is sent, and nothing is stored by this tool outside your output directory.
 - **Never read:** `node_modules`, dot-directories, build output, generated files, symlinks, and anything you pass to `--exclude`. Files whose path contains `secret` or `credential`, or whose content looks like a key or token, are skipped. That guard is a heuristic. Check `--list-files` before a live run.
-- **Cost:** `jev-1.13.0` at US$0.042 per million input tokens. The dry run prints a central estimate and a worst case. `--cap-usd` refuses to start if the worst case exceeds the cap, and a run stops before a request that could pass it. One request at a time (at most one every 0.3 s, so a project this size takes a few minutes), no retries, stop on the first error. Costs are calculated from the tariff and the token counts the API returns. They are not an invoice.
+- **Cost:** `jev-1.13.0` at US$0.042 per million input tokens. The dry run prints a central estimate and a worst case. `--cap-usd` refuses to start if the worst case exceeds the cap, and a run stops before a request that could pass it. Up to 8 requests run at once (`--concurrency`), paced by a token-bucket limiter that stays under Jev's documented rate limits, so a 30,000-line project takes about a minute or two. Each request reserves its worst-case cost before it is sent. There are no automatic retries, and the first error stops the run, a 429 included. Costs are calculated from the tariff and the token counts the API returns. They are not an invoice.
 
 ## What comes out
 

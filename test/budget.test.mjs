@@ -21,7 +21,10 @@ test("oversized units split their questions, then their lines; focus source is n
     (p) => p.kind === "function" && p.members[0].name === "big",
   ).budget.serializedRequestBytes;
   const grouped = buildPlan(root, {
-    limits: { maxRequestBytes: Math.floor(whole * 0.8) },
+    limits: {
+      maxRequestBytes: Math.floor(whole * 0.8),
+      maxHardRequestBytes: Math.floor(whole * 0.8),
+    },
   });
   const groups = grouped.units.filter(
     (p) => p.members[0]?.name === "big" && p.kind === "function",
@@ -34,7 +37,9 @@ test("oversized units split their questions, then their lines; focus source is n
       .map((s) => s.id)
       .sort(),
   );
-  const tiny = buildPlan(root, { limits: { maxRequestBytes: 7000 } });
+  const tiny = buildPlan(root, {
+    limits: { maxRequestBytes: 7000, maxHardRequestBytes: 7000 },
+  });
   const parent = tiny.units.find(
     (p) => p.kind === "function" && p.members[0].name === "big",
   );
@@ -104,4 +109,71 @@ test("limits can only be lowered", (t) => {
   assert.throws(() => buildPlan(root, { limits: { maxFiles: 10_000 } }));
   assert.throws(() => buildPlan(root, { limits: { nope: 1 } }));
   assert.throws(() => buildPlan(root, { limits: { maxFiles: 0 } }));
+});
+
+const longFunction = (lines) =>
+  `export function huge(input: number) {\n${Array.from(
+    { length: lines },
+    (_, i) => `  const value${i} = input * ${i} + ${"1".repeat(20)};`,
+  ).join("\n")}\n  return value1;\n}\n`;
+
+test("a focus above the 24 KB trim target but inside the provider budget is one request, not split", (t) => {
+  const root = project(t, { "huge.ts": longFunction(420) });
+  const p = buildPlan(root);
+  const units = p.units.filter((u) => u.members[0].name === "huge");
+  assert.equal(units.length, 1, "no question groups and no line windows");
+  assert.equal(units[0].kind, "function");
+  assert.equal(units[0].status, "eligible");
+  const request = p.requests.find((r) => r.unitId === units[0].id);
+  assert.ok(
+    request.serializedBytes > 24000 && request.serializedBytes <= 64000,
+    String(request.serializedBytes),
+  );
+  assert.deepEqual(
+    Object.keys(request.request.questions).sort(),
+    packSignals({ kind: "function" })
+      .map((s) => s.id)
+      .sort(),
+    "every eligible signal is asked in the same request",
+  );
+  assert.equal(p.coverage.splits.lineWindows, 0);
+  const legacy = buildPlan(root, { limits: { maxHardRequestBytes: 24000 } });
+  assert.ok(
+    legacy.units.some((u) => u.kind === "function_chunk"),
+    "the old 24 KB rule would have windowed it",
+  );
+});
+
+test("above the provider budget the function is split into line windows", (t) => {
+  const p = buildPlan(project(t, { "huge.ts": longFunction(1200) }));
+  assert.ok(p.units.some((u) => u.kind === "function_chunk"));
+  assert.ok(p.requests.every((r) => r.serializedBytes <= 64000));
+  assert.equal(
+    p.units.find((u) => u.kind === "function").status,
+    "insufficient_context",
+  );
+});
+
+test("requests at or under the trim target do not change when the hard cap is present or absent", (t) => {
+  const root = project(t, {
+    "a.ts": clone("a") + clone("b", "20"),
+    "c.ts": clone("c", "30"),
+  });
+  const hashes = (p) => p.requests.map((r) => r.requestHash);
+  assert.deepEqual(
+    hashes(buildPlan(root)),
+    hashes(buildPlan(root, { limits: { maxHardRequestBytes: 24000 } })),
+  );
+});
+
+test("the hard cap cannot be below the trim target or above its ceiling", (t) => {
+  const root = project(t, { "a.ts": clone("a") });
+  assert.throws(
+    () => buildPlan(root, { limits: { maxHardRequestBytes: 10000 } }),
+    /must not be below/,
+  );
+  assert.throws(
+    () => buildPlan(root, { limits: { maxHardRequestBytes: 64001 } }),
+    /Invalid lowered limit/,
+  );
 });

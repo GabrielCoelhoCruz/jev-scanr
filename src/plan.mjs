@@ -115,7 +115,7 @@ export function packBudget(pack, limits) {
     heuristicInputTokensBytesDiv3: Math.ceil(serializedBytes / 3),
     heuristicTargetTokens: 6000,
     notTokenizer: true,
-    hardByteCap: limits.maxRequestBytes,
+    hardByteCap: limits.maxHardRequestBytes ?? limits.maxRequestBytes,
     providerInputTokenCap: POLICY.maxInputTokens,
     providerStatePlusLongestQuestionTokenCap: 32768,
     statePlusLongestQuestionBytes:
@@ -267,22 +267,38 @@ function verifyUnitManifest(plan) {
   }
 }
 export const PLAN_SCHEMA = "semantic-refactor-scan-plan/1";
-export const SCANNER_VERSION = "0.1.0-alpha";
+export const SCANNER_VERSION = "0.1.1";
+export const COMPATIBLE_PLAN_VERSIONS = ["0.1.0-alpha", SCANNER_VERSION];
 
 export function verifyPlan(plan) {
   const { planHash, ...body } = plan;
   if (
     planHash !== hash(body) ||
     plan.schema !== PLAN_SCHEMA ||
-    plan.scannerVersion !== SCANNER_VERSION ||
+    !COMPATIBLE_PLAN_VERSIONS.includes(plan.scannerVersion) ||
     plan.catalogHash !== catalogHash ||
     hash(plan.policy) !== hash(POLICY)
   )
     throw Error("Plan/version integrity mismatch");
   selectSignals(plan.enabledSignals);
   if (
+    plan.scope !== undefined &&
+    (!Array.isArray(plan.scope.paths) ||
+      plan.scope.paths.some((x) => !safeRelative(x)))
+  )
+    throw Error("Plan scope invalid");
+  if (
     !plan.limits ||
-    hash(Object.keys(plan.limits).sort()) !== hash(Object.keys(LIMITS).sort())
+    hash(Object.keys(plan.limits).sort()) !==
+      hash(
+        Object.keys(LIMITS)
+          .filter(
+            (k) =>
+              k !== "maxHardRequestBytes" ||
+              plan.scannerVersion !== "0.1.0-alpha",
+          )
+          .sort(),
+      )
   )
     throw Error("Complete exact limit schema required");
   if (
@@ -434,8 +450,9 @@ export function verifyPlan(plan) {
     if (!request) continue;
     const serializedBytes = Buffer.byteLength(JSON.stringify(request));
     if (
-      serializedBytes > plan.limits.maxRequestBytes ||
-      serializedBytes > LIMITS.maxRequestBytes
+      serializedBytes >
+        (plan.limits.maxHardRequestBytes ?? plan.limits.maxRequestBytes) ||
+      serializedBytes > (LIMITS.maxHardRequestBytes ?? LIMITS.maxRequestBytes)
     )
       throw Error("Oversized request");
     requests.push({

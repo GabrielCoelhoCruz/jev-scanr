@@ -246,6 +246,16 @@ export function buildReport(
     thresholds,
     thresholdMeaning:
       "Display cut only. Jev probabilities are not bug confidence, impact or permission to edit.",
+    coverage: {
+      paths: plan.scope?.paths ?? [],
+      sourceFiles: plan.coverage.sourceFiles ?? null,
+      filesWithUnindexedFunctions: new Set(
+        (plan.coverage.parseAndIndexOmissions ?? [])
+          .filter((o) => o.reason === "function_limit")
+          .map((o) => o.path),
+      ).size,
+      unitsNotPacked: plan.coverage.unitsNotPacked ?? 0,
+    },
     cells: cells.length,
     units: plan.units.length,
     requests: plan.requests.length,
@@ -347,9 +357,25 @@ export function reportMarkdown(report, accounting = null) {
     "The display cut is a display setting, not a calibration. Jev probabilities are rounded to two decimals, are not reproducible from call to call, and are not the chance of a bug or of a worthwhile change.",
     "",
   ];
+  const partial = [
+    report.coverage?.filesWithUnindexedFunctions
+      ? `functions in ${report.coverage.filesWithUnindexedFunctions.toLocaleString("en-US")} files were not indexed (function cap)`
+      : null,
+    report.coverage?.unitsNotPacked
+      ? `${report.coverage.unitsNotPacked.toLocaleString("en-US")} units were not packed (unit limit)`
+      : null,
+  ].filter(Boolean);
+  if (partial.length)
+    lines.push(`Not fully covered: ${partial.join("; ")}.`, "");
+  const c = report.coverage?.sourceFiles;
+  if (c)
+    lines.push(
+      `Coverage: read ${c.read.toLocaleString("en-US")} of ${c.inScope.toLocaleString("en-US")} source files${report.coverage.paths.length ? ` in scope (--paths ${report.coverage.paths.join(",")}; ${c.inProject.toLocaleString("en-US")} in the project)` : ""} (${c.inScope ? Math.round((c.read / c.inScope) * 100) : 100}%).${c.unreadByFileOrByteCap ? ` ${c.unreadByFileOrByteCap.toLocaleString("en-US")} source files were not read because of the file cap.` : ""}`,
+      "",
+    );
   if (accounting)
     lines.push(
-      `Cost (calculated from provider-returned usage, not an invoice): **US$${accounting.knownEstimatedUSD.toFixed(4)}** for ${accounting.knownInputTokens.toLocaleString("en-US")} input tokens over ${accounting.reservedAttempts} attempts.`,
+      `Cost (calculated from provider-returned usage, not an invoice): **US$${accounting.knownEstimatedUSD.toFixed(4)}** for ${accounting.knownInputTokens.toLocaleString("en-US")} input tokens over ${accounting.reservedAttempts} attempts${accounting.wallClockMs ? `, ${(accounting.wallClockMs / 1000).toFixed(0)} s wall-clock at concurrency ${accounting.concurrency}` : ""}.`,
       "",
     );
   lines.push(
