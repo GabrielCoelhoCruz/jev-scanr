@@ -22,6 +22,6 @@
     "stableAtLeast": 4,
     "pivotAtMost": 2,
     "between": "stay_alpha",
-    "meaning": "How many signals passed decides the release. At or above stableAtLeast: stable. At or below pivotAtMost: pivot to the evaluation-harness product. Anything in between, exactly 3 today: no stable release and no pivot; the current release stays an alpha and the result is recorded as it is. No threshold may change after labels exist. Not decidable until the labeler is a human or a calibrated judge."
+    "meaning": "How many signals passed decides the release. At or above stableAtLeast: stable. At or below pivotAtMost: far from stable (the outcome is labeled pivot; what to do about it is the maintainers' call). Anything in between, exactly 3 today: the current release stays an alpha and the result is recorded as it is. No threshold may change after labels exist. Not decidable until the labeler is a human or a calibrated judge."
   }
 }

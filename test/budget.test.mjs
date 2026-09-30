@@ -1,9 +1,21 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildPlan } from "../src/build-plan.mjs";
+import { buildPlan as build } from "../src/build-plan.mjs";
 import { packSignals, verifyPlan } from "../src/plan.mjs";
 import { buildReport } from "../src/report.mjs";
 import { project, clone } from "./helpers.mjs";
+
+const SEVEN = [
+  "clone_same_policy",
+  "function_should_split",
+  "magic_policy_literal",
+  "internal_duplication",
+  "function_multiple_responsibilities",
+  "unused_local_or_parameter",
+  "deep_nesting",
+];
+const buildPlan = (root, options = {}) =>
+  build(root, { signals: SEVEN, ...options });
 
 const big = (t) =>
   project(t, {

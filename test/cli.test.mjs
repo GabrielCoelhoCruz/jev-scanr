@@ -9,10 +9,12 @@ import {
 } from "node:fs";
 import { join } from "node:path";
 import { execFileSync, spawnSync } from "node:child_process";
-import { main, parseArgs } from "../src/cli.mjs";
+import { HELP, defaultOutDir, main, parseArgs } from "../src/cli.mjs";
+import { buildPlan } from "../src/build-plan.mjs";
 import { readJournal } from "../src/runner.mjs";
 import { verifyPlan } from "../src/plan.mjs";
 import {
+  clone,
   project,
   scratch,
   fake,
@@ -194,13 +196,121 @@ test("--threshold changes only the display cut, and --experimental adds the expe
   );
 });
 
-test("signals lists the catalog with its evidence", async (t) => {
+test("signals lists each signal with the independent test first and the dev run second", async (t) => {
   const lines = [];
   t.mock.method(console, "log", (line) => lines.push(line));
   await main(["signals"]);
-  assert.equal(lines.length, 8);
-  assert.match(lines[0], /clone_same_policy@.*\[default\].*5\/5 actionable/);
-  assert.ok(lines.some((l) => /unreachable_code.*\[experimental\]/.test(l)));
+  const text = lines.join("\n");
+  assert.match(
+    text,
+    /clone_same_policy@\S+\s+\[default\]\n\s+independent test: 12\/16 actionable/,
+  );
+  assert.match(text, /dev run:\s+5\/5 \(daily-tracker/);
+  assert.match(
+    text,
+    /deep_nesting@\S+\s+\[experimental\]\n\s+independent test: no cell above the cut/,
+  );
+  assert.match(text, /unreachable_code@\S+\s+\[experimental\]/);
+  assert.match(text, /No person has labeled|no person has labeled/i);
+  assert.ok(text.indexOf("independent test") < text.indexOf("dev run"));
+});
+
+test("the help names the flags the parser accepts, and --help works after a command", async (t) => {
+  assert.match(HELP, /report --plan PLAN --run-dir RUN/);
+  assert.match(HELP, /continue --plan PLAN --run-dir RUN/);
+  assert.ok(!/--run RUN/.test(HELP));
+  assert.match(HELP, /--cap-usd N/);
+  assert.match(HELP, /--yes /);
+  for (const args of [
+    ["scan", "--help"],
+    ["signals", "-h"],
+    ["continue", "--help"],
+    ["auth", "--help"],
+  ]) {
+    const lines = [];
+    t.mock.method(console, "log", (line) => lines.push(line));
+    await main(args);
+    assert.match(lines.at(-1), /^jev-scanr \(short alias: jevs\)/);
+    t.mock.restoreAll();
+  }
+});
+
+test("scan refuses a file or a missing directory as PATH, in plain words", async (t) => {
+  const dir = project(t, { "a.ts": clone("alpha") });
+  await assert.rejects(
+    main(["scan", join(dir, "a.ts")]),
+    /PATH must be a directory.*--paths/,
+  );
+  await assert.rejects(
+    main(["scan", join(dir, "missing")]),
+    /No such directory/,
+  );
+});
+
+test("the dry run prints a default output folder outside the project, and the live default is the same folder", async (t) => {
+  const dir = project(t, { "a.ts": clone("alpha") });
+  const cache = scratch(t);
+  const lines = [];
+  t.mock.method(console, "log", (line) => lines.push(line));
+  await main(["scan", dir], { env: { XDG_CACHE_HOME: cache } });
+  const printed = lines.join("\n").match(/Output would go to (\S+)/)[1];
+  assert.ok(printed.startsWith(join(cache, "jev-scanr") + "/"));
+  assert.ok(!printed.startsWith(dir));
+  assert.equal(
+    defaultOutDir(buildPlan(dir), { XDG_CACHE_HOME: cache }),
+    printed,
+  );
+  assert.ok(!existsSync(printed), "a dry run writes nothing");
+});
+
+test("a live run without --out writes the report to the default folder and resumes nothing it should not", async (t) => {
+  const dir = project(t, { "a.ts": clone("alpha") + clone("beta", "20") });
+  const cache = scratch(t);
+  const env = { XDG_CACHE_HOME: cache };
+  const p = buildPlan(dir);
+  const client = fake(async (r) => response(r, positive(0.9)));
+  await main(["scan", dir, "--run", "--yes", "--cap-usd", "1"], {
+    env,
+    client,
+  });
+  const out = defaultOutDir(p, env);
+  assert.ok(existsSync(join(out, "queue.md")));
+  await assert.rejects(
+    main(["scan", dir, "--run", "--yes", "--cap-usd", "1"], { env, client }),
+    /already holds a finished report/,
+  );
+});
+
+test("file statuses are printed in words, and --list-files says which files were skipped and why", async (t) => {
+  const dir = project(t, {
+    "a.ts": clone("alpha"),
+    "secret-keys.ts": "export const x = 1;\n",
+    "node_modules/pkg/index.ts": "export const y = 2;\n",
+  });
+  const lines = [];
+  t.mock.method(console, "log", (line) => lines.push(line));
+  await main(["scan", dir, "--list-files"], {
+    env: { XDG_CACHE_HOME: scratch(t) },
+  });
+  const text = lines.join("\n");
+  assert.ok(!/excluded_path|potential_secret|outside_paths/.test(text));
+  assert.match(text, /excluded by path or policy/);
+  assert.match(
+    text,
+    /Files skipped, and why:\n(?:.*\n)*?secret-keys\.ts {2}\(excluded by path or policy\)/,
+  );
+  assert.match(text, /1 function, 0 similar pairs/);
+});
+
+test("report and continue reject --run with the flag name the help uses", async () => {
+  await assert.rejects(
+    main(["report", "--plan", "x", "--run", "y", "--out", "z"]),
+    /Use --run-dir RUN/,
+  );
+  await assert.rejects(
+    main(["continue", "--plan", "x", "--run", "y", "--out", "z"]),
+    /Use --run-dir RUN/,
+  );
 });
 
 test("a stopped run can be continued, and the combined report accounts for both runs", async (t) => {

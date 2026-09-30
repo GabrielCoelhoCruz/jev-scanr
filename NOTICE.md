@@ -4,12 +4,9 @@
 
 ## Origin
 
-This code is derived from an experimental scanner (the "Semantic Scanner" prototype, versions 0.2 to 0.4.1, also MIT, copyright "Semantic Scanner contributors"). That prototype in turn adapted the read-only AST inventory and the reservation / write-ahead-journal approach of the earlier MIT `jev-readonly-pilot` harness. The original notices are retained unchanged:
+This code is derived from the author's earlier unpublished prototypes, which were also MIT-licensed and adapted parts of an earlier MIT-licensed read-only analysis harness. The original notices are retained unchanged in [`licenses/`](licenses/) (for example [`licenses/jev-readonly-pilot-MIT.txt`](licenses/jev-readonly-pilot-MIT.txt)); the prototypes' own notice is carried forward in the copyright line above.
 
-- [`licenses/jev-readonly-pilot-MIT.txt`](licenses/jev-readonly-pilot-MIT.txt)
-- The prototype's own MIT notice is the copyright line above, carried forward with its history.
-
-This repository keeps only the jev-only pipeline (units → Jev → per-signal probability → queue). The prototype's other evaluation modes, datasets, model predictions, labels and private review artifacts are not included.
+This repository keeps only the Jev-only pipeline (units, Jev, per-signal probability, queue). The prototypes' other evaluation modes, datasets, model predictions, labels and private review artifacts are not included.
 
 ## Third-party software
 
@@ -17,7 +14,7 @@ Runtime dependencies are installed, not vendored, and pinned exactly in `package
 
 ## Examples and evidence
 
-`examples/demo-app/` is synthetic code written for this project. Its `expected/` directory is one real recorded run on it. `evals/results/` shows a few paths, one 5-line snippet and measured results from a scan of the author's own application (https://github.com/GabrielCoelhoCruz/daily-tracker), which is public, and line ranges (no copied source) for candidates in two other public MIT repositories, linked at pinned commits: https://github.com/pingdotgg/t3code and https://github.com/can1357/oh-my-pi. `signals/` records numbers from that run. No third-party application corpus is bundled. This project's structure (README, agent skill, results write-ups) follows https://github.com/dzhng/jevgrep as a model; no code was copied from it.
+`examples/demo-app/` is synthetic code written for this project. Its `expected/` directory is one real recorded run on it. `evals/results/` shows a few paths, one 5-line snippet and measured results from a scan of the author's own application (https://github.com/GabrielCoelhoCruz/daily-tracker), which is public, and line ranges (no copied source) for candidates in two other public MIT repositories, linked at pinned commits: https://github.com/pingdotgg/t3code and https://github.com/can1357/oh-my-pi. `signals/` records numbers from that run. No third-party application corpus is bundled.
 
 ## Apache-2.0 material
 

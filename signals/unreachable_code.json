@@ -13,6 +13,16 @@
     "insufficient": "Reachability depends on code or values that are not visible."
   },
   "presence": "unreachable",
+  "independentTest": {
+    "source": "evals/results/validation-gate-2026-09-30.md",
+    "corpus": "two public repositories never used to tune the questions",
+    "sample": "random cells at or above the 0.7 cut",
+    "reviewer": "LLM (Claude Opus 5.5), first pass from the code excerpts alone; no human labels",
+    "reviewedAboveCut": 0,
+    "actionableAboveCut": 0,
+    "questionVersion": "1.0.0",
+    "note": "No cell of this signal was at or above the 0.7 cut in either repository, so nothing was reviewed."
+  },
   "evidence": [
     {
       "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",

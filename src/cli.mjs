@@ -1,7 +1,14 @@
 #!/usr/bin/env node
-import { readFileSync, existsSync, mkdirSync, realpathSync } from "node:fs";
+import {
+  readFileSync,
+  existsSync,
+  mkdirSync,
+  realpathSync,
+  statSync,
+} from "node:fs";
+import { homedir } from "node:os";
 import { spawn } from "node:child_process";
-import { resolve, join } from "node:path";
+import { resolve, join, basename } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs as nodeParseArgs } from "node:util";
 import { writeNew, outside, POLICY } from "./core.mjs";
@@ -27,11 +34,14 @@ import {
   saveApiKey,
 } from "./credentials.mjs";
 
-export const SKILL_SOURCE = "GabrielCoelhoCruz/jev-scanr";
+export const SKILLS_CLI_VERSION = "1.7.0";
 
 export const VERSION = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url)),
 ).version;
+
+export const skillSource = (version = VERSION) =>
+  `https://github.com/GabrielCoelhoCruz/jev-scanr/tree/v${version}/skills/jev-scanr`;
 
 export const HELP = `jev-scanr (short alias: jevs) ${VERSION}
 
@@ -40,12 +50,12 @@ Ranks refactoring candidates in a TypeScript/JavaScript project by asking the Je
 Usage
   jevs --version                              print the version
   jevs auth [--remove]                        save your TypeSafe API key (owner-only file), or delete it
-  jevs skill [--global] [--yes]               install the agent skill for your coding agents (uses npx skills)
+  jevs skill [--global] [--yes]               install the agent skill for this version, from its release tag (uses npx skills)
   jevs scan PATH [options]         dry run: shows units, requests and estimated cost, sends nothing
   jevs scan PATH --run --yes --cap-usd N [options]
                                                 sends source excerpts to the Jev API and writes the report
-  jevs report --plan PLAN --run RUN --out DIR [--threshold 0.7]
-  jevs continue --plan PLAN --run RUN --out NEWPLAN
+  jevs report --plan PLAN --run-dir RUN --out DIR [--threshold 0.7]
+  jevs continue --plan PLAN --run-dir RUN --out NEWPLAN
                                                 plan only the requests without an accepted answer
   jevs run --plan PLAN --out DIR --cap-usd N --yes
                                                 run an existing plan
@@ -55,18 +65,24 @@ Options for scan
   --exclude a,b,c     paths (files or directories, relative to PATH) that are never read or sent
   --paths a,b         scan only these directories or files (relative to PATH). Units and their context
                       come only from them. A scan reads at most 500 files, so scan a large project in slices
-  --experimental      also ask the experimental signals (off by default)
+  --experimental      also ask the experimental signals (off by default; jevs signals shows which are which)
   --signals a,b       ask exactly these signals instead of the defaults
   --include-tests     also analyze test files (off by default)
   --external-configs FILE
                       offline JSON data for tsconfig files that live in packages (for example
                       "extends": "expo/tsconfig.base"). Never downloaded or executed; see docs/EXTERNAL-CONFIGS.md
-  --list-files        dry run: list every file whose source would be sent
+  --list-files        dry run: list every file whose source would be sent, and the files skipped and why
+  --run               send the excerpts to the Jev API instead of a dry run; needs --yes and --cap-usd
+  --yes               consent to send source excerpts to the Jev API
+  --cap-usd N         refuse to start if the worst-case cost exceeds N US dollars
   --concurrency N     live runs: up to N requests in flight (1 to 32, default 8). A token-bucket limiter keeps the
                       rate under Jev's documented limits (about 40 requests and 100K tokens per second, at 80%).
                       Any error, 429 included, stops the run; there are no automatic retries
-  --out DIR           output directory (default ./jev-scan-out; must not exist for a new run)
+  --out DIR           output directory, outside the project (default: a folder under ~/.cache/jev-scanr named after
+                      the project and plan, printed by the dry run; rerunning the same plan resumes it)
   --threshold N       display cut for every signal, 0 to 1 (default 0.7)
+  --help              help (works after any command)
+  --version           print the version
 
 Sending source. Every analyzed excerpt goes to the Jev API (https://api.typesafe.ai) under your own key: TYPESAFE_API_KEY in the environment, or the one saved by jevs auth. Files whose path or content looks like a secret are skipped, and dot-directories, node_modules, build output and generated files are never read. That guard is a heuristic. Check --list-files and use --exclude before a live run.
 `;
@@ -103,6 +119,8 @@ export function parseArgs(args) {
     command === "-h" ||
     command === "help"
   )
+    return { command: "help", values: {}, positionals: [] };
+  if (rest.includes("--help") || rest.includes("-h"))
     return { command: "help", values: {}, positionals: [] };
   const { values, positionals } = nodeParseArgs({
     args: rest,
@@ -210,6 +228,43 @@ export function coverageLines(c, paths, unread, extra = {}) {
   return lines;
 }
 
+export function defaultOutDir(plan, env = process.env) {
+  const base = env.XDG_CACHE_HOME || join(env.HOME || homedir(), ".cache");
+  return join(
+    base,
+    "jev-scanr",
+    `${basename(plan.root)}-${plan.planHash.slice(0, 8)}`,
+  );
+}
+
+const FILE_STATUS = {
+  excluded_path: "excluded by path or policy",
+  potential_secret_no_content_stored:
+    "skipped as possible secrets (content not read)",
+  outside_paths: "outside --paths",
+  unreadable_directory: "not readable as a directory",
+  missing_or_unreadable: "missing or unreadable",
+  unreadable: "unreadable",
+  file_or_byte_limit: "over the file or size cap",
+  file_changed_exceeds_limit: "grew past the size limit while reading",
+  generated: "generated",
+  path_escape: "outside the project",
+  non_regular_or_multilink: "not a regular file",
+  symlink: "symlink (never followed)",
+  unsupported_config_extension: "unsupported configuration file",
+};
+const fileStatus = (k) => FILE_STATUS[k] ?? k.replaceAll("_", " ");
+
+function skippedFiles(plan) {
+  return plan.files
+    .filter(
+      (f) =>
+        !["read", "non_source", "outside_paths"].includes(f.status) && f.path,
+    )
+    .map((f) => `${f.path}  (${fileStatus(f.status)})`)
+    .sort();
+}
+
 function summary(plan) {
   const e = plan.estimates,
     counts = plan.files.reduce(
@@ -244,14 +299,14 @@ function printSummary(plan, s) {
     [
       `Plan ${s.planHash.slice(0, 12)}… · model ${POLICY.model} at US$${POLICY.inputUSDPerMillion}/M input tokens`,
       `Signals: ${s.signals.join(", ")}`,
-      `Files: ${s.files.read ?? 0} read, ${
+      `Files: ${s.files.read ?? 0} read (source and configuration), ${
         Object.entries(s.files)
           .filter(([k]) => k !== "read" && k !== "non_source")
-          .map(([k, v]) => `${v} ${k}`)
+          .map(([k, v]) => `${v} ${fileStatus(k)}`)
           .join(", ") || "none skipped"
       }`,
       ...coverageLines(s.coverage, s.paths, s.unread, s),
-      `Units: ${s.functionUnits} functions, ${s.pairUnits} similar pairs`,
+      `Units: ${s.functionUnits} function${s.functionUnits === 1 ? "" : "s"}, ${s.pairUnits} similar pair${s.pairUnits === 1 ? "" : "s"}`,
       `Requests: ${s.requests} (${s.questions} questions, ${(s.requestBytes / 1e6).toFixed(2)} MB of request text)`,
       `Estimated cost: ${usd(s.estimatedUSD)} (bytes ÷ 3 per token); worst case ${usd(s.conservativeUSD)} (one token per byte, plus one reservation)`,
       "Costs are calculated from the documented tariff, not an invoice.",
@@ -307,7 +362,7 @@ async function execute(plan, values, deps) {
     throw Error(
       "No TypeSafe API key. Run jevs auth, or set TYPESAFE_API_KEY in the environment (never pass it as an option)",
     );
-  const out = outside(plan.root, values.out ?? "jev-scan-out");
+  const out = outside(plan.root, values.out ?? defaultOutDir(plan, deps.env));
   const captured = join(out, "plan.json");
   if (existsSync(join(out, "report.json")))
     throw Error(
@@ -367,11 +422,9 @@ export async function main(args = process.argv.slice(2), deps = {}) {
   if (command === "skill") {
     const args = [
       "--yes",
-      "skills",
+      `skills@${SKILLS_CLI_VERSION}`,
       "add",
-      SKILL_SOURCE,
-      "--skill",
-      "jev-scanr",
+      skillSource(),
     ];
     if (values.global) args.push("--global");
     if (values.yes) args.push("--yes");
@@ -393,16 +446,30 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     return;
   }
   if (command === "signals") {
-    for (const s of allSignals) {
-      const e = s.evidence[0];
+    for (const sig of allSignals) {
+      const t = sig.independentTest,
+        d = sig.evidence[0];
+      console.log(`${sig.id}@${sig.version}  [${sig.status}]`);
       console.log(
-        `${s.id}@${s.version}  [${s.status}]  ${e.actionableAboveCut}/${e.reviewedAboveCut} actionable above the cut (${e.corpus.split(" (")[0]})`,
+        `  independent test: ${t.reviewedAboveCut ? `${t.actionableAboveCut}/${t.reviewedAboveCut} actionable above the cut (random sample, two repositories)` : "no cell above the cut, nothing reviewed"}`,
+      );
+      console.log(
+        `  dev run:          ${d.actionableAboveCut}/${d.reviewedAboveCut} (${d.corpus.split(" (")[0]}, highest-probability cells: an upper bound)`,
       );
     }
+    console.log(
+      "\nAll labels come from an LLM reviewer; no person has labeled them. See EVIDENCE.md.",
+    );
     return;
   }
   if (command === "scan") {
     if (positionals.length !== 1) throw Error("scan needs one PATH");
+    const target = resolve(positionals[0]);
+    if (!existsSync(target)) throw Error(`No such directory: ${target}`);
+    if (!statSync(target).isDirectory())
+      throw Error(
+        `PATH must be a directory, but ${target} is a file. To scan one file, pass its directory as PATH and the file with --paths.`,
+      );
     const plan = buildPlan(positionals[0], {
       signals: signalSelection(values),
       excluded: values.exclude ? values.exclude.split(",").filter(Boolean) : [],
@@ -414,14 +481,21 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     });
     verifyPlan(plan);
     thresholds(values, plan);
+    if (values.paths && plan.coverage.sourceFiles?.inScope === 0)
+      throw Error("--paths matched no source files under PATH");
     printSummary(plan, summary(plan));
-    if (values["list-files"])
+    if (values["list-files"]) {
       console.log(
         `\nFiles whose source would be sent:\n${filesToSend(plan).join("\n")}`,
       );
+      const skipped = skippedFiles(plan);
+      console.log(
+        `\nFiles skipped, and why${skipped.length ? `${skipped.length > 200 ? " (first 200)" : ""}:\n${skipped.slice(0, 200).join("\n")}` : ": none"}`,
+      );
+    }
     if (!values.run) {
       console.log(
-        "\nDry run: nothing was sent and nothing was written. Add --run --yes --cap-usd N to run.",
+        `\nDry run: nothing was sent and nothing was written.\nOutput would go to ${values.out ? outside(plan.root, values.out) : defaultOutDir(plan, deps.env)}\nTo run: jevs scan ${positionals[0]} --run --yes --cap-usd N${values.out ? "" : "   (add --out DIR to choose the folder)"}`,
       );
       return;
     }

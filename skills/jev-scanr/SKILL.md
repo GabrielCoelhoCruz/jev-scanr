@@ -12,7 +12,7 @@ description: Use when the user asks for refactoring candidates, cleanup targets,
 Check for `jevs` with `command -v jevs`. If it is missing, install it with Node.js 24+:
 
 ```sh
-npm install -g github:GabrielCoelhoCruz/jev-scanr
+npm install -g github:GabrielCoelhoCruz/jev-scanr#v0.3.0-alpha
 jevs --version
 ```
 
@@ -61,7 +61,7 @@ Do not treat the order as a priority list, and do not change everything above a 
 
 ## What the numbers mean
 
-Read the evidence before quoting a number to the user: `jevs signals` lists each signal with its evidence, and the repository's `EVIDENCE.md` indexes the measurements. All labels so far come from an LLM reviewer, none from a person. Three of the seven default signals reached a usefulness band in the pre-registered test, and the project is an alpha. Say so if the user asks how reliable the queue is.
+Read the evidence before quoting a number to the user: `jevs signals` lists each signal with its evidence, and the repository's `EVIDENCE.md` indexes the measurements. All labels so far come from an LLM reviewer, none from a person. Only three signals (`clone_same_policy`, `function_should_split`, `function_multiple_responsibilities`) are on by default, because they reached a usefulness band in the pre-registered test; the other four that were tried are experimental and need `--experimental` or `--signals`. The project is an alpha. Say so if the user asks how reliable the queue is. For unused variables, nesting depth and unreachable code, prefer `tsc` and ESLint.
 
 ## Reporting back
 

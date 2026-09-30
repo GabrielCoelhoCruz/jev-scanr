@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCANNER_VERSION } from "../src/plan.mjs";
@@ -160,4 +161,89 @@ test("the README reports the oh-my-pi pull request as open, not merged", () => {
     read("evals/results/showcase-t3code-oh-my-pi-2026-09-30.md"),
     /13847[^\n]*not merged|not merged[^\n]*13847/,
   );
+});
+
+test("public documents carry no internal wording", () => {
+  const banned =
+    /coordinator|evaluation-harness product|handoff pack|narrator control|private files|authorizedOpus|TODO\(/i;
+  for (const file of walk(root)) {
+    if (
+      !/\.(md|mjs|json|yml|txt)$/.test(file) ||
+      file.endsWith("package-lock.json") ||
+      file.endsWith("docs.test.mjs")
+    )
+      continue;
+    const text = readFileSync(file, "utf8");
+    assert.ok(
+      !banned.test(text),
+      `${relative(root, file)} has internal wording`,
+    );
+    assert.ok(
+      !relative(root, file).startsWith("test/") ||
+        !/\b(n\u00e3o|revisor|humano)\b/i.test(text),
+      `${relative(root, file)} has a stray non-English fixture`,
+    );
+  }
+});
+
+test("the README leads with the benefit, lists each signal as the catalog does, and credits jevgrep only as related work", () => {
+  const readme = read("README.md");
+  assert.match(
+    readme.split("\n").find((l) => l.startsWith("**")),
+    /^\*\*Find the functions in your TypeScript\/JavaScript project most worth refactoring/,
+  );
+  assert.match(readme, /^## When to use something else$/m);
+  assert.match(readme, /^## Related$/m);
+  assert.match(
+    readme,
+    /The `auth` and `skill` commands here were inspired by it/,
+  );
+  assert.ok(!/^## (Start with a|Source, credentials)/m.test(readme));
+  assert.ok(!/jevgrep/i.test(read("NOTICE.md")));
+  const rows = [
+    ...readme.matchAll(
+      /^\| `([a-z_]+)`\s+\|[^|]*\|\s*(default|experimental)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|$/gm,
+    ),
+  ];
+  assert.equal(rows.length, 8);
+  for (const [, id, status, independent, dev] of rows) {
+    const s = JSON.parse(read(`signals/${id}.json`));
+    assert.equal(status, s.status, id);
+    const t = s.independentTest;
+    assert.equal(
+      independent,
+      t.reviewedAboveCut
+        ? `${t.actionableAboveCut}/${t.reviewedAboveCut}`
+        : "no items",
+      id,
+    );
+    const e = s.evidence[0];
+    assert.equal(dev, `${e.actionableAboveCut}/${e.reviewedAboveCut}`, id);
+  }
+});
+
+test("the npm package ships the tool and its notices, not the evaluation tools or development scripts", () => {
+  const out = execFileSync(
+    "npm",
+    ["pack", "--dry-run", "--json", "--ignore-scripts"],
+    { cwd: root, encoding: "utf8" },
+  );
+  const files = JSON.parse(out)[0].files.map((f) => f.path);
+  for (const must of [
+    "src/cli.mjs",
+    "src/credentials.mjs",
+    "catalog.json",
+    "skills/jev-scanr/SKILL.md",
+    "LICENSE",
+    "NOTICE.md",
+    "README.md",
+    "examples/demo-app/src/billing.ts",
+  ])
+    assert.ok(files.includes(must), must);
+  for (const f of files)
+    assert.ok(
+      !/^(evals|scripts|test)\//.test(f) &&
+        !f.startsWith("examples/demo-app/expected/"),
+      `${f} should not be in the package`,
+    );
 });

@@ -8,7 +8,7 @@ import {
   reportMarkdown,
   resolveThresholds,
 } from "../src/report.mjs";
-import { defaultSignalIds } from "../src/catalog.mjs";
+import { defaultSignalIds, selectSignals } from "../src/catalog.mjs";
 import {
   plan,
   scratch,
@@ -78,13 +78,17 @@ test("unanswered cells are abstentions, never scores", (t) => {
 });
 
 test("thresholds default to the catalog cut and reject unknown or invalid values", () => {
+  selectSignals();
   const cuts = resolveThresholds();
   assert.deepEqual(Object.keys(cuts), defaultSignalIds);
   assert.ok(Object.values(cuts).every((v) => v === 0.7));
   assert.throws(() => resolveThresholds({ nope: 0.5 }));
-  assert.throws(() => resolveThresholds({ deep_nesting: 1.5 }));
-  assert.throws(() => resolveThresholds({ deep_nesting: "x" }));
-  assert.equal(resolveThresholds({ deep_nesting: 0 }).deep_nesting, 0);
+  assert.throws(() => resolveThresholds({ function_should_split: 1.5 }));
+  assert.throws(() => resolveThresholds({ function_should_split: "x" }));
+  assert.equal(
+    resolveThresholds({ function_should_split: 0 }).function_should_split,
+    0,
+  );
 });
 
 test("near-ties are flagged with both probabilities and never gain display from the losing option", async (t) => {

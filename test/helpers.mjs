@@ -26,8 +26,18 @@ export const twoFiles = {
   "b.ts": clone("gamma"),
 };
 
+export const SEVEN = [
+  "clone_same_policy",
+  "function_should_split",
+  "magic_policy_literal",
+  "internal_duplication",
+  "function_multiple_responsibilities",
+  "unused_local_or_parameter",
+  "deep_nesting",
+];
+
 export const plan = (t, files = twoFiles, options = {}) =>
-  buildPlan(project(t, files), options);
+  buildPlan(project(t, files), { signals: SEVEN, ...options });
 
 export function reseal(p) {
   for (const unit of p.units) {

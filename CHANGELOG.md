@@ -4,6 +4,14 @@
 
 **Breaking: renamed from `jev-refactor` to `jev-scanr`.** The commands are now `jev-scanr` and the short alias `jevs` (the `jr` alias is gone; `jr` is also an unrelated npm package). The GitHub repository moved to `GabrielCoelhoCruz/jev-scanr` and the old URL redirects. The agent skill is now `skills/jev-scanr/` (`npx skills add GabrielCoelhoCruz/jev-scanr --skill jev-scanr`; reinstall it to replace the old one).
 
+- **Defaults changed to match the independent test.** Only `clone_same_policy`, `function_should_split` and `function_multiple_responsibilities` are on by default. `magic_policy_literal`, `internal_duplication`, `unused_local_or_parameter` and `deep_nesting` are experimental (`--experimental` or `--signals`). Each signal file records its independent-test result in `independentTest`; `jevs signals` and the README show it first and the development run second. A default-band check is now a test.
+- **Output goes outside the project by default.** `--out` defaults to a folder under `~/.cache/jev-scanr` named after the project and plan, and the dry run prints it; rerunning the same plan resumes that folder. Before, the default was inside the project and was refused.
+- The help now says `--run-dir RUN` for `report` and `continue` (what the parser accepts), lists `--run`, `--yes` and `--cap-usd`, and `--help` works after any command.
+- `scan` refuses a file or a missing directory as PATH in plain words, and prints file statuses in words (for example "skipped as possible secrets (content not read)"); `--list-files` also lists the files skipped and why.
+- `jevs skill` pins the skills CLI (1.7.0) and installs the skill from this release's tag instead of the main branch.
+- The gate rule's explanatory text in `evals/gate.json` was reworded (no behavior change); its pinned hash in `CONTRIBUTING.md` changed.
+- Documentation: the README leads with the benefit and moves the measurements to their own section; a "When to use something else" section; a "Related" section crediting jevgrep; a glossary in `EVIDENCE.md`; internal wording removed from the public documents.
+- CI also runs on macOS; the npm package no longer ships the evaluation tools, fixtures or development scripts; Dependabot is configured.
 - `jevs auth` and the key file moved to `$XDG_CONFIG_HOME/jev-scanr/credentials.json` (default `~/.config/jev-scanr/`). An existing `jev-refactor` key is moved there the first time a key is needed, keeping mode 0600 (an old file readable by others is refused); `jevs auth --remove` deletes both.
 - `jevs --version`, `-V` and `jevs version` print the version.
 - Documentation: until the package is published to npm, never run `npx jev-scanr` or `npx jevs` (npx would fetch whatever package owns that name), and never run `npx jr`; use the installed commands or `npx github:GabrielCoelhoCruz/jev-scanr`. A test fails if a tracked text file says otherwise.
@@ -15,7 +23,7 @@
 - **Renamed to `jev-refactor`** (was `semantic-refactor-scan`). The command is `jev-refactor`, with the short alias `jr`. Schema identifiers (`semantic-refactor-scan-plan/1`, `semantic-refactor-scan-report/1`) keep their names, because plans and the recorded demo are bound to them by hash. Plans from 0.1.0-alpha and 0.1.1 still verify.
 - `jr auth` saves your TypeSafe API key in an owner-only file (`~/.config/jev-refactor/credentials.json`, mode 0600; a file readable by others is refused); `jr auth --remove` deletes it. `TYPESAFE_API_KEY` in the environment still wins. The key is never a command-line option.
 - `jr skill` installs the agent skill `skills/jev-refactor/SKILL.md` through `npx skills`. The skill tells an agent when to scan, to ask for a cost cap first, and to verify each queue item before editing.
-- Evals: a `human-labels/1` file must say `"labelerKind": "human"` and cannot name a model as labeler, so LLM labels cannot be counted as human. The gate rule in `evals/gate.json` gains a release outcome (4 or more default signals: stable; 2 or fewer: pivot; exactly 3: stay alpha; labels not from a person or calibrated judge: not decidable). Its pinned hash changed; see `CONTRIBUTING.md`.
+- Evals: a `human-labels/1` file must say `"labelerKind": "human"` and cannot name a model as labeler, so LLM labels cannot be counted as human. The gate rule in `evals/gate.json` gains a release outcome (4 or more default signals: stable; exactly 3: stay alpha; labels not from a person or calibrated judge: not decidable). Its pinned hash changed; see `CONTRIBUTING.md`.
 - Documentation: `README.md` restructured; `EVIDENCE.md` is now an index over `evals/results/`; `docs/DESIGN.md` became `docs/architecture.md`; issue and pull request templates; a publish workflow that is disabled until an npm release is approved.
 - Scan behavior, questions and signals are unchanged from 0.1.1.
 
@@ -30,7 +38,7 @@
 
 ## 0.1.0-alpha
 
-First public cut, from the Semantic Scanner prototype 0.4.1. Jev-only pipeline; 22 → 8 questions.
+First public cut, from the author's earlier prototype. Jev-only pipeline; 22 → 8 questions.
 
 - Default catalog: 7 signals (`clone_same_policy`, `function_should_split`, `magic_policy_literal`, `internal_duplication`, `function_multiple_responsibilities`, `unused_local_or_parameter`, `deep_nesting`). `unreachable_code` is experimental and opt-in. The other 14 are retired, listed with their evidence in `signals/retired.md`.
 - Unit kinds: functions, line windows of very long functions, and similar pairs. Catch-block, comment-block and sibling units are gone.
@@ -40,4 +48,4 @@ First public cut, from the Semantic Scanner prototype 0.4.1. Jev-only pipeline; 
 - One file per question under `signals/`, with fixtures, a live sanity check (`scripts/check-signal.mjs`) and a written gate for going on by default.
 - `evals/`: test a signal the way we did. Case sets with label sources, oracle / null / no-answer / induced-error / served-model checks, noise floor next to every rate, P-variance measurement, an LLM-judge protocol with known-negative controls and calibration against human labels, and a pre-registered gate. Results use the layout of Anthropic's eval report builder (vendored, Apache-2.0).
 - `examples/demo-app/`: a small synthetic app with seeded problems, plus one real recorded run (`expected/`).
-- Removed from the prototype: the 0.2 and 0.3 modes, deterministic ranking arms, the narrator control, the Claude handoff pack, the hard-coded exclusions of the author's private files.
+- Removed experimental modes from the prototype that are not part of this tool.

@@ -1,6 +1,6 @@
 # Releasing
 
-**The package has not been published to npm, and npm publishing is not approved.** Until the maintainer says otherwise, a release is a git tag and nothing else. Install from GitHub: `npm install -g github:GabrielCoelhoCruz/jev-scanr`.
+**The package has not been published to npm, and npm publishing is not approved.** Until the maintainer says otherwise, a release is a git tag and nothing else. Install from GitHub at a tag: `npm install -g github:GabrielCoelhoCruz/jev-scanr#vX.Y.Z`.
 
 ## Tagging a version
 

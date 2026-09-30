@@ -11,8 +11,8 @@ import { join } from "node:path";
 import { hash } from "../src/core.mjs";
 import { buildPlan } from "../src/build-plan.mjs";
 import { verifyPlan, packSignals } from "../src/plan.mjs";
-import { catalog, defaultSignalIds } from "../src/catalog.mjs";
-import { project, plan, clone, twoFiles, reseal } from "./helpers.mjs";
+import { catalog } from "../src/catalog.mjs";
+import { project, plan, clone, twoFiles, reseal, SEVEN } from "./helpers.mjs";
 
 test("units are functions and similar pairs only, formed without scoring or filtering", (t) => {
   const p = plan(t, {
@@ -35,10 +35,10 @@ test("units are functions and similar pairs only, formed without scoring or filt
     ["alpha", "beta", "gamma", "outer", "rethrows"],
     "only outermost non-test functions",
   );
-  assert.deepEqual(p.enabledSignals, defaultSignalIds);
+  assert.deepEqual(p.enabledSignals, SEVEN);
   for (const r of p.requests)
     for (const id of Object.keys(r.request.questions))
-      assert.ok(defaultSignalIds.includes(id));
+      assert.ok(SEVEN.includes(id));
   assert.ok(
     p.units.every((u) => u.sections.every((s) => typeof s.source === "string")),
   );
@@ -66,7 +66,7 @@ test("only the pair signal is asked of pairs and only function signals of functi
 test("experimental and explicit signal selections change what is asked and are bound into the plan", (t) => {
   const root = project(t, twoFiles);
   const experimental = buildPlan(root, {
-    signals: [...defaultSignalIds, "unreachable_code"],
+    signals: [...SEVEN, "unreachable_code"],
   });
   assert.ok(experimental.enabledSignals.includes("unreachable_code"));
   assert.ok(

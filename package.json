@@ -36,16 +36,13 @@
     "docs",
     "skills",
     "examples",
-    "scripts",
-    "test/fixtures",
     "NOTICE.md",
     "EVIDENCE.md",
-    "CONTRIBUTING.md",
     "SECURITY.md",
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
-    "evals"
+    "!examples/demo-app/expected"
   ],
   "scripts": {
     "test": "node --test test/*.test.mjs",

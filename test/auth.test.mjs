@@ -9,7 +9,13 @@ import {
   writeFileSync,
 } from "node:fs";
 import { dirname } from "node:path";
-import { main, parseArgs, SKILL_SOURCE } from "../src/cli.mjs";
+import {
+  main,
+  parseArgs,
+  SKILLS_CLI_VERSION,
+  skillSource,
+  VERSION,
+} from "../src/cli.mjs";
 import {
   credentialsPath,
   legacyCredentialsPath,
@@ -89,14 +95,17 @@ test("jevs skill installs this repository's skill through npx skills", async () 
   await main(["skill", "--global", "--yes"], { skillArgs: (a) => (args = a) });
   assert.deepEqual(args, [
     "--yes",
-    "skills",
+    `skills@${SKILLS_CLI_VERSION}`,
     "add",
-    SKILL_SOURCE,
-    "--skill",
-    "jev-scanr",
+    `https://github.com/GabrielCoelhoCruz/jev-scanr/tree/v${VERSION}/skills/jev-scanr`,
     "--global",
     "--yes",
   ]);
+  assert.match(SKILLS_CLI_VERSION, /^\d+\.\d+\.\d+$/);
+  assert.equal(
+    skillSource("9.9.9"),
+    "https://github.com/GabrielCoelhoCruz/jev-scanr/tree/v9.9.9/skills/jev-scanr",
+  );
   assert.equal(parseArgs(["skill"]).command, "skill");
 });
 

@@ -13,6 +13,15 @@
     "insufficient": "The full body is not visible or is too opaque to judge."
   },
   "presence": "split_candidate",
+  "independentTest": {
+    "source": "evals/results/validation-gate-2026-09-30.md",
+    "corpus": "two public repositories never used to tune the questions",
+    "sample": "random cells at or above the 0.7 cut",
+    "reviewer": "LLM (Claude Opus 5.5), first pass from the code excerpts alone; no human labels",
+    "reviewedAboveCut": 16,
+    "actionableAboveCut": 6,
+    "questionVersion": "1.0.0"
+  },
   "evidence": [
     {
       "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",

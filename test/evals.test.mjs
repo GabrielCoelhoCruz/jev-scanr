@@ -377,7 +377,7 @@ test("the review package and human label formats from the blind protocol load as
   const review = normalizeLabels(
     {
       schema: "blind-relational-reference/1",
-      reviewer: "authorizedOpus5.5-pending",
+      reviewer: "example-llm-reviewer",
       cards: [
         {
           cardId: "a",
@@ -649,8 +649,7 @@ test("a human-labels file must declare a human labeler and cannot be an LLM", ()
     () =>
       normalizeLabels(
         file({
-          labeler:
-            "LLM (não humano): anthropic/claude-opus-5-5, revisor independente",
+          labeler: "LLM (not human): example-model, independent reviewer",
         }),
       ),
     /labelerKind/,

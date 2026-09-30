@@ -54,24 +54,45 @@ test("every signal file is a complete, versioned question with an explicit insuf
   }
 });
 
-test("the catalog is exactly seven default signals plus the experimental opt-in", () => {
+test("only the signals that reached a default band in the independent test are on by default", () => {
   assert.deepEqual(defaultSignalIds, [
     "clone_same_policy",
     "function_should_split",
-    "magic_policy_literal",
-    "internal_duplication",
     "function_multiple_responsibilities",
-    "unused_local_or_parameter",
-    "deep_nesting",
   ]);
   assert.deepEqual(
     allSignals.filter((s) => s.status === "experimental").map((s) => s.id),
-    ["unreachable_code"],
+    [
+      "magic_policy_literal",
+      "internal_duplication",
+      "unused_local_or_parameter",
+      "deep_nesting",
+      "unreachable_code",
+    ],
   );
   assert.deepEqual(
     catalog.signals.map((s) => s.id),
     defaultSignalIds,
   );
+});
+
+test("every signal records its independent test, and a default needs at least 8 reviewed cells at 30% or more", () => {
+  for (const s of allSignals) {
+    const t = s.independentTest;
+    assert.ok(t, s.id);
+    assert.equal(t.questionVersion, s.version, s.id);
+    assert.ok(t.actionableAboveCut <= t.reviewedAboveCut, s.id);
+    const ok =
+      t.reviewedAboveCut >= 8 &&
+      t.actionableAboveCut / t.reviewedAboveCut >= 0.3;
+    if (s.status === "default")
+      assert.ok(ok, `${s.id} is default below the gate band`);
+    else if (s.id !== "unreachable_code" && t.reviewedAboveCut >= 8)
+      assert.ok(
+        t.actionableAboveCut / t.reviewedAboveCut < 0.3,
+        `${s.id} passed the band but is experimental`,
+      );
+  }
 });
 
 test("a signal is on by default only if its recorded evidence passes the gate", () => {

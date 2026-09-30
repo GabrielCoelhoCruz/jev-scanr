@@ -1,6 +1,6 @@
 # Validation gate on two new repositories (2026-09-30)
 
-**Bottom line.** Three of the seven default signals reached a default band in a pre-registered test on two repositories the project had never used: one at or above 50% actionable (`clone_same_policy`) and two in the 30-50% band with a low-precision warning. The rule says stable release at 4 or more and pivot at 2 or fewer, so 3 means **no stable release and no pivot: the project stays an alpha preview.** Every label comes from an LLM reviewer, none is confirmed by a person, and the sample is small, so this is weak evidence.
+**Bottom line.** Three of the seven default signals reached a default band in a pre-registered test on two repositories the project had never used: one at or above 50% actionable (`clone_same_policy`) and two in the 30-50% band with a low-precision warning. The rule says stable release at 4 or more and pivot at 2 or fewer, so 3 means **no stable release: the project stays an alpha preview.** Every label comes from an LLM reviewer, none is confirmed by a person, and the sample is small, so this is weak evidence.
 
 ## Question
 
@@ -10,9 +10,9 @@ Are the findings a signal puts above the 0.7 display cut worth a person's time, 
 
 Frozen before any request was sent (the rule, the seed, the selection of repositories and the gate). The gate, as registered:
 
-> Per signal, aggregating both repos, on the random sample above the display cut (0.7) with n >= 8 reviewed cells: actionable >= 50% and greater than the rate among the below-cut sample -> DEFAULT. 30-50% -> default with a low-precision warning. < 30% or n < 8 (low_n) -> experimental, off. Release v0.1 stable if >= 4 signals are DEFAULT; pivot to the evaluation-harness product if <= 2. Registered checks: if human-vs-Opus agreement on the 30 human cards is < 70%, every LLM number gets a "not human-confirmed" label; if |P1-P2| > 0.05 in more than 20% of the repeats, reports must show a range and the cut becomes "P above cut in two calls". The reviewer's labels decide the gate; the coordinator does not. unreachable_code is experimental: no gate applies unless it reaches n >= 8 anyway.
+> Per signal, aggregating both repos, on the random sample above the display cut (0.7) with n >= 8 reviewed cells: actionable >= 50% and greater than the rate among the below-cut sample -> DEFAULT. 30-50% -> default with a low-precision warning. < 30% or n < 8 (low_n) -> experimental, off. Release v0.1 stable if >= 4 signals are DEFAULT. Registered checks: if human-vs-Opus agreement on the 30 human cards is < 70%, every LLM number gets a "not human-confirmed" label; if |P1-P2| > 0.05 in more than 20% of the repeats, reports must show a range and the cut becomes "P above cut in two calls". The reviewer's labels decide the gate. unreachable_code is experimental: no gate applies unless it reaches n >= 8 anyway.
 
-The release count (4 / 2) was registered, but what happens at exactly 3 was not. That gap is recorded in [`CONTRIBUTING.md`](../../CONTRIBUTING.md) and in `evals/gate.json`, where exactly 3 now means "stay alpha". The change was made before any new labels exist, and the changed rule has a new published hash.
+The release count was registered as "stable at 4 or more" and a lower line for the other extreme, but what happens at exactly 3 was not. That gap is recorded in [`CONTRIBUTING.md`](../../CONTRIBUTING.md) and in `evals/gate.json`, where exactly 3 now means "stay alpha". The change was made before any new labels exist, and the changed rule has a new published hash.
 
 ## Setup
 
@@ -67,3 +67,7 @@ A second, independent LLM reviewer labeled 39 of the same cells from the cards o
 ## What would change this
 
 Labels from a person on the 30 human cards (which would also allow a calibrated judge), and a second round on more repositories of different kinds with the exactly-3 rule already in place.
+
+## Consequence
+
+In 0.3.0-alpha the three signals that reached a default band (`clone_same_policy`, `function_should_split`, `function_multiple_responsibilities`) are on by default, each with its independent-test numbers recorded in its signal file, and the other four default signals of 0.2.0-alpha became experimental opt-in (`--signals` or `--experimental`).

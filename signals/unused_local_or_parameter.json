@@ -1,7 +1,7 @@
 {
   "id": "unused_local_or_parameter",
   "version": "1.0.0",
-  "status": "default",
+  "status": "experimental",
   "family": "dead_code",
   "kinds": ["function", "function_chunk"],
   "primitive": "choice",
@@ -13,6 +13,15 @@
     "insufficient": "Its uses may lie outside the visible code."
   },
   "presence": "unused",
+  "independentTest": {
+    "source": "evals/results/validation-gate-2026-09-30.md",
+    "corpus": "two public repositories never used to tune the questions",
+    "sample": "random cells at or above the 0.7 cut",
+    "reviewer": "LLM (Claude Opus 5.5), first pass from the code excerpts alone; no human labels",
+    "reviewedAboveCut": 9,
+    "actionableAboveCut": 1,
+    "questionVersion": "1.0.0"
+  },
   "evidence": [
     {
       "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",

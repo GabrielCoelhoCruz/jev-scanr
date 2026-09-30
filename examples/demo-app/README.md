@@ -1,12 +1,12 @@
 # Demo app
 
-Nine small TypeScript files, written for this project. Some functions carry a problem that one of the default signals asks about, and the rest are clean on purpose, so you can run the scanner and see what comes out without pointing it at your own code.
+Eight small TypeScript files, written for this project. Some functions carry a problem that one of the signals asks about, and the rest are clean on purpose, so you can run the scanner and see what comes out without pointing it at your own code.
 
 ```sh
-node src/cli.mjs scan examples/demo-app          # dry run: 15 requests, about US$0.001, sends nothing
+node src/cli.mjs scan examples/demo-app          # dry run: 15 requests, under US$0.001 with the default signals, sends nothing
 ```
 
-A real run costs about a tenth of a cent. See [`expected/RECORDED-RUN.md`](expected/RECORDED-RUN.md) for one recorded on `jev-1.13.0`, with its receipt, journal, `report.md` and `queue.md`.
+A real run costs under a tenth of a cent. The recording below asked the seven original questions (US$0.0011); four of them are now experimental and need `--experimental`. See [`expected/RECORDED-RUN.md`](expected/RECORDED-RUN.md) for one recorded on `jev-1.13.0`, with its receipt, journal, `report.md` and `queue.md`.
 
 ## What is seeded
 

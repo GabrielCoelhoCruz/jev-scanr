@@ -20,6 +20,8 @@ Tests are offline. They never call Jev and never need a key. Please keep it that
 
 ## Adding a signal
 
+A new signal lands as `experimental` with a question file, two fixtures and a few labeled cases. No API key is needed for that; step 4 is optional, and a maintainer can run it on the pull request. Everything under "The gate" below is only for turning a signal on by default.
+
 A signal is **one versioned question file plus fixtures**.
 
 1. **Create `signals/<id>.json`** and add the id to `order` in `catalog.json`. Fields:
@@ -44,17 +46,17 @@ Changing the text of a question or its options is a new question: bump `version`
 
 ## The gate a signal must pass to be on by default
 
-`status: default` needs recorded `evidence` that passes a gate. A test enforces the alpha gate for every default signal today. The stable gate is what a signal needs to be on by default in a stable release. It is implemented in [`evals/`](evals/README.md), so you can run it on your own data.
+`status: default` needs recorded evidence that passes a gate. A test enforces the alpha gate on the development run, and, since 0.3.0-alpha, the independent test's band (each signal records its result in `independentTest`): at least 8 reviewed items and at least 30% worth a look. The stable gate is what a signal needs to be on by default in a stable release. It is implemented in [`evals/`](evals/README.md), so you can run it on your own data.
 
-**Alpha gate** (the first seven defaults; enough for `v0.1.0-alpha` only): on one project, the 5 highest-probability cells at or above the 0.7 cut (all if fewer) plus 3 random cells below the cut, reviewed; at least 2 of the top cells actionable, and the actionable rate above the cut greater than below it.
+**Alpha gate** (the first seven signals; enough for an alpha only): on one project, the 5 highest-probability cells at or above the 0.7 cut (all if fewer) plus 3 random cells below the cut, reviewed; at least 2 of the top cells actionable, and the actionable rate above the cut greater than below it.
 
 **Stable gate.** Everything is written down _before_ the labels exist:
 
-1. **Pre-register.** Commit [`evals/gate.json`](evals/gate.json) (its SHA-256 is `a5de92c48a73d87825864bfcd06462d52a9a1f133f83efe3808e0b45c6831473`; `gate --expect-rule-sha` refuses any other), the sampling rule and its seed, and who will label.
+1. **Pre-register.** Commit [`evals/gate.json`](evals/gate.json) (its SHA-256 is `75401b5d71c7d14dc048fb6e23ce64607020ebc285cec46f0f964d294a0ac2af`; `gate --expect-rule-sha` refuses any other), the sampling rule and its seed, and who will label.
 2. **Sample at random, not from the top.** From **at least two projects** that nobody proposing the signal has used: a random sample of cells at or above the cut, stratified 0.7–0.85 and 0.85–1, with **n ≥ 8** reviewed per signal, plus the 4 cells just below the cut. Also repeat 50 requests to measure how much P moves (`variance`). If more than 20% of cells move by more than 0.05, the report shows a range and the display rule changes.
 3. **Labels from a person, or from a calibrated judge.** An LLM judge must not be Jev, must use its own rubric prompt (`evals/judge/RUBRIC.md`), must pass its three known-negative controls, and must agree with a person on at least 90% of the clear cases (at least 20 of them) on a set the judge did not see (`calibrate`). The first calibration set is the 30-card human subset of our validation experiment. Until a judge is calibrated, only human labels count. The judge's first pass is sealed (hashed) before any repository access.
 4. **The bar.** At least **50% actionable**, greater than the rate among the cells just below the cut (30–50% is allowed with a "low precision" label; under 30%, or n < 8, the signal stays experimental).
-   **The release count.** A signal with `default` or `default_low_precision` counts as DEFAULT. At least 4 DEFAULT signals: stable release. 2 or fewer: pivot to the evaluation-harness product. Exactly 3: no stable release and no pivot; the release stays an alpha and the result is recorded as it is (added after the first run of this gate, which landed on 3, before any new labels exist). With labels that are not from a person or a calibrated judge, the outcome is `not_decidable`. `gate` prints it.
+   **The release count.** A signal with `default` or `default_low_precision` counts as DEFAULT. A stable release needs at least 4 DEFAULT signals; with fewer the release stays an alpha and the result is recorded as it is (the first run of this gate landed on exactly 3, which the rule had not covered; the case was added before any new labels exist). With labels that are not from a person or a calibrated judge, the outcome is `not_decidable`. `gate` prints it.
 5. **Report the noise floor.** The result prints `1/sqrt(n)` next to every rate. If the rate is within the noise floor of a bar, the verdict is not decided: label more cells.
 6. **Publish** the cards, labels, scripts and the `gate` output so anyone can recount, and record the result in the signal's `evidence` with `questionVersion`.
 
