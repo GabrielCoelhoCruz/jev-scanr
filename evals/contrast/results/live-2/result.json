@@ -1,0 +1,183 @@
+{
+  "schema": "contrast-result/1",
+  "cut": 0.7,
+  "resamples": 2000,
+  "seed": 20260930,
+  "sets": {
+    "A2": {
+      "signal": "function_should_split",
+      "units": 92,
+      "scored": 92,
+      "unscored": 0,
+      "positives": 46,
+      "controls": 46,
+      "mainHeuristic": "lines",
+      "jev": {
+        "auc": 0.7632325141776938,
+        "lo": 0.6563845050215208,
+        "hi": 0.8546401515151515
+      },
+      "heuristics": {
+        "lines": {
+          "auc": 0.4995274102079395,
+          "lo": 0.37990543735224586,
+          "hi": 0.6223958333333334,
+          "main": true
+        },
+        "statements": {
+          "auc": 0.4910207939508507,
+          "lo": 0.3721590909090909,
+          "hi": 0.6078014184397164,
+          "main": false
+        },
+        "cyclomatic": {
+          "auc": 0.4881852551984877,
+          "lo": 0.36766098484848486,
+          "hi": 0.6007518796992481,
+          "main": false
+        },
+        "params": {
+          "auc": 0.5642722117202268,
+          "lo": 0.4481109516977523,
+          "hi": 0.6789273849074513,
+          "main": false
+        },
+        "tokens": {
+          "auc": 0.513468809073724,
+          "lo": 0.39406982305117166,
+          "hi": 0.6338942307692308,
+          "main": false
+        }
+      },
+      "diff": {
+        "value": 0.2637051039697543,
+        "lo": 0.15780730897009976,
+        "hi": 0.3662405303030303
+      },
+      "matched": true,
+      "meanP": {
+        "positive": 0.34456521739130436,
+        "control": 0.1319565217391304
+      },
+      "atCut": {
+        "positiveRate": 0.13043478260869565,
+        "controlRate": 0.021739130434782608
+      },
+      "sensitivity": {
+        "excludingInsufficient": {
+          "n": 92,
+          "auc": 0.7632325141776938
+        }
+      },
+      "verdict": [
+        "Matched: lines AUC 0.50 (0.38 to 0.62) includes 0.5, as constructed.",
+        "Jev separates the classes: AUC 0.76 (0.66 to 0.85), interval above 0.5.",
+        "Jev ahead of lines: AUC difference 0.26 (0.16 to 0.37)."
+      ]
+    },
+    "B2": {
+      "signal": "clone_same_policy",
+      "units": 100,
+      "scored": 100,
+      "unscored": 0,
+      "positives": 50,
+      "controls": 50,
+      "mainHeuristic": "shingleJaccard",
+      "jev": {
+        "auc": 0.9798,
+        "lo": 0.9531313131313132,
+        "hi": 0.9971898835808912
+      },
+      "heuristics": {
+        "shingleJaccard": {
+          "auc": 0.5626,
+          "lo": 0.4411057692307692,
+          "hi": 0.6736,
+          "main": true
+        },
+        "tokenCoverage10": {
+          "auc": 0.3768,
+          "lo": 0.27050820328131253,
+          "hi": 0.48213535098781,
+          "main": false
+        },
+        "rawJaccard5": {
+          "auc": 0.3434,
+          "lo": 0.23737980769230768,
+          "hi": 0.46134766432410085,
+          "main": false
+        },
+        "vocabJaccard": {
+          "auc": 0.706,
+          "lo": 0.5890356142456983,
+          "hi": 0.8064516129032258,
+          "main": false
+        },
+        "minLines": {
+          "auc": 0.5484,
+          "lo": 0.44017607042817125,
+          "hi": 0.6540464743589743,
+          "main": false
+        },
+        "sizeRatio": {
+          "auc": 0.6654,
+          "lo": 0.5622222222222222,
+          "hi": 0.7656056221579165,
+          "main": false
+        },
+        "minTokens": {
+          "auc": 0.5646,
+          "lo": 0.4477791116446579,
+          "hi": 0.6715584952459694,
+          "main": false
+        },
+        "surfaceJaccard": {
+          "auc": 0.785,
+          "lo": 0.7131410256410257,
+          "hi": 0.8559423769507803,
+          "main": false
+        }
+      },
+      "diff": {
+        "value": 0.4172,
+        "lo": 0.3074919871794871,
+        "hi": 0.5340909090909091
+      },
+      "matched": true,
+      "meanP": {
+        "positive": 0.9536,
+        "control": 0.27599999999999997
+      },
+      "atCut": {
+        "positiveRate": 0.98,
+        "controlRate": 0.1
+      },
+      "sensitivity": {
+        "excludingInsufficient": {
+          "n": 100,
+          "auc": 0.9798
+        }
+      },
+      "hardNegatives": {
+        "n": 28,
+        "surfaceThreshold": 0.8,
+        "meanP": 0.25999999999999995,
+        "atCut": 0.14285714285714285,
+        "note": "Different functions that share most literals, property names and type names. Some may truly share a policy, so a high P here is not automatically an error."
+      },
+      "diffSecondary": {
+        "against": "surfaceJaccard",
+        "value": 0.19479999999999997,
+        "lo": 0.1204040404040404,
+        "hi": 0.2711412151067323
+      },
+      "verdict": [
+        "Matched: shingleJaccard AUC 0.56 (0.44 to 0.67) includes 0.5, as constructed.",
+        "Jev separates the classes: AUC 0.98 (0.95 to 1.00), interval above 0.5.",
+        "Jev ahead of shingleJaccard: AUC difference 0.42 (0.31 to 0.53).",
+        "Against the pre-registered secondary comparison surfaceJaccard: AUC difference 0.19 (0.12 to 0.27), Jev ahead.",
+        "Unmatched features that separate the classes: tokenCoverage10 0.38 (0.27 to 0.48); rawJaccard5 0.34 (0.24 to 0.46); vocabJaccard 0.71 (0.59 to 0.81); sizeRatio 0.67 (0.56 to 0.77); surfaceJaccard 0.79 (0.71 to 0.86). A score that tracks these is not evidence of judgment."
+      ]
+    }
+  }
+}

@@ -29,6 +29,7 @@ import { fakeScores } from "../evals/contrast/lib/fake.mjs";
 import {
   analyzeContrast,
   markdown,
+  retest,
   scoresFromJournal,
 } from "../evals/contrast/analyze.mjs";
 import { makeChimera, PINNED } from "../evals/contrast/build.mjs";
@@ -617,4 +618,57 @@ test("analyzer on controls: oracle is perfect, matched features stay at chance, 
       length.sets.A2.jev.hi >= 0.5,
   );
   assert.ok(oracle.sets.B2.hardNegatives.n > 0);
+});
+
+test("the committed live-2 run reproduces its stored analysis and its test-retest summary", () => {
+  const dir = join(root, "evals/contrast/results/live-2");
+  const journal = readFileSync(join(dir, "journal.jsonl"), "utf8");
+  const stored = JSON.parse(readFileSync(join(dir, "result.json"), "utf8"));
+  const scores = scoresFromJournal(journal, controls);
+  assert.deepEqual(
+    analyzeContrast(controls, scores, { resamples: stored.resamples }),
+    stored,
+  );
+  const earlier = scoresFromJournal(
+    readFileSync(
+      join(root, "evals/contrast/results/live-1/journal.jsonl"),
+      "utf8",
+    ),
+    doc,
+  );
+  assert.deepEqual(
+    retest(controls, scores, earlier),
+    JSON.parse(readFileSync(join(dir, "retest.json"), "utf8")),
+  );
+  assert.equal(retest(controls, scores, earlier).all.n, 96);
+  assert.equal(
+    stored.sets.A2.jev.lo > 0.5 && stored.sets.B2.jev.lo > 0.5,
+    true,
+  );
+});
+
+test("retest compares identical inputs by their reuses link", () => {
+  const fake = {
+    units: [
+      { id: "n1", set: "X", label: 1, reuses: "o1" },
+      { id: "n2", set: "X", label: 0, reuses: "o2" },
+      { id: "n3", set: "X", label: 0, reuses: null },
+    ],
+  };
+  const now = new Map([
+    ["n1", { p: 0.72, choice: "a" }],
+    ["n2", { p: 0.4, choice: "b" }],
+    ["n3", { p: 0.9, choice: "a" }],
+  ]);
+  const before = new Map([
+    ["o1", { p: 0.68, choice: "a" }],
+    ["o2", { p: 0.55, choice: "a" }],
+  ]);
+  const out = retest(fake, now, before).all;
+  assert.equal(out.n, 2);
+  assert.ok(Math.abs(out.meanAbsChange - 0.095) < 1e-12);
+  assert.equal(out.changedByMoreThan005, 1);
+  assert.equal(out.choiceFlips, 1);
+  assert.equal(out.crossing05, 1);
+  assert.equal(out.crossing07, 1);
 });

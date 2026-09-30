@@ -1,0 +1,38 @@
+{
+  "schema": "contrast-retest/1",
+  "all": {
+    "n": 96,
+    "meanAbsChange": 0.011145833333333336,
+    "maxAbsChange": 0.06000000000000005,
+    "meanSignedChange": 0.002604166666666668,
+    "changedByMoreThan005": 5,
+    "correlation": 0.9990307161903472,
+    "choiceFlips": 0,
+    "crossing05": 0,
+    "crossing07": 0
+  },
+  "bySet": {
+    "A2": {
+      "n": 46,
+      "meanAbsChange": 0.01152173913043478,
+      "maxAbsChange": 0.06,
+      "meanSignedChange": 0.008478260869565215,
+      "changedByMoreThan005": 1,
+      "correlation": 0.9952198245687471,
+      "choiceFlips": 0,
+      "crossing05": 0,
+      "crossing07": 0
+    },
+    "B2": {
+      "n": 50,
+      "meanAbsChange": 0.010800000000000002,
+      "maxAbsChange": 0.06000000000000005,
+      "meanSignedChange": -0.0027999999999999956,
+      "changedByMoreThan005": 4,
+      "correlation": 0.9630870567299139,
+      "choiceFlips": 0,
+      "crossing05": 0,
+      "crossing07": 0
+    }
+  }
+}
