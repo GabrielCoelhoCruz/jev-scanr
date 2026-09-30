@@ -34,6 +34,7 @@
     "catalog.json",
     "licenses",
     "docs",
+    "!docs/images",
     "skills",
     "examples",
     "NOTICE.md",
@@ -42,7 +43,10 @@
     "CHANGELOG.md",
     "LICENSE",
     "README.md",
-    "!examples/demo-app/expected"
+    "!examples/demo-app/expected/journal.jsonl",
+    "!examples/demo-app/expected/report.json",
+    "!examples/demo-app/expected/report.md",
+    "!examples/demo-app/expected/RECORDED-RUN.md"
   ],
   "scripts": {
     "test": "node --test test/*.test.mjs",

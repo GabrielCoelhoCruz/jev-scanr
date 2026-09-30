@@ -416,3 +416,52 @@ test("--version, -V and version print the package version", () => {
     assert.equal(out.trim(), `jev-scanr ${version}`);
   }
 });
+
+test("demo replays the recorded run offline: no key, nothing written, labeled as a recording", (t) => {
+  const cwd = scratch(t);
+  const result = spawn(["demo"], cwd, { HOME: cwd });
+  assert.equal(result.status, 0, result.stderr);
+  const lines = result.stdout.split("\n");
+  assert.equal(
+    lines[0],
+    "RECORDED RUN. This replays a saved result: nothing is sent, and no key or network is needed.",
+  );
+  assert.equal(
+    lines[1],
+    "  Recorded with jev-scanr 0.3.1-alpha on 2026-09-30, model jev-1.13.0, on the synthetic app in examples/demo-app.",
+  );
+  assert.equal(
+    lines[2],
+    "  15 of 15 requests answered, 19,754 input tokens, US$0.0008 calculated from the tariff (not an invoice).",
+  );
+  assert.deepEqual(
+    lines.filter((l) => l.startsWith("## ")),
+    [
+      "## 1. clampPercent src/percent.ts:1–14 ↔ clampVolume src/volume.ts:1–14 · clone_same_policy@3.0.0 · P=0.98",
+      "## 2. importOrders src/importer.ts:7–42 · function_should_split@1.0.0 · P=0.90",
+      "## 3. importOrders src/importer.ts:7–42 · function_multiple_responsibilities@1.0.0 · P=0.88",
+      "## 4. registerUser src/signup.ts:1–27 · function_multiple_responsibilities@1.0.0 · P=0.78",
+    ],
+  );
+  assert.match(result.stdout, /hypotheses from one Jev answer each/);
+  assert.match(result.stdout, /jevs scan \.\n$/);
+  assert.deepEqual(readdirSync(cwd), []);
+});
+
+test("demo takes no arguments and is listed in the help", (t) => {
+  const cwd = scratch(t);
+  const result = spawn(["demo", "src"], cwd);
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stderr,
+    /^Error: demo takes no arguments; it replays the recorded run/,
+  );
+  assert.match(
+    HELP,
+    /jevs demo {35}replay a recorded run on the bundled demo app: no key, no network/,
+  );
+  assert.equal(
+    spawn(["demo", "--help"], cwd).stdout.includes("jevs demo"),
+    true,
+  );
+});

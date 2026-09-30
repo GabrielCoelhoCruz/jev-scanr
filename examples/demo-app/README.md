@@ -6,7 +6,7 @@ Ten small TypeScript files, written for this project. Some functions carry a pro
 node src/cli.mjs scan examples/demo-app          # dry run: 15 requests, under US$0.001 with the default signals, sends nothing
 ```
 
-A real run costs under a tenth of a cent. See [`expected/RECORDED-RUN.md`](expected/RECORDED-RUN.md) for one recorded on `jev-1.13.0` with the three default signals, with its receipt, journal, `report.md` and `queue.md`.
+`node src/cli.mjs demo` (or `jevs demo` once installed) prints the recorded queue instead, with no key and no network. A real run costs under a tenth of a cent. See [`expected/RECORDED-RUN.md`](expected/RECORDED-RUN.md) for one recorded on `jev-1.13.0` with the three default signals, with its receipt, journal, `report.md` and `queue.md`.
 
 ## What is seeded
 

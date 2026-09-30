@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="552" viewBox="0 0 840 552" role="img" aria-labelledby="t d" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, 'DejaVu Sans Mono', 'Liberation Mono', monospace" font-size="13">
+<title id="t">jev-scanr queue from a recorded run</title>
+<desc id="d">4 candidates from a recorded run on jev-1.13.0, 0.0008 US dollars. 1. clampPercent src/percent.ts:1–14 ↔ clampVolume src/volume.ts:1–14, clone_same_policy@3.0.0, P=0.98; 2. importOrders src/importer.ts:7–42, function_should_split@1.0.0, P=0.90; 3. importOrders src/importer.ts:7–42, function_multiple_responsibilities@1.0.0, P=0.88; 4. registerUser src/signup.ts:1–27, function_multiple_responsibilities@1.0.0, P=0.78. Hypotheses to verify, not confirmed bugs.</desc>
+<rect x="0.5" y="0.5" width="839" height="551" rx="10" fill="#0d1117" stroke="#30363d"/>
+<rect x="0.5" y="0.5" width="839" height="34" rx="10" fill="#161b22"/>
+<rect x="0.5" y="24" width="839" height="11" fill="#161b22"/>
+<line x1="0.5" y1="35" x2="839.5" y2="35" stroke="#30363d"/>
+<circle cx="20" cy="18" r="5.5" fill="#ff5f56"/><circle cx="40" cy="18" r="5.5" fill="#ffbd2e"/><circle cx="60" cy="18" r="5.5" fill="#27c93f"/>
+<text x="420" y="22" fill="#8b949e" text-anchor="middle">queue.md · jevs demo</text>
+<rect x="28" y="42" width="112" height="22" rx="4" fill="#9e6a03"/>
+<text x="84" y="57" fill="#ffffff" text-anchor="middle" font-weight="700">RECORDED RUN</text>
+<text x="156" y="57" fill="#c9d1d9">jev-1.13.0 · 2026-09-30 · 15 of 15 requests answered</text>
+<text x="156" y="77" fill="#8b949e">19,754 input tokens · US$0.0008 calculated, not an invoice · synthetic demo app</text>
+<text x="28" y="124" fill="#e6edf3" font-weight="700">1. clampPercent src/percent.ts:1–14 ↔ clampVolume src/volume.ts:1–14</text>
+<rect x="748" y="109" width="64" height="22" rx="11" fill="#1f6feb"/>
+<text x="780" y="124" fill="#ffffff" text-anchor="middle" font-weight="700">P=0.98</text>
+<text x="50" y="144" fill="#79c0ff">clone_same_policy@3.0.0</text>
+<text x="50" y="164" fill="#8b949e">Question: Do the sections labeled pair.a and pair.b implement the same kind of policy…</text>
+<text x="50" y="184" fill="#8b949e">Jev answer: same_policy</text>
+<text x="28" y="222" fill="#e6edf3" font-weight="700">2. importOrders src/importer.ts:7–42</text>
+<rect x="748" y="207" width="64" height="22" rx="11" fill="#1f6feb"/>
+<text x="780" y="222" fill="#ffffff" text-anchor="middle" font-weight="700">P=0.90</text>
+<text x="50" y="242" fill="#79c0ff">function_should_split@1.0.0</text>
+<text x="50" y="262" fill="#8b949e">Question: Is the section labeled focus long or dense enough that a reader must track…</text>
+<text x="50" y="282" fill="#8b949e">Jev answer: split_candidate</text>
+<text x="28" y="320" fill="#e6edf3" font-weight="700">3. importOrders src/importer.ts:7–42</text>
+<rect x="748" y="305" width="64" height="22" rx="11" fill="#1f6feb"/>
+<text x="780" y="320" fill="#ffffff" text-anchor="middle" font-weight="700">P=0.88</text>
+<text x="50" y="340" fill="#79c0ff">function_multiple_responsibilities@1.0.0</text>
+<text x="50" y="360" fill="#8b949e">Question: Does the section labeled focus perform two or more separable responsibilities…</text>
+<text x="50" y="380" fill="#8b949e">Jev answer: multiple</text>
+<text x="28" y="418" fill="#e6edf3" font-weight="700">4. registerUser src/signup.ts:1–27</text>
+<rect x="748" y="403" width="64" height="22" rx="11" fill="#1f6feb"/>
+<text x="780" y="418" fill="#ffffff" text-anchor="middle" font-weight="700">P=0.78</text>
+<text x="50" y="438" fill="#79c0ff">function_multiple_responsibilities@1.0.0</text>
+<text x="50" y="458" fill="#8b949e">Question: Does the section labeled focus perform two or more separable responsibilities…</text>
+<text x="50" y="478" fill="#8b949e">Jev answer: multiple</text>
+<line x1="28" y1="502" x2="812" y2="502" stroke="#30363d"/>
+<text x="28" y="520" fill="#8b949e">Hypotheses to verify before editing, not confirmed bugs. Questions clipped.</text>
+</svg>

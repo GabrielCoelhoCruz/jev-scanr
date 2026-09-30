@@ -238,12 +238,84 @@ test("the npm package ships the tool and its notices, not the evaluation tools o
     "NOTICE.md",
     "README.md",
     "examples/demo-app/src/billing.ts",
+    "examples/demo-app/expected/queue.md",
+    "examples/demo-app/expected/RECEIPT.json",
+    "examples/demo-app/expected/RESULT.json",
   ])
     assert.ok(files.includes(must), must);
   for (const f of files)
     assert.ok(
-      !/^(evals|scripts|test)\//.test(f) &&
-        !f.startsWith("examples/demo-app/expected/"),
+      !/^(evals|scripts|test)\//.test(f),
       `${f} should not be in the package`,
     );
+  assert.deepEqual(
+    files.filter((f) => f.startsWith("examples/demo-app/expected/")).sort(),
+    [
+      "examples/demo-app/expected/RECEIPT.json",
+      "examples/demo-app/expected/RESULT.json",
+      "examples/demo-app/expected/queue.md",
+    ],
+  );
+});
+
+test("the README top states the measured run, offers the no-key demo before the install, and keeps its claims tied to the recording", () => {
+  const readme = read("README.md");
+  const result = JSON.parse(read("examples/demo-app/expected/RESULT.json"));
+  const receipt = JSON.parse(read("examples/demo-app/expected/RECEIPT.json"));
+  assert.equal(receipt.model, "jev-1.13.0");
+  assert.equal(result.inputTokens.toLocaleString("en-US"), "19,754");
+  assert.equal(result.calculatedUSD.toFixed(4), "0.0008");
+  assert.match(
+    readme,
+    /\*\*Measured, one real run\*\* \(`jev-1\.13\.0`, 2026-09-30\): 15 requests answered in 3 seconds, 19,754 input tokens, US\$0\.0008 calculated/,
+  );
+  assert.ok(
+    readme.indexOf("npx github:GabrielCoelhoCruz/jev-scanr demo") <
+      readme.indexOf("## Quickstart"),
+  );
+  assert.ok(
+    readme.indexOf("## Try it without a key") < readme.indexOf("## Quickstart"),
+  );
+  assert.match(
+    readme,
+    /\*\*Jev owns the probabilities; your code owns the policy\.\*\*/,
+  );
+  assert.match(readme, /we did not run them against jev-scanr/);
+  const table = readme
+    .split("## How it compares\n")[1]
+    .split("\n\n")[0]
+    .trim()
+    .split("\n")
+    .map((row) =>
+      row
+        .split("|")
+        .slice(1, -1)
+        .map((c) => c.trim()),
+    );
+  assert.deepEqual(table[0], [
+    "",
+    "ESLint `complexity` / `max-lines`",
+    "`jscpd`",
+    "Ask a general LLM to review",
+    "**jev-scanr**",
+  ]);
+  assert.deepEqual(
+    table.slice(2).map((row) => row[0]),
+    [
+      "Cost",
+      "Reads the whole project",
+      "Explains why an item is ranked",
+      "Thresholds can be checked",
+      "Edits code",
+      "Measured head to head on the same code",
+    ],
+  );
+  assert.deepEqual(table.at(-1).slice(1), [
+    "Not run",
+    "Not run",
+    "Not run",
+    "Not run",
+  ]);
+  assert.match(table[2][4], /US\$0\.0008 measured on the 15-request demo/);
+  assert.match(table[2][4], /US\$0\.174 measured for the 1,273 requests/);
 });

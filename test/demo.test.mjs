@@ -3,6 +3,8 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { buildPlan } from "../src/build-plan.mjs";
+import { recordedRun, demoText } from "../src/demo.mjs";
+import { renderDemoSvg, parseQueue } from "../scripts/render-demo-image.mjs";
 
 const demo = new URL("../examples/demo-app/", import.meta.url).pathname;
 const read = (p) => readFileSync(demo + p, "utf8");
@@ -74,4 +76,43 @@ test("the recorded findings are the seeded functions the default signals ask abo
     [],
   );
   assert.equal(report.provenance, "live");
+});
+
+test("the replay text is the recorded queue between a banner and a footer", () => {
+  const text = demoText();
+  assert.ok(text.includes(read("expected/queue.md").trimEnd()));
+  assert.ok(text.startsWith("RECORDED RUN."));
+  assert.ok(
+    text.endsWith(
+      "Try your own code with a free dry run that sends nothing: jevs scan .",
+    ),
+  );
+});
+
+test("the README image is drawn from the recording and is a PNG of the expected size", () => {
+  const items = parseQueue(recordedRun().queue);
+  assert.deepEqual(
+    items.map((i) => [i.rank, i.signal, i.p, i.answer]),
+    [
+      ["1", "clone_same_policy@3.0.0", "0.98", "same_policy"],
+      ["2", "function_should_split@1.0.0", "0.90", "split_candidate"],
+      ["3", "function_multiple_responsibilities@1.0.0", "0.88", "multiple"],
+      ["4", "function_multiple_responsibilities@1.0.0", "0.78", "multiple"],
+    ],
+  );
+  const root = new URL("../", import.meta.url);
+  assert.equal(
+    readFileSync(new URL("docs/images/demo-queue.svg", root), "utf8"),
+    renderDemoSvg(recordedRun()),
+    "the recording changed: run node scripts/render-demo-image.mjs and rasterize the PNG (docs/RELEASING.md)",
+  );
+  const png = readFileSync(new URL("docs/images/demo-queue.png", root));
+  assert.equal(png.subarray(1, 4).toString(), "PNG");
+  assert.equal(png.readUInt32BE(16), 1680);
+  assert.equal(png.readUInt32BE(20), 1104);
+  assert.ok(png.length < 100_000);
+  assert.match(
+    readFileSync(new URL("README.md", root), "utf8"),
+    /!\[The four-item queue from a recorded run[^\]]*\]\(docs\/images\/demo-queue\.png\)/,
+  );
 });

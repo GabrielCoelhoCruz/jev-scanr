@@ -7,11 +7,40 @@
 
 **Find the functions in your TypeScript/JavaScript project most worth refactoring, ranked by the Jev model.** Read-only: it writes a list, never your code.
 
-- Asks Jev narrow questions per function ("does this do two separable jobs?", "do these two copies implement the same rule?") and sorts the answers.
-- Costs about US$0.015 per 100 functions with the default signals (this repo's `src/`, 113 functions, is estimated at US$0.015); the dry run is free and needs no key.
-- Built for you or your coding agent to verify each item before acting.
+Jev's whole job here is to answer one narrow question about one function, or one pair of similar ones ("do these two copies implement the same rule?", "does this function do two separable jobs?"), with a probability. jev-scanr asks those questions, sorts the answers and writes a queue for you or your coding agent to verify.
+
+**Measured, one real run** (`jev-1.13.0`, 2026-09-30): 15 requests answered in 3 seconds, 19,754 input tokens, US$0.0008 calculated, on the bundled demo app ([recorded run](examples/demo-app/expected/RECORDED-RUN.md)). The free dry run estimates any project before you spend anything.
+
+## Try it without a key
+
+```sh
+npx github:GabrielCoelhoCruz/jev-scanr demo     # replays the recorded run below: no key, no Jev call
+```
+
+The command needs no key and calls no API; npx itself downloads the package from GitHub. Use it exactly as written: the package is not on npm yet, and plain `npx jevs` would run an unrelated package, so never run that (details under [Quickstart](#quickstart)). Once installed, the same replay is `jevs demo`.
+
+![The four-item queue from a recorded run of jev-scanr on the bundled demo app: model jev-1.13.0, P from 0.98 to 0.78, each item with its signal, question and Jev's answer](docs/images/demo-queue.png)
+
+This is `queue.md` from one recorded run on a demo app we wrote with problems put in on purpose, so it shows the output format, **not accuracy**. Every item is a hypothesis from one Jev answer, not a confirmed bug.
 
 > **Alpha, unofficial** (built on TypeSafe's Jev, not affiliated with TypeSafe). In the one independent test so far, 3 of the 7 original questions were useful often enough to keep on by default; the labels came from an LLM, not a person. [What we measured](#what-we-measured).
+
+## How it compares
+
+| | ESLint `complexity` / `max-lines` | `jscpd` | Ask a general LLM to review | **jev-scanr** |
+| --- | --- | --- | --- | --- |
+| Cost | Free, runs locally | Free, runs locally | Per token: depends on the model and how much code you paste (not measured here) | US$0.0008 measured on the 15-request demo ([recorded](examples/demo-app/expected/RECORDED-RUN.md)); US$0.174 measured for the 1,273 requests of the [validation run](evals/results/validation-gate-2026-09-30.md) on two repositories of about 53,000 lines (older prototype code, same questions); the free dry run estimates yours first (about US$0.016 for this repo's `src/`, an estimate) |
+| Reads the whole project | Every file you give it, one file at a time | Every file you give it, across files | Only what you paste or the tool loads, within its context window | Up to 500 files and 12,000 functions per scan, in path order; the dry run lists what it did not read and larger projects go in slices (`--paths`). Each function is judged with bounded context (callers, one hop of imports), not the whole project at once |
+| Explains why an item is ranked | A number against your limit ("complexity 14, limit 10") | The duplicated lines and the duplication percentage | Free text, different on each run | In part: each item shows the narrow question, Jev's answer, its probability and the lines to read first. No prose reason, and the probability is not the chance of a bug |
+| Thresholds can be checked | You pick the number; the result repeats, but nothing says which number is right | Same: you pick token, line and percent limits | No fixed threshold; answers vary between runs | In part: per-signal hit rates against LLM-reviewer labels are published in [`EVIDENCE.md`](EVIDENCE.md) and the 0.7 cut is a display setting you can move offline (`--threshold`). No person has labeled anything, nothing is calibrated, and probabilities moved by more than 0.05 on 3.8% of repeated cells |
+| Edits code | No autofix for these rules | No | Depends on the tool; a chat only suggests | Never: it writes `queue.md`, `report.md` and `report.json` outside your project by default |
+| Measured head to head on the same code | Not run | Not run | Not run | Not run |
+
+The other columns describe how each approach generally works; we did not run them against jev-scanr on the same code. The table compares what each one does, not how often it is right, and it claims no advantage in accuracy. When the cheaper tools are the better choice, [say so](#when-to-use-something-else).
+
+<!-- A measured "vs. a length/complexity baseline" row goes above the "Measured head to head" row once that comparison has run. -->
+
+**Jev owns the probabilities; your code owns the policy.** Code only cuts the project into functions and gathers context. Whether an item exists, and where it sits in the order, comes from Jev's answers alone; which questions are asked (`--signals`), where the display cut sits (`--threshold`) and what to do with an item (verify it first, often change nothing) stay with you and your agent. [`docs/architecture.md`](docs/architecture.md) has the pipeline.
 
 ## Quickstart
 
@@ -57,7 +86,7 @@ A live run writes `queue.md` (start here), `report.md` (counts, cost, per-signal
 
 **A scan reads at most 500 files, in path order, and indexes at most 12,000 functions and packs at most 2,000 units.** The dry run shows this next to the cost (for example `Coverage: read 485 of 3,953 source files (12%)`), lists the directories it did not read, and warns with `NOT INDEXED` or `NOT PACKED` when a cap cut a slice short. For a larger project, scan it in slices: `jevs scan . --paths apps/web/src/components,apps/server`. Units and their context come only from the paths you give, so keep related code together. Each slice is a separate run with its own cost. If your `tsconfig.json` extends a config that lives in a package (Expo, Next and so on), read [`docs/EXTERNAL-CONFIGS.md`](docs/EXTERNAL-CONFIGS.md) first.
 
-The bundled demo app has problems put in on purpose ([`examples/demo-app/`](examples/demo-app/)), so you can see the output without your own code:
+The bundled demo app has problems put in on purpose ([`examples/demo-app/`](examples/demo-app/)), so you can see the output without your own code. `jevs demo` replays the recorded queue with no key and no network. To see what a dry run prints for it:
 
 ```sh
 jevs scan examples/demo-app
