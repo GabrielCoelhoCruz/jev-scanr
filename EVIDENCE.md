@@ -65,10 +65,37 @@ That test measured reranking, and this tool no longer reranks. **The jev-only pi
 
 ## 4. What would change our minds, and what comes next
 
-A signal is on by default only if it passes a written gate ([`CONTRIBUTING.md`](CONTRIBUTING.md)). The seven current defaults passed the _alpha_ gate on one project. The stable gate is stricter, and none of them has passed it yet:
+A signal is on by default only if it passes a written gate ([`CONTRIBUTING.md`](CONTRIBUTING.md)). The seven current defaults passed the _alpha_ gate on one project. The stable gate is stricter, and none of them has passed it with labels from a person:
 
-- **Next experiment (planned, pre-registered):** two new public MIT TypeScript repositories that nobody on this project has used, a random sample above the cut (not the top-5), four cells just below the cut, 50 repeated requests to measure how much P moves, a fresh LLM reviewer, and 30 cards labeled by a person.
-- **Stable release if at least 4 signals reach 50% actionable** on the random above-cut sample with n ≥ 8. **If 2 or fewer do,** the useful part of this work is the evaluation protocol (frozen rules, sealed labels, a blind join), and this scanner becomes its example.
+- **The first run of this experiment** is reported in section 5. It reached 3 default signals, and labels from a person are still missing. **The design was:** two new public MIT TypeScript repositories that nobody on this project has used, a random sample above the cut (not the top-5), four cells just below the cut, 50 repeated requests to measure how much P moves, a fresh LLM reviewer, and 30 cards labeled by a person.
+- **Stable release if at least 4 signals are default** (50% actionable, or 30-50% with the low-precision label) on the random above-cut sample with n ≥ 8. **If 2 or fewer do,** the useful part of this work is the evaluation protocol (frozen rules, sealed labels, a blind join), and this scanner becomes its example.
 - If people agree with the reviewer on fewer than 70% of the human-labeled cards, every number in this file gets a "not human-confirmed" label.
 
 Everything above is reproducible from the questions in `signals/`, the frozen sampling and join rules, and the labels, which we plan to publish with the results.
+
+## 5. Result of the pre-registered independent test (LLM labels only)
+
+Section 4 described this experiment as planned. It has now run on `paulrobello/claude-office` and `reshaped-ui/reshaped`, with the sampling, the join and the gate frozen before any label existed. A fresh Opus reviewer labeled all 145 sampled cells from the cards alone (pass 1, sealed before it had repository access), then again with repository access (pass 2). **No person has labeled anything yet, so every number below is "not human-confirmed".**
+
+Random sample above the 0.7 cut, both repositories pooled, pass 1 (pass 2 differs in one cell, `clone_same_policy` in `reshaped`, and changes no verdict):
+
+| Signal                               | Actionable above cut | Below the cut (4 nearest per repo) | Registered verdict             |
+| ------------------------------------ | -------------------- | ---------------------------------- | ------------------------------ |
+| `clone_same_policy`                  | 12/16 (75%)          | 2/8 (25%)                          | default                        |
+| `function_should_split`              | 6/16 (38%)           | 2/8 (25%)                          | default, low-precision warning |
+| `function_multiple_responsibilities` | 3/8 (38%)            | 2/8 (25%)                          | default, low-precision warning |
+| `internal_duplication`               | 4/16 (25%)           | 1/8 (13%)                          | experimental                   |
+| `magic_policy_literal`               | 3/16 (19%)           | 0/8 (0%)                           | experimental                   |
+| `unused_local_or_parameter`          | 1/9 (11%)            | 2/8 (25%)                          | experimental                   |
+| `deep_nesting`                       | 0 cells              | 2/8 (25%)                          | experimental (n < 8)           |
+| `unreachable_code`                   | 0 cells              | 0/8                                | experimental, outside the gate |
+
+- **Outcome of the registered gate:** 3 of 7 signals passed a gate whose bands include low-precision defaults. Only `clone_same_policy` cleared 50%; `function_should_split` and `function_multiple_responsibilities` are in the 30-50% band. The two repositories disagree on two of the three (`clone_same_policy` is 8/8 in one and 4/8 in the other; `function_should_split` is 5/8 against 1/8). Nothing is human-confirmed. The release rule says stable at 4 or more and pivot at 2 or fewer, and it did not say what happens at exactly 3. **So v0.1 is not declared stable: it stays an alpha preview.** For the alpha, `clone_same_policy` is on by default, `function_should_split` and `function_multiple_responsibilities` are on by default with the low-precision warning, and every other signal is experimental and opt-in. If only signals at 50% or above counted, the count would be 1; we did not read the rule that way, because the registered text calls the 30-50% band "default with a low-precision warning".
+- **Sample sizes are small.** The noise floor 1/sqrt(n) is 25% for n = 16 and 35% for n = 8. Only `clone_same_policy` clears the 50% bar, and its Wilson 95% interval is 57-93% (pass 2: 13/16). `function_multiple_responsibilities` reached n = 8 only on one repository, and `deep_nesting` and `unreachable_code` had no scored cells above the cut.
+- **Repeat variance:** in 9 of 235 repeated cells (3.8%) P moved by more than 0.05, and 18% of the 50 repeated requests had at least one such cell. That is under the registered 20% line, so no range is required.
+- **Agreement with a second LLM:** on the 39 cells both reviewers labeled, HOME-16 pass 1 and the HOME-17 labeler agree on 33 (85%, Cohen's kappa 0.67). Per signal the counts are small (1 to 8 cells), so the per-signal kappas (0.00 to 1.00) are not reliable. All 6 disagreements: HOME-16 said actionable and HOME-17 said no_action on `clone_same_policy` (1) and `function_should_split` (3), and the reverse on `magic_policy_literal` (1) and `internal_duplication` (1).
+- **What this does not show:** two language models agreeing is not the human calibration this project requires (at least 90% agreement with a person). Under `evals/gate.json` (labels must come from a person or a calibrated judge) every signal stays experimental, and the 30 human-labeled cards are still unlabeled. The check "agreement with people under 70% means label everything not human-confirmed" cannot be run without them, so the label applies by default.
+
+**Lesson and fix.** A pre-registered rule needs a written outcome for every count, including the one in the middle. The gate now has one (`evals/gate.json`, `release`: exactly 3 means stay alpha), added before any new labels exist, and the changed rule has a new hash in `CONTRIBUTING.md`. We also fixed a labeling trap: a file in the human-labels format can no longer be loaded as human unless it says `"labelerKind": "human"`, so the second reviewer's LLM labels cannot be counted as a person's.
+
+Inputs are pinned by hash in `handoffs/HOME-7-validation-gate/` (labels, cards, receipt); the private sample key is kept out of the repository and identified only by its hash (`82f2316c...8fd3`).
