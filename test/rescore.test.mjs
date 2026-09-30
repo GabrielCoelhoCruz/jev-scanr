@@ -183,8 +183,11 @@ test("the floor defaults per signal or the cut when the cut is lower, and report
   assert.deepEqual(resolveFloors({ a: 0.7, b: 0.3 }), { a: 0.5, b: 0.3 });
   assert.deepEqual(
     resolveFloors({ function_should_split: 0.6, name_vs_behavior: 0.25 }),
-    { function_should_split: 0.35, name_vs_behavior: 0.25 },
+    { function_should_split: 0.35, name_vs_behavior: 0.2 },
   );
+  assert.deepEqual(resolveFloors({ name_vs_behavior: 0.1 }), {
+    name_vs_behavior: 0.1,
+  });
   assert.deepEqual(resolveFloors({ a: 0.7 }, { a: 0.6 }), { a: 0.6 });
   assert.throws(() => resolveFloors({ a: 0.7 }, { a: 0.8 }), /above its cut/);
   assert.throws(() => resolveFloors({ a: 0.7 }, { b: 0.1 }), /Unknown/);

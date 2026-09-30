@@ -1,0 +1,2817 @@
+{
+  "schema": "real-name-cells/1",
+  "meaning": "Jev's P(name_mismatch) on 400 randomly sampled real functions, with two model labelers' labels. Copied from the real-code evaluation (live run 3); no person labeled anything.",
+  "source": {
+    "repositoryPath": "evals/real/",
+    "pullRequest": "https://github.com/GabrielCoelhoCruz/jev-scanr/pull/15",
+    "commit": "12d4e40cad259858902347cf26a986a0c9f47ded",
+    "sha256": {
+      "units.json": "c6db11f8b002aed9595c8a6fd25f2bbaf20d09e889fcefae2149c204999be741",
+      "labels/claude.jsonl": "b7b1aa623e3151d606d500b408117629de21ed27ff1a87d22b37da589670987b",
+      "labels/gpt.jsonl": "e1829b483ece6e2acbf4f25b38273ace02338d62c2d6aeefbdf0e580cfbaca20",
+      "results/live-3/journal.jsonl": "f72098dd20344e7aa063618b8f78d71a1ccbd1d8410601c05fe6651b217456b7"
+    }
+  },
+  "cells": [
+    {
+      "id": "e4f9506b",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "12dc1a5b",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "83eeb96a",
+      "p": 0.04,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c9348db1",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "994c7fae",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "be1e5baa",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "32257c58",
+      "p": 0.03,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "2c4ddf31",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4cb69ad9",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a727cf22",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5a9bd3d0",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3eb3a7b6",
+      "p": 0.02,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "633f2e1d",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b4d41dcb",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "8f33af01",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "imprecise"
+    },
+    {
+      "id": "b3fc85b7",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9a3a2c72",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "02cf4c44",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a8b6fc06",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ac695b69",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ed65a4bf",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "647efca8",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a4dc2145",
+      "p": 0.02,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "af865bd0",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "0c29bf02",
+      "p": 0.16,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "8fee8223",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "cb13506b",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9efbdf58",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "1057ad4c",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "94aa2296",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9c07f1de",
+      "p": 0.05,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3d2e9fbf",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "bd68b034",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4d2f965e",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "142ddcfa",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "fbc8f26e",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ac81b9dd",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "153f5f8b",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7b2868a4",
+      "p": 0.01,
+      "nameCue": true,
+      "claude": "imprecise",
+      "gpt": "mismatch"
+    },
+    {
+      "id": "e1d47a45",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a36e40f6",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "imprecise",
+      "gpt": "fits"
+    },
+    {
+      "id": "64af2982",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "24308049",
+      "p": 0.06,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "0c2b0014",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "27896552",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3b428e2f",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "058ec24b",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "bbb5909e",
+      "p": 0.07,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "fd875d13",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3e7a5a76",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4e860538",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c6a1fe84",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "50f78049",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "fb00178e",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "2fdaf623",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "imprecise"
+    },
+    {
+      "id": "0c70773f",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "0529a23a",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "060d2474",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "8e77a73e",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f5652b6a",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "84f81bf7",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "55edb94f",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c71873ee",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "066ef27d",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c9d49464",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f1ed8080",
+      "p": 0.28,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "0dd75d00",
+      "p": 0.01,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "e6418455",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c30aee7b",
+      "p": 0.01,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "2182ff09",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3f045f2d",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9631adfa",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "912ecf0d",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "2eb2ad13",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "fb1d8cfc",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7c1151cf",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7e29374a",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "28a14e8f",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f328d895",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a839259b",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "76e03ae1",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "694caa53",
+      "p": 0.07,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "409e0ef1",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "cd6d6491",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "feca2e90",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ca90cd04",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ddfb6b59",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "0679d18a",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "0614767d",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "0dae9bb2",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b08ef3bd",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "04e09f1e",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "746a16c5",
+      "p": 0.04,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5d4543bd",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "61dfa51e",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4168d383",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9f688182",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4264dc1e",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9136de88",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "932a8af5",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5824b1bb",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f8b3ae32",
+      "p": 0.2,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "mismatch"
+    },
+    {
+      "id": "bf3ba91b",
+      "p": 0.3,
+      "nameCue": true,
+      "claude": "imprecise",
+      "gpt": "mismatch"
+    },
+    {
+      "id": "1da088d8",
+      "p": 0.35,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3ced9e7a",
+      "p": 0.04,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ff530819",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4950531f",
+      "p": 0.04,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "63d8ca38",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "2cda45b3",
+      "p": 0.06,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f3dd36d1",
+      "p": 0.09,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "d957cb4d",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "406f1457",
+      "p": 0.07,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3b728bf2",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "621f44f2",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a3c33dfa",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a426884f",
+      "p": 0.01,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "dbce32d0",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3e4a6c61",
+      "p": 0.23,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "90d84fcd",
+      "p": 0.12,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "imprecise"
+    },
+    {
+      "id": "760f1d5f",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "66df2ae5",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "e2ae9e67",
+      "p": 0.37,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "70de33ae",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "14097ad0",
+      "p": 0.21,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "99d63932",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f225bf75",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "d17f50c5",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9f9930ed",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "2bf0b5df",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f0a486e2",
+      "p": 0.13,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "2f9b8bff",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "50fa11d7",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "580986be",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "25681dbd",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "cce72350",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b97da96a",
+      "p": 0.01,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "756f6993",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f5c20874",
+      "p": 0.46,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "d9bc9207",
+      "p": 0.11,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ad36cba3",
+      "p": 0.12,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "776eb827",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "47b10762",
+      "p": 0.1,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "359d1b29",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7e8ae8c8",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a0fcacc0",
+      "p": 0.14,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3fea087a",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7ffd85e2",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "caf7890a",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "fa670092",
+      "p": 0.04,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6d26e108",
+      "p": 0.04,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "cead198a",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "1c62a733",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "02442712",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a819d72f",
+      "p": 0.32,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "027bb789",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "97d2ba87",
+      "p": 0.01,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "cc6c39dd",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9363abc9",
+      "p": 0.08,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9cd34a30",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "710374fd",
+      "p": 0.02,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "77b82e3d",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "eb31b4db",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "05c1bc0a",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "065a0d8a",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b4f19afc",
+      "p": 0.01,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "93192005",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "488464c2",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "73bdd9be",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "dcf0cd51",
+      "p": 0.5,
+      "nameCue": false,
+      "claude": "imprecise",
+      "gpt": "imprecise"
+    },
+    {
+      "id": "355cb678",
+      "p": 0.01,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "fc9007e7",
+      "p": 0.04,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6273ca5e",
+      "p": 0.11,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "mismatch"
+    },
+    {
+      "id": "07f86c5b",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "13119b99",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4a21b93e",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7e345d86",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "58a50a01",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7ef75baf",
+      "p": 0.04,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "90952d66",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ea0af5f1",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6806c7a4",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "37422431",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "36bb0ebd",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b18dd3c7",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5f8d5cb9",
+      "p": 0.29,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "69026f8e",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a676811c",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3b963ab1",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6aeac473",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "76b2a816",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "d6e7d1a6",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "76f02e49",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4d063744",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "cef575df",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b2885423",
+      "p": 0.07,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "33850fe3",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f6e91c60",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "505011aa",
+      "p": 0.03,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4c1a19fb",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5edb4550",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "991a84e2",
+      "p": 0.25,
+      "nameCue": false,
+      "claude": "imprecise",
+      "gpt": "fits"
+    },
+    {
+      "id": "fd19491f",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "bd0a70d6",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "imprecise",
+      "gpt": "mismatch"
+    },
+    {
+      "id": "ff3d7070",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "84293547",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a5f9ac1c",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ceaba061",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4fa9149e",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f079904e",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "da5325e1",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "80c36c91",
+      "p": 0.05,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "66e04c75",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "e9f78cc5",
+      "p": 0.04,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "740ebd54",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "468040b3",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "dac09623",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "fe186d67",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "d98d12ef",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "imprecise"
+    },
+    {
+      "id": "c0dddd95",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "65da6497",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5c8adef3",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3abdd0e2",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f1e5f4b8",
+      "p": 0.31,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9a7fc0db",
+      "p": 0.33,
+      "nameCue": false,
+      "claude": "imprecise",
+      "gpt": "imprecise"
+    },
+    {
+      "id": "da536cc7",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f6e71812",
+      "p": 0.6,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9d65e804",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5ccacb7c",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "2b72fe7a",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "dc7c221e",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ebf72600",
+      "p": 0.08,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "1eb35c1b",
+      "p": 0.04,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "dc11fb1a",
+      "p": 0.07,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "84a3417f",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "cf37bc32",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3382c0f2",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "327fc3b2",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4a505ee6",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4aaf62ae",
+      "p": 0.01,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "64f5e948",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "89b7082c",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c3b0d86e",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f410b38d",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7f23c745",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "99f8b2eb",
+      "p": 0.09,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a63fc654",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b9f3eb3b",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6e6ce77a",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "86b17961",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "50cbcd54",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "0210e9d5",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "d5eb16ba",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f9a75a72",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "1cfcc62b",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "80d798f8",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "60f1d72a",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b18d1325",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6d1eb2f0",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7cbc3911",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "208a6c1b",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9dffb471",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7b9f83e9",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c50e3856",
+      "p": 0.08,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "23c51343",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "bb7e1c4d",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b5d0c6c2",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "0a6671fd",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "56ad13ed",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "imprecise"
+    },
+    {
+      "id": "2f6a785b",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "367b536f",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "743ee753",
+      "p": 0.06,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "0736ee7a",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9698d6f2",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "365b7429",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "693005cf",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "d87bc520",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6d500915",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "caa43b4e",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "d32a9d0a",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "cdae08a4",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ba028ff4",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "ea31e02d",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "18f06de5",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "86d09a95",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "732a84ed",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "1b363536",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9a3b7455",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "561a339d",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "0eaf510d",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "92f779f2",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3dc6d31d",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "78a503e4",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "24946d01",
+      "p": 0.01,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b5a5c369",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "1005b062",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "44e17b60",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "baa298f9",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "70caa8fe",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5563d35a",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9472d826",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "713d7f33",
+      "p": 0.04,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f058de06",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "2b1065d8",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "694dc117",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5ce74c16",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "85dd683f",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c2e7cb96",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "79b73866",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6ff8a648",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7e187e70",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "fb31e881",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a4dd1561",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "05e806a0",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6ea3ffab",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "74c2e121",
+      "p": 0.06,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6feab50a",
+      "p": 0.15,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "8282a487",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7b1278dd",
+      "p": 0.11,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "1b3532f4",
+      "p": 0.07,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "57168bb0",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "8693c38f",
+      "p": 0.01,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "1f90cb94",
+      "p": 0.08,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4b56834d",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "1b6d2706",
+      "p": 0.12,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f673b9d9",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9ebf707f",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "e0292f42",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "cbf7fbd7",
+      "p": 0.05,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "41a323f4",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "089beaa0",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "e9c1d523",
+      "p": 0.05,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "711f1639",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "e228d5c9",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "e4000bbf",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "da00baea",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c38013a9",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "edeb213b",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "8381ecbb",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a7b1d1bc",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b956f6a6",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "8b9a8e2f",
+      "p": 0.05,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c6f6888c",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6a270709",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c48acaee",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "294c1a75",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "47bb5b86",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9428f4e3",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3742473b",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9e7646ef",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "86ebf1d6",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "777e7c9b",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "imprecise",
+      "gpt": "fits"
+    },
+    {
+      "id": "8d230ea0",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3b48f40c",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "8d965f11",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "834459e9",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9d7c9318",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "088bcbcd",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "40243e83",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a5f40161",
+      "p": 0.02,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "4c9d7d79",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f9e608cd",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "32fbf81d",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "f2c4c9ae",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5aa9998d",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "fb497511",
+      "p": 0.03,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "35dd83b3",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "90c8eebd",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "10163c25",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b1208e56",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "72373d82",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "bbe356cb",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "12f2e12f",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "3c3819b7",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "8f240773",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c6ca56ee",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c00f94bf",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "b8135e86",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "041aa536",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "e4c55578",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "033345fd",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c372f6bc",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "bdc799af",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5c93b873",
+      "p": 0.09,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "136f4292",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "c64187ae",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "5c1d5f0b",
+      "p": 0.02,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6247ddd2",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "76e181a0",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "322371a4",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "1955cac9",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "9d02caac",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "be3d446a",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "00002ce4",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "7e6a275a",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "753394c2",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "8c40dd8e",
+      "p": 0,
+      "nameCue": true,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "a784b558",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "2a6e1f22",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    },
+    {
+      "id": "6dca5233",
+      "p": 0.01,
+      "nameCue": false,
+      "claude": "imprecise",
+      "gpt": "fits"
+    },
+    {
+      "id": "bc9a7f1f",
+      "p": 0,
+      "nameCue": false,
+      "claude": "fits",
+      "gpt": "fits"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 import test from "node:test";
+import { spawnSync } from "node:child_process";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { buildPlan } from "../src/build-plan.mjs";
@@ -60,10 +61,25 @@ test("the cue is true only when no word of the name appears in the body", (t) =>
   });
 });
 
-test("name_vs_behavior asks only the functions whose name words are absent from the body", (t) => {
+test("without --name-cue name_vs_behavior asks every function", (t) => {
   const plan = buildPlan(project(t, { "a.ts": SOURCE }), {
     signals: ["name_vs_behavior"],
   });
+  assert.equal(plan.requests.length, 3);
+  assert.equal(Object.hasOwn(plan.coverage, "unitsSkippedByNameCue"), false);
+  assert.equal(Object.hasOwn(plan.retrieval, "nameCue"), false);
+  assert.equal(
+    plan.unitManifest.every((u) => !("nameCueAbsent" in u)),
+    true,
+  );
+});
+
+test("with the name cue on, name_vs_behavior asks only the functions whose name words are absent from the body", (t) => {
+  const plan = buildPlan(project(t, { "a.ts": SOURCE }), {
+    signals: ["name_vs_behavior"],
+    retrieval: { nameCue: true },
+  });
+  assert.equal(plan.retrieval.nameCue, true);
   assert.deepEqual(
     plan.requests.map((r) => r.request.state.members[0].name).sort(),
     ["invoiceTotal", "parseDuration"],
@@ -83,6 +99,7 @@ test("the cue filters only its own signal: the default signals still ask every f
   const root = project(t, { "a.ts": SOURCE });
   const plan = buildPlan(root, {
     signals: [...defaultSignalIds, "name_vs_behavior"],
+    retrieval: { nameCue: true },
   });
   assert.equal(plan.requests.length, 3);
   assert.deepEqual(
@@ -92,11 +109,11 @@ test("the cue filters only its own signal: the default signals still ask every f
     [true, false, true],
   );
   assert.equal(
-    Object.hasOwn(
-      buildPlan(root, { signals: defaultSignalIds }).coverage,
-      "unitsSkippedByNameCue",
-    ),
-    false,
+    buildPlan(root, {
+      signals: defaultSignalIds,
+      retrieval: { nameCue: true },
+    }).requests.length,
+    3,
   );
 });
 
@@ -144,4 +161,24 @@ test("a plan written before retrieval recorded its sources still verifies and re
   delete body.coverage.lowOverlap;
   const old = { ...body, scannerVersion: "0.4.0-alpha" };
   assert.equal(verifyPlan({ ...old, planHash: hash(old) }).planHash, hash(old));
+});
+
+test("--name-cue is a scan option and narrows the dry run", (t) => {
+  const root = project(t, { "a.ts": SOURCE }),
+    cwd = project(t);
+  const requests = (...args) =>
+    spawnSync(
+      process.execPath,
+      [
+        new URL("../src/cli.mjs", import.meta.url).pathname,
+        "scan",
+        root,
+        "--signals",
+        "name_vs_behavior",
+        ...args,
+      ],
+      { cwd, env: { PATH: process.env.PATH }, encoding: "utf8" },
+    ).stdout.match(/^Requests: (\d+)/m)[1];
+  assert.equal(requests(), "3");
+  assert.equal(requests("--name-cue"), "2");
 });

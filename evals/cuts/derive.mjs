@@ -18,11 +18,12 @@ const text = (path) => readFileSync(new URL(path, import.meta.url), "utf8");
 export const RULE = {
   default: { cut: 70, floor: 50 },
   cutGrid: [50, 55, 60, 65, 70],
-  floorGrid: [30, 35, 40, 45, 50, 55, 60, 65, 70],
+  floorGrid: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70],
   cutPrimaryFalseAlarm: 0.05,
   cutHardenedFalseAlarm: 0.1,
   floorPrimaryFalseAlarm: 0.1,
   realCellMinActionable: 0.3,
+  realFloorMinActionable: 0.3,
 };
 
 const SIGNALS = {
@@ -68,6 +69,19 @@ function scoredUnits() {
   return rows;
 }
 
+function realCells(baseline, id) {
+  if (id !== "name_vs_behavior")
+    return baseline
+      .filter((c) => c.signalId === id)
+      .map((c) => ({ p: c.p, positive: c.labels.pass1 === "actionable" }));
+  return read("real-name-cells.json").cells.map((c) => ({
+    p: c.p,
+    positive: [c.claude, c.gpt].some(
+      (l) => l === "mismatch" || l === "imprecise",
+    ),
+  }));
+}
+
 function atOrAbove(rows, hundredths) {
   const k = rows.filter((r) => r.p >= hundredths / 100 - 1e-9).length;
   return {
@@ -90,7 +104,7 @@ export function derive() {
       positives = rows.filter(
         (r) => spec.positives.includes(r.set) && r.label === 1,
       ),
-      real = cells.filter((c) => c.signalId === id);
+      real = realCells(cells, id);
     const table = RULE.floorGrid.map((g) => ({
       at: g / 100,
       positivesAtOrAbove: atOrAbove(positives, g),
@@ -101,9 +115,8 @@ export function derive() {
       labeledCellsAtOrAbove: real.length
         ? {
             n: real.filter((c) => c.p >= g / 100 - 1e-9).length,
-            actionable: real.filter(
-              (c) => c.p >= g / 100 - 1e-9 && c.labels.pass1 === "actionable",
-            ).length,
+            actionable: real.filter((c) => c.p >= g / 100 - 1e-9 && c.positive)
+              .length,
           }
         : null,
     }));
@@ -122,10 +135,47 @@ export function derive() {
       RULE.floorGrid.find(
         (g) =>
           g <= cut &&
-          row(g).controlsAtOrAbove.rate <= RULE.floorPrimaryFalseAlarm,
+          row(g).controlsAtOrAbove.rate <= RULE.floorPrimaryFalseAlarm &&
+          (!real.length ||
+            (row(g).labeledCellsAtOrAbove.n > 0 &&
+              row(g).labeledCellsAtOrAbove.actionable /
+                row(g).labeledCellsAtOrAbove.n >=
+                RULE.realFloorMinActionable)),
       ) ?? RULE.default.floor;
     perSignal[id] = { cut: cut / 100, floor: Math.min(floor, cut) / 100 };
+    const sample = read("real-name-cells.json").cells;
+    const cueSummary = () => {
+      const flagged = (c) =>
+        [c.claude, c.gpt].some((l) => l === "mismatch" || l === "imprecise");
+      const strict = (c) => [c.claude, c.gpt].some((l) => l === "mismatch");
+      const count = (list, from) => {
+        const at = list.filter((c) => c.p >= from - 1e-9);
+        return {
+          n: at.length,
+          flagged: at.filter(flagged).length,
+          strict: at.filter(strict).length,
+        };
+      };
+      const through = sample.filter((c) => c.nameCue);
+      return {
+        note: "Real-sample cells, every function asked. nameCue: only the functions the name-word cue lets through.",
+        allFlagged: sample.filter(flagged).length,
+        allStrict: sample.filter(strict).length,
+        cells: { all: sample.length, nameCue: through.length },
+        flaggedThroughCue: through.filter(flagged).length,
+        strictThroughCue: through.filter(strict).length,
+        atFloor: {
+          all: count(sample, perSignal[id].floor),
+          nameCue: count(through, perSignal[id].floor),
+        },
+        atCut: {
+          all: count(sample, perSignal[id].cut),
+          nameCue: count(through, perSignal[id].cut),
+        },
+      };
+    };
     signals[id] = {
+      ...(id === "name_vs_behavior" ? { realSample: cueSummary() } : {}),
       positiveSets: spec.positives,
       primaryControls: spec.primary.set,
       hardenedControls: spec.hardened?.set ?? null,

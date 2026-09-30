@@ -10,7 +10,7 @@ import { LIMITS, safeRelative } from "./snapshot.mjs";
 export { catalog };
 export const UNIT_KINDS = ["function", "function_chunk", "clone_pair"];
 export const appliesToUnit = (signal, nameCueAbsent) =>
-  !signal.unitFilter || nameCueAbsent === true;
+  !signal.unitFilter || nameCueAbsent !== false;
 export function packSignals(pack) {
   return catalog.signals.filter(
     (s) =>

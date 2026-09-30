@@ -83,6 +83,9 @@ Options for scan
   --low-overlap N     ask about up to N pairs found by the second source, which proposes functions that share the
                       names they call and read, and their string literals, but fewer than 45% of their token
                       sequences (default 50, 0 turns the source off). They go through clone_same_policy
+  --name-cue          name_vs_behavior only: ask just the functions whose name words are all absent from the body
+                      (about 11% to 15% of them). Off by default: on a random real sample it skipped 13 of the 16
+                      functions that two model readers called imprecise or mismatched
   --include-tests     also ask about test files (off by default). Test files that call or import an asked function are
                       still sent as context; add --exclude to keep them out
   --external-configs FILE
@@ -121,6 +124,7 @@ const options = {
   signals: { type: "string" },
   "include-tests": { type: "boolean" },
   "low-overlap": { type: "string" },
+  "name-cue": { type: "boolean" },
   "external-configs": { type: "string" },
   "list-files": { type: "boolean" },
   threshold: { type: "string" },
@@ -573,6 +577,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
         : [],
       retrieval: {
         includeTests: !!values["include-tests"],
+        nameCue: !!values["name-cue"],
         ...(values["low-overlap"] === undefined
           ? {}
           : { lowOverlap: { cap: lowOverlapCap(values["low-overlap"]) } }),

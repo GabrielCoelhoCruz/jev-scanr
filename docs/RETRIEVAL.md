@@ -30,17 +30,18 @@ What this does not show. The copies are the same function twice, rewritten by a 
 
 ## Functions for `name_vs_behavior`: name words absent from the body
 
-`name_vs_behavior` is an opt-in signal (`--signals name_vs_behavior`, or `--signals` with the defaults plus it). Most names fit their functions, so asking about every function spends requests on the easy case. The catalog entry sets `unitFilter: "name_words_absent_from_body"`, and the planner asks only functions for which none of the words of the name appears in the body.
+`name_vs_behavior` is an opt-in signal (`--signals name_vs_behavior`, or `--signals` with the defaults plus it). Most names fit their functions, so asking about every function spends requests on the easy case. The catalog entry declares `unitFilter: "name_words_absent_from_body"`. With `--name-cue` the planner asks only functions for which none of the words of the name appears in the body. **Without `--name-cue` it asks every function**, which is the default, because of the measurement under Bias below.
 
 - **The cue.** The name is split into words at case changes and separators, words under 3 letters and a short stop list are dropped, plural endings are trimmed. The body is the function's source without its own name. The cue is true when no word of the name appears among the body's words, in either form. Functions with no usable name words are skipped. The same code built the contrast set C.
-- **Scope.** The filter applies to this signal only. The default signals still ask about every function, in the same request. `plan.json` records `nameCueAbsent` per unit and `coverage.unitsSkippedByNameCue`.
+- **Scope.** The filter applies to this signal only, and only with `--name-cue`. The default signals still ask about every function, in the same request. `plan.json` records `nameCueAbsent` per unit and `coverage.unitsSkippedByNameCue`.
 
 ### Bias
 
 - **A correct name can be absent from the body.** `invoiceTotal` for a function that sums `rows` passes the cue and fits. Jev, not the cue, says so.
 - **A wrong name can be present in the body.** A function called `validateUser` that only logs is hidden if its body contains `user` or `validate`, because one shared word is enough to stop the cue. These are missed.
 - **A rename to an unrelated name still passes almost always.** This is the case the cue exists for, and in the pinned repositories it let through 92% of functions renamed to an unrelated name (1,101 of 1,200).
-- **Selectivity.** It lets through 15% of named functions (931 of 6,132; 12% to 22% per repository).
+- **Selectivity.** With `--name-cue` it lets through 15% of named functions (931 of 6,132; 12% to 22% per repository).
+- **On a random real sample the cue skipped most of what readers flagged.** Of 400 randomly sampled functions, the cue lets 45 through (11%). Two model labelers, reading the same 400, called 16 functions imprecise or mismatched. Only 3 of those 16 pass the cue, and 3 of the 5 `mismatch` ones. The functions at P 0.2 or above number 15 with no cue (5 flagged) and 6 with it (1 flagged). The cost of asking all 400 was US$0.02, so the cue saves little money and loses most of the flagged functions. That is why it is off unless you ask for it. Numbers: `evals/cuts/result.json` (`signals.name_vs_behavior.realSample`). No person labeled these functions.
 - **Real mismatches are rare.** In a fair sample of ordinary functions, two blind labelers judged a mismatch in about 1% of them (a later fair-sample check by the project's maintainers, not reproduced in this repository), so most of what passes the cue will be answered `name_fits`.
 
 ### Validated offline, no Jev call

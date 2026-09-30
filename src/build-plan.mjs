@@ -31,7 +31,8 @@ export function buildPlan(root, options = {}) {
   const generated = formUnits(index, {
     includeTests: !!options.retrieval?.includeTests,
     lowOverlap: options.retrieval?.lowOverlap,
-    nameCues: catalog.signals.some((s) => s.unitFilter),
+    nameCues:
+      !!options.retrieval?.nameCue && catalog.signals.some((s) => s.unitFilter),
     kinds: UNIT_ORDER.filter((kind) =>
       catalog.signals.some((s) => s.kinds.includes(kind)),
     ),
@@ -275,7 +276,10 @@ export function buildPlan(root, options = {}) {
     limits,
     excluded: snapshot.excluded,
     scope: { paths: snapshot.paths },
-    retrieval: generated.options,
+    retrieval: {
+      ...generated.options,
+      ...(options.retrieval?.nameCue ? { nameCue: true } : {}),
+    },
     configurationReading:
       "Bounded JSONC config data and proven static bindings; never require/eval target config",
     snapshot: { fingerprint: hash(snapshot.files), atomic: false },
@@ -287,7 +291,7 @@ export function buildPlan(root, options = {}) {
       parseAndIndexOmissions: index.errors,
       generatorOmissions: omitted,
       unitsNotPacked: manifest.filter((m) => m.disposition !== "packed").length,
-      ...(catalog.signals.some((s) => s.unitFilter)
+      ...(options.retrieval?.nameCue
         ? { unitsSkippedByNameCue: filteredByCue }
         : {}),
       splits,
