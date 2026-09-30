@@ -16,6 +16,8 @@ Runtime dependencies are installed, not vendored, and pinned exactly in `package
 
 `examples/demo-app/` is synthetic code written for this project. Its `expected/` directory is one real recorded run on it. `evals/results/` shows a few paths, one 5-line snippet and measured results from a scan of the author's own application (https://github.com/GabrielCoelhoCruz/daily-tracker), which is public, and line ranges (no copied source) for candidates in two other public MIT repositories, linked at pinned commits: https://github.com/pingdotgg/t3code and https://github.com/can1357/oh-my-pi. `signals/` records numbers from that run. No third-party application corpus is bundled.
 
+`evals/real/` samples functions from the same four repositories (MIT, same pinned commits) and stores paths, ranges and hashes only.
+
 `evals/contrast/` builds test units from functions in reshaped-ui/reshaped, paulrobello/claude-office, pingdotgg/t3code and can1357/oh-my-pi (all MIT), at the commits pinned in `evals/contrast/README.md`. The committed `units.json` holds paths, ranges, hashes and numbers, not their source.
 
 ## Apache-2.0 material

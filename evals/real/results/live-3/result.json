@@ -1,0 +1,549 @@
+{
+  "schema": "real-result/1",
+  "labelers": ["claude", "gpt"],
+  "cut": 0.7,
+  "resamples": 2000,
+  "seed": 20260930,
+  "scored": 400,
+  "units": 400,
+  "alertRate": {
+    "cut": 0.7,
+    "flagged": 0
+  },
+  "agreement": {
+    "items": 400,
+    "rawAgreement4": 0.965,
+    "rawAgreement3": 0.9875,
+    "kappa4": 0.31947988820026724,
+    "kappa3": 0,
+    "mismatchByFirst": 0,
+    "mismatchBySecond": 5,
+    "mismatchByBoth": 0,
+    "cannotTellByEither": 0,
+    "confusion": {
+      "fits|fits": 384,
+      "fits|imprecise": 5,
+      "imprecise|imprecise": 2,
+      "imprecise|fits": 4,
+      "fits|mismatch": 2,
+      "imprecise|mismatch": 3
+    }
+  },
+  "views": {
+    "agreement_only": {
+      "primary": true,
+      "units": 395,
+      "positives": 0,
+      "negatives": 395,
+      "prevalence": 0,
+      "underpowered": true,
+      "jev": {
+        "auc": null,
+        "lo": null,
+        "hi": null
+      },
+      "heuristics": {
+        "lines": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        },
+        "statements": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        },
+        "cyclomatic": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        },
+        "params": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        },
+        "tokens": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        },
+        "nameMissing": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        }
+      },
+      "diff": {
+        "lines": {
+          "value": null,
+          "lo": null,
+          "hi": null
+        },
+        "nameMissing": {
+          "value": null,
+          "lo": null,
+          "hi": null
+        }
+      },
+      "atCut": {
+        "cut": 0.7,
+        "flagged": 0,
+        "truePositives": 0,
+        "precision": null,
+        "precisionLo": null,
+        "precisionHi": null,
+        "sameCountByLines": null,
+        "sameCountByNameMissing": null
+      },
+      "separates": false,
+      "ahead": {
+        "lines": false,
+        "nameMissing": false
+      },
+      "behind": {
+        "lines": false,
+        "nameMissing": false
+      }
+    },
+    "first_labeler": {
+      "primary": true,
+      "units": 400,
+      "positives": 0,
+      "negatives": 400,
+      "prevalence": 0,
+      "underpowered": true,
+      "jev": {
+        "auc": null,
+        "lo": null,
+        "hi": null
+      },
+      "heuristics": {
+        "lines": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        },
+        "statements": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        },
+        "cyclomatic": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        },
+        "params": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        },
+        "tokens": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        },
+        "nameMissing": {
+          "auc": null,
+          "lo": null,
+          "hi": null
+        }
+      },
+      "diff": {
+        "lines": {
+          "value": null,
+          "lo": null,
+          "hi": null
+        },
+        "nameMissing": {
+          "value": null,
+          "lo": null,
+          "hi": null
+        }
+      },
+      "atCut": {
+        "cut": 0.7,
+        "flagged": 0,
+        "truePositives": 0,
+        "precision": null,
+        "precisionLo": null,
+        "precisionHi": null,
+        "sameCountByLines": null,
+        "sameCountByNameMissing": null
+      },
+      "separates": false,
+      "ahead": {
+        "lines": false,
+        "nameMissing": false
+      },
+      "behind": {
+        "lines": false,
+        "nameMissing": false
+      }
+    },
+    "second_labeler": {
+      "primary": true,
+      "units": 400,
+      "positives": 5,
+      "negatives": 395,
+      "prevalence": 0.0125,
+      "underpowered": true,
+      "jev": {
+        "auc": 0.8131645569620253,
+        "lo": 0.5952380952380952,
+        "hi": 0.9774436090225563
+      },
+      "heuristics": {
+        "lines": {
+          "auc": 0.28607594936708863,
+          "lo": 0.10363790186125212,
+          "hi": 0.4870956015994184
+        },
+        "statements": {
+          "auc": 0.289873417721519,
+          "lo": 0.05778894472361809,
+          "hi": 0.6404399323181049
+        },
+        "cyclomatic": {
+          "auc": 0.25924050632911394,
+          "lo": 0.06979695431472081,
+          "hi": 0.6272040302267002
+        },
+        "params": {
+          "auc": 0.5012658227848101,
+          "lo": 0.3593350383631714,
+          "hi": 0.7808564231738035
+        },
+        "tokens": {
+          "auc": 0.23518987341772152,
+          "lo": 0.06218274111675127,
+          "hi": 0.5012594458438288
+        },
+        "nameMissing": {
+          "auc": 0.850886075949367,
+          "lo": 0.6859781696053736,
+          "hi": 0.9543147208121827
+        }
+      },
+      "diff": {
+        "lines": {
+          "value": 0.5270886075949366,
+          "lo": 0.25726010101010105,
+          "hi": 0.8306760204081632
+        },
+        "nameMissing": {
+          "value": -0.03772151898734177,
+          "lo": -0.2304785894206549,
+          "hi": 0.08455696202531637
+        }
+      },
+      "atCut": {
+        "cut": 0.7,
+        "flagged": 0,
+        "truePositives": 0,
+        "precision": null,
+        "precisionLo": null,
+        "precisionHi": null,
+        "sameCountByLines": null,
+        "sameCountByNameMissing": null
+      },
+      "separates": false,
+      "ahead": {
+        "lines": false,
+        "nameMissing": false
+      },
+      "behind": {
+        "lines": false,
+        "nameMissing": false
+      }
+    },
+    "first_labeler_lenient": {
+      "primary": false,
+      "units": 400,
+      "positives": 9,
+      "negatives": 391,
+      "prevalence": 0.0225,
+      "underpowered": true,
+      "jev": {
+        "auc": 0.7938334754191532,
+        "lo": 0.663510101010101,
+        "hi": 0.9288411846551381
+      },
+      "heuristics": {
+        "lines": {
+          "auc": 0.4057971014492754,
+          "lo": 0.26026899309342055,
+          "hi": 0.5517993456924755
+        },
+        "statements": {
+          "auc": 0.4430235862460926,
+          "lo": 0.21757419957934096,
+          "hi": 0.6710287168302436
+        },
+        "cyclomatic": {
+          "auc": 0.42100028417163965,
+          "lo": 0.18718112244897958,
+          "hi": 0.6558798646362098
+        },
+        "params": {
+          "auc": 0.6652458084683148,
+          "lo": 0.4788510101010101,
+          "hi": 0.8482370047255543
+        },
+        "tokens": {
+          "auc": 0.3610400682011935,
+          "lo": 0.14962121212121213,
+          "hi": 0.5744529695936346
+        },
+        "nameMissing": {
+          "auc": 0.5865302642796248,
+          "lo": 0.3900255754475703,
+          "hi": 0.7746835443037975
+        }
+      },
+      "diff": {
+        "lines": {
+          "value": 0.3880363739698778,
+          "lo": 0.16846153846153844,
+          "hi": 0.6165030897855326
+        },
+        "nameMissing": {
+          "value": 0.20730321113952832,
+          "lo": -0.03156887755102045,
+          "hi": 0.4701776649746192
+        }
+      },
+      "atCut": {
+        "cut": 0.7,
+        "flagged": 0,
+        "truePositives": 0,
+        "precision": null,
+        "precisionLo": null,
+        "precisionHi": null,
+        "sameCountByLines": null,
+        "sameCountByNameMissing": null
+      },
+      "separates": false,
+      "ahead": {
+        "lines": false,
+        "nameMissing": false
+      },
+      "behind": {
+        "lines": false,
+        "nameMissing": false
+      }
+    },
+    "second_labeler_lenient": {
+      "primary": false,
+      "units": 400,
+      "positives": 12,
+      "negatives": 388,
+      "prevalence": 0.03,
+      "underpowered": true,
+      "jev": {
+        "auc": 0.7530068728522337,
+        "lo": 0.6096203538064003,
+        "hi": 0.8987179487179487
+      },
+      "heuristics": {
+        "lines": {
+          "auc": 0.32957474226804123,
+          "lo": 0.19518982309679983,
+          "hi": 0.46591134963227987
+        },
+        "statements": {
+          "auc": 0.4012027491408935,
+          "lo": 0.2230548469387755,
+          "hi": 0.5905086672350099
+        },
+        "cyclomatic": {
+          "auc": 0.39980670103092786,
+          "lo": 0.2360959651035987,
+          "hi": 0.5654145077720207
+        },
+        "params": {
+          "auc": 0.5531572164948454,
+          "lo": 0.3885859687386405,
+          "hi": 0.7165225519981304
+        },
+        "tokens": {
+          "auc": 0.3126073883161512,
+          "lo": 0.15378006872852235,
+          "hi": 0.4863064396743153
+        },
+        "nameMissing": {
+          "auc": 0.586877147766323,
+          "lo": 0.4117948717948718,
+          "hi": 0.7578257191201354
+        }
+      },
+      "diff": {
+        "lines": {
+          "value": 0.42343213058419243,
+          "lo": 0.23969072164948452,
+          "hi": 0.6368593238822247
+        },
+        "nameMissing": {
+          "value": 0.16612972508591062,
+          "lo": -0.010905125408942173,
+          "hi": 0.3733348913297499
+        }
+      },
+      "atCut": {
+        "cut": 0.7,
+        "flagged": 0,
+        "truePositives": 0,
+        "precision": null,
+        "precisionLo": null,
+        "precisionHi": null,
+        "sameCountByLines": null,
+        "sameCountByNameMissing": null
+      },
+      "separates": false,
+      "ahead": {
+        "lines": false,
+        "nameMissing": false
+      },
+      "behind": {
+        "lines": false,
+        "nameMissing": false
+      }
+    }
+  },
+  "descriptive": {
+    "note": "Not part of the conclusion. Flagged: units at or above the cut. Labeled: units either labeler called mismatch or imprecise. Names only, from public repositories.",
+    "flagged": [],
+    "labeled": [
+      {
+        "id": "dcf0cd51",
+        "name": "transformDefinition",
+        "lines": 28,
+        "p": 0.5,
+        "claude": "imprecise",
+        "gpt": "imprecise"
+      },
+      {
+        "id": "9a7fc0db",
+        "name": "isPermissionDenied",
+        "lines": 9,
+        "p": 0.33,
+        "claude": "imprecise",
+        "gpt": "imprecise"
+      },
+      {
+        "id": "bf3ba91b",
+        "name": "copy",
+        "lines": 9,
+        "p": 0.3,
+        "claude": "imprecise",
+        "gpt": "mismatch"
+      },
+      {
+        "id": "991a84e2",
+        "name": "markSeen",
+        "lines": 7,
+        "p": 0.25,
+        "claude": "imprecise",
+        "gpt": "fits"
+      },
+      {
+        "id": "f8b3ae32",
+        "name": "FileUploadTrigger",
+        "lines": 5,
+        "p": 0.2,
+        "claude": "fits",
+        "gpt": "mismatch"
+      },
+      {
+        "id": "90d84fcd",
+        "name": "checkTransitions",
+        "lines": 6,
+        "p": 0.12,
+        "claude": "fits",
+        "gpt": "imprecise"
+      },
+      {
+        "id": "6273ca5e",
+        "name": "useIsDismissible",
+        "lines": 25,
+        "p": 0.11,
+        "claude": "fits",
+        "gpt": "mismatch"
+      },
+      {
+        "id": "777e7c9b",
+        "name": "buildGenerated",
+        "lines": 25,
+        "p": 0.03,
+        "claude": "imprecise",
+        "gpt": "fits"
+      },
+      {
+        "id": "7b2868a4",
+        "name": "optimalDimensions",
+        "lines": 13,
+        "p": 0.01,
+        "claude": "imprecise",
+        "gpt": "mismatch"
+      },
+      {
+        "id": "a36e40f6",
+        "name": "filterEnabled",
+        "lines": 19,
+        "p": 0.01,
+        "claude": "imprecise",
+        "gpt": "fits"
+      },
+      {
+        "id": "2fdaf623",
+        "name": "setMotionTargets",
+        "lines": 37,
+        "p": 0.01,
+        "claude": "fits",
+        "gpt": "imprecise"
+      },
+      {
+        "id": "bd0a70d6",
+        "name": "ComboboxListVirtualized",
+        "lines": 9,
+        "p": 0.01,
+        "claude": "imprecise",
+        "gpt": "mismatch"
+      },
+      {
+        "id": "d98d12ef",
+        "name": "setThreadTerminalOpen",
+        "lines": 8,
+        "p": 0.01,
+        "claude": "fits",
+        "gpt": "imprecise"
+      },
+      {
+        "id": "56ad13ed",
+        "name": "getOrphanedWorktreePathForThread",
+        "lines": 23,
+        "p": 0.01,
+        "claude": "fits",
+        "gpt": "imprecise"
+      },
+      {
+        "id": "6dca5233",
+        "name": "bucketRules",
+        "lines": 42,
+        "p": 0.01,
+        "claude": "imprecise",
+        "gpt": "fits"
+      },
+      {
+        "id": "8f33af01",
+        "name": "labelFor",
+        "lines": 8,
+        "p": 0,
+        "claude": "fits",
+        "gpt": "imprecise"
+      }
+    ]
+  },
+  "conclusion": "No conclusion: fewer than 15 positives or 15 negatives in every primary view. Point estimates are shown, not interpreted."
+}
