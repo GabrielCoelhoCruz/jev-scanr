@@ -506,6 +506,7 @@ test("demo replays the recorded run offline: no key, nothing written, labeled as
       "## 2. importOrders src/importer.ts:7–42 · function_should_split@1.0.0 · P=0.90",
       "## 3. importOrders src/importer.ts:7–42 · function_multiple_responsibilities@1.0.0 · P=0.88",
       "## 4. registerUser src/signup.ts:1–27 · function_multiple_responsibilities@1.0.0 · P=0.78",
+      "## 5. registerUser src/signup.ts:1–27 · function_should_split@1.0.0 · P=0.52",
     ],
   );
   assert.match(result.stdout, /hypotheses from one Jev answer each/);
@@ -558,4 +559,26 @@ test("demo takes no arguments and is listed in the help", (t) => {
     spawn(["demo", "--help"], cwd).stdout.includes("jevs demo"),
     true,
   );
+});
+
+test("--experimental asks every experimental signal except the opt-in one, and --signals can name it", (t) => {
+  const root = project(t, twoFiles),
+    cwd = scratch(t);
+  const signals = (...args) =>
+    spawn(["scan", root, ...args], cwd)
+      .stdout.match(/^Signals: (.*)$/m)[1]
+      .split(", ");
+  assert.deepEqual(signals("--experimental"), [
+    "clone_same_policy",
+    "function_should_split",
+    "magic_policy_literal",
+    "internal_duplication",
+    "function_multiple_responsibilities",
+    "unused_local_or_parameter",
+    "deep_nesting",
+    "unreachable_code",
+  ]);
+  assert.deepEqual(signals("--signals", "name_vs_behavior"), [
+    "name_vs_behavior",
+  ]);
 });

@@ -2,6 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { pairLevel, repoLevel } from "../evals/retrieval/validate.mjs";
+import { measure } from "../evals/retrieval/names.mjs";
+import { buildIndex } from "../src/index.mjs";
+import { readSnapshot } from "../src/snapshot.mjs";
 import { INVOICES, ORDERS, OTHER } from "./fixtures/copies.mjs";
 import { project } from "./helpers.mjs";
 
@@ -92,4 +95,59 @@ test("repoLevel ranks the planted copy against its original", (t) => {
     [1, 1, [1], 1],
   );
   assert.deepEqual(result.sameRepoPairs.k, 0);
+});
+
+const names = JSON.parse(
+  readFileSync(
+    new URL("../evals/retrieval/names-result.json", import.meta.url),
+  ),
+);
+
+test("the committed name-cue validation keeps selectivity and the recall of unrelated renames visible", () => {
+  assert.deepEqual(
+    Object.fromEntries(
+      Object.entries(names.repos).map(([repo, r]) => [
+        repo,
+        [r.named, r.selectivity.k, r.renamedPassing.k, r.sampled],
+      ]),
+    ),
+    {
+      "paulrobello/claude-office": [509, 78, 271, 300],
+      "reshaped-ui/reshaped": [361, 78, 285, 300],
+      "pingdotgg/t3code": [1456, 301, 275, 300],
+      "can1357/oh-my-pi": [3806, 474, 270, 300],
+    },
+  );
+  assert.deepEqual(
+    [names.pooled.selectivity.k, names.pooled.selectivity.n],
+    [931, 6132],
+  );
+  assert.deepEqual(
+    [names.pooled.renamedPassing.k, names.pooled.renamedPassing.n],
+    [1101, 1200],
+  );
+  assert.deepEqual(
+    [names.constructed.positives.k, names.constructed.controls.k],
+    [50, 50],
+  );
+});
+
+test("measure counts functions the cue lets through and renames that still pass", (t) => {
+  const source = (name, words) =>
+    `export function ${name}(a: number[]) {\n  let ${words} = 0;\n  for (const x of a) ${words} += x;\n  return ${words};\n}\n`;
+  const root = project(t, {
+    "a.ts": [
+      source("invoiceTotal", "acc"),
+      source("sumRows", "sumRows"),
+      source("parseDuration", "acc"),
+      source("readConfig", "acc"),
+    ].join(""),
+  });
+  const result = measure(buildIndex(readSnapshot(root)), 1, 4);
+  assert.deepEqual(
+    [result.named, result.selectivity.k, result.sampled],
+    [4, 3, 4],
+  );
+  assert.equal(result.originalsPassingInSample.k, 3);
+  assert.equal(result.renamedPassing.k, 4);
 });

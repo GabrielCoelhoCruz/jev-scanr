@@ -24,6 +24,7 @@ execFileSync(
     "evals",
     "signals",
     "catalog.json",
+    "cuts.json",
     "package.json",
   ],
   { stdio: "inherit", cwd: new URL("../", import.meta.url).pathname },

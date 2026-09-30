@@ -16,6 +16,7 @@ import { verifyPlan } from "./plan.mjs";
 import {
   allSignals,
   defaultSignalIds,
+  optInSignalIds,
   signalCaveat,
   signalStatusLabel,
 } from "./catalog.mjs";
@@ -76,7 +77,8 @@ Options for scan
   --exclude a,b,c     paths (files or directories, relative to PATH) that are never read or sent
   --paths a,b         scan only these directories or files (relative to PATH). Units and their context
                       come only from them. A scan reads at most 500 files, so scan a large project in slices
-  --experimental      also ask the experimental signals (off by default; jevs signals shows which are which)
+  --experimental      also ask the experimental signals (off by default; jevs signals shows which are which).
+                      The opt-in signal name_vs_behavior is not included: name it with --signals
   --signals a,b       ask exactly these signals instead of the defaults
   --low-overlap N     ask about up to N pairs found by the second source, which proposes functions that share the
                       names they call and read, and their string literals, but fewer than 45% of their token
@@ -163,7 +165,9 @@ function signalSelection(values) {
   if (values.signals && values.experimental)
     throw Error("Use either --signals or --experimental");
   if (values.signals) return values.signals.split(",").filter(Boolean);
-  return values.experimental ? allSignals.map((s) => s.id) : defaultSignalIds;
+  return values.experimental
+    ? allSignals.map((s) => s.id).filter((id) => !optInSignalIds.includes(id))
+    : defaultSignalIds;
 }
 
 function unit(flag, text) {

@@ -52,6 +52,21 @@ test("the folder `jevs demo` points to re-cuts offline, with no key and nothing 
     recorded.stdout,
     /: 4 worth a look, 1 uncertain, 24 below the band\./,
   );
+  const perSignal = run(
+    [
+      "rescore",
+      folder,
+      "--cut-signal",
+      "function_should_split=0.6",
+      "--out",
+      join(cwd, "perSignal"),
+    ],
+    cwd,
+  );
+  assert.match(
+    perSignal.stdout,
+    /: 4 worth a look, 1 uncertain, 24 below the band\./,
+  );
 });
 
 test("the shipped demo plan verifies, carries no machine path and holds the requests the recording answered", () => {

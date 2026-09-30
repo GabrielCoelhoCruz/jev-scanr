@@ -6,6 +6,7 @@ import { testConfigFacts } from "./config-facts.mjs";
 import { formUnits, pseudoMember, lineWindows, UNIT_ORDER } from "./units.mjs";
 import {
   catalog,
+  appliesToUnit,
   packSignals,
   requestFor,
   packBudget,
@@ -30,6 +31,7 @@ export function buildPlan(root, options = {}) {
   const generated = formUnits(index, {
     includeTests: !!options.retrieval?.includeTests,
     lowOverlap: options.retrieval?.lowOverlap,
+    nameCues: catalog.signals.some((s) => s.unitFilter),
     kinds: UNIT_ORDER.filter((kind) =>
       catalog.signals.some((s) => s.kinds.includes(kind)),
     ),
@@ -211,16 +213,23 @@ export function buildPlan(root, options = {}) {
       parts: 0,
       location: o.location,
     });
+  let filteredByCue = 0;
   for (const unit of generated.units) {
+    const cue = unit.facts.nameCue?.absent;
     const signals = catalog.signals
-      .filter((s) => s.kinds.includes(unit.kind))
+      .filter((s) => s.kinds.includes(unit.kind) && appliesToUnit(s, cue))
       .map((s) => s.id);
+    if (!signals.length) {
+      filteredByCue++;
+      continue;
+    }
     const result = partsFor(unit);
     if (packs.length + result.parts.length > limits.maxCandidates) {
       manifest.push({
         unitId: unit.id,
         kind: unit.kind,
         signals,
+        ...(cue === undefined ? {} : { nameCueAbsent: cue }),
         disposition: "not_packed_candidate_limit",
         parts: 0,
         location: locate(unit),
@@ -232,6 +241,7 @@ export function buildPlan(root, options = {}) {
       unitId: unit.id,
       kind: unit.kind,
       signals,
+      ...(cue === undefined ? {} : { nameCueAbsent: cue }),
       disposition: "packed",
       parts: result.parts.length,
     });
@@ -277,6 +287,9 @@ export function buildPlan(root, options = {}) {
       parseAndIndexOmissions: index.errors,
       generatorOmissions: omitted,
       unitsNotPacked: manifest.filter((m) => m.disposition !== "packed").length,
+      ...(catalog.signals.some((s) => s.unitFilter)
+        ? { unitsSkippedByNameCue: filteredByCue }
+        : {}),
       splits,
       packStatuses: Object.fromEntries(
         ["eligible", "insufficient_context"].map((s) => [
@@ -285,7 +298,7 @@ export function buildPlan(root, options = {}) {
         ]),
       ),
       meaning:
-        "Deterministic code forms units and assembles context only. No deterministic score, rank, filter or fallback candidate exists in this tool.",
+        "Deterministic code forms units, assembles context and decides which functions and pairs are asked (retrieval, docs/RETRIEVAL.md). It never scores, ranks or filters answers: no deterministic score, rank or fallback candidate exists after Jev answers.",
     },
     configFacts: {
       aliases: index.config.records,

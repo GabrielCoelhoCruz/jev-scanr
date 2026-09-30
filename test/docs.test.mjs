@@ -6,7 +6,11 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCANNER_VERSION } from "../src/plan.mjs";
 import { HELP } from "../src/cli.mjs";
-import { fullCatalog, signalStatusLabel } from "../src/catalog.mjs";
+import {
+  allSignals,
+  optInSignalIds,
+  signalStatusLabel,
+} from "../src/catalog.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const read = (p) => readFileSync(join(root, p), "utf8");
@@ -224,7 +228,13 @@ test("the README has its required sections, a lead before them, related work as 
       /^\| `([a-z_]+)`\s+\|[^|]*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|$/gm,
     ),
   ];
-  assert.equal(rows.length, fullCatalog.signals.length);
+  assert.deepEqual(
+    rows.map((r) => r[1]).sort(),
+    allSignals
+      .map((s) => s.id)
+      .filter((id) => !optInSignalIds.includes(id))
+      .sort(),
+  );
   for (const [, id, status, independent, dev] of rows) {
     const s = JSON.parse(read(`signals/${id}.json`));
     assert.equal(status, signalStatusLabel(s), id);

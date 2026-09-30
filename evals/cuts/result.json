@@ -5,24 +5,8 @@
       "cut": 70,
       "floor": 50
     },
-    "cutGrid": [
-      50,
-      55,
-      60,
-      65,
-      70
-    ],
-    "floorGrid": [
-      30,
-      35,
-      40,
-      45,
-      50,
-      55,
-      60,
-      65,
-      70
-    ],
+    "cutGrid": [50, 55, 60, 65, 70],
+    "floorGrid": [30, 35, 40, 45, 50, 55, 60, 65, 70],
     "cutPrimaryFalseAlarm": 0.05,
     "cutHardenedFalseAlarm": 0.1,
     "floorPrimaryFalseAlarm": 0.1,
@@ -46,9 +30,7 @@
   },
   "signals": {
     "function_should_split": {
-      "positiveSets": [
-        "A"
-      ],
+      "positiveSets": ["A"],
       "primaryControls": "A",
       "hardenedControls": "A2",
       "labeledCells": 36,
@@ -60,10 +42,7 @@
         "k": 2,
         "n": 50,
         "rate": 0.04,
-        "wilson95": [
-          0.011,
-          0.1346
-        ]
+        "wilson95": [0.011, 0.1346]
       },
       "positivesAtCut": {
         "k": 19,
@@ -277,9 +256,7 @@
       ]
     },
     "clone_same_policy": {
-      "positiveSets": [
-        "B"
-      ],
+      "positiveSets": ["B"],
       "primaryControls": "B",
       "hardenedControls": "B2",
       "labeledCells": 36,
@@ -291,10 +268,7 @@
         "k": 2,
         "n": 50,
         "rate": 0.04,
-        "wilson95": [
-          0.011,
-          0.1346
-        ]
+        "wilson95": [0.011, 0.1346]
       },
       "positivesAtCut": {
         "k": 49,
@@ -508,9 +482,7 @@
       ]
     },
     "name_vs_behavior": {
-      "positiveSets": [
-        "C"
-      ],
+      "positiveSets": ["C"],
       "primaryControls": "C",
       "hardenedControls": null,
       "labeledCells": 0,
@@ -522,10 +494,7 @@
         "k": 0,
         "n": 50,
         "rate": 0,
-        "wilson95": [
-          0,
-          0.0714
-        ]
+        "wilson95": [0, 0.0714]
       },
       "positivesAtCut": {
         "k": 29,

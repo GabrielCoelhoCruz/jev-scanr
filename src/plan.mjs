@@ -9,10 +9,13 @@ import { LIMITS, safeRelative } from "./snapshot.mjs";
 
 export { catalog };
 export const UNIT_KINDS = ["function", "function_chunk", "clone_pair"];
+export const appliesToUnit = (signal, nameCueAbsent) =>
+  !signal.unitFilter || nameCueAbsent === true;
 export function packSignals(pack) {
   return catalog.signals.filter(
     (s) =>
       s.kinds.includes(pack.kind) &&
+      appliesToUnit(s, pack.facts?.nameCue?.absent) &&
       (!pack.signalSubset || pack.signalSubset.includes(s.id)),
   );
 }
@@ -140,7 +143,9 @@ function verifyUnitManifest(plan) {
   const units = new Map();
   for (const u of plan.unitManifest) {
     const expected = catalog.signals
-      .filter((s) => s.kinds.includes(u.kind))
+      .filter(
+        (s) => s.kinds.includes(u.kind) && appliesToUnit(s, u.nameCueAbsent),
+      )
       .map((s) => s.id);
     if (
       units.has(u.unitId) ||

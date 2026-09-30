@@ -1,8 +1,8 @@
-export function orderTotalWithTax(entries: { price: number; quantity: number }[]) {
-  let total = 0;
-  for (const entry of entries) {
-    total += entry.price * entry.quantity;
+export function invoiceTotal(rows: { price: number; quantity: number }[]) {
+  let sum = 0;
+  for (const row of rows) {
+    sum += row.price * row.quantity;
   }
-  const tax = total * 0.2;
-  return Math.round((total + tax) * 100) / 100;
+  const vat = sum * 0.2;
+  return Math.round((sum + vat) * 100) / 100;
 }

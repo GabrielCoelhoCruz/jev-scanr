@@ -6,6 +6,7 @@
   "kinds": ["function"],
   "primitive": "choice",
   "scope": "whole_unit",
+  "unitFilter": "name_words_absent_from_body",
   "question": "Does the name recorded for the member labeled focus describe what the visible body of that section does? Judge the name against the visible behavior only. A generic or imprecise name that fits the behavior is not a mismatch.",
   "criteria": {
     "name_mismatch": "The name describes a different operation or domain than the visible body performs.",

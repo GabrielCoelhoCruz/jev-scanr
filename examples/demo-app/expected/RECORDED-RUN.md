@@ -16,7 +16,7 @@ Files: `RECEIPT.json` (written before the first request, read-only), `RESULT.jso
 
 ## What came out
 
-Four candidates reached the 0.7 display cut:
+At the 0.7 display cut that was in force when the run was recorded, four candidates were listed. Since then each signal has its own default cut (`function_should_split` 0.5, see `docs/CUTS.md`), so the same answers now list five, with `registerUser` for `function_should_split` added at 0.52. The recording itself did not change; only how it is cut did.
 
 | Item | Signal | P |
 |---|---|---:|
@@ -24,8 +24,9 @@ Four candidates reached the 0.7 display cut:
 | `importOrders` | `function_should_split` | 0.90 |
 | `importOrders` | `function_multiple_responsibilities` | 0.88 |
 | `registerUser` | `function_multiple_responsibilities` | 0.78 |
+| `registerUser` | `function_should_split` | 0.52 |
 
-Five questions were seeded on purpose (the clone pair, `importOrders` twice, `registerUser` twice). Jev put four of the five over the cut. **It missed one:** `function_should_split` on `registerUser` came out at 0.52, below the cut. None of the clean functions reached the cut, including `renderInvoiceText`, which is long but does one job (0.14 for splitting, 0.06 for multiple responsibilities). Nothing was re-run or adjusted after seeing these numbers.
+Five questions were seeded on purpose (the clone pair, `importOrders` twice, `registerUser` twice). At the flat 0.7 Jev put four of the five over the cut and **missed one:** `function_should_split` on `registerUser` came out at 0.52. The 0.5 default for that signal was derived from other data (constructed contrast units), not from this demo, and it happens to include the 0.52 item; that is not evidence that the cut is right. None of the clean functions reached the cut, including `renderInvoiceText`, which is long but does one job (0.14 for splitting, 0.06 for multiple responsibilities). Nothing was re-run or adjusted after seeing these numbers.
 
 ## What changed in the demo before recording
 

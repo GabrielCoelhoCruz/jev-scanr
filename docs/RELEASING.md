@@ -22,10 +22,10 @@ The job runs the full checks, packs the tarball, checks that the tag matches `pa
 
 ## The README image
 
-`docs/images/demo-queue.png` shows the recorded demo queue. `node scripts/render-demo-image.mjs` redraws `docs/images/demo-queue.svg` from `examples/demo-app/expected/`, and a test fails if the committed SVG differs from that output, so re-record the demo and redraw the image together. The PNG is the SVG rasterized at 2x, 840 by 552 CSS pixels, with headless Chromium, then reduced to 64 colors to keep it near 65 KB:
+`docs/images/demo-queue.png` shows the recorded demo queue. `node scripts/render-demo-image.mjs` redraws `docs/images/demo-queue.svg` from `examples/demo-app/expected/`, and a test fails if the committed SVG differs from that output, so re-record the demo and redraw the image together. The PNG is the SVG rasterized at 2x, 840 by 650 CSS pixels, with headless Chromium, then reduced to 64 colors to keep it near 65 KB:
 
 ```sh
-chromium --headless=new --hide-scrollbars --default-background-color=00000000 --force-device-scale-factor=2 --window-size=840,552 --screenshot=raw.png file:///path/to/page-containing-the-svg.html
+chromium --headless=new --hide-scrollbars --default-background-color=00000000 --force-device-scale-factor=2 --window-size=840,650 --screenshot=raw.png file:///path/to/page-containing-the-svg.html
 ```
 
-The test also checks the PNG's size (1680 by 1104 pixels). Change both numbers if the item count changes.
+The test also checks the PNG's size (1680 by 1300 pixels). Change both numbers if the item count changes.
