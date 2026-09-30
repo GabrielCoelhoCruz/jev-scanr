@@ -1,6 +1,6 @@
 # Contributing
 
-This project is `jev-refactor`. Its results are written up in [`evals/results/`](evals/results/) and indexed in [`EVIDENCE.md`](EVIDENCE.md).
+This project is `jev-scanr`. Its results are written up in [`evals/results/`](evals/results/) and indexed in [`EVIDENCE.md`](EVIDENCE.md).
 
 Thanks for looking. The most useful contributions are **new questions with evidence**, **bug reports with a failing fixture**, and **labels** on cards from your own project. Please open an issue before a large change.
 

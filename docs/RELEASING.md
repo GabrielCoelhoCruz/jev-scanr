@@ -1,6 +1,6 @@
 # Releasing
 
-**The package has not been published to npm, and npm publishing is not approved.** Until the maintainer says otherwise, a release is a git tag and nothing else. Install from GitHub: `npm install -g github:GabrielCoelhoCruz/jev-refactor`.
+**The package has not been published to npm, and npm publishing is not approved.** Until the maintainer says otherwise, a release is a git tag and nothing else. Install from GitHub: `npm install -g github:GabrielCoelhoCruz/jev-scanr`.
 
 ## Tagging a version
 
@@ -17,4 +17,4 @@
 3. Set the repository variable `NPM_PUBLISH_ENABLED` to `true`.
 4. Push a version tag.
 
-The job runs the full checks, packs the tarball, checks that the tag matches `package.json`, does a dry-run publish, and only then publishes with provenance. After the first publish, update the README install command to `npm install -g jev-refactor`.
+The job runs the full checks, packs the tarball, checks that the tag matches `package.json`, does a dry-run publish, and only then publishes with provenance. After the first publish, update the README install command to `npm install -g jev-scanr`.

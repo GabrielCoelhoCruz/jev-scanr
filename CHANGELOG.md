@@ -1,11 +1,14 @@
 # Changelog
 
-## 0.2.1-alpha
+## 0.3.0-alpha
 
-- `jr --version`, `-V` and `jr version` print the version.
-- Documentation: never `npx jr` (an unrelated package on npm has that name); use the installed commands or `npx github:GabrielCoelhoCruz/jev-refactor`. A test fails if a tracked text file says `npx jr` or `npx jev-refactor`.
-- The README and the showcase write-up record that one showcase candidate led to a reproduced bug and an open, unmerged pull request (can1357/oh-my-pi#13847).
-- Plans from earlier versions still verify. No signal, question or scan behavior changed.
+**Breaking: renamed from `jev-refactor` to `jev-scanr`.** The commands are now `jev-scanr` and the short alias `jevs` (the `jr` alias is gone; `jr` is also an unrelated npm package). The GitHub repository moved to `GabrielCoelhoCruz/jev-scanr` and the old URL redirects. The agent skill is now `skills/jev-scanr/` (`npx skills add GabrielCoelhoCruz/jev-scanr --skill jev-scanr`; reinstall it to replace the old one).
+
+- `jevs auth` and the key file moved to `$XDG_CONFIG_HOME/jev-scanr/credentials.json` (default `~/.config/jev-scanr/`). An existing `jev-refactor` key is moved there the first time a key is needed, keeping mode 0600 (an old file readable by others is refused); `jevs auth --remove` deletes both.
+- `jevs --version`, `-V` and `jevs version` print the version.
+- Documentation: until the package is published to npm, never run `npx jev-scanr` or `npx jevs` (npx would fetch whatever package owns that name), and never run `npx jr`; use the installed commands or `npx github:GabrielCoelhoCruz/jev-scanr`. A test fails if a tracked text file says otherwise.
+- The README and the showcase write-up record that one showcase candidate led to a bug reproduced with a regression test and an open, unmerged pull request (can1357/oh-my-pi#13847).
+- The schema identifiers `semantic-refactor-scan-plan/1` and `semantic-refactor-scan-report/1` keep their names, because plans and the recorded demo are bound to them by hash. Plans from 0.1.0-alpha, 0.1.1 and 0.2.0-alpha still verify. No signal, question or scan behavior changed.
 
 ## 0.2.0-alpha
 

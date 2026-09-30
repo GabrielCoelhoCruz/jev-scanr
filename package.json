@@ -1,6 +1,6 @@
 {
-  "name": "jev-refactor",
-  "version": "0.2.1-alpha",
+  "name": "jev-scanr",
+  "version": "0.3.0-alpha",
   "description": "A refactoring queue for TypeScript and JavaScript projects, judged by the Jev model. Unofficial, not affiliated with TypeSafe.",
   "keywords": [
     "jev",
@@ -13,17 +13,17 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GabrielCoelhoCruz/jev-refactor.git"
+    "url": "git+https://github.com/GabrielCoelhoCruz/jev-scanr.git"
   },
-  "homepage": "https://github.com/GabrielCoelhoCruz/jev-refactor#readme",
+  "homepage": "https://github.com/GabrielCoelhoCruz/jev-scanr#readme",
   "bugs": {
-    "url": "https://github.com/GabrielCoelhoCruz/jev-refactor/issues"
+    "url": "https://github.com/GabrielCoelhoCruz/jev-scanr/issues"
   },
   "license": "MIT",
   "type": "module",
   "bin": {
-    "jev-refactor": "./src/cli.mjs",
-    "jr": "./src/cli.mjs"
+    "jev-scanr": "./src/cli.mjs",
+    "jevs": "./src/cli.mjs"
   },
   "engines": {
     "node": ">=24"

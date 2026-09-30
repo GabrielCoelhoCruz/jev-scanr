@@ -37,8 +37,8 @@ jobs:
       - name: Pack
         run: npm pack --ignore-scripts
       - name: Dry run
-        run: npm publish ./jev-refactor-*.tgz --access public --ignore-scripts --dry-run
+        run: npm publish ./jev-scanr-*.tgz --access public --ignore-scripts --dry-run
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish ./jev-refactor-*.tgz --access public --ignore-scripts --provenance
+        run: npm publish ./jev-scanr-*.tgz --access public --ignore-scripts --provenance

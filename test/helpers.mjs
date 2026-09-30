@@ -7,7 +7,7 @@ import { buildPlan } from "../src/build-plan.mjs";
 import { makeClient, runPlan } from "../src/runner.mjs";
 
 export function project(t, files = {}) {
-  const root = mkdtempSync(join(tmpdir(), "jev-refactor-"));
+  const root = mkdtempSync(join(tmpdir(), "jev-scanr-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   for (const [path, source] of Object.entries(files)) {
     mkdirSync(dirname(join(root, path)), { recursive: true });

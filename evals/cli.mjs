@@ -23,7 +23,7 @@ import {
 import { evaluateGate, ruleSHA256 } from "./lib/gate.mjs";
 import { pct, withNoise } from "./lib/stats.mjs";
 
-const HELP = `Eval tools for jev-refactor signals. See evals/README.md.
+const HELP = `Eval tools for jev-scanr signals. See evals/README.md.
 
   node evals/cli.mjs audit [--cases PATH]                       offline: case-set audit + oracle/null/no-answer/error/served-model checks
   node evals/cli.mjs run --yes --cap-usd N --out DIR [--cases PATH] [--signal ID] [--reps K] [--cut 0.7]

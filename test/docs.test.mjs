@@ -25,9 +25,9 @@ function walk(dir, out = []) {
 
 test("package name, bins and versions agree", () => {
   const pkg = JSON.parse(read("package.json"));
-  assert.equal(pkg.name, "jev-refactor");
-  assert.deepEqual(Object.keys(pkg.bin).sort(), ["jev-refactor", "jr"]);
-  assert.equal(pkg.bin["jr"], pkg.bin["jev-refactor"]);
+  assert.equal(pkg.name, "jev-scanr");
+  assert.deepEqual(Object.keys(pkg.bin).sort(), ["jev-scanr", "jevs"]);
+  assert.equal(pkg.bin["jevs"], pkg.bin["jev-scanr"]);
   assert.equal(pkg.version, SCANNER_VERSION);
   assert.ok(pkg.files.includes("skills"));
   assert.equal(JSON.parse(read("package-lock.json")).version, pkg.version);
@@ -61,10 +61,10 @@ test("relative links in the documentation resolve to files", () => {
 });
 
 test("the agent skill is named like its folder and says to verify before editing", () => {
-  const skill = read("skills/jev-refactor/SKILL.md");
+  const skill = read("skills/jev-scanr/SKILL.md");
   const front = skill.match(/^---\nname: (.+)\ndescription: (.+)\n---\n/);
   assert.ok(front);
-  assert.equal(front[1], "jev-refactor");
+  assert.equal(front[1], "jev-scanr");
   assert.ok(front[2].length > 80);
   assert.match(skill, /Verify each item before editing/);
   assert.match(skill, /hypothes/i);
@@ -98,7 +98,7 @@ test("no internal ticket ids or machine paths are in tracked text", () => {
   }
 });
 
-test("no document runs an npm package named jr or jev-refactor through npx", () => {
+test("no document runs an npm package named jr, jevs or jev-scanr through npx", () => {
   for (const file of walk(root)) {
     if (
       !/\.(md|mjs|json|yml|txt)$/.test(file) ||
@@ -108,17 +108,47 @@ test("no document runs an npm package named jr or jev-refactor through npx", () 
       continue;
     const text = readFileSync(file, "utf8");
     for (const [, line] of text.matchAll(
-      /^(.*\bnpx\s+(?:--yes\s+|-y\s+)?(?:jr|jev-refactor)\b.*)$/gm,
+      /^(.*\bnpx\s+(?:--yes\s+|-y\s+)?(?:jr|jevs|jev-scanr|jev-refactor)\b.*)$/gm,
     ))
       assert.ok(
-        /never (run )?`?npx jr/i.test(line),
+        /\b(never|do not|test fails)\b/i.test(line),
         `${relative(root, file)}: ${line.trim()}`,
       );
   }
   const readme = read("README.md");
+  assert.match(readme, /do not run `npx jev-scanr` or `npx jevs`/i);
   assert.match(readme, /never run `npx jr`/i);
-  assert.match(readme, /npx github:GabrielCoelhoCruz\/jev-refactor/);
-  assert.match(read("skills/jev-refactor/SKILL.md"), /Never run `npx jr`/);
+  assert.match(readme, /npx github:GabrielCoelhoCruz\/jev-scanr/);
+  const skill = read("skills/jev-scanr/SKILL.md");
+  assert.match(skill, /never run `npx jev-scanr` or `npx jevs`/);
+  assert.match(skill, /never run `npx jr`/);
+});
+
+test("the old names survive only as history", () => {
+  for (const file of walk(root)) {
+    if (
+      !/\.(md|json|yml)$/.test(file) ||
+      file.endsWith("package-lock.json") ||
+      file.endsWith("docs.test.mjs") ||
+      file.endsWith("CHANGELOG.md")
+    )
+      continue;
+    const text = readFileSync(file, "utf8");
+    for (const line of text.split("\n")) {
+      if (/\bjev-refactor\b/.test(line))
+        assert.ok(
+          /renamed from|was called|then named|before 0\.3\.0|legacy|old|in 0\.2\.0-alpha/i.test(
+            line,
+          ),
+          `${relative(root, file)}: ${line.trim()}`,
+        );
+      if (/\bjr\b/.test(line))
+        assert.ok(
+          /never|alias|unrelated/i.test(line),
+          `${relative(root, file)}: ${line.trim()}`,
+        );
+    }
+  }
 });
 
 test("the README reports the oh-my-pi pull request as open, not merged", () => {

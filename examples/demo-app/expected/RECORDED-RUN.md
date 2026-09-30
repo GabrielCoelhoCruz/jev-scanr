@@ -1,6 +1,6 @@
 # Recorded run
 
-This is **one real run** of `jev-refactor` (then named `semantic-refactor-scan`) 0.1.0-alpha on the synthetic demo app in `../src`, not a simulation.
+This is **one real run** of `jev-scanr` (then named `semantic-refactor-scan`) 0.1.0-alpha on the synthetic demo app in `../src`, not a simulation.
 
 | | |
 |---|---|

@@ -61,7 +61,7 @@ export async function graderChecks(cases, { cut = 0.7 } = {}) {
   const checks = [];
   const graded = cases.filter((c) => expectedOf(c) !== "excluded");
   const run = async (respond) => {
-    const out = mkdtempSync(join(tmpdir(), "jev-refactor-audit-"));
+    const out = mkdtempSync(join(tmpdir(), "jev-scanr-audit-"));
     try {
       const summary = await runEval({
         cases,

@@ -16,7 +16,7 @@ export async function checkSignal(id, { client, capUSD = 0.05, cut } = {}) {
   if (!signal) throw Error("Unknown signal");
   const threshold = cut ?? fullCatalog.displayThresholdDefault;
   const result = { signalId: id, threshold, variants: {} };
-  const scratch = mkdtempSync(join(tmpdir(), "jev-refactor-check-"));
+  const scratch = mkdtempSync(join(tmpdir(), "jev-scanr-check-"));
   try {
     for (const variant of ["positive", "negative"]) {
       const plan = buildPlan(join(fixtures, id, variant), { signals: [id] });

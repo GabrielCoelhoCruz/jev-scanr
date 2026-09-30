@@ -285,7 +285,7 @@ test("the package binary runs under node and prints help", () => {
 });
 
 test("the binary also runs through a symlink, as npm and npx install it", (t) => {
-  const link = join(scratch(t), "jev-refactor");
+  const link = join(scratch(t), "jev-scanr");
   symlinkSync(cli, link);
   const out = execFileSync(process.execPath, [link, "signals"], {
     env,
@@ -303,6 +303,6 @@ test("--version, -V and version print the package version", () => {
       env,
       encoding: "utf8",
     });
-    assert.equal(out.trim(), `jev-refactor ${version}`);
+    assert.equal(out.trim(), `jev-scanr ${version}`);
   }
 });

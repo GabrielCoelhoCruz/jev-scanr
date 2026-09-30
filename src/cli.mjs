@@ -27,29 +27,29 @@ import {
   saveApiKey,
 } from "./credentials.mjs";
 
-export const SKILL_SOURCE = "GabrielCoelhoCruz/jev-refactor";
+export const SKILL_SOURCE = "GabrielCoelhoCruz/jev-scanr";
 
 export const VERSION = JSON.parse(
   readFileSync(new URL("../package.json", import.meta.url)),
 ).version;
 
-export const HELP = `jev-refactor (short alias: jr) ${VERSION}
+export const HELP = `jev-scanr (short alias: jevs) ${VERSION}
 
 Ranks refactoring candidates in a TypeScript/JavaScript project by asking the Jev model a few narrow questions about each function or similar pair. Deterministic code only cuts the project into units and gathers context. It does not score, rank or filter. Every finding and its order come from Jev's probabilities.
 
 Usage
-  jr --version                              print the version
-  jr auth [--remove]                        save your TypeSafe API key (owner-only file), or delete it
-  jr skill [--global] [--yes]               install the agent skill for your coding agents (uses npx skills)
-  jr scan PATH [options]         dry run: shows units, requests and estimated cost, sends nothing
-  jr scan PATH --run --yes --cap-usd N [options]
+  jevs --version                              print the version
+  jevs auth [--remove]                        save your TypeSafe API key (owner-only file), or delete it
+  jevs skill [--global] [--yes]               install the agent skill for your coding agents (uses npx skills)
+  jevs scan PATH [options]         dry run: shows units, requests and estimated cost, sends nothing
+  jevs scan PATH --run --yes --cap-usd N [options]
                                                 sends source excerpts to the Jev API and writes the report
-  jr report --plan PLAN --run RUN --out DIR [--threshold 0.7]
-  jr continue --plan PLAN --run RUN --out NEWPLAN
+  jevs report --plan PLAN --run RUN --out DIR [--threshold 0.7]
+  jevs continue --plan PLAN --run RUN --out NEWPLAN
                                                 plan only the requests without an accepted answer
-  jr run --plan PLAN --out DIR --cap-usd N --yes
+  jevs run --plan PLAN --out DIR --cap-usd N --yes
                                                 run an existing plan
-  jr signals                     list the catalog and its evidence
+  jevs signals                                list the catalog and its evidence
 
 Options for scan
   --exclude a,b,c     paths (files or directories, relative to PATH) that are never read or sent
@@ -68,7 +68,7 @@ Options for scan
   --out DIR           output directory (default ./jev-scan-out; must not exist for a new run)
   --threshold N       display cut for every signal, 0 to 1 (default 0.7)
 
-Sending source. Every analyzed excerpt goes to the Jev API (https://api.typesafe.ai) under your own key: TYPESAFE_API_KEY in the environment, or the one saved by jr auth. Files whose path or content looks like a secret are skipped, and dot-directories, node_modules, build output and generated files are never read. That guard is a heuristic. Check --list-files and use --exclude before a live run.
+Sending source. Every analyzed excerpt goes to the Jev API (https://api.typesafe.ai) under your own key: TYPESAFE_API_KEY in the environment, or the one saved by jevs auth. Files whose path or content looks like a secret are skipped, and dot-directories, node_modules, build output and generated files are never read. That guard is a heuristic. Check --list-files and use --exclude before a live run.
 `;
 
 const options = {
@@ -305,7 +305,7 @@ async function execute(plan, values, deps) {
   const apiKey = deps.client ? null : resolveApiKey(deps.env);
   if (!deps.client && !apiKey)
     throw Error(
-      "No TypeSafe API key. Run jr auth, or set TYPESAFE_API_KEY in the environment (never pass it as an option)",
+      "No TypeSafe API key. Run jevs auth, or set TYPESAFE_API_KEY in the environment (never pass it as an option)",
     );
   const out = outside(plan.root, values.out ?? "jev-scan-out");
   const captured = join(out, "plan.json");
@@ -343,12 +343,12 @@ async function execute(plan, values, deps) {
 
 export async function main(args = process.argv.slice(2), deps = {}) {
   const { command, values, positionals } = parseArgs(args);
-  if (command === "version") return console.log(`jev-refactor ${VERSION}`);
+  if (command === "version") return console.log(`jev-scanr ${VERSION}`);
   if (command === "help") return console.log(HELP);
   if (command === "auth") {
     if (positionals.length)
       throw Error(
-        "Never pass the key as an argument; run jr auth and type it when asked",
+        "Never pass the key as an argument; run jevs auth and type it when asked",
       );
     if (values.remove) {
       const { file, existed } = removeApiKey(deps.env);
@@ -371,7 +371,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
       "add",
       SKILL_SOURCE,
       "--skill",
-      "jev-refactor",
+      "jev-scanr",
     ];
     if (values.global) args.push("--global");
     if (values.yes) args.push("--yes");
@@ -382,7 +382,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
         reject(
           e.code === "ENOENT"
             ? Error(
-                "Skill installation needs npx. Install npm, then run jr skill again.",
+                "Skill installation needs npx. Install npm, then run jevs skill again.",
               )
             : e,
         ),

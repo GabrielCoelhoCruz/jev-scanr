@@ -1,6 +1,6 @@
 # Notices and provenance
 
-`jev-refactor` is released under the MIT license in [`LICENSE`](LICENSE), copyright the jev-refactor contributors. It was called `semantic-refactor-scan` before 0.2.0-alpha.
+`jev-scanr` is released under the MIT license in [`LICENSE`](LICENSE), copyright the jev-scanr contributors. It was called `semantic-refactor-scan` before 0.2.0-alpha and `jev-refactor` in 0.2.0-alpha.
 
 ## Origin
 

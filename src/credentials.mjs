@@ -4,6 +4,7 @@ import {
   mkdirSync,
   readFileSync,
   rmSync,
+  rmdirSync,
   statSync,
   writeFileSync,
 } from "node:fs";
@@ -13,20 +14,44 @@ import { dirname, join } from "node:path";
 export const credentialsPath = (env = process.env) =>
   join(
     env.XDG_CONFIG_HOME || join(env.HOME || homedir(), ".config"),
-    "jev-refactor",
+    "jev-scanr",
     "credentials.json",
   );
 
-export function resolveApiKey(env = process.env) {
-  if (env.TYPESAFE_API_KEY) return env.TYPESAFE_API_KEY;
-  const file = credentialsPath(env);
-  if (!existsSync(file)) return null;
+const configBase = (env) =>
+  env.XDG_CONFIG_HOME || join(env.HOME || homedir(), ".config");
+
+export const legacyCredentialsPath = (env = process.env) =>
+  join(configBase(env), "jev-refactor", "credentials.json");
+
+function readKeyFile(file) {
   if (statSync(file).mode & 0o077)
     throw Error(
-      `${file} is readable by other users. Run chmod 600 on it, or run jr auth again.`,
+      `${file} is readable by other users. Run chmod 600 on it, or run jevs auth again.`,
     );
   const { apiKey } = JSON.parse(readFileSync(file, "utf8"));
   return typeof apiKey === "string" && apiKey ? apiKey : null;
+}
+
+export function migrateLegacyCredentials(env = process.env) {
+  const legacy = legacyCredentialsPath(env);
+  if (existsSync(credentialsPath(env)) || !existsSync(legacy)) return false;
+  const apiKey = readKeyFile(legacy);
+  if (!apiKey) return false;
+  saveApiKey(apiKey, env);
+  rmSync(legacy, { force: true });
+  try {
+    rmdirSync(dirname(legacy));
+  } catch {}
+  return true;
+}
+
+export function resolveApiKey(env = process.env) {
+  if (env.TYPESAFE_API_KEY) return env.TYPESAFE_API_KEY;
+  migrateLegacyCredentials(env);
+  const file = credentialsPath(env);
+  if (!existsSync(file)) return null;
+  return readKeyFile(file);
 }
 
 export function saveApiKey(apiKey, env = process.env) {
@@ -43,8 +68,10 @@ export function saveApiKey(apiKey, env = process.env) {
 
 export function removeApiKey(env = process.env) {
   const file = credentialsPath(env);
-  const existed = existsSync(file);
+  const legacy = legacyCredentialsPath(env);
+  const existed = existsSync(file) || existsSync(legacy);
   rmSync(file, { force: true });
+  rmSync(legacy, { force: true });
   return { file, existed };
 }
 
