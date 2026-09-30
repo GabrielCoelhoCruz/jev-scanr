@@ -1,0 +1,32 @@
+{
+  "id": "unreachable_code",
+  "version": "1.0.0",
+  "status": "experimental",
+  "family": "dead_code",
+  "kinds": ["function", "function_chunk"],
+  "primitive": "choice",
+  "scope": "chunkable",
+  "question": "Does the visible focus code contain statements that can never execute, such as code after an unconditional return/throw or a branch whose condition is visibly always false?",
+  "criteria": {
+    "unreachable": "At least one visible statement cannot execute.",
+    "none": "Every visible statement is reachable.",
+    "insufficient": "Reachability depends on code or values that are not visible."
+  },
+  "presence": "unreachable",
+  "evidence": [
+    {
+      "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",
+      "date": "2026-09-30",
+      "scanner": "0.4.x jev-only, jev-1.13.0",
+      "sample": "top-5 cells by P at or above the 0.7 cut, plus 3 random cells below it",
+      "reviewer": "LLM (Claude Opus 5.5), pass 2 with repository access; pass 1 counts in EVIDENCE.md",
+      "aboveCutInFullRun": 1,
+      "reviewedAboveCut": 1,
+      "actionableAboveCut": 1,
+      "reviewedBelowCut": 3,
+      "actionableBelowCut": 0,
+      "note": "One cell above the cut in the whole run, and it was actionable: too few to gate on. Reviewed by one LLM reviewer (Claude Opus 5.5) in two passes; not human truth. Cells were the highest-P above the 0.7 cut, so the rate is an upper bound.",
+      "questionVersion": "1.0.0"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "magic_policy_literal",
+  "version": "1.0.0",
+  "status": "default",
+  "family": "policy",
+  "kinds": ["function", "function_chunk"],
+  "primitive": "choice",
+  "scope": "chunkable",
+  "question": "Does the visible focus code embed unexplained numeric or string literals that encode business policy, limits or thresholds (not trivial 0/1/empty values and not user-facing copy) without a named constant or comment?",
+  "criteria": {
+    "unexplained_policy_literal": "A policy-bearing literal appears without a name or explanation.",
+    "none": "No such literal, or every policy literal is named or explained.",
+    "insufficient": "The visible code is too partial to judge."
+  },
+  "presence": "unexplained_policy_literal",
+  "evidence": [
+    {
+      "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",
+      "date": "2026-09-30",
+      "scanner": "0.4.x jev-only, jev-1.13.0",
+      "sample": "top-5 cells by P at or above the 0.7 cut, plus 3 random cells below it",
+      "reviewer": "LLM (Claude Opus 5.5), pass 2 with repository access; pass 1 counts in EVIDENCE.md",
+      "aboveCutInFullRun": 72,
+      "reviewedAboveCut": 5,
+      "actionableAboveCut": 3,
+      "reviewedBelowCut": 3,
+      "actionableBelowCut": 0,
+      "note": "Reviewed by one LLM reviewer (Claude Opus 5.5) in two passes; not human truth. Cells were the highest-P above the 0.7 cut, so the rate is an upper bound.",
+      "questionVersion": "1.0.0"
+    }
+  ]
+}

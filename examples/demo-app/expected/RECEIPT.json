@@ -1,0 +1,34 @@
+{
+  "schema": "demo-recording-receipt/1",
+  "frozenAtUTC": "2026-09-30T04:50:21.140Z",
+  "purpose": "One real recorded Jev pass over the bundled synthetic demo app. Written before any request.",
+  "scanner": {
+    "version": "0.1.0-alpha",
+    "sourceContentSHA256": "945bd66559bc9e0197b368e58c4d5e291b4e949939cf99c6c84f6458f5d251b4",
+    "catalogHash": "3175ef0d7cce65b9d6c7a08c9aa6d6e4778a07cec39e4cf269e42766366ca38f"
+  },
+  "demoContentSHA256": "81db1e2549a8127bca3efaf520cdeb4dda0f2324b24026a09e61d9fc6f0eb658",
+  "model": "jev-1.13.0",
+  "tariffUSDPerMillionInput": 0.042,
+  "priceConfirmed": "docs.typesafe.ai/models.md checked 2026-09-30",
+  "signals": [
+    "clone_same_policy",
+    "function_should_split",
+    "magic_policy_literal",
+    "internal_duplication",
+    "function_multiple_responsibilities",
+    "unused_local_or_parameter",
+    "deep_nesting"
+  ],
+  "requests": 15,
+  "questions": 85,
+  "serializedRequestBytes": 80603,
+  "requestHashesSHA256": "6a4589a84fa677c554e9347548d8d974af826a5d5102ec039a35fc6e1062d1d7",
+  "estimatedUSD": 0.0011284560000000001,
+  "conservativeUSD": 0.0061378380000000005,
+  "capUSD": 0.02,
+  "passes": 1,
+  "sdkRetries": 0,
+  "stopRule": "stop on the first error, 429, unexpected model, unknown usage or invalid answer",
+  "credentialPresent": true
+}

@@ -1,0 +1,389 @@
+import { hash } from "./core.mjs";
+import { VALIDATION_POLICY } from "./validation.mjs";
+import { verifyPlan, catalog, packSignals } from "./plan.mjs";
+
+export function resolveThresholds(overrides = {}) {
+  if (!overrides || typeof overrides !== "object" || Array.isArray(overrides))
+    throw Error("Thresholds must be an object");
+  const thresholds = Object.fromEntries(
+    catalog.signals.map((s) => [s.id, catalog.displayThresholdDefault]),
+  );
+  for (const [id, value] of Object.entries(overrides)) {
+    if (!(id in thresholds)) throw Error("Unknown signal in thresholds");
+    if (!Number.isFinite(value) || value < 0 || value > 1)
+      throw Error("Threshold must be within [0, 1]");
+    thresholds[id] = value;
+  }
+  return thresholds;
+}
+
+function nearTie(answer) {
+  if (!answer) return {};
+  const maximum = Math.max(...Object.values(answer.probabilities)),
+    own = answer.probabilities[answer.choice];
+  return own < maximum - VALIDATION_POLICY.winnerEpsilon
+    ? { near_tie: true, choiceProbability: own, maximumProbability: maximum }
+    : {};
+}
+const tieFields = ({ near_tie, choiceProbability, maximumProbability }) =>
+  near_tie ? { near_tie, choiceProbability, maximumProbability } : {};
+
+const locate = (pack) =>
+  pack.members.map((m) => ({
+    name: m.name ?? null,
+    path: m.path,
+    startLine: m.range.startLine,
+    endLine: m.range.endLine,
+    role: m.role,
+  }));
+
+export function buildReport(
+  plan,
+  events = [],
+  { thresholds: overrides = {} } = {},
+) {
+  verifyPlan(plan);
+  const thresholds = resolveThresholds(overrides);
+  const outcomes = new Map(
+    events.filter((e) => e.type === "finished").map((e) => [e.unitId, e]),
+  );
+  const provenance = events[0]?.mode ?? "not_run";
+  const cells = [];
+  for (const pack of plan.units)
+    for (const signal of packSignals(pack)) {
+      const eligibility = pack.questionEligibility[signal.id];
+      const event = outcomes.get(pack.id);
+      const answer =
+        eligibility.status === "eligible" && event?.status === "succeeded"
+          ? (event.response.answers[signal.id] ?? null)
+          : null;
+      const status =
+        eligibility.status !== "eligible"
+          ? "insufficient_context"
+          : !event
+            ? "unattempted"
+            : event.status === "failed"
+              ? "error"
+              : !answer
+                ? "unanswered"
+                : answer.choice === "insufficient"
+                  ? "model_insufficient"
+                  : "scored";
+      const p =
+        status === "scored"
+          ? (answer.probabilities[signal.presence] ?? null)
+          : null;
+      cells.push({
+        packId: pack.id,
+        unitId: pack.unitId,
+        kind: pack.kind,
+        split: pack.split ?? null,
+        signalId: signal.id,
+        signalVersion: signal.version,
+        signalStatus: signal.status,
+        status,
+        choice: answer?.choice ?? null,
+        ...nearTie(answer),
+        confidence: answer?.confidence ?? null,
+        positiveOption: signal.presence,
+        pPositive: p,
+        threshold: thresholds[signal.id],
+        shown: p !== null && p >= thresholds[signal.id],
+        missingReasons: eligibility.missingReasons,
+      });
+    }
+  const packById = new Map(plan.units.map((p) => [p.id, p]));
+  const unitIds = [...new Set(plan.units.map((p) => p.unitId))];
+  const blocks = unitIds.map((unitId) => {
+    const packs = plan.units.filter((p) => p.unitId === unitId);
+    const primary = packs.find((p) => p.id === unitId) ?? packs[0];
+    return {
+      unitId,
+      kind: primary.kind,
+      location: locate(primary),
+      catchRange: primary.catchRange ?? null,
+      parts: packs.map((p) => ({
+        packId: p.id,
+        kind: p.kind,
+        split: p.split ?? null,
+        location: locate(p),
+      })),
+      signals: cells
+        .filter((c) => c.unitId === unitId)
+        .map(({ unitId: _u, ...c }) => c),
+    };
+  });
+  const views = Object.fromEntries(
+    catalog.signals.map((s) => {
+      const scored = cells.filter(
+        (c) => c.signalId === s.id && c.status === "scored",
+      );
+      scored.sort(
+        (a, b) => b.pPositive - a.pPositive || a.packId.localeCompare(b.packId),
+      );
+      return [
+        s.id,
+        {
+          threshold: thresholds[s.id],
+          status: s.status,
+          version: s.version,
+          evidence: s.evidence,
+          scored: scored.length,
+          shown: scored
+            .filter((c) => c.shown)
+            .map((c) => ({
+              packId: c.packId,
+              unitId: c.unitId,
+              pPositive: c.pPositive,
+              confidence: c.confidence,
+              choice: c.choice,
+              ...tieFields(c),
+              location: locate(packById.get(c.packId)),
+            })),
+          ordering:
+            "Jev P(positive option) descending; ties by pack id. No deterministic score participates.",
+        },
+      ];
+    }),
+  );
+  for (const u of plan.unitManifest.filter((m) => m.disposition !== "packed")) {
+    blocks.push({
+      unitId: u.unitId,
+      kind: u.kind,
+      location: u.location,
+      catchRange: null,
+      parts: [],
+      signals: u.signals.map((signalId) => ({
+        packId: null,
+        kind: u.kind,
+        split: null,
+        signalId,
+        status: u.disposition,
+        choice: null,
+        confidence: null,
+        pPositive: null,
+        shown: false,
+        missingReasons: [u.disposition],
+      })),
+    });
+    for (const signalId of u.signals)
+      cells.push({
+        packId: null,
+        unitId: u.unitId,
+        kind: u.kind,
+        split: null,
+        signalId,
+        status: u.disposition,
+        missingReasons: [u.disposition],
+        pPositive: null,
+        shown: false,
+      });
+  }
+  const abstentions = cells
+    .filter((c) => c.status !== "scored")
+    .map((c) => ({
+      packId: c.packId,
+      unitId: c.unitId,
+      kind: c.kind,
+      signalId: c.signalId,
+      status: c.status,
+      missingReasons: c.missingReasons,
+      split: c.split,
+    }));
+  const findings = cells
+    .filter((c) => c.shown)
+    .sort(
+      (a, b) =>
+        b.pPositive - a.pPositive ||
+        a.signalId.localeCompare(b.signalId) ||
+        a.packId.localeCompare(b.packId),
+    )
+    .map((c) => {
+      const pack = packById.get(c.packId),
+        signal = catalog.signals.find((s) => s.id === c.signalId);
+      return {
+        signalId: c.signalId,
+        signalVersion: c.signalVersion,
+        signalStatus: c.signalStatus,
+        question: signal.question,
+        answer: c.choice,
+        ...tieFields(c),
+        positiveOption: c.positiveOption,
+        pPositive: c.pPositive,
+        confidence: c.confidence,
+        threshold: c.threshold,
+        unitId: c.unitId,
+        packId: c.packId,
+        kind: c.kind,
+        split: c.split,
+        location: locate(pack),
+        catchRange: pack.catchRange ?? null,
+        verificationReads: pack.sections.map((s) => ({
+          path: s.path,
+          range: s.range,
+          fileSHA256: s.fileSHA256,
+          sourceSHA256: s.sourceSHA256,
+          roles: s.roles,
+        })),
+        contextOmissions: pack.omitted,
+        packRef: {
+          planHash: plan.planHash,
+          packId: pack.id,
+          contentHash: pack.contentHash,
+        },
+        notAPatchInstruction: true,
+      };
+    });
+  const statusCounts = cells.reduce(
+    (a, c) => ((a[c.status] = (a[c.status] ?? 0) + 1), a),
+    {},
+  );
+  const report = {
+    schema: "semantic-refactor-scan-report/1",
+    planHash: plan.planHash,
+    catalogVersion: plan.catalogVersion,
+    provenance,
+    thresholds,
+    thresholdMeaning:
+      "Display cut only. Jev probabilities are not bug confidence, impact or permission to edit.",
+    cells: cells.length,
+    units: plan.units.length,
+    requests: plan.requests.length,
+    statusCounts,
+    unitsNotPacked: plan.unitManifest.filter((m) => m.disposition !== "packed")
+      .length,
+    generatorOmissions: plan.coverage.generatorOmissions,
+    blocks,
+    views,
+    abstentions,
+    findings,
+  };
+  const nearTies = cells
+    .filter((c) => c.near_tie)
+    .map((c) => ({
+      packId: c.packId,
+      unitId: c.unitId,
+      signalId: c.signalId,
+      status: c.status,
+      choice: c.choice,
+      ...tieFields(c),
+      pPositive: c.pPositive,
+      shown: c.shown,
+    }));
+  if (nearTies.length) {
+    report.nearTies = nearTies;
+    report.nearTieRule = `Jev probabilities are rounded to 2 decimals, so a chosen option within 0.01 of the maximum is accepted and flagged near_tie. Display depends only on the cell's own P(positive) against the cut.`;
+  }
+  return { ...report, reportHash: hash(report) };
+}
+
+const display = (v) => String(v).replace(/[`<>\r\n\u2028\u2029]/g, " ");
+const where = (loc) =>
+  loc
+    .map(
+      (l) =>
+        `${display(l.name ?? "anonymous")} ${display(l.path)}:${l.startLine}–${l.endLine}`,
+    )
+    .join(" ↔ ");
+const isFocus = (read) =>
+  read.roles.some((r) => r === "focus" || r.startsWith("pair."));
+const tie = (x) =>
+  x.near_tie
+    ? ` (near tie: chosen ${x.choiceProbability.toFixed(2)} vs max ${x.maximumProbability.toFixed(2)})`
+    : "";
+const evidenceLine = (view) => {
+  const e = view.evidence?.[0];
+  return e
+    ? `${e.actionableAboveCut}/${e.reviewedAboveCut} actionable above the cut (${e.corpus.split(" (")[0]}, LLM reviewer)`
+    : "no evidence recorded";
+};
+
+export function queueMarkdown(report) {
+  const lines = [
+    "# Refactor queue",
+    "",
+    `${report.findings.length} candidates at or above each signal's display cut, ordered by Jev's probability for the positive option (highest first). Each item is a hypothesis from one Jev answer about one narrow question. It is not a bug report, and P is not the chance that a change is worth making.`,
+    "",
+    "**How to use this file.** Hand it to a person or a coding agent. For each item, read the listed lines, answer the question yourself, and change nothing if it does not hold. `no change` is a valid outcome. Verify before editing. Signals marked *experimental* have too little evidence to trust; see EVIDENCE.md.",
+    "",
+  ];
+  for (const [i, f] of report.findings.entries()) {
+    lines.push(
+      `## ${i + 1}. ${where(f.location)} · ${f.signalId}@${f.signalVersion}${f.signalStatus === "experimental" ? " (experimental)" : ""} · P=${f.pPositive.toFixed(2)}`,
+      "",
+      `- **Question:** ${display(f.question)}`,
+      `- **Jev answer:** ${f.answer}${tie(f)}${f.split?.type === "line_window" ? `; judged on lines ${f.split.startLine}–${f.split.endLine} only` : ""}.`,
+      `- **Read first:** ${[...f.verificationReads]
+        .sort((x, y) => Number(isFocus(y)) - Number(isFocus(x)))
+        .slice(0, 6)
+        .map(
+          (r) => `${display(r.path)}:${r.range.startLine}–${r.range.endLine}`,
+        )
+        .join(
+          "; ",
+        )}${f.verificationReads.length > 6 ? "; more in report.json" : ""}.`,
+      f.contextOmissions.length
+        ? `- **Context Jev did not get:** ${f.contextOmissions.map((o) => display(o.reason)).join(", ")}.`
+        : "- **Context Jev did not get:** none recorded; dynamic or external context may still be missing.",
+      "",
+    );
+  }
+  return lines.join("\n");
+}
+
+export function reportMarkdown(report, accounting = null) {
+  const lines = [
+    "# Scan report",
+    "",
+    `Provenance: **${report.provenance}**. Plan \`${report.planHash.slice(0, 12)}…\`, catalog ${report.catalogVersion}, signals: ${Object.keys(report.views).join(", ")}.`,
+    `${report.cells} cells (unit × question): ${Object.entries(
+      report.statusCounts,
+    )
+      .map(([k, v]) => `${v} ${k}`)
+      .join(
+        ", ",
+      )}. ${report.findings.length} at or above the display cut. ${report.units} units in ${report.requests} requests.`,
+    "",
+    "The display cut is a display setting, not a calibration. Jev probabilities are rounded to two decimals, are not reproducible from call to call, and are not the chance of a bug or of a worthwhile change.",
+    "",
+  ];
+  if (accounting)
+    lines.push(
+      `Cost (calculated from provider-returned usage, not an invoice): **US$${accounting.knownEstimatedUSD.toFixed(4)}** for ${accounting.knownInputTokens.toLocaleString("en-US")} input tokens over ${accounting.reservedAttempts} attempts.`,
+      "",
+    );
+  lines.push(
+    "| Signal | Status | Scored | At or above cut | Cut | Model said insufficient | Evidence so far |",
+    "|---|---|---:|---:|---:|---:|---|",
+  );
+  for (const [id, v] of Object.entries(report.views)) {
+    const cells = report.blocks
+      .flatMap((b) => b.signals)
+      .filter((c) => c.signalId === id);
+    lines.push(
+      `| ${id}@${v.version} | ${v.status} | ${v.scored} | ${v.shown.length} | ${v.threshold} | ${cells.filter((c) => c.status === "model_insufficient").length} | ${evidenceLine(v)} |`,
+    );
+  }
+  lines.push("");
+  const abstained = Object.entries(
+    report.abstentions.reduce(
+      (m, a) => ((m[a.status] = (m[a.status] ?? 0) + 1), m),
+      {},
+    ),
+  );
+  if (abstained.length)
+    lines.push(
+      `Cells without a score: ${abstained.map(([k, v]) => `${v} ${k}`).join(", ")}.`,
+      "",
+    );
+  if (report.nearTies)
+    lines.push(
+      `${report.nearTies.length} answers were near ties (chosen option within 0.01 of the maximum). They are flagged in report.json and queue.md.`,
+      "",
+    );
+  lines.push(
+    "Next: open `queue.md`. Every item there is something to verify, not to apply.",
+    "",
+  );
+  return lines.join("\n");
+}

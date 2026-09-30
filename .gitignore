@@ -1,0 +1,6 @@
+node_modules/
+jev-scan-out/
+scan-out/
+*.log
+.env*
+__pycache__/

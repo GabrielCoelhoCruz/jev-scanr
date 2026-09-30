@@ -1,0 +1,32 @@
+{
+  "id": "clone_same_policy",
+  "version": "3.0.0",
+  "status": "default",
+  "family": "shared_policy",
+  "kinds": ["clone_pair"],
+  "primitive": "choice",
+  "scope": "pair",
+  "question": "Do the sections labeled pair.a and pair.b implement the same kind of policy or operation, after accounting for visible types, callees and callers? Mere normalized shape, similar names or interchangeable literals are not enough.",
+  "criteria": {
+    "same_policy": "Visible evidence supports a shared operation/rule schema; any configurable values are identified explicitly, without treating differing values as erroneous.",
+    "distinct_policy": "Visible evidence shows distinct rules, domain mappings or content despite similar shape; enum/color tables and template data may be distinct policies.",
+    "insufficient": "Decisive behavior/types/caller or configuration context is absent or ambiguous."
+  },
+  "presence": "same_policy",
+  "evidence": [
+    {
+      "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",
+      "date": "2026-09-30",
+      "scanner": "0.4.x jev-only, jev-1.13.0",
+      "sample": "top-5 cells by P at or above the 0.7 cut, plus 3 random cells below it",
+      "reviewer": "LLM (Claude Opus 5.5), pass 2 with repository access; pass 1 counts in EVIDENCE.md",
+      "aboveCutInFullRun": 43,
+      "reviewedAboveCut": 5,
+      "actionableAboveCut": 5,
+      "reviewedBelowCut": 3,
+      "actionableBelowCut": 0,
+      "note": "Reviewed by one LLM reviewer (Claude Opus 5.5) in two passes; not human truth. Cells were the highest-P above the 0.7 cut, so the rate is an upper bound.",
+      "questionVersion": "3.0.0"
+    }
+  ]
+}

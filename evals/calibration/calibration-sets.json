@@ -1,0 +1,16 @@
+{
+  "schema": "calibration-sets/1",
+  "meaning": "Human-labeled card sets that an LLM judge is checked against before it may decide a signal. A judge is calibrated only by `node evals/cli.mjs calibrate` on one of these, at about 90% agreement on the clear cases.",
+  "sets": [
+    {
+      "id": "human-30",
+      "status": "waiting for human labels",
+      "cards": 30,
+      "cardsSHA256": "4271fb042cad882e8e9d18f58235fd4a4185d96558193a4b39314ef037b62252",
+      "labelFormat": "human-labels/1",
+      "labeler": "the project author, blind to every model label",
+      "origin": "drawn at random, with a frozen seed, from cards that have at least one above-cut cell of a candidate default signal, in the pre-registered validation experiment on two new public MIT TypeScript repositories",
+      "note": "The cards contain source excerpts of those public repositories, so they are published with the experiment's results rather than in this repository."
+    }
+  ]
+}

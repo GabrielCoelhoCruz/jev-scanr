@@ -1,0 +1,20 @@
+{
+  "schema": "signal-gate/1",
+  "meaning": "The rule a signal must pass to be on by default in a stable release. Commit it, and publish its hash, before the labels exist.",
+  "stable": {
+    "aboveCutStratum": "above_cut_random",
+    "belowCutStrata": ["below_cut_near", "below_cut_random"],
+    "minReviewedAboveCut": 8,
+    "minProjects": 2,
+    "actionableRate": 0.5,
+    "lowPrecisionRate": 0.3,
+    "mustExceedBelowCutRate": true,
+    "labeler": "a human, or an LLM judge whose calibration against human labels passed"
+  },
+  "alpha": {
+    "aboveCutStratum": "above_cut_top",
+    "minActionableAboveCut": 2,
+    "mustExceedBelowCutRate": true,
+    "meaning": "Top-of-ranking sample on one project. Enough for an alpha release only."
+  }
+}

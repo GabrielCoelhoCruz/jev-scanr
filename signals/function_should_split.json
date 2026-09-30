@@ -1,0 +1,32 @@
+{
+  "id": "function_should_split",
+  "version": "1.0.0",
+  "status": "default",
+  "family": "function_shape",
+  "kinds": ["function"],
+  "primitive": "choice",
+  "scope": "whole_unit",
+  "question": "Is the section labeled focus long or dense enough that a reader must track many distinct steps, and do cohesive visible blocks exist that could each stand as a separately named function? Length alone is not enough; name the blocks in your reasoning.",
+  "criteria": {
+    "split_candidate": "Cohesive, separately nameable blocks are visible and their interleaving makes the function hard to follow.",
+    "cohesive": "The function is short or its steps are already one coherent unit.",
+    "insufficient": "The full body is not visible or is too opaque to judge."
+  },
+  "presence": "split_candidate",
+  "evidence": [
+    {
+      "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",
+      "date": "2026-09-30",
+      "scanner": "0.4.x jev-only, jev-1.13.0",
+      "sample": "top-5 cells by P at or above the 0.7 cut, plus 3 random cells below it",
+      "reviewer": "LLM (Claude Opus 5.5), pass 2 with repository access; pass 1 counts in EVIDENCE.md",
+      "aboveCutInFullRun": 19,
+      "reviewedAboveCut": 5,
+      "actionableAboveCut": 4,
+      "reviewedBelowCut": 3,
+      "actionableBelowCut": 0,
+      "note": "Reviewed by one LLM reviewer (Claude Opus 5.5) in two passes; not human truth. Cells were the highest-P above the 0.7 cut, so the rate is an upper bound.",
+      "questionVersion": "1.0.0"
+    }
+  ]
+}

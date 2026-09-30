@@ -1,0 +1,47 @@
+{
+  "name": "semantic-refactor-scan",
+  "version": "0.1.0-alpha",
+  "description": "Ranks refactoring candidates in TypeScript/JavaScript projects by asking the Jev model narrow, evidence-backed questions",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "semantic-refactor-scan": "./src/cli.mjs"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "files": [
+    "src",
+    "signals",
+    "catalog.json",
+    "licenses",
+    "docs",
+    "examples",
+    "scripts",
+    "test/fixtures",
+    "NOTICE.md",
+    "EVIDENCE.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
+    "evals"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "check": "node scripts/check.mjs",
+    "ci": "npm run check && npm test",
+    "scan": "node src/cli.mjs"
+  },
+  "dependencies": {
+    "@babel/parser": "7.28.5",
+    "@babel/traverse": "7.28.5",
+    "@typesafe-ai/sdk": "0.6.0",
+    "jsonc-parser": "3.3.1"
+  },
+  "devDependencies": {
+    "ajv": "8.17.1",
+    "prettier": "3.6.2"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "id": "function_multiple_responsibilities",
+  "version": "1.0.0",
+  "status": "default",
+  "family": "function_shape",
+  "kinds": ["function"],
+  "primitive": "choice",
+  "scope": "whole_unit",
+  "question": "Does the section labeled focus perform two or more separable responsibilities (for example fetching, transforming, persisting and presenting data) that are not coordinated by one stated purpose? Judge the visible body only.",
+  "criteria": {
+    "multiple": "Two or more distinct responsibilities are visible and could be named separately without changing behavior.",
+    "single": "The visible work serves one coherent purpose, even if it has several steps.",
+    "insufficient": "The body or its decisive helpers are not visible enough to judge."
+  },
+  "presence": "multiple",
+  "evidence": [
+    {
+      "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",
+      "date": "2026-09-30",
+      "scanner": "0.4.x jev-only, jev-1.13.0",
+      "sample": "top-5 cells by P at or above the 0.7 cut, plus 3 random cells below it",
+      "reviewer": "LLM (Claude Opus 5.5), pass 2 with repository access; pass 1 counts in EVIDENCE.md",
+      "aboveCutInFullRun": 4,
+      "reviewedAboveCut": 4,
+      "actionableAboveCut": 2,
+      "reviewedBelowCut": 3,
+      "actionableBelowCut": 0,
+      "note": "Reviewed by one LLM reviewer (Claude Opus 5.5) in two passes; not human truth. Cells were the highest-P above the 0.7 cut, so the rate is an upper bound.",
+      "questionVersion": "1.0.0"
+    }
+  ]
+}

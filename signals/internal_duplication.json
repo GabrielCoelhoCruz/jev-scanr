@@ -1,0 +1,32 @@
+{
+  "id": "internal_duplication",
+  "version": "1.0.0",
+  "status": "default",
+  "family": "duplication",
+  "kinds": ["function", "function_chunk"],
+  "primitive": "choice",
+  "scope": "chunkable",
+  "question": "Within the visible focus code, are there two or more near-identical blocks that differ only in literals or identifiers and could share one implementation?",
+  "criteria": {
+    "duplicated_blocks": "Two or more visible blocks repeat the same logic with trivial variation.",
+    "none": "No meaningful repetition is visible.",
+    "insufficient": "The visible fragment is too partial to judge."
+  },
+  "presence": "duplicated_blocks",
+  "evidence": [
+    {
+      "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",
+      "date": "2026-09-30",
+      "scanner": "0.4.x jev-only, jev-1.13.0",
+      "sample": "top-5 cells by P at or above the 0.7 cut, plus 3 random cells below it",
+      "reviewer": "LLM (Claude Opus 5.5), pass 2 with repository access; pass 1 counts in EVIDENCE.md",
+      "aboveCutInFullRun": 74,
+      "reviewedAboveCut": 5,
+      "actionableAboveCut": 3,
+      "reviewedBelowCut": 3,
+      "actionableBelowCut": 0,
+      "note": "Reviewed by one LLM reviewer (Claude Opus 5.5) in two passes; not human truth. Cells were the highest-P above the 0.7 cut, so the rate is an upper bound.",
+      "questionVersion": "1.0.0"
+    }
+  ]
+}
