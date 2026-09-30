@@ -31,7 +31,9 @@ export const HEURISTICS = {
   ],
 };
 
-export const SECONDARY = { B: "vocabJaccard" };
+HEURISTICS.A2 = HEURISTICS.A;
+HEURISTICS.B2 = [...HEURISTICS.B, "surfaceJaccard"];
+export const SECONDARY = { B: "vocabJaccard", B2: "surfaceJaccard" };
 
 const quantile = (sorted, q) =>
   sorted.length
@@ -180,6 +182,18 @@ export function analyzeContrast(
       },
       sensitivity,
     };
+    if (id === "B2") {
+      const hard = neg.filter((r) => r.u.features.surfaceJaccard >= 0.8);
+      entry.hardNegatives = {
+        n: hard.length,
+        surfaceThreshold: 0.8,
+        meanP: mean(hard.map((r) => r.s.p)),
+        atCut: hard.length
+          ? hard.filter((r) => r.s.p >= cut).length / hard.length
+          : null,
+        note: "Different functions that share most literals, property names and type names. Some may truly share a policy, so a high P here is not automatically an error.",
+      };
+    }
     if (id === "C") {
       const byPair = Map.groupBy(scored, (r) => r.u.pairId);
       const deltas = [...byPair.values()]
@@ -288,6 +302,11 @@ export function markdown(result) {
     if (e.paired)
       lines.push(
         `Paired view (same body, renamed against original): ${e.paired.pairs} pairs, mean P difference ${f(e.paired.meanDelta)} (${f(e.paired.lo)} to ${f(e.paired.hi)}); renamed higher in ${e.paired.higher}, lower in ${e.paired.lower}, tied in ${e.paired.tied}; two-sided sign test p = ${f(e.paired.signTestP)}.`,
+        "",
+      );
+    if (e.hardNegatives)
+      lines.push(
+        `Hard negatives (surface overlap at least ${e.hardNegatives.surfaceThreshold}): ${e.hardNegatives.n} units, mean P ${f(e.hardNegatives.meanP)}, ${f(e.hardNegatives.atCut)} at the cut. ${e.hardNegatives.note}`,
         "",
       );
     lines.push(...e.verdict.map((v) => `- ${v}`), "");

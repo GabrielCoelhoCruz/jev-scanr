@@ -203,6 +203,27 @@ export function analyze(text, ext) {
   const shingles = new Set();
   for (let i = 0; i + 5 <= norm.length; i++)
     shingles.add(norm.slice(i, i + 5).join("\u001f"));
+  const surface = new Set();
+  walk(fn, (n, parent, key) => {
+    if (n.type === "StringLiteral" && n.value.length >= 2)
+      surface.add(`s:${n.value}`);
+    else if (n.type === "TemplateElement" && n.value.cooked?.trim().length >= 2)
+      surface.add(`s:${n.value.cooked}`);
+    else if (
+      n.type === "Identifier" &&
+      ((parent?.type.endsWith("MemberExpression") &&
+        key === "property" &&
+        !parent.computed) ||
+        (["ObjectProperty", "ObjectMethod", "TSPropertySignature"].includes(
+          parent?.type,
+        ) &&
+          key === "key" &&
+          !parent.computed))
+    )
+      surface.add(`p:${n.name}`);
+    else if (n.type === "Identifier" && parent?.type === "TSTypeReference")
+      surface.add(`t:${n.name}`);
+  });
   const locals = localNames(fn);
   const vocab = new Set(
     toks
@@ -223,6 +244,7 @@ export function analyze(text, ext) {
     norm,
     shingles,
     vocab,
+    surface,
     locals,
     words: new Set(splitWords(bodyText)),
     usesThis,

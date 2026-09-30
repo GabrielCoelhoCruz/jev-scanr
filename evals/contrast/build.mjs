@@ -132,17 +132,32 @@ function component(p, first) {
   );
 }
 
-function partText(p, first, resultName) {
+function partText(p, first, resultName, consume = false) {
   const { text, info } = p,
     fn = info.top.fn;
   let body;
   if (fn.body.type !== "BlockStatement") {
     const e = text.slice(fn.body.start, fn.body.end);
-    body = first ? `const ${resultName} = ${e};` : `return ${e};`;
+    body = first
+      ? `const ${resultName} = ${e};`
+      : consume
+        ? `return [${resultName}, ${e}];`
+        : `return ${e};`;
     return "  " + body;
   }
   const stmts = fn.body.body,
     last = stmts.at(-1);
+  if (!first && consume) {
+    const indent = indentOf(text, stmts[0].start) || "  ";
+    if (last.type === "ReturnStatement" && last.argument)
+      return `${indent}${text.slice(stmts[0].start, last.argument.start)}[${resultName}, ${text.slice(last.argument.start, last.argument.end)}]${text.slice(last.argument.end, last.end)}`;
+    if (last.type !== "ReturnStatement" && returnsOf(fn).length) return null;
+    const head = text.slice(
+      stmts[0].start,
+      last.type === "ReturnStatement" ? last.start : last.end,
+    );
+    return `${indent}${head}${last.type === "ReturnStatement" ? "" : `\n${indent}`}return ${resultName};`;
+  }
   if (first && last.type === "ReturnStatement") {
     if (last.argument)
       body = `${text.slice(stmts[0].start, last.start)}const ${resultName} = ${text.slice(last.argument.start, last.argument.end)};`;
@@ -153,7 +168,7 @@ function partText(p, first, resultName) {
   return (indentOf(text, stmts[0].start) || "  ") + body;
 }
 
-export function makeChimera(a, b) {
+export function makeChimera(a, b, { consume = false } = {}) {
   const fa = a.info.top.fn,
     fb = b.info.top.fn;
   if (a.ext !== b.ext || a.info.name === b.info.name) return null;
@@ -173,8 +188,9 @@ export function makeChimera(a, b) {
   const resultName = `${a.info.name}Result`;
   if (na.has(resultName) || nb.has(resultName)) return null;
   const first = partText(a, true, resultName),
-    second = partText(b, false, resultName);
+    second = partText(b, false, resultName, consume);
   if (!first || !second) return null;
+  if (consume && !first.includes(`const ${resultName} =`)) return null;
   const params = [fa.params, fb.params]
     .filter((ps) => ps.length)
     .map((ps, i) => {
@@ -190,7 +206,11 @@ export function makeChimera(a, b) {
   const text = `${head}\n${first}\n\n${second}\n}${a.info.top.form === "const" ? ";" : ""}\n`;
   if (secretLike(text)) return null;
   const info = analyze(text, a.ext);
-  if (!info || info.recursion || info.returns > returnsOf(fb).length + 1)
+  if (
+    !info ||
+    info.recursion ||
+    info.returns > returnsOf(fb).length + (consume ? 2 : 1)
+  )
     return null;
   return {
     text,
@@ -199,7 +219,7 @@ export function makeChimera(a, b) {
   };
 }
 
-function buildA(ctx) {
+export function buildA(ctx) {
   const rng = rngFor(SEED, "A");
   const used = new Set();
   const key = (p) => `${p.repo}:${p.path}:${p.startLine}`;
@@ -410,7 +430,7 @@ function buildC(ctx) {
   return { units, log };
 }
 
-function buildB(ctx) {
+export function buildB(ctx) {
   const rng = rngFor(SEED, "B");
   const intern = interner();
   const units = [];
@@ -602,7 +622,7 @@ function buildB(ctx) {
   return { units, log };
 }
 
-export function assemble(sets) {
+export function assemble(sets, meta = SETS) {
   const out = [];
   for (const [set, { units }] of Object.entries(sets))
     for (const u of units) {
@@ -613,7 +633,7 @@ export function assemble(sets) {
         text,
         sha256: hash(text),
       }));
-      out.push({ ...u, id, kind: SETS[set].kind, files });
+      out.push({ ...u, id, kind: meta[set].kind, files });
     }
   return out.sort(
     (x, y) =>
@@ -628,7 +648,7 @@ export function publicUnits(units) {
   }));
 }
 
-export function build(reposDir) {
+export function loadPools(reposDir) {
   const pools = {};
   for (const [repo, { dir, commit }] of Object.entries(PINNED)) {
     const cwd = join(reposDir, dir);
@@ -639,6 +659,11 @@ export function build(reposDir) {
       throw Error(`${repo} is at ${head}, expected ${commit}`);
     pools[repo] = extractPool(cwd, repo);
   }
+  return pools;
+}
+
+export function build(reposDir) {
+  const pools = loadPools(reposDir);
   const ctx = { pools };
   const sets = { A: buildA(ctx), B: buildB(ctx), C: buildC(ctx) };
   const units = assemble(sets);
