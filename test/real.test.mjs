@@ -254,3 +254,29 @@ test("descriptive readout lists flagged and labeled units by name", () => {
   );
   assert.match(markdown(r), /Descriptive readout/);
 });
+
+test("the committed live-3 run reproduces its stored analysis and stays descriptive", async () => {
+  const { scoresFromJournal } = await import("../evals/contrast/analyze.mjs");
+  const dir = join(root, "evals/real/results/live-3");
+  const journal = readFileSync(join(dir, "journal.jsonl"), "utf8");
+  const stored = JSON.parse(readFileSync(join(dir, "result.json"), "utf8"));
+  const scores = scoresFromJournal(journal, doc);
+  const read = (name) =>
+    parseLabels(
+      readFileSync(join(root, `evals/real/labels/${name}.jsonl`), "utf8"),
+      doc,
+    );
+  const again = analyzeReal(
+    doc,
+    scores,
+    [
+      { name: "claude", labels: read("claude") },
+      { name: "gpt", labels: read("gpt") },
+    ],
+    { resamples: stored.resamples },
+  );
+  assert.deepEqual(again, stored);
+  assert.match(stored.conclusion, /^No conclusion/);
+  assert.equal(stored.alertRate.flagged, 0);
+  assert.equal(scores.size, 400);
+});
