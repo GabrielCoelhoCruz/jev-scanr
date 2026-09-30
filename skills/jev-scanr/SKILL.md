@@ -12,7 +12,7 @@ description: Use when the user asks for refactoring candidates, cleanup targets,
 Check for `jevs` with `command -v jevs`. If it is missing, install it with Node.js 24+:
 
 ```sh
-npm install -g github:GabrielCoelhoCruz/jev-scanr#v0.3.0-alpha
+npm install -g github:GabrielCoelhoCruz/jev-scanr#v0.3.1-alpha
 jevs --version
 ```
 
