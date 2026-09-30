@@ -85,7 +85,11 @@ test("a plan from the alpha release, without scope or the hard cap, still verifi
   for (const u of old.units) u.budget.hardByteCap = old.limits.maxRequestBytes;
   reseal(old);
   assert.equal(verifyPlan(old).planHash, old.planHash);
-  assert.deepEqual(COMPATIBLE_PLAN_VERSIONS, ["0.1.0-alpha", "0.1.1"]);
+  assert.deepEqual(COMPATIBLE_PLAN_VERSIONS, [
+    "0.1.0-alpha",
+    "0.1.1",
+    "0.2.0-alpha",
+  ]);
   const wrong = structuredClone(p);
   delete wrong.limits.maxHardRequestBytes;
   assert.throws(() => verifyPlan(reseal(wrong)), /limit schema/);

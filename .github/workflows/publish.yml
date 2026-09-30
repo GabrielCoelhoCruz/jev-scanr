@@ -1,0 +1,44 @@
+name: publish
+
+# Disabled until the maintainer approves npm publishing (see docs/RELEASING.md).
+# The job runs only when the repository variable NPM_PUBLISH_ENABLED is "true".
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: ${{ vars.NPM_PUBLISH_ENABLED == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm ci --ignore-scripts --no-audit --no-fund
+      - run: npm run ci
+      - run: python3 -m unittest discover -s test -p test_pinned_config.py
+      - name: Tag matches package.json
+        env:
+          TAG: ${{ github.ref_name }}
+        run: test "v$(node -p "require('./package.json').version")" = "$TAG"
+      - name: Pack
+        run: npm pack --ignore-scripts
+      - name: Dry run
+        run: npm publish ./jev-refactor-*.tgz --access public --ignore-scripts --dry-run
+      - name: Publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish ./jev-refactor-*.tgz --access public --ignore-scripts --provenance

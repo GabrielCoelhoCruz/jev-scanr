@@ -1,11 +1,29 @@
 {
-  "name": "semantic-refactor-scan",
-  "version": "0.1.1",
-  "description": "Ranks refactoring candidates in TypeScript/JavaScript projects by asking the Jev model narrow, evidence-backed questions",
+  "name": "jev-refactor",
+  "version": "0.2.0-alpha",
+  "description": "A refactoring queue for TypeScript and JavaScript projects, judged by the Jev model. Unofficial, not affiliated with TypeSafe.",
+  "keywords": [
+    "jev",
+    "typesafe",
+    "refactoring",
+    "code-quality",
+    "coding-agents",
+    "cli",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GabrielCoelhoCruz/jev-refactor.git"
+  },
+  "homepage": "https://github.com/GabrielCoelhoCruz/jev-refactor#readme",
+  "bugs": {
+    "url": "https://github.com/GabrielCoelhoCruz/jev-refactor/issues"
+  },
   "license": "MIT",
   "type": "module",
   "bin": {
-    "semantic-refactor-scan": "./src/cli.mjs"
+    "jev-refactor": "./src/cli.mjs",
+    "jr": "./src/cli.mjs"
   },
   "engines": {
     "node": ">=24"
@@ -16,6 +34,7 @@
     "catalog.json",
     "licenses",
     "docs",
+    "skills",
     "examples",
     "scripts",
     "test/fixtures",

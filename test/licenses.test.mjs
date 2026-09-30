@@ -37,6 +37,6 @@ test("the package is MIT and names the contributors collectively", () => {
   assert.equal(pkg.license, "MIT");
   assert.match(
     read("LICENSE"),
-    /^MIT License\n\nCopyright \(c\) 2026 the semantic-refactor-scan contributors/,
+    /^MIT License\n\nCopyright \(c\) 2026 the jev-refactor contributors/,
   );
 });

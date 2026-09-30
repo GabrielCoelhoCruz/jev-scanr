@@ -1,6 +1,6 @@
 # Notices and provenance
 
-`semantic-refactor-scan` is released under the MIT license in [`LICENSE`](LICENSE), copyright the semantic-refactor-scan contributors.
+`jev-refactor` is released under the MIT license in [`LICENSE`](LICENSE), copyright the jev-refactor contributors. It was called `semantic-refactor-scan` before 0.2.0-alpha.
 
 ## Origin
 
@@ -17,7 +17,7 @@ Runtime dependencies are installed, not vendored, and pinned exactly in `package
 
 ## Examples and evidence
 
-`examples/demo-app/` is synthetic code written for this project. Its `expected/` directory is one real recorded run on it. `EVIDENCE.md` shows a few paths, one 5-line snippet and measured results from a scan of the author's own application (https://github.com/GabrielCoelhoCruz/daily-tracker), which is public. `signals/` records numbers from that run. No third-party application corpus is bundled.
+`examples/demo-app/` is synthetic code written for this project. Its `expected/` directory is one real recorded run on it. `evals/results/` shows a few paths, one 5-line snippet and measured results from a scan of the author's own application (https://github.com/GabrielCoelhoCruz/daily-tracker), which is public, and line ranges (no copied source) for candidates in two other public MIT repositories, linked at pinned commits: https://github.com/pingdotgg/t3code and https://github.com/can1357/oh-my-pi. `signals/` records numbers from that run. No third-party application corpus is bundled. This project's structure (README, agent skill, results write-ups) follows https://github.com/dzhng/jevgrep as a model; no code was copied from it.
 
 ## Apache-2.0 material
 

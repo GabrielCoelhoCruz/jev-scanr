@@ -168,7 +168,7 @@ export function auditCases(cases) {
 }
 
 export function caseProject(c) {
-  const root = mkdtempSync(join(tmpdir(), "semantic-refactor-scan-case-"));
+  const root = mkdtempSync(join(tmpdir(), "jev-refactor-case-"));
   for (const [path, source] of Object.entries(c.files)) {
     mkdirSync(dirname(join(root, path)), { recursive: true });
     writeFileSync(join(root, path), source);

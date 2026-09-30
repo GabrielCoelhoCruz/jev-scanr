@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.0-alpha
+
+- **Renamed to `jev-refactor`** (was `semantic-refactor-scan`). The command is `jev-refactor`, with the short alias `jr`. Schema identifiers (`semantic-refactor-scan-plan/1`, `semantic-refactor-scan-report/1`) keep their names, because plans and the recorded demo are bound to them by hash. Plans from 0.1.0-alpha and 0.1.1 still verify.
+- `jr auth` saves your TypeSafe API key in an owner-only file (`~/.config/jev-refactor/credentials.json`, mode 0600; a file readable by others is refused); `jr auth --remove` deletes it. `TYPESAFE_API_KEY` in the environment still wins. The key is never a command-line option.
+- `jr skill` installs the agent skill `skills/jev-refactor/SKILL.md` through `npx skills`. The skill tells an agent when to scan, to ask for a cost cap first, and to verify each queue item before editing.
+- Evals: a `human-labels/1` file must say `"labelerKind": "human"` and cannot name a model as labeler, so LLM labels cannot be counted as human. The gate rule in `evals/gate.json` gains a release outcome (4 or more default signals: stable; 2 or fewer: pivot; exactly 3: stay alpha; labels not from a person or calibrated judge: not decidable). Its pinned hash changed; see `CONTRIBUTING.md`.
+- Documentation: `README.md` restructured; `EVIDENCE.md` is now an index over `evals/results/`; `docs/DESIGN.md` became `docs/architecture.md`; issue and pull request templates; a publish workflow that is disabled until an npm release is approved.
+- Scan behavior, questions and signals are unchanged from 0.1.1.
+
 ## 0.1.1
 
 - `--paths dir1,dir2` scans only the given directories or files. Units and context come only from them. Files outside are counted, not read.

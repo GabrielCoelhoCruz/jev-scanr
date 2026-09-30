@@ -1,30 +1,58 @@
-# semantic-refactor-scan
+# jev-refactor
 
-**A refactoring queue for TypeScript and JavaScript projects, judged by the Jev model.** _v0.1.0-alpha_
+[![CI](https://img.shields.io/github/actions/workflow/status/GabrielCoelhoCruz/jev-refactor/ci.yml?style=flat-square&label=ci)](https://github.com/GabrielCoelhoCruz/jev-refactor/actions/workflows/ci.yml)
+[![MIT license](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Node.js 24+](https://img.shields.io/badge/Node.js-24%2B-339933?style=flat-square)](package.json)
+![alpha](https://img.shields.io/badge/status-alpha-orange?style=flat-square)
 
-It cuts your project into functions and similar pairs of functions, asks [Jev](https://docs.typesafe.ai) a few narrow yes/no-style questions about each one ("does this function do two or more separable jobs?", "does it embed unexplained policy numbers?"), and gives you a list ordered by Jev's probability. You, or a coding agent, verify each item and act on the ones that hold.
+**A refactoring queue for TypeScript and JavaScript projects, judged by the Jev model.** Built on TypeSafe's Jev. Unofficial, not affiliated with TypeSafe.
 
-It is **not** a bug finder, a security scanner or an auto-fixer. It changes no files. Every finding and its order come only from Jev's probabilities; the code only forms units and gathers context. Built on TypeSafe's Jev model. Unofficial, not affiliated with TypeSafe.
+**Measured, not promised.** We started with 22 candidate questions and kept the 7 that survived a written review rule. In a pre-registered test on two repositories we had never scanned, 3 of those 7 reached a usefulness band by an LLM reviewer's labels (one above 50% actionable, two between 30% and 50%), and **no person has confirmed them yet**, so this is an alpha. [What we measured](#what-we-measured) has the numbers and the limits.
 
-> **Alpha.** The seven default signals passed a small check on one project, reviewed by one LLM. Read [`EVIDENCE.md`](EVIDENCE.md) before you trust a number.
+<!-- TODO(after the pull request exists): add the confirmed oh-my-pi finding to this paragraph. Do not write "found a real bug in oh-my-pi" before a maintainer or a test confirms it. The showcase candidates are hypotheses today. -->
 
-## Try it
+It cuts your project into functions and similar pairs of functions, asks [Jev](https://docs.typesafe.ai) a few narrow questions about each one ("does this function do two or more separable jobs?", "does it embed unexplained policy numbers?"), and gives you a list ordered by Jev's probability. You, or a coding agent, verify each item and act on the ones that hold. It is **not** a bug finder, a security scanner or an auto-fixer, and it changes no files.
 
 ```sh
-git clone <this repo> && cd semantic-refactor-scan && npm ci     # Node 24+
-node src/cli.mjs scan ~/code/my-project                      # dry run: shows units and cost, sends nothing
+npm install -g github:GabrielCoelhoCruz/jev-refactor    # not on npm yet; Node.js 24+
+jr auth                                                 # saves your TypeSafe key; or: export TYPESAFE_API_KEY=...
+jr scan .                                               # dry run: units, requests, cost estimate; sends nothing
 ```
 
-`npm link` gives you a `semantic-refactor-scan` command instead of `node src/cli.mjs`. Once the package is on npm, `npx semantic-refactor-scan scan .` works the same way. It already runs from a packed tarball with `npx ./semantic-refactor-scan-0.1.0-alpha.tgz`.
+The dry run needs no key, so you can try the first and third command before you have one. `jr` is short for `jev-refactor`. A live run needs your own [TypeSafe](https://docs.typesafe.ai) API key and runs only when you add `--run --yes --cap-usd N`.
 
-**A scan reads at most 500 files, in path order, and indexes at most 12,000 functions and packs at most 2,000 units.** The dry run says so right next to the cost (`Coverage: read 485 of 3,953 source files (12%)`) and lists which directories were not read, and it warns with `NOT INDEXED` or `NOT PACKED` if a function or unit cap cut a slice short. For a larger project, scan it in slices with `--paths apps/web/src/components,apps/server`. Units and their context come only from the paths you give, so keep related code in one slice. Each slice is a separate run with its own cost.
+## Install the agent skill
 
-If your `tsconfig.json` extends a config that lives in a package (Expo, Next, …), read [`docs/EXTERNAL-CONFIGS.md`](docs/EXTERNAL-CONFIGS.md) first: without it, imports through path aliases get less context.
-
-Try it on the bundled demo app first. The dry run sends nothing:
+Installing the CLI alone does not teach your coding agent to use it. Install the skill too, from the project where your agent works:
 
 ```sh
-node src/cli.mjs scan examples/demo-app
+jr skill
+```
+
+It detects your coding agents (Claude Code, Codex, OpenCode and others) and asks where to install; add `--global` for a user-wide install or `--yes` for unattended installation. The [skill](skills/jev-refactor/SKILL.md) tells the agent when to run a scan, how to keep it inside a cost cap, and how to **verify each queue item before editing**: items are hypotheses, not orders. `jr skill` delegates to the [skills CLI](https://github.com/vercel-labs/skills) and needs npm/npx and network access. You can run the installer directly, without `jr`:
+
+```sh
+npx skills add GabrielCoelhoCruz/jev-refactor --skill jev-refactor
+```
+
+The skill never asks for your key in chat; `jr auth` is for you to run in your own terminal.
+
+## Start with a scan, leave with a queue
+
+```sh
+jr scan .                                      # dry run: units, requests, coverage, estimated and worst-case cost
+jr scan . --list-files                         # every file whose source would be sent
+jr scan . --exclude private,legacy/keys --run --yes --cap-usd 0.5 --out ../scan-out
+```
+
+A live run writes `queue.md` (start here), `report.md` (counts, cost, per-signal table), `report.json`, plus `plan.json` and the run journal. The output directory must be outside the project. `plan.json` contains source excerpts, so keep it private. If a run stops early (an API error, the cost cap), the report covers what was answered, and `jr continue` plans only what is missing (`jr --help`).
+
+**A scan reads at most 500 files, in path order, and indexes at most 12,000 functions and packs at most 2,000 units.** The dry run says so next to the cost (`Coverage: read 485 of 3,953 source files (12%)`), lists the directories it did not read, and warns with `NOT INDEXED` or `NOT PACKED` if a cap cut a slice short. For a larger project, scan it in slices: `jr scan . --paths apps/web/src/components,apps/server`. Units and their context come only from the paths you give, so keep related code in one slice. Each slice is a separate run with its own cost. If your `tsconfig.json` extends a config that lives in a package (Expo, Next, and so on), read [`docs/EXTERNAL-CONFIGS.md`](docs/EXTERNAL-CONFIGS.md) first.
+
+Try it on the bundled demo app first; it has problems put in on purpose ([`examples/demo-app/`](examples/demo-app/)):
+
+```sh
+jr scan examples/demo-app
 ```
 
 ```
@@ -33,26 +61,7 @@ Requests: 15 (85 questions, 0.08 MB of request text)
 Estimated cost: US$0.0011 (bytes ÷ 3 per token); worst case US$0.0061 (one token per byte, plus one reservation)
 ```
 
-When you are happy with the scope and the cost, run it on your own key:
-
-```sh
-export TYPESAFE_API_KEY=...                                  # your key; never a command-line option
-node src/cli.mjs scan examples/demo-app --run --yes --cap-usd 0.02 --out ../demo-scan   # about a tenth of a cent
-node src/cli.mjs scan ~/code/my-project --list-files         # every file whose source would be sent
-node src/cli.mjs scan ~/code/my-project --exclude private,legacy/keys --run --yes --cap-usd 0.5 --out ./scan-out
-```
-
-It writes `queue.md` (start here), `report.md` (counts, cost, per-signal table), `report.json`, plus `plan.json` and the run journal. `plan.json` contains source excerpts, so keep it private. If a run stops early (an API error, the cost cap), the report covers what was answered and `continue` plans only what is missing (`node src/cli.mjs --help`).
-
-## What gets sent, and what it costs
-
-- **Sent:** each analyzed function or pair, with bounded context (callers, imported declarations, one hop), to `https://api.typesafe.ai` under your own key. Nothing else is sent, and nothing is stored by this tool outside your output directory.
-- **Never read:** `node_modules`, dot-directories, build output, generated files, symlinks, and anything you pass to `--exclude`. Files whose path contains `secret` or `credential`, or whose content looks like a key or token, are skipped. That guard is a heuristic. Check `--list-files` before a live run.
-- **Cost:** `jev-1.13.0` at US$0.042 per million input tokens. The dry run prints a central estimate and a worst case. `--cap-usd` refuses to start if the worst case exceeds the cap, and a run stops before a request that could pass it. Up to 8 requests run at once (`--concurrency`), paced by a token-bucket limiter that stays under Jev's documented rate limits, so a 30,000-line project takes about a minute or two. Each request reserves its worst-case cost before it is sent. There are no automatic retries, and the first error stops the run, a 429 included. Costs are calculated from the tariff and the token counts the API returns. They are not an invoice.
-
-## What comes out
-
-The demo app has problems put in on purpose (see [`examples/demo-app/`](examples/demo-app/)). Here is an item from a **real run recorded on `jev-1.13.0`**, which cost US$0.0011 ([`expected/`](examples/demo-app/expected/) has the receipt, journal and reports). `queue.md` lists paths, line ranges and Jev's answer, and no source:
+Here is an item from a **real run recorded on `jev-1.13.0`** that cost US$0.0011 ([`expected/`](examples/demo-app/expected/) has the receipt, journal and reports). `queue.md` lists paths, line ranges and Jev's answer, and no source:
 
 ```
 ## 2. lateFee src/billing.ts:1–7 · magic_policy_literal@1.0.0 · P=1.00
@@ -66,11 +75,11 @@ const fee = amount * 0.035 * Math.min(daysLate - 14, 60);
 return fee > 250 ? 250 : Math.round(fee * 100) / 100;
 ```
 
-Seven of the demo's functions have a problem seeded in, and the recorded run put exactly those seven at the top and none of the clean ones. That shows the output format and the plumbing, **not accuracy**: we wrote the problems, so they are easy. For measured results on a real project, including where it did not work, read [`EVIDENCE.md`](EVIDENCE.md). Your run will not match the recording exactly, because Jev's probabilities are not reproducible from call to call.
+Seven of the demo's functions have a problem seeded in, and the recorded run put exactly those seven at the top and none of the clean ones. That shows the output format and the plumbing, **not accuracy**: we wrote the problems, so they are easy. Your run will not match the recording exactly, because Jev's probabilities are not reproducible from call to call.
 
 ## Signals
 
-Seven signals are on by default, one is experimental (`--experimental`). The other fourteen tried in the prototype are retired: [`signals/retired.md`](signals/retired.md) says why, with the numbers.
+Seven signals are on by default and one is experimental (`--experimental`). The other fourteen tried in the prototype are retired: [`signals/retired.md`](signals/retired.md) says why, with the numbers.
 
 | Signal                               | Asks about                                                       | Status       |
 | ------------------------------------ | ---------------------------------------------------------------- | ------------ |
@@ -83,14 +92,39 @@ Seven signals are on by default, one is experimental (`--experimental`). The oth
 | `deep_nesting`                       | control flow nested three or more levels                         | default      |
 | `unreachable_code`                   | statements that can never run                                    | experimental |
 
-`node src/cli.mjs signals` lists them with their evidence. Each question lives in one file under [`signals/`](signals/); adding one is described in [`CONTRIBUTING.md`](CONTRIBUTING.md).
+`jr signals` lists them with their evidence. Each question lives in one file under [`signals/`](signals/); adding one is described in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
-## Reading a probability
+P is Jev's probability for the positive option of one narrow question, rounded to two decimals. It is **not** the chance of a bug, and not the chance that a refactor pays off. It is not reproducible from call to call, and the 0.7 display cut is a display setting, not a calibration (`--threshold` moves it offline). When the chosen option is within 0.01 of another, the item is flagged `near tie`.
 
-P is Jev's probability for the positive option of one narrow question, rounded to two decimals. It is **not** the chance of a bug, and not the chance that a refactor pays off. It is not reproducible: the one request we had to send twice came back with a different distribution the second time. The 0.7 display cut is a display setting, not a calibration; `--threshold` moves it offline. When the chosen option is within 0.01 of another, the item is flagged `near tie`.
+## What we measured
 
-`evals/` has what you need to test a signal the way we did (case sets, oracle and null checks, noise floor, P variance, a calibrated LLM judge, a pre-registered gate); see [`evals/README.md`](evals/README.md).
+Every number has its limits next to it. All labels come from an LLM reviewer; no person has labeled anything yet. [`EVIDENCE.md`](EVIDENCE.md) is the index, and each write-up in [`evals/results/`](evals/results/) gives the method, the sample and what it does not show:
 
-## Layout, tests, license
+- **[Signal curation on one app](evals/results/signal-curation-daily-tracker.md).** 22 questions in, 7 kept by a rule written before the labels: on the top cells of the kept signals 21 of 29 were actionable (72%, an upper bound), against 1 of 41 for the rest, and 0 of 64 random cells below the cut. One project, the author's own.
+- **[Validation gate on two new repositories](evals/results/validation-gate-2026-09-30.md).** Pre-registered, random above-cut sample. 3 of 7 signals reached a default band (only `clone_same_policy` above 50%), the repositories disagree on two of the three, and the rule's outcome for exactly 3 was not registered. The project stays an alpha. The release code was not the code that ran (the prototype it derives from was).
+- **[Showcase on t3code and oh-my-pi](evals/results/showcase-t3code-oh-my-pi-2026-09-30.md).** Five candidates as hypotheses on 2.8% to 6.8% of two repositories, with pinned commits. We have not contacted the maintainers.
+- **[One candidate, in detail](evals/results/daily-tracker-case-study.md).** What a useful item looks like, and what it takes to confirm one.
 
-`src/` (units → context → requests → journal → report), `signals/` (one file per question), `evals/`, `examples/demo-app/`, `docs/` (design and offline config data), `test/` (`npm test`, no network, no Jev calls). `npm run ci` also checks formatting. MIT, see [`LICENSE`](LICENSE) and [`NOTICE.md`](NOTICE.md). Security and privacy notes are in [`SECURITY.md`](SECURITY.md).
+## Source, credentials, and local state
+
+- **Sent:** each analyzed function or pair, with bounded context (callers, imported declarations, one hop), to `https://api.typesafe.ai` under your own key. Nothing else is sent. A dry run sends nothing.
+- **Never read:** `node_modules`, dot-directories, build output, generated files, symlinks, and anything you pass to `--exclude`. Files whose path contains `secret` or `credential`, or whose content looks like a key or token, are skipped. That guard is a heuristic: check `--list-files` and choose a root you are willing to send.
+- **Your key:** `TYPESAFE_API_KEY` in the environment wins; otherwise `jr auth` stores it in an owner-only file (`$XDG_CONFIG_HOME/jev-refactor/credentials.json`, default `~/.config/jev-refactor/`, mode 0600; a file readable by other users is refused). The key is never accepted as a command-line option, printed, or written into a report. `jr auth --remove` deletes it.
+- **Cost:** `jev-1.13.0` at US$0.042 per million input tokens. The dry run prints a central estimate and a worst case. `--cap-usd` refuses to start if the worst case exceeds the cap, and a run stops before a request that could pass it. Up to 8 requests run at once (`--concurrency`), paced under Jev's documented rate limits; there are no automatic retries, and the first error stops the run, a 429 included. Costs are calculated from the tariff and the returned token counts, not an invoice.
+- **Local state:** only what you ask for, in the output directory you choose. Nothing runs your project's code.
+
+See [`SECURITY.md`](SECURITY.md) for the full list and how to report a problem.
+
+## Development
+
+```sh
+git clone https://github.com/GabrielCoelhoCruz/jev-refactor && cd jev-refactor
+npm ci                                                   # Node.js 24+
+npm run ci                                               # syntax and formatting checks, then all tests (offline)
+python3 -m unittest discover -s test -p test_pinned_config.py
+node src/cli.mjs scan examples/demo-app                  # the same CLI without installing it
+```
+
+Tests never call Jev and never need a key. How the pipeline works (units, context, requests, journal, report) is in [`docs/architecture.md`](docs/architecture.md); the evaluation tools are in [`evals/README.md`](evals/README.md). Contributions are welcome, especially new questions with evidence and labels from your own project: read [`CONTRIBUTING.md`](CONTRIBUTING.md), including the gate a signal must pass to be on by default. Releases are described in [`docs/RELEASING.md`](docs/RELEASING.md); the package is not published to npm.
+
+[MIT](LICENSE). Provenance and third-party notices: [`NOTICE.md`](NOTICE.md).

@@ -1,160 +1,23 @@
 # Evidence
 
-What we measured, how, and what it does and does not show. Every number below comes from one project, one Jev model version and one LLM reviewer. None of it is human truth. Where a number could mislead, we say so next to it.
+The index of what we measured. Each write-up in [`evals/results/`](evals/results/) gives the method, the sample, the result and what it does **not** show. The short version: every label so far comes from an LLM reviewer, **no person has labeled anything**, every sample is small, and nothing here is confirmed by a maintainer or a test. Read the limits before you trust a number.
 
-## 1. Where the seven signals come from
+| Write-up                                                                                | What it measured                                                                         | Headline                                                                                                                                                                       | Main limit                                                                                                              |
+| --------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| [Signal curation on one app](evals/results/signal-curation-daily-tracker.md)            | 22 candidate questions, scored on one TypeScript/React Native app and reviewed by an LLM | 7 kept by a rule written before the labels: 21 of 29 top cells actionable (72%) against 1 of 41 for the rest; 0 of 64 random cells below the cut                               | The 72% is an upper bound (highest-probability cells only); one project, the author's own                               |
+| [Validation gate on two new repositories](evals/results/validation-gate-2026-09-30.md)  | Pre-registered random above-cut sample on two repositories never used before             | 3 of 7 signals reached a default band (only `clone_same_policy` above 50%); the project stays an alpha                                                                         | Small n, LLM labels, the prototype pipeline ran (same questions); the repositories disagree on two of the three signals |
+| [Showcase on t3code and oh-my-pi](evals/results/showcase-t3code-oh-my-pi-2026-09-30.md) | What the scanner surfaces on two public MIT repositories, at pinned commits              | 28 of 79 sampled cells actionable in the sealed first pass (35%), 34 after a repository-reading second pass that leans toward confirming; five candidates listed as hypotheses | 2.8% to 6.8% of each repository has a judged unit; no below-cut sample, so not a gate; maintainers not contacted        |
+| [One candidate in detail](evals/results/daily-tracker-case-study.md)                    | What a useful item looks like and what it takes to confirm one                           | A literal-thresholds item that a repository read turned into "a helper already exists"                                                                                         | One item, chosen to illustrate                                                                                          |
 
-The scanner started as a prototype with **22 questions** ("signals") across five unit types: functions, similar pairs, catch blocks, sibling functions and comment blocks. One live pass ran on the sanitized daily-tracker project (a TypeScript / React Native app: 170 source files, about 32,000 lines):
+## The gate
 
-- 884 requests, 7,915 questions, `jev-1.13.0`, US$0.168 calculated from the tariff and returned token counts (not an invoice).
-- 473 cells came out at or above the 0.7 display cut.
-- One LLM reviewer (Claude Opus 5.5) labeled a sample of cells `actionable` / `no_action` / `uncertain` in two passes: first from the request context alone, then again with read access to the repository. The rubric is fixed text: _actionable_ means concrete evidence that a bounded improvement merits coding verification, and it is not a confirmed bug. The pass-1 labels were sealed (hashed) before any repository access. Pass 2 is anchored on pass 1, so it is not an independent judgment.
-- The sample per signal: the **5 highest-probability cells at or above the cut**, plus 3 random cells below it. A rule frozen before the labels was used to join labels to cells.
+A signal is on by default in a stable release only if it passes the written gate in [`CONTRIBUTING.md`](CONTRIBUTING.md) ([`evals/gate.json`](evals/gate.json), pinned by hash): a random above-cut sample from two or more projects, n of at least 8, at least 50% actionable and above the below-cut rate (30-50% with a low-precision label), labels from a person or a calibrated judge. The release count is: 4 or more default signals to release, 2 or fewer to pivot to the evaluation protocol as the product, and exactly 3 means the release stays an alpha. No judge is calibrated yet, because the 30 human-labeled cards that would calibrate it do not exist, so under that rule **every signal is still experimental**, and the current defaults are alpha defaults.
 
-**Result of the join.** With a rule written down before the join (keep if at least 2 of the top-5 cells were actionable and the top rate beat the below-cut rate; drop if none was), **7 signals kept, 1 needed its question fixed, 14 dropped**:
+## Limits that apply to everything here
 
-|            | Signals | Top cells reviewed | Actionable | Rate |
-| ---------- | ------: | -----------------: | ---------: | ---: |
-| Kept       |       7 |                 29 |         21 |  72% |
-| All others |      15 |                 41 |          1 |   2% |
-
-Below the cut, **0 of 64** random cells were actionable, for every signal. The per-signal numbers are in each `signals/*.json` file (`evidence`) and in [`signals/retired.md`](signals/retired.md).
-
-**The clearest case.** `clone_behavior_difference` marked 183 of 195 similar pairs at or above the cut, and 0 of the 5 reviewed were actionable. The reviewer found style variants and identical bodies. The 14 dropped signals produced 255 of the 473 items above the cut. That is more than half the report, and it came from questions that did not work. Cutting the questions removed that noise. Swapping the model did not.
-
-### Case study: a real run on one app
-
-The prototype run behind these numbers was on the author's own app, [`GabrielCoelhoCruz/daily-tracker`](https://github.com/GabrielCoelhoCruz/daily-tracker) at commit `6b8e9d08767e0364f78ccdf763ea654429cf5fc8` (a React Native / Expo app). A sanitized copy was scanned, with two files withheld. The run put 473 cells at or above the cut. One of them shows what a useful item looks like, and what it takes to confirm one.
-
-`buildMetrics` in `components/history/HistoryMetricsGrid.tsx` (lines 23–79) came out at P=0.99 for `magic_policy_literal`. It colours a weekly score with two bare thresholds:
-
-```ts
-const averageColor =
-  review.averageScore != null && review.averageScore >= 75
-    ? theme.colors.semantic.success
-    : review.averageScore != null && review.averageScore >= 50
-      ? theme.colors.accent.DEFAULT
-```
-
-The reviewer's first pass, from the request context alone, said `uncertain`: it could not tell whether a shared constant or helper already existed. With repository access it changed to `actionable`. On the same History screen, `WeeklyReviewCard` colours the same score at 90 / 75 / 50, and a helper, `getExecutionScoreTone`, already encodes 90 / 75 / 50. So the 75 / 50 bands are a real inconsistency, and the refactor is to use the helper. The item alone only said "unexplained literals". Confirming it took reading the repository, which is what the queue asks you or your agent to do. Nobody has confirmed this as a bug, and the app was not changed by this project.
-
-## 2. What these numbers do not show
-
-- **The 72% is an upper bound.** Reviewed cells are the _highest_-probability ones. For `magic_policy_literal` (72 cells above the cut) and `internal_duplication` (74), only 5 each were reviewed. Nothing is known about the other 67 and 69.
-- **Small n.** `deep_nesting` rests on 2 cells, `unused_local_or_parameter` on 3, `function_multiple_responsibilities` on 4, `unreachable_code` on 1. One label moves a verdict.
-- **One reviewer, one model family, no human labels.** Claude Opus 5.5 labeled every cell. No person has labeled any. Agreement with the reviewer is agreement with a model.
-- **One project, the author's own.** A single React Native app. That is the only corpus with positive multi-signal evidence.
-- **The below-cut sample says little about the cut.** 0 of 64 is consistent with a good cut, but most below-cut cells sit far under 0.7. Random draws rarely land near the boundary, and we did not test what lies just below it.
-- **P is not stable.** Jev's probabilities are rounded to two decimals, and the one request we had to send twice returned a different distribution the second time. We have not measured the variance; treat 0.7 as a display setting, not a calibrated threshold. When a chosen option is within 0.01 of another, the report flags a `near tie`.
-- **The measured requests carried 22 questions; this release sends 7 or 8.** The question text is identical, but each request is now smaller, so for some units the byte-budget trimming keeps more context (on the daily-tracker snapshot, 47 of 686 unsplit units differ, and none has less), and similar pairs are asked one question instead of three. We have not re-measured Jev's answers on the new requests, so the probabilities may differ from the ones behind these numbers.
-- **Validation does not carry over between question versions or corpora.** An earlier prototype question about narrating comments scored 19 of 20 on one project (with a different answer type) and 0 of 5 on this one. Each catalog entry carries its own evidence, and a rewritten question starts with none.
-
-## 3. The test on independent repositories, and why it failed
-
-Before this design, an earlier version was tried on two independent public repositories (`ArcaneWizards/open-source`, a show-control monorepo, and `Borodin/typescript-telegram-bot-api`, an API client). That test asked a different question: does Jev, used to _rerank_ candidates chosen by deterministic rules, beat the deterministic ranking? A pre-registered gate said yes only if it gained at least 10 points pooled and lost nothing on either repository.
-
-It **failed**. At K = 10 over both repositories, Jev had 5 of 93 actionable slots and the deterministic ranking had 9 of 93. Positives were very sparse: 10 actionable cells out of 179 reviewed.
-
-Why, as far as the review showed:
-
-- The two strongest candidates the reviewer found sat in packages whose source had been cut off by the request byte limit, so the model never saw them. The current pipeline no longer drops focus source.
-- One unresolved helper (`callApi`) explained 16 of 38 "uncertain" labels, which one more step of `this.*` resolution would have resolved. That is still not implemented.
-- Some behavior lived in native (`.cpp`/`.mm`) files outside TypeScript resolution.
-
-That test measured reranking, and this tool no longer reranks. **The jev-only pipeline in this repository has not been run on those independent repositories.** Nothing here says it would do better or worse there.
-
-## 4. What would change our minds, and what comes next
-
-A signal is on by default only if it passes a written gate ([`CONTRIBUTING.md`](CONTRIBUTING.md)). The seven current defaults passed the _alpha_ gate on one project. The stable gate is stricter, and none of them has passed it with labels from a person:
-
-- **The first run of this experiment** is reported in section 5. It reached 3 default signals, and labels from a person are still missing. **The design was:** two new public MIT TypeScript repositories that nobody on this project has used, a random sample above the cut (not the top-5), four cells just below the cut, 50 repeated requests to measure how much P moves, a fresh LLM reviewer, and 30 cards labeled by a person.
-- **Stable release if at least 4 signals are default** (50% actionable, or 30-50% with the low-precision label) on the random above-cut sample with n ≥ 8. **If 2 or fewer do,** the useful part of this work is the evaluation protocol (frozen rules, sealed labels, a blind join), and this scanner becomes its example.
-- If people agree with the reviewer on fewer than 70% of the human-labeled cards, every number in this file gets a "not human-confirmed" label.
-
-Everything above is reproducible from the questions in `signals/`, the frozen sampling and join rules, and the labels, which we plan to publish with the results.
-
-## 5. Result of the pre-registered independent test (LLM labels only)
-
-Section 4 described this experiment as planned. It has now run on `paulrobello/claude-office` and `reshaped-ui/reshaped`, with the sampling, the join and the gate frozen before any label existed. A fresh Opus reviewer labeled all 145 sampled cells from the cards alone (pass 1, sealed before it had repository access), then again with repository access (pass 2). **No person has labeled anything yet, so every number below is "not human-confirmed".**
-
-Random sample above the 0.7 cut, both repositories pooled, pass 1 (pass 2 differs in one cell, `clone_same_policy` in `reshaped`, and changes no verdict):
-
-| Signal                               | Actionable above cut | Below the cut (4 nearest per repo) | Registered verdict             |
-| ------------------------------------ | -------------------- | ---------------------------------- | ------------------------------ |
-| `clone_same_policy`                  | 12/16 (75%)          | 2/8 (25%)                          | default                        |
-| `function_should_split`              | 6/16 (38%)           | 2/8 (25%)                          | default, low-precision warning |
-| `function_multiple_responsibilities` | 3/8 (38%)            | 2/8 (25%)                          | default, low-precision warning |
-| `internal_duplication`               | 4/16 (25%)           | 1/8 (13%)                          | experimental                   |
-| `magic_policy_literal`               | 3/16 (19%)           | 0/8 (0%)                           | experimental                   |
-| `unused_local_or_parameter`          | 1/9 (11%)            | 2/8 (25%)                          | experimental                   |
-| `deep_nesting`                       | 0 cells              | 2/8 (25%)                          | experimental (n < 8)           |
-| `unreachable_code`                   | 0 cells              | 0/8                                | experimental, outside the gate |
-
-- **Outcome of the registered gate:** 3 of 7 signals passed a gate whose bands include low-precision defaults. Only `clone_same_policy` cleared 50%; `function_should_split` and `function_multiple_responsibilities` are in the 30-50% band. The two repositories disagree on two of the three (`clone_same_policy` is 8/8 in one and 4/8 in the other; `function_should_split` is 5/8 against 1/8). Nothing is human-confirmed. The release rule says stable at 4 or more and pivot at 2 or fewer, and it did not say what happens at exactly 3. **So v0.1 is not declared stable: it stays an alpha preview.** For the alpha, `clone_same_policy` is on by default, `function_should_split` and `function_multiple_responsibilities` are on by default with the low-precision warning, and every other signal is experimental and opt-in. If only signals at 50% or above counted, the count would be 1; we did not read the rule that way, because the registered text calls the 30-50% band "default with a low-precision warning".
-- **Sample sizes are small.** The noise floor 1/sqrt(n) is 25% for n = 16 and 35% for n = 8. Only `clone_same_policy` clears the 50% bar, and its Wilson 95% interval is 57-93% (pass 2: 13/16). `function_multiple_responsibilities` reached n = 8 only on one repository, and `deep_nesting` and `unreachable_code` had no scored cells above the cut.
-- **Repeat variance:** in 9 of 235 repeated cells (3.8%) P moved by more than 0.05, and 18% of the 50 repeated requests had at least one such cell. That is under the registered 20% line, so no range is required.
-- **Agreement with a second LLM:** on the 39 cells both reviewers labeled, HOME-16 pass 1 and the HOME-17 labeler agree on 33 (85%, Cohen's kappa 0.67). Per signal the counts are small (1 to 8 cells), so the per-signal kappas (0.00 to 1.00) are not reliable. All 6 disagreements: HOME-16 said actionable and HOME-17 said no_action on `clone_same_policy` (1) and `function_should_split` (3), and the reverse on `magic_policy_literal` (1) and `internal_duplication` (1).
-- **What this does not show:** two language models agreeing is not the human calibration this project requires (at least 90% agreement with a person). Under `evals/gate.json` (labels must come from a person or a calibrated judge) every signal stays experimental, and the 30 human-labeled cards are still unlabeled. The check "agreement with people under 70% means label everything not human-confirmed" cannot be run without them, so the label applies by default.
-
-**Lesson and fix.** A pre-registered rule needs a written outcome for every count, including the one in the middle. The gate now has one (`evals/gate.json`, `release`: exactly 3 means stay alpha), added before any new labels exist, and the changed rule has a new hash in `CONTRIBUTING.md`. We also fixed a labeling trap: a file in the human-labels format can no longer be loaded as human unless it says `"labelerKind": "human"`, so the second reviewer's LLM labels cannot be counted as a person's.
-
-Inputs are pinned by hash in `handoffs/HOME-7-validation-gate/` (labels, cards, receipt); the private sample key is kept out of the repository and identified only by its hash (`82f2316c...8fd3`).
-
-## 6. Showcase: t3code and oh-my-pi
-
-We ran v0.1.1 on two public MIT-licensed TypeScript repositories to see what the scanner produces on code we did not write. **Everything in this section is a candidate for a person to check. Each item is a hypothesis, not a confirmed bug, and nothing here judges the quality of either codebase.** The labels come from an LLM reviewer, not from the maintainers, and no person has labeled anything. **We have not contacted the maintainers and have opened no issue or pull request.**
-
-**Pinned commits** (every line range below is at these commits):
-
-- [`pingdotgg/t3code` @ `0fcd5f9`](https://github.com/pingdotgg/t3code/tree/0fcd5f90611451cca842689faea53b5450c022da)
-- [`can1357/oh-my-pi` @ `2b023d1`](https://github.com/can1357/oh-my-pi/tree/2b023d1b80133c523d66412602d99b5427408395)
-
-### What was scanned, and how little of each repository that is
-
-The scanner read shallow clones at those commits, with git hooks off, nothing installed and nothing executed. Two passes were made, one request group per slice, with no retries:
-
-- **First pass** (v0.1.0-alpha, whole repository). Its function index stopped at 3,000 functions, so functions in 318 (t3code) and 342 (oh-my-pi) files were never indexed. That bug is fixed in v0.1.1, and this pass is kept only as part of the combined sample.
-- **Second pass** (v0.1.1, `--paths`), one slice per directory set:
-
-| Repository | Directories scanned                                                             | Source files in scope | Read | Unread because of a limit |
-| ---------- | ------------------------------------------------------------------------------- | --------------------- | ---- | ------------------------- |
-| t3code     | `apps/web/src/components/chat`                                                  | 162                   | 144  | 0                         |
-| t3code     | `apps/server/src/provider`                                                      | 225                   | 190  | 0                         |
-| oh-my-pi   | `packages/coding-agent/src/extensibility`, `packages/coding-agent/src/commands` | 139                   | 118  | 0                         |
-
-**Coverage.** Files that hold at least one judged unit (from both passes): **270 of 3,953 source files in t3code (6.8%)** and **156 of 5,637 in oh-my-pi (2.8%)**. Source files read at all, both passes: 819 (20.7%) and 590 (10.5%). Everything outside the directories above, and every file that had no judged unit, was not examined, so these results say nothing about the rest of either repository.
-
-**Cost.** 4,060 requests to `jev-1.13.0`, 15,332,262 input and 966,029 output tokens: **US$0.64 calculated from the published tariff, not an invoice** (first pass US$0.23, second pass US$0.41). The reviewer's token use was not observable.
-
-### How the sample was labeled
-
-For each repository and signal we took a random sample (frozen seed, ordered by hash) of up to 6 cells at or above the 0.7 cut: 79 cells on 77 cards. An LLM reviewer (Claude Opus 5.5) labeled the cards alone first, and sealed those labels before it had any repository access (pass 1). It then read the repositories (pass 2). **Pass 2 is anchored on pass 1, and its changes lean one way: 6 of the 8 changes went to "actionable", because its searches looked for exactly the sibling copies pass 1 had marked as missing evidence.** Read pass 2 as a check directed by pass 1, not as an independent measurement.
-
-This sample has no below-cut cells and only 6 per repository and signal, so it is **not the pre-registered gate** and cannot say a signal is default-worthy. The noise floor 1/sqrt(n) is 29% for 12 cells, 38% for 7 and 11% for all 79.
-
-| Signal                               | Above-cut cells found (t3code / oh-my-pi) | Pass 1 actionable, t3code | Pass 1, oh-my-pi | Pass 1, both (noise floor) | Pass 2, both |
-| ------------------------------------ | ----------------------------------------- | ------------------------- | ---------------- | -------------------------- | ------------ |
-| `clone_same_policy`                  | 83 / 21                                   | 3/6                       | 2/6              | 5/12 (42%, ±29%)           | 7/12 (58%)   |
-| `function_should_split`              | 107 / 58                                  | 1/6                       | 3/6              | 4/12 (33%, ±29%)           | 4/12 (33%)   |
-| `magic_policy_literal`               | 80 / 26                                   | 0/6                       | 3/6              | 3/12 (25%, ±29%)           | 5/12 (42%)   |
-| `internal_duplication`               | 142 / 88                                  | 2/6                       | 0/6              | 2/12 (17%, ±29%)           | 3/12 (25%)   |
-| `function_multiple_responsibilities` | 9 / 1                                     | 5/6                       | 1/1              | 6/7 (86%, ±38%)            | 6/7 (86%)    |
-| `unused_local_or_parameter`          | 10 / 11                                   | 0/6                       | 0/6              | 0/12 (0%, ±29%)            | 1/12 (8%)    |
-| `deep_nesting`                       | 19 / 15                                   | 3/6                       | 5/6              | 8/12 (67%, ±29%)           | 8/12 (67%)   |
-| all signals                          |                                           | 14/42                     | 14/37            | 28/79 (35%, ±11%)          | 34/79 (43%)  |
-
-The two repositories differ: for example `internal_duplication` was actionable on 2 of 6 t3code cells and 0 of 6 oh-my-pi cells in pass 1. `function_multiple_responsibilities` had only 10 above-cut cells in the two repositories combined. Pass 1 labeled 5 cells "uncertain" (counted as not actionable above); pass 2 labeled none.
-
-### Candidates the reviewer found strongest
-
-Each is a hypothesis to verify. Ranges were re-read at the pinned commits.
-
-1. **oh-my-pi, `packages/agent/src/agent-loop.ts`: two similar finalization sequences.** Lines [2163-2239](https://github.com/can1357/oh-my-pi/blob/2b023d1b80133c523d66412602d99b5427408395/packages/agent/src/agent-loop.ts#L2163-L2239) (the `done`/`error` branch inside the loop) and [2449-2513](https://github.com/can1357/oh-my-pi/blob/2b023d1b80133c523d66412602d99b5427408395/packages/agent/src/agent-loop.ts#L2449-L2513) (after the loop) repeat the same steps, ending in `finishChat`. They already differ: only the first wraps the result in `recoverTransientErrorToolTurn(retainCompletedToolCalls(...))` (2164-2167), and the first snapshots the message before `transformAssistantMessage` (2185-2191) while the second transforms it first (2468-2471). Worth checking whether both differences are intended.
-2. **t3code, `apps/server/src/provider/AntigravityInstallation.ts` and `CodexInstallation.ts`: copied install-management logic.** The remove guard ([875-917](https://github.com/pingdotgg/t3code/blob/0fcd5f90611451cca842689faea53b5450c022da/apps/server/src/provider/AntigravityInstallation.ts#L875-L917) vs [644-684](https://github.com/pingdotgg/t3code/blob/0fcd5f90611451cca842689faea53b5450c022da/apps/server/src/provider/CodexInstallation.ts#L644-L684)), the cancel handler (854-870 vs 627-639) and the atomic commit of the active-version pointer (538-561 vs 421-445) look alike. The remove copies differ: only the Antigravity one skips blank paths and checks `managedVersionDirectory`. [`apps/server/src/atomicWrite.ts`](https://github.com/pingdotgg/t3code/blob/0fcd5f90611451cca842689faea53b5450c022da/apps/server/src/atomicWrite.ts#L1-L25) (1-25) exists, and neither installation file references it.
-3. **t3code, `apps/server/src/provider/CodexChatGptAuth.ts`: the same verification options twice.** `jwtVerify` is called with the same issuer, algorithms and clock tolerance at [609-624](https://github.com/pingdotgg/t3code/blob/0fcd5f90611451cca842689faea53b5450c022da/apps/server/src/provider/CodexChatGptAuth.ts#L609-L624) and [933-942](https://github.com/pingdotgg/t3code/blob/0fcd5f90611451cca842689faea53b5450c022da/apps/server/src/provider/CodexChatGptAuth.ts#L933-L942); only the audience source and the error message differ. A change to one set of options would need to be mirrored in the other.
-4. **oh-my-pi, `annotate` command: the 999-character limit written in three places.** It appears as a check in [`text-review.ts:36`](https://github.com/can1357/oh-my-pi/blob/2b023d1b80133c523d66412602d99b5427408395/packages/coding-agent/src/extensibility/custom-commands/bundled/annotate/text-review.ts#L36), in user-facing messages in `index.ts` (lines 293 and 299), and as "fewer than 1,000 characters" in `prompts/text-summary.md` (line 1). A change to one could leave the others stale.
-5. **oh-my-pi, `packages/coding-agent/src/extensibility/extensions/runner.ts`: an unnamed cap of 512 with the same eviction twice.** `markToolCallEmitted` ([583-589](https://github.com/can1357/oh-my-pi/blob/2b023d1b80133c523d66412602d99b5427408395/packages/coding-agent/src/extensibility/extensions/runner.ts#L583-L589)) and `markLoopToolCall` (597-603) each write the literal 512 and evict the oldest entry.
-
-The reviewer listed more (for example three readers of `omp-plugins.lock.json` with different error handling, and repeated process-group termination in `opencodeRuntime.ts`); the full labeled sample and rationales are in the handoff. Source files are quoted only by path and range, because both repositories are MIT-licensed and we link to them rather than copy them.
-
-**What this section does not show.** It does not show that any candidate is a bug, that a change would be welcome, or that the scanner would do as well on other code. It shows what a small, random, LLM-labeled sample looked like on 2.8% to 6.8% of two repositories.
+- **No human labels.** One LLM reviewer family (Claude Opus 5.5) labeled every sample; a second LLM agreed on 85% of 39 shared cells, which is not calibration against a person.
+- **A label is not a confirmed bug.** "Actionable" means the reviewer found concrete evidence that a bounded improvement merits coding verification.
+- **P is not stable.** Jev's probabilities are rounded to two decimals and moved by more than 0.05 on 3.8% of repeated cells. The 0.7 cut is a display setting.
+- **Question versions do not carry over.** A rewritten question starts with no evidence; each catalog entry carries its own.
+- Costs are calculated from the published tariff and returned token counts, not invoices.
+- Per-cell labels and cards contain excerpts of other people's repositories and are not included here.

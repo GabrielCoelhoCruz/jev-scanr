@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import { readFileSync, existsSync, mkdirSync, realpathSync } from "node:fs";
+import { spawn } from "node:child_process";
 import { resolve, join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs as nodeParseArgs } from "node:util";
@@ -18,21 +19,32 @@ import {
 } from "./runner.mjs";
 import { buildReport, queueMarkdown, reportMarkdown } from "./report.mjs";
 import { continuationPlan, combineRuns } from "./continuation.mjs";
+import {
+  credentialsPath,
+  readSecret,
+  removeApiKey,
+  resolveApiKey,
+  saveApiKey,
+} from "./credentials.mjs";
 
-export const HELP = `semantic-refactor-scan ${JSON.parse(readFileSync(new URL("../package.json", import.meta.url))).version}
+export const SKILL_SOURCE = "GabrielCoelhoCruz/jev-refactor";
+
+export const HELP = `jev-refactor (short alias: jr) ${JSON.parse(readFileSync(new URL("../package.json", import.meta.url))).version}
 
 Ranks refactoring candidates in a TypeScript/JavaScript project by asking the Jev model a few narrow questions about each function or similar pair. Deterministic code only cuts the project into units and gathers context. It does not score, rank or filter. Every finding and its order come from Jev's probabilities.
 
 Usage
-  semantic-refactor-scan scan PATH [options]         dry run: shows units, requests and estimated cost, sends nothing
-  semantic-refactor-scan scan PATH --run --yes --cap-usd N [options]
+  jr auth [--remove]                        save your TypeSafe API key (owner-only file), or delete it
+  jr skill [--global] [--yes]               install the agent skill for your coding agents (uses npx skills)
+  jr scan PATH [options]         dry run: shows units, requests and estimated cost, sends nothing
+  jr scan PATH --run --yes --cap-usd N [options]
                                                 sends source excerpts to the Jev API and writes the report
-  semantic-refactor-scan report --plan PLAN --run RUN --out DIR [--threshold 0.7]
-  semantic-refactor-scan continue --plan PLAN --run RUN --out NEWPLAN
+  jr report --plan PLAN --run RUN --out DIR [--threshold 0.7]
+  jr continue --plan PLAN --run RUN --out NEWPLAN
                                                 plan only the requests without an accepted answer
-  semantic-refactor-scan run --plan PLAN --out DIR --cap-usd N --yes
+  jr run --plan PLAN --out DIR --cap-usd N --yes
                                                 run an existing plan
-  semantic-refactor-scan signals                     list the catalog and its evidence
+  jr signals                     list the catalog and its evidence
 
 Options for scan
   --exclude a,b,c     paths (files or directories, relative to PATH) that are never read or sent
@@ -51,7 +63,7 @@ Options for scan
   --out DIR           output directory (default ./jev-scan-out; must not exist for a new run)
   --threshold N       display cut for every signal, 0 to 1 (default 0.7)
 
-Sending source. Every analyzed excerpt goes to the Jev API (https://api.typesafe.ai) under your own TYPESAFE_API_KEY. Files whose path or content looks like a secret are skipped, and dot-directories, node_modules, build output and generated files are never read. That guard is a heuristic. Check --list-files and use --exclude before a live run.
+Sending source. Every analyzed excerpt goes to the Jev API (https://api.typesafe.ai) under your own key: TYPESAFE_API_KEY in the environment, or the one saved by jr auth. Files whose path or content looks like a secret are skipped, and dot-directories, node_modules, build output and generated files are never read. That guard is a heuristic. Check --list-files and use --exclude before a live run.
 `;
 
 const options = {
@@ -70,6 +82,8 @@ const options = {
   "external-configs": { type: "string" },
   "list-files": { type: "boolean" },
   threshold: { type: "string" },
+  global: { type: "boolean" },
+  remove: { type: "boolean" },
   "continuation-plan": { type: "string" },
   "continuation-run": { type: "string" },
 };
@@ -281,9 +295,10 @@ async function execute(plan, values, deps) {
     throw Error(
       `Worst-case cost ${usd(s.conservativeUSD)} exceeds --cap-usd ${cap}. Lower the scope with --exclude or --signals, or raise the cap.`,
     );
-  if (!deps.client && !process.env.TYPESAFE_API_KEY)
+  const apiKey = deps.client ? null : resolveApiKey(deps.env);
+  if (!deps.client && !apiKey)
     throw Error(
-      "Set TYPESAFE_API_KEY in the environment (never pass it as an option)",
+      "No TypeSafe API key. Run jr auth, or set TYPESAFE_API_KEY in the environment (never pass it as an option)",
     );
   const out = outside(plan.root, values.out ?? "jev-scan-out");
   const captured = join(out, "plan.json");
@@ -303,7 +318,7 @@ async function execute(plan, values, deps) {
   const result = await runPlan({
     plan,
     directory: runDir,
-    client: deps.client ?? makeClient({ apiKey: process.env.TYPESAFE_API_KEY }),
+    client: deps.client ?? makeClient({ apiKey }),
     mode: "live",
     capUSD: cap,
     concurrency,
@@ -322,6 +337,53 @@ async function execute(plan, values, deps) {
 export async function main(args = process.argv.slice(2), deps = {}) {
   const { command, values, positionals } = parseArgs(args);
   if (command === "help") return console.log(HELP);
+  if (command === "auth") {
+    if (positionals.length)
+      throw Error(
+        "Never pass the key as an argument; run jr auth and type it when asked",
+      );
+    if (values.remove) {
+      const { file, existed } = removeApiKey(deps.env);
+      return console.log(
+        existed ? `Removed ${file}` : `No saved key at ${file}`,
+      );
+    }
+    const key = await (deps.readSecret ?? readSecret)(
+      "TypeSafe API key (input hidden): ",
+    );
+    const file = saveApiKey(key, deps.env);
+    return console.log(
+      `Saved to ${file} (owner-only). TYPESAFE_API_KEY in the environment overrides it.`,
+    );
+  }
+  if (command === "skill") {
+    const args = [
+      "--yes",
+      "skills",
+      "add",
+      SKILL_SOURCE,
+      "--skill",
+      "jev-refactor",
+    ];
+    if (values.global) args.push("--global");
+    if (values.yes) args.push("--yes");
+    if (deps.skillArgs) return deps.skillArgs(args);
+    const code = await new Promise((resolveExit, reject) => {
+      const child = spawn("npx", args, { stdio: "inherit" });
+      child.on("error", (e) =>
+        reject(
+          e.code === "ENOENT"
+            ? Error(
+                "Skill installation needs npx. Install npm, then run jr skill again.",
+              )
+            : e,
+        ),
+      );
+      child.on("exit", resolveExit);
+    });
+    if (code !== 0) throw Error(`npx skills exited with code ${code}`);
+    return;
+  }
   if (command === "signals") {
     for (const s of allSignals) {
       const e = s.evidence[0];
