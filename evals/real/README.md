@@ -1,6 +1,6 @@
 # Real code: does Jev's name check hold up off the constructed sets?
 
-[`../contrast/`](../contrast/README.md) showed that Jev separates constructed contrasts. This folder asks the harder question: on ordinary code, sampled at random, with labels from people-like readers and not from a mechanical change, does Jev's P for a mismatched name rank better than free heuristics? Status: pre-registered. Every rule below was committed before any label or request existed; the commit history of this folder is the proof. Findings will be hypotheses about this sample.
+[`../contrast/`](../contrast/README.md) showed that Jev separates constructed contrasts. This folder asks the harder question: on ordinary code, sampled at random, with labels from people-like readers and not from a mechanical change, does Jev's P for a mismatched name rank better than free heuristics? Status: run; results in [`results/README.md`](results/README.md). Every rule below was committed before any label or request existed; the commit history of this folder is the proof. Findings will be hypotheses about this sample.
 
 ## Sample
 
@@ -67,6 +67,17 @@ node evals/contrast/requests.mjs --units evals/real/units.json --project PROJECT
 node evals/contrast/run.mjs --units evals/real/units.json --project PROJECT --run --yes --cap-usd 0.15 --out RUNDIR
 node evals/real/analyze.mjs --journal RUNDIR/journal.jsonl --markdown
 ```
+
+## Attribution
+
+The sample is drawn from functions in four public repositories, each under the MIT license. `units.json` stores paths, line ranges, hashes and numbers, not their source; the excerpts are regenerated from the pinned commits by `build.mjs`. The labelers and the live run saw those regenerated excerpts.
+
+| Repository                                                                | License (copyright line)       | Pinned commit                              |
+| ------------------------------------------------------------------------- | ------------------------------ | ------------------------------------------ |
+| [reshaped-ui/reshaped](https://github.com/reshaped-ui/reshaped)           | MIT (Reshaped)                 | `cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1` |
+| [paulrobello/claude-office](https://github.com/paulrobello/claude-office) | MIT (Paul Robello)             | `3522c16399660ac787cd1f4ad4f3255352ec8e6c` |
+| [pingdotgg/t3code](https://github.com/pingdotgg/t3code)                   | MIT (T3 Tools Inc.)            | `0fcd5f90611451cca842689faea53b5450c022da` |
+| [can1357/oh-my-pi](https://github.com/can1357/oh-my-pi)                   | MIT (Mario Zechner; Can Bölük) | `2b023d1b80133c523d66412602d99b5427408395` |
 
 ## Limits
 
