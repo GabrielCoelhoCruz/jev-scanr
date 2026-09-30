@@ -1,0 +1,400 @@
+{"id":"409e0ef1","label":"fits","note":"Renders a kanban column with header, count, sticky notes, overflow"}
+{"id":"bb7e1c4d","label":"fits","note":"Builds OTLP tracing layer for relay client, or none if unconfigured"}
+{"id":"a63fc654","label":"fits","note":"Removes a preview session and recomputes active tab and snapshot"}
+{"id":"55edb94f","label":"fits","note":"Assigns stable slot numbers to sessions per bucket, releasing departed ones"}
+{"id":"753394c2","label":"fits","note":"Resolves OAuth callback options with validated redirect URI override"}
+{"id":"4b56834d","label":"fits","note":"Parses num_ctx from Ollama parameters string"}
+{"id":"bd68b034","label":"fits","note":"Fetches preferences from API, returning empty object on failure"}
+{"id":"58a50a01","label":"fits","note":"React Grid component mapping props to CSS grid variables"}
+{"id":"9c07f1de","label":"fits","note":"Applies chroma key via flood fill or global removal if enabled"}
+{"id":"b18dd3c7","label":"fits","note":"Native select component with placeholder handling and styling"}
+{"id":"8f240773","label":"fits","note":"Validates value against arktype or JSON schema, returning value or issues"}
+{"id":"92f779f2","label":"fits","note":"Decodes GitLab diffs JSON into a git-style patch with truncation flag"}
+{"id":"76b2a816","label":"fits","note":"Context menu component opening dropdown at right-click coordinates"}
+{"id":"9cd34a30","label":"fits","note":"Table component wrapping children in a table, adding body if needed"}
+{"id":"6d500915","label":"fits","note":"Converts raw comments and reviews into sorted PullRequestComment list"}
+{"id":"33850fe3","label":"fits","note":"Carousel scroll control button with visibility and focus handling"}
+{"id":"fb1d8cfc","label":"fits","note":"Zustand slice creator with boss state setters"}
+{"id":"10163c25","label":"fits","note":"Checks via SQL whether all memory rows have given cwd"}
+{"id":"9d02caac","label":"fits","note":"CLI handler for marketplace add/remove/update/list subcommands"}
+{"id":"76e03ae1","label":"fits","note":"Decides spawn position and arrival skipping for an agent"}
+{"id":"4aaf62ae","label":"fits","note":"Maps generic PR state to Azure DevOps status string"}
+{"id":"ac81b9dd","label":"fits","note":"Marks an elevator spawn position as occupied by an agent"}
+{"id":"e6418455","label":"fits","note":"Renders queued undismissed attention toasts, handling click and dismiss"}
+{"id":"a5f40161","label":"fits","note":"Renders fetch tool summary: URL, method, raw and truncated badges"}
+{"id":"0a6671fd","label":"fits","note":"Filters codex launch args to those valid for exec subcommand"}
+{"id":"9631adfa","label":"fits","note":"Renders zoom in, out and reset buttons"}
+{"id":"70de33ae","label":"fits","note":"Transforms font weight token into variable entry"}
+{"id":"f079904e","label":"fits","note":"Parses digit-only string to number, else null"}
+{"id":"4264dc1e","label":"fits","note":"Renders a toast with auto-dismiss, click and dismiss button"}
+{"id":"25681dbd","label":"fits","note":"Toggle button managing its own checked state around controlled version"}
+{"id":"7e187e70","label":"fits","note":"Returns hue adjusted per layer via color-mix"}
+{"id":"0679d18a","label":"fits","note":"Draws city buildings with lit windows onto graphics"}
+{"id":"f5652b6a","label":"fits","note":"Draws night-time stars with fade alpha"}
+{"id":"7e345d86","label":"fits","note":"Transforms typography token into font size, line height, family, weight, spacing vars"}
+{"id":"561a339d","label":"fits","note":"Renders pull request tab icon reflecting resolved PR state"}
+{"id":"743ee753","label":"fits","note":"Computes rank score of palette item against query terms"}
+{"id":"d98d12ef","label":"fits","note":"Sets terminal open flag, creating default terminal if none"}
+{"id":"359d1b29","label":"fits","note":"Chooses controlled or uncontrolled slider with default min/max"}
+{"id":"0736ee7a","label":"fits","note":"Sets plist key to JSON value via plutil replace, else insert"}
+{"id":"756f6993","label":"fits","note":"Renders grouped buttons wrapper with role group"}
+{"id":"f9a75a72","label":"fits","note":"Renders segmented progress bar for task steps"}
+{"id":"6806c7a4","label":"fits","note":"Controlled toggle button with group-aware checked state"}
+{"id":"b956f6a6","label":"fits","note":"Builds gallery preview entries for composer shape options"}
+{"id":"bbe356cb","label":"fits","note":"Validates and parses video input reference array"}
+{"id":"dcf0cd51","label":"imprecise","note":"Transforms theme and writes css/json/tailwind files, logs result"}
+{"id":"3fea087a","label":"fits","note":"Normalizes keyboard event to lowercase key, using code when alt pressed"}
+{"id":"4cb69ad9","label":"fits","note":"Returns random quote from acceptance quotes list"}
+{"id":"777e7c9b","label":"imprecise","note":"Builds typebox schema from benchmark definition keys; name vague"}
+{"id":"9f9930ed","label":"fits","note":"Builds list of two-letter weekday names"}
+{"id":"7b9f83e9","label":"fits","note":"Adds third-party packages of bundled modules into collection"}
+{"id":"41a323f4","label":"fits","note":"Finds project or user system prompt override file, text or template"}
+{"id":"c9d49464","label":"fits","note":"Parses cron expression into editor mode structure"}
+{"id":"caa43b4e","label":"fits","note":"Builds preview nav-status report input, skipping duplicates"}
+{"id":"9a7fc0db","label":"imprecise","note":"Only detects EPERM (TCC), excluding EACCES permission errors"}
+{"id":"5a9bd3d0","label":"fits","note":"Logs debug messages to stderr when DEBUG enabled"}
+{"id":"86b17961","label":"fits","note":"Tests whether IPv4 octets are private or special-purpose"}
+{"id":"ea31e02d","label":"fits","note":"Computes thread list row styles and class names by selection"}
+{"id":"1b363536","label":"fits","note":"Color picker popover with swatch trigger"}
+{"id":"693005cf","label":"fits","note":"Releases persisted attachment upload jobs and deletes pending upload"}
+{"id":"a4dc2145","label":"fits","note":"Maps utilization fraction to frame index 0-4"}
+{"id":"dac09623","label":"fits","note":"Remembers thread timeline entries only if thread key and entries exist"}
+{"id":"a8b6fc06","label":"fits","note":"Returns first queue position for arrival or departure"}
+{"id":"4fa9149e","label":"fits","note":"True if draft is new and all fields blank"}
+{"id":"32fbf81d","label":"fits","note":"Renders a release table row with link, state, sha, error"}
+{"id":"065a0d8a","label":"fits","note":"Container layout component with padding and sizing props"}
+{"id":"b2885423","label":"fits","note":"Renders year month-selection grid with min/max disabling"}
+{"id":"a4dd1561","label":"fits","note":"Reads clipboard text via xclip, falling back to xsel"}
+{"id":"580986be","label":"fits","note":"Iterates hotkey map, splitting comma keys and invoking callback"}
+{"id":"94aa2296","label":"fits","note":"Renders marquee text at desk position if text present"}
+{"id":"c2e7cb96","label":"fits","note":"Finds unique workspace path by suffix using glob"}
+{"id":"711f1639","label":"fits","note":"Renders activity state pill for a work item"}
+{"id":"a839259b","label":"fits","note":"Renders building/floor navigation breadcrumb"}
+{"id":"69026f8e","label":"fits","note":"Renders toast region list with hover inspect behavior"}
+{"id":"621f44f2","label":"fits","note":"Resolves align prop into responsive CSS variable"}
+{"id":"1b3532f4","label":"fits","note":"JSON-quotes label and escapes backtick and line separators"}
+{"id":"6273ca5e","label":"fits","note":"Hook registering dismissible layer and returning check if dismissible"}
+{"id":"f0a486e2","label":"fits","note":"Resolves width prop into CSS variables and class names"}
+{"id":"e4f9506b","label":"fits","note":"Computes x,y position of desk number in grid"}
+{"id":"f058de06","label":"fits","note":"Builds sha256 key identifying MUX server connection params"}
+{"id":"5ce74c16","label":"fits","note":"Finds span containing index and returns its click candidates"}
+{"id":"c3b0d86e","label":"fits","note":"Awaits animation destination request with timeout race"}
+{"id":"776eb827","label":"fits","note":"Resolves inset-block prop into class names and CSS variables"}
+{"id":"fd875d13","label":"fits","note":"Finds grid path and converts to world coordinates"}
+{"id":"2a6e1f22","label":"fits","note":"Aggregates cost series into summary with per-model rows"}
+{"id":"a5f9ac1c","label":"fits","note":"Compares shortcut contexts of two keybinding rules"}
+{"id":"ddfb6b59","label":"fits","note":"Draws thought or speech bubble with shadow and tail"}
+{"id":"2f9b8bff","label":"fits","note":"Renders hidden input with serialized select value"}
+{"id":"78a503e4","label":"fits","note":"Hook refreshing usage limits across connected environments"}
+{"id":"c6f6888c","label":"fits","note":"Imports SARIF or bundle into security store and reports count"}
+{"id":"90c8eebd","label":"fits","note":"Shuts down all LSP clients including pending ones"}
+{"id":"647efca8","label":"fits","note":"Saves debug settings JSON to localStorage, ignoring errors"}
+{"id":"468040b3","label":"fits","note":"Converts color to rgba string with given alpha"}
+{"id":"0dae9bb2","label":"fits","note":"Renders a sticky note for a task"}
+{"id":"3eb3a7b6","label":"fits","note":"Draws simple fallback desk rectangle"}
+{"id":"7e29374a","label":"fits","note":"Renders mobile boss with body, sunglasses, headset, label"}
+{"id":"5c1d5f0b","label":"fits","note":"Restores original lines where only whitespace differs"}
+{"id":"0c2b0014","label":"fits","note":"Checks if session's project matches any room repo on floor"}
+{"id":"35dd83b3","label":"fits","note":"Renders conflict region lines for ours/theirs/base or full markers"}
+{"id":"713d7f33","label":"fits","note":"Removes provider compaction keys from preserve data"}
+{"id":"5edb4550","label":"fits","note":"Radio component integrating form control and radio group state"}
+{"id":"66df2ae5","label":"fits","note":"Resolves border color prop into class names"}
+{"id":"e1d47a45","label":"fits","note":"Checks if agent coordinates fall inside elevator bounds"}
+{"id":"694caa53","label":"fits","note":"Renders safety board with success count and time since incident"}
+{"id":"2eb2ad13","label":"fits","note":"Renders desk surface and keyboard sprites at desk positions"}
+{"id":"da5325e1","label":"fits","note":"Converts viewed overlay map to array of path/viewed objects"}
+{"id":"7cbc3911","label":"fits","note":"Renders markdown video player with asset URL resolution"}
+{"id":"8282a487","label":"fits","note":"Checks if path equals or is under an immutable source path"}
+{"id":"e0292f42","label":"fits","note":"Filters stream options to wire-relevant defined keys"}
+{"id":"9136de88","label":"fits","note":"Resizable right sidebar with events/conversation tabs"}
+{"id":"edeb213b","label":"fits","note":"Formats search query for scrapers, demoting path sites and inurl to terms"}
+{"id":"ca90cd04","label":"fits","note":"Hook tracking drag-to-resize size with constraints"}
+{"id":"b5a5c369","label":"fits","note":"Renders PR comment markdown with expand/collapse for overflow"}
+{"id":"e4c55578","label":"fits","note":"Loads configured skills and returns list with warnings"}
+{"id":"355cb678","label":"fits","note":"Controlled checkbox group managing array value via context"}
+{"id":"9d65e804","label":"fits","note":"Finds end index of terminal string terminator (BEL, ST)"}
+{"id":"9428f4e3","label":"fits","note":"Converts model object into JSON summary"}
+{"id":"13119b99","label":"fits","note":"Dropdown menu wrapping popover with defaults"}
+{"id":"3d2e9fbf","label":"fits","note":"Computes vertical and horizontal grid line coordinates"}
+{"id":"1b6d2706","label":"fits","note":"Records filename in bounded recent set, evicting oldest"}
+{"id":"8693c38f","label":"fits","note":"Converts legacy p- puppeteer selector to modern form"}
+{"id":"6d26e108","label":"fits","note":"Hook returning tabs context with panel and button ids"}
+{"id":"1f90cb94","label":"fits","note":"Records snapshot of seen lines in session edit store"}
+{"id":"86ebf1d6","label":"fits","note":"Generates export HTML from template with theme styles and session data"}
+{"id":"136f4292","label":"fits","note":"Restores database from gzip backup with integrity checks and rollback"}
+{"id":"9f688182","label":"fits","note":"Renders pie chart and legend of tool usage"}
+{"id":"66e04c75","label":"fits","note":"Builds pairing URL with token in hash"}
+{"id":"b4f19afc","label":"fits","note":"Computes next focus target among focusable elements with overflow"}
+{"id":"760f1d5f","label":"fits","note":"Returns copy of date with year set"}
+{"id":"c48acaee","label":"fits","note":"Renders judgment state as field string"}
+{"id":"2f6a785b","label":"fits","note":"Toggles option selection in pending user input draft answer"}
+{"id":"cf37bc32","label":"fits","note":"Type guard: enabled provider behind latest with usable update"}
+{"id":"cb13506b","label":"fits","note":"Smooths path via collinear removal, funnel, bezier, dedupe"}
+{"id":"9363abc9","label":"fits","note":"Computes ordered fallback positions for a popover position"}
+{"id":"93192005","label":"fits","note":"Hook providing lock/unlock scroll functions and locked state"}
+{"id":"3f045f2d","label":"fits","note":"Groups sessions by project and sorts groups and sessions"}
+{"id":"9dffb471","label":"fits","note":"Parses remote ref into remote name and branch using known remotes"}
+{"id":"2fdaf623","label":"fits","note":"Sets motion targets for agents, pruning stale and computing paths"}
+{"id":"3dc6d31d","label":"fits","note":"Creates controller handling file-tree drag to composer mentions"}
+{"id":"40243e83","label":"fits","note":"Prompts for Cloudflare gateway token, account, gateway IDs, returns credential"}
+{"id":"90d84fcd","label":"fits","note":"Returns whether transitions are allowed given attribute and reduced motion"}
+{"id":"64af2982","label":"fits","note":"Derives weather-themed condition from success/error counts and activity"}
+{"id":"1eb35c1b","label":"fits","note":"Maps auth method to display label"}
+{"id":"4950531f","label":"fits","note":"Transforms radius token into px variable"}
+{"id":"a7b1d1bc","label":"fits","note":"Picks account label from metadata, limit scope, or index"}
+{"id":"47bb5b86","label":"fits","note":"Builds native tool view from text result or error"}
+{"id":"bf3ba91b","label":"imprecise","note":"JSON round-trip deep copy; generic name, odd Date handling"}
+{"id":"cce72350","label":"fits","note":"Resolves responsive value for current viewport with fallbacks"}
+{"id":"cc6c39dd","label":"fits","note":"Transforms shadow token into light/dark variables"}
+{"id":"14097ad0","label":"fits","note":"Formats date as local YYYY-MM-DD"}
+{"id":"9d7c9318","label":"fits","note":"Parses skill invocation name and args from text"}
+{"id":"994c7fae","label":"fits","note":"Maps grid path positions to world positions"}
+{"id":"4a505ee6","label":"fits","note":"Reads source text for composer atom node types"}
+{"id":"7e6a275a","label":"fits","note":"Builds utilization chart data bucketed over time per account"}
+{"id":"7b1278dd","label":"fits","note":"Derives file extension from URL, defaulting to .txt"}
+{"id":"c0dddd95","label":"fits","note":"Strips repeated sanitized fragment prefixes from id"}
+{"id":"ed65a4bf","label":"fits","note":"Renders floor loading placeholder text"}
+{"id":"9a3b7455","label":"fits","note":"Renders legend row with account name, remaining percent, reset info"}
+{"id":"07f86c5b","label":"fits","note":"Parses color token into light/dark oklch values"}
+{"id":"3b428e2f","label":"fits","note":"Updates agent position then computes collision-avoiding path"}
+{"id":"0dd75d00","label":"fits","note":"Renders labeled switch toggle"}
+{"id":"633f2e1d","label":"fits","note":"Triggers browser download of data URL via anchor click"}
+{"id":"f6e91c60","label":"fits","note":"Computes flyout position adjustments to fit container and width"}
+{"id":"00002ce4","label":"fits","note":"Encodes context text with glyph codec and returns wrapping codec"}
+{"id":"1da088d8","label":"fits","note":"Form control helper caption reading disabled state"}
+{"id":"56ad13ed","label":"fits","note":"Returns thread's worktree path if no other thread shares it"}
+{"id":"02442712","label":"fits","note":"Flyout managing its own active state around controlled version"}
+{"id":"c00f94bf","label":"fits","note":"Compiles rules into scan plans with scopes and conditions"}
+{"id":"b97da96a","label":"fits","note":"Renders microphone SVG icon"}
+{"id":"79b73866","label":"fits","note":"Formats date as 'D Mon YYYY, HH:MM'"}
+{"id":"089beaa0","label":"fits","note":"Builds Gemini request tool list from params"}
+{"id":"60f1d72a","label":"fits","note":"Hook debouncing and querying composer path search entries"}
+{"id":"be3d446a","label":"fits","note":"Computes usage window series and insights from snapshot rows"}
+{"id":"27896552","label":"fits","note":"Computes smoothed command-center path, empty if no route"}
+{"id":"1955cac9","label":"fits","note":"Tokenizes expression source into string/number/id/operator tokens"}
+{"id":"f225bf75","label":"fits","note":"Resolves inline border prop into CSS variable"}
+{"id":"f673b9d9","label":"fits","note":"Wraps text and splits into pages of lines"}
+{"id":"5f8d5cb9","label":"fits","note":"Switch component with checkbox input and label"}
+{"id":"e9f78cc5","label":"fits","note":"Returns project's updated or created timestamp as ms, else 0"}
+{"id":"4c9d7d79","label":"fits","note":"Encrypts snapshot JSON into AES payload with header"}
+{"id":"bdc799af","label":"fits","note":"Renders collapsible tool call card with summary and body"}
+{"id":"9472d826","label":"fits","note":"Renders thread work log rows, grouped or flat"}
+{"id":"80d798f8","label":"fits","note":"Parses owner/repo name from git remote URL"}
+{"id":"7e8ae8c8","label":"fits","note":"Returns mouse or touch drag coordinate on chosen axis"}
+{"id":"066ef27d","label":"fits","note":"Draws agent capsule with color and white border"}
+{"id":"3b48f40c","label":"fits","note":"Parses namespaced git shorthand into git source, else null"}
+{"id":"fb497511","label":"fits","note":"Normalizes table HTML: unwraps cell paragraphs, makes first row header"}
+{"id":"b9f3eb3b","label":"fits","note":"Returns mac permission message based on missing permissions"}
+{"id":"d87bc520","label":"fits","note":"Decodes backslash escapes (named, octal) into UTF-8 string"}
+{"id":"84f81bf7","label":"fits","note":"Animates door scale open/closed with easing"}
+{"id":"fb00178e","label":"fits","note":"Stops and resets animation, collision, grid, state machines, destroys app"}
+{"id":"f328d895","label":"fits","note":"Renders mobile agent activity panel with boss and agents"}
+{"id":"9ebf707f","label":"fits","note":"Finds prompt cache key from body or headers"}
+{"id":"8d965f11","label":"fits","note":"Adds or removes server name in config disabled list"}
+{"id":"3b963ab1","label":"fits","note":"Controlled tabs provider managing panels and selection state"}
+{"id":"9e7646ef","label":"fits","note":"Loads Kokoro TTS model on given device with progress"}
+{"id":"7f23c745","label":"fits","note":"Plans pinned thread move up or down, computing new order keys"}
+{"id":"ea0af5f1","label":"fits","note":"Hook computing which scroll side needs fade"}
+{"id":"0614767d","label":"fits","note":"Renders weather display of success, errors and activity"}
+{"id":"ebf72600","label":"fits","note":"Returns source character count of diff, using cached max"}
+{"id":"2cda45b3","label":"fits","note":"Sets input value natively and dispatches change event"}
+{"id":"fc9007e7","label":"fits","note":"Loader text component with optional completed text and icon"}
+{"id":"a676811c","label":"fits","note":"Progress bar component computing width from value range"}
+{"id":"a784b558","label":"fits","note":"Loads user and project cursor settings JSON with warnings"}
+{"id":"ff3d7070","label":"fits","note":"Normalizes DPoP URL as Effect, failing if invalid"}
+{"id":"bd0a70d6","label":"imprecise","note":"Plain styled combobox list wrapper; no virtualization visible"}
+{"id":"36bb0ebd","label":"fits","note":"Renders calendar prev/next controls and month title"}
+{"id":"c6ca56ee","label":"fits","note":"Collects stats sessions from archived compressed jsonl files"}
+{"id":"8d230ea0","label":"fits","note":"Parses KDL node into responses heuristic prefixes/substrings"}
+{"id":"7b2868a4","label":"imprecise","note":"Just multiplies cols/rows by cell size; no optimization"}
+{"id":"d17f50c5","label":"fits","note":"Returns initial state object with zero defaults"}
+{"id":"74c2e121","label":"fits","note":"Converts number, bigint or string to number"}
+{"id":"e2ae9e67","label":"fits","note":"Wraps children in visually hidden div"}
+{"id":"cdae08a4","label":"fits","note":"Label picker UI toggling PR labels with error toast"}
+{"id":"8c40dd8e","label":"fits","note":"Runs code in VM context, handling reset coordination and state"}
+{"id":"5ccacb7c","label":"fits","note":"Extracts trimmed non-empty string answers into array"}
+{"id":"84a3417f","label":"fits","note":"Maps ACP tool status to runtime item status"}
+{"id":"84293547","label":"fits","note":"Requests older turns for thread via registry, returns boolean"}
+{"id":"2182ff09","label":"fits","note":"Renders labeled number input and range slider"}
+{"id":"a0fcacc0","label":"fits","note":"Dropdown submenu opening on hover with context provider"}
+{"id":"e4000bbf","label":"fits","note":"Scores fuzzy token match, trying alphanumeric swap variants"}
+{"id":"dc7c221e","label":"fits","note":"Keeps only non-empty keys with boolean values"}
+{"id":"294c1a75","label":"fits","note":"Checks if JSON schema accepts given section label property"}
+{"id":"50fa11d7","label":"fits","note":"Controlled radio group provider forwarding changes"}
+{"id":"a36e40f6","label":"imprecise","note":"Returns whether toast for event type is enabled in prefs; not a filter"}
+{"id":"a3c33dfa","label":"fits","note":"Renders tbody with classes"}
+{"id":"5824b1bb","label":"fits","note":"Converts hex color to oklch, throwing on failure"}
+{"id":"b4d41dcb","label":"fits","note":"Frees elevator position held by agent"}
+{"id":"86d09a95","label":"fits","note":"Menu wrapper handling long-press press suppression and themed menu"}
+{"id":"af865bd0","label":"fits","note":"Hook starting animation system on mount and stopping on unmount"}
+{"id":"367b536f","label":"fits","note":"Renders Cursor provider row with enable action"}
+{"id":"4168d383","label":"fits","note":"Renders clickable analog or digital wall clock"}
+{"id":"dbce32d0","label":"fits","note":"Provides hotkeys provider only if no parent provider exists"}
+{"id":"12f2e12f","label":"fits","note":"Tries creating secret gist via gh, returning null on failure"}
+{"id":"c30aee7b","label":"fits","note":"Skips waypoints using line-walkability checks"}
+{"id":"cd6d6491","label":"fits","note":"Renders heat map of top edited files"}
+{"id":"088bcbcd","label":"fits","note":"Maps tool choice to OpenAI Responses tool choice given tools and model"}
+{"id":"3ced9e7a","label":"fits","note":"Disables page scrolling via wheel/touch prevention and no text selection"}
+{"id":"99f8b2eb","label":"fits","note":"Re-registers device with preferences override, logging errors"}
+{"id":"710374fd","label":"fits","note":"Renders example card with optional title lines"}
+{"id":"8e77a73e","label":"fits","note":"Lists non-floor, non-elevator tiles as obstacle rectangles"}
+{"id":"bbb5909e","label":"fits","note":"Hook cleaning up motion state and raf on unmount"}
+{"id":"3b728bf2","label":"fits","note":"Menu item aligner wrapper defaulting side to inline"}
+{"id":"4d2f965e","label":"fits","note":"Maps status string to icon character"}
+{"id":"8f33af01","label":"fits","note":"Picks display label for session with fallbacks"}
+{"id":"be1e5baa","label":"fits","note":"Derives project key from session name or root"}
+{"id":"c372f6bc","label":"fits","note":"Collects prunable tool-result and block regions eligible for shaking"}
+{"id":"e9c1d523","label":"fits","note":"Converts agent message into title conversation turn"}
+{"id":"04e09f1e","label":"fits","note":"Zustand slice managing queue reservations and ready occupants"}
+{"id":"834459e9","label":"fits","note":"CLI lists available plugins from marketplaces"}
+{"id":"eb31b4db","label":"fits","note":"Builds responsive class name list from value per viewport"}
+{"id":"8381ecbb","label":"fits","note":"Normalizes and dedupes condition regexes, returning error on failure"}
+{"id":"64f5e948","label":"fits","note":"Fetches media as blob, rejecting failures and HTML pages"}
+{"id":"23c51343","label":"fits","note":"Picks first remaining same-project thread after deletion by sort order"}
+{"id":"2b1065d8","label":"fits","note":"Reads finite number at JSON path or undefined"}
+{"id":"4c1a19fb","label":"fits","note":"Alert component with title, icon and actions"}
+{"id":"baa298f9","label":"fits","note":"Hook managing browse path input state and navigation"}
+{"id":"7ef75baf","label":"fits","note":"Textarea component with autogrow and form control integration"}
+{"id":"060d2474","label":"fits","note":"Builds furniture elements for a zone"}
+{"id":"1c62a733","label":"fits","note":"Transforms color token into light/dark variables"}
+{"id":"3e4a6c61","label":"fits","note":"Shows error caption only when form control has error"}
+{"id":"4e860538","label":"fits","note":"Renders conversation entries by role"}
+{"id":"033345fd","label":"fits","note":"Fetches Devin model catalog, trying native then legacy identity"}
+{"id":"a426884f","label":"fits","note":"Reads rendered transform offset along axis from computed style"}
+{"id":"b1208e56","label":"fits","note":"Parses JSON items response, tolerating code fences"}
+{"id":"f6e71812","label":"fits","note":"Opens PR link context menu at event position"}
+{"id":"c6a1fe84","label":"fits","note":"Maps agent phase to movement type string"}
+{"id":"57168bb0","label":"fits","note":"Computes djb2-style 32-bit hash of name"}
+{"id":"fb31e881","label":"fits","note":"Generates placeholder string not present in given values"}
+{"id":"85dd683f","label":"fits","note":"Builds wss live sideband URL for call id"}
+{"id":"c71873ee","label":"fits","note":"Hook loading office textures and reporting loaded state"}
+{"id":"ac695b69","label":"fits","note":"Checks if agent coordinates are inside elevator"}
+{"id":"041aa536","label":"fits","note":"Performs Perplexity browser SSO login and validates session"}
+{"id":"0eaf510d","label":"fits","note":"Adds missing file context records and references to composer draft"}
+{"id":"406f1457","label":"fits","note":"Converts camelCase to kebab-case"}
+{"id":"32257c58","label":"fits","note":"Maps edit ratio to heat color"}
+{"id":"cbf7fbd7","label":"fits","note":"Decodes SPARC call instructions in byte buffer (BCJ filter)"}
+{"id":"6ea3ffab","label":"fits","note":"Filters files excluding configured suffix patterns"}
+{"id":"b5d0c6c2","label":"fits","note":"Renders worktree icon with tooltip if thread has worktree"}
+{"id":"28a14e8f","label":"fits","note":"Renders command center decor sprites"}
+{"id":"3742473b","label":"fits","note":"Returns visual row index or -1"}
+{"id":"208a6c1b","label":"fits","note":"Renders aggregate resource telemetry card"}
+{"id":"c64187ae","label":"fits","note":"Loads project and user system prompt files"}
+{"id":"65da6497","label":"fits","note":"Builds tooltip text naming who reacted with emoji"}
+{"id":"fa670092","label":"fits","note":"Picks light or dark on-color by WCAG contrast with background"}
+{"id":"5d4543bd","label":"fits","note":"Renders kanban columns from tasks"}
+{"id":"90952d66","label":"fits","note":"Computes spring transition duration and linear easing"}
+{"id":"5563d35a","label":"fits","note":"Diagnostics settings screen showing startup crash logs"}
+{"id":"d5eb16ba","label":"fits","note":"Renders systemd unit file text for boot service"}
+{"id":"bc9a7f1f","label":"fits","note":"Waits for eval handles to settle, emitting progress and snapshots"}
+{"id":"12dc1a5b","label":"fits","note":"Renders furniture for all command center zones"}
+{"id":"d6e7d1a6","label":"fits","note":"Hook adding arrow-key focus navigation across calendar dates"}
+{"id":"ad36cba3","label":"fits","note":"Picks light or dark on-color by APCA contrast"}
+{"id":"f8b3ae32","label":"fits","note":"Wraps children as file upload trigger span"}
+{"id":"6feab50a","label":"fits","note":"Computes name and endpoint for text-predict daemon"}
+{"id":"6d1eb2f0","label":"fits","note":"Ref-counts retained background scope, returns release function"}
+{"id":"0529a23a","label":"fits","note":"Draws left arm bezier and hand"}
+{"id":"a819d72f","label":"fits","note":"Renders sized placeholder box"}
+{"id":"142ddcfa","label":"fits","note":"Renders zone columns with counts and overflow"}
+{"id":"c9348db1","label":"fits","note":"Builds event request headers with optional API key"}
+{"id":"24946d01","label":"fits","note":"Renders labeled stat value with optional tooltip and tone"}
+{"id":"cead198a","label":"fits","note":"Locks scroll on container with ref count, returns unlock function"}
+{"id":"da00baea","label":"fits","note":"Builds piecewise scale giving anchor intervals equal width"}
+{"id":"83eeb96a","label":"fits","note":"Converts HH:MM times into cron expression"}
+{"id":"6aeac473","label":"fits","note":"Reducer handling toast add/show/hide/remove actions"}
+{"id":"991a84e2","label":"imprecise","note":"Adds to seen set and returns whether already seen"}
+{"id":"feca2e90","label":"fits","note":"Renders floor sign with label and accent border"}
+{"id":"327fc3b2","label":"fits","note":"Finds available iOS simulator by name via simctl"}
+{"id":"a727cf22","label":"fits","note":"Hook returning translation function and current language"}
+{"id":"c38013a9","label":"fits","note":"Parses read tool args into path, selector, line range"}
+{"id":"b18d1325","label":"fits","note":"Projects thread into awareness state, null if no phase"}
+{"id":"732a84ed","label":"fits","note":"Creates environment RPC command with success/settled hooks"}
+{"id":"153f5f8b","label":"fits","note":"Parses cell_row_col id into position or null"}
+{"id":"488464c2","label":"fits","note":"Select component choosing native or custom variant"}
+{"id":"ff530819","label":"fits","note":"Pagination choosing controlled or uncontrolled variant"}
+{"id":"5aa9998d","label":"fits","note":"Parses and validates JSON line into savings record"}
+{"id":"e228d5c9","label":"fits","note":"Extracts mermaid code blocks with hashes from markdown"}
+{"id":"6dca5233","label":"imprecise","note":"Buckets rules but also registers TTSR rules in manager"}
+{"id":"5c8adef3","label":"fits","note":"Reads auth method from config with default"}
+{"id":"f3dd36d1","label":"fits","note":"Hook returning previous value of input"}
+{"id":"746a16c5","label":"fits","note":"Zustand slice for debug settings with persistence"}
+{"id":"50cbcd54","label":"fits","note":"Returns initial Codex scan state object"}
+{"id":"fd19491f","label":"fits","note":"Resolves publishing startup state from relay and publish flags"}
+{"id":"89b7082c","label":"fits","note":"Extracts remote-related fields from VCS status"}
+{"id":"1cfcc62b","label":"fits","note":"Maps PR action to Azure CLI arguments"}
+{"id":"f410b38d","label":"fits","note":"Returns end padding class based on browse input state"}
+{"id":"058ec24b","label":"fits","note":"Draws boss capsule body"}
+{"id":"da536cc7","label":"fits","note":"Remembers timeline position in bounded map, evicting oldest"}
+{"id":"76e181a0","label":"fits","note":"Summarizes conversation text via remote or local model call"}
+{"id":"c50e3856","label":"fits","note":"Converts oklch color string to hex or rgba"}
+{"id":"7c1151cf","label":"fits","note":"Renders desk with chair, monitor, keyboard, accessory sprites"}
+{"id":"05e806a0","label":"fits","note":"Type guard checking object has content array"}
+{"id":"70caa8fe","label":"fits","note":"Hook searching pull requests for composer with debounce and exact lookup"}
+{"id":"80c36c91","label":"fits","note":"Returns true if shift pressed or at most one project group"}
+{"id":"1057ad4c","label":"fits","note":"Renders a tool entry row"}
+{"id":"ba028ff4","label":"fits","note":"Renders workspace audio preview with load/failure handling"}
+{"id":"0210e9d5","label":"fits","note":"Merges incoming handoff prompt into existing draft replacing prior handoff"}
+{"id":"6a270709","label":"fits","note":"Collects providers with policy enabled from accounts and reports"}
+{"id":"1005b062","label":"fits","note":"Hook choosing load-balanced environment from host resources and weights"}
+{"id":"9efbdf58","label":"fits","note":"Loads debug settings from localStorage, empty on failure"}
+{"id":"9698d6f2","label":"fits","note":"Input group addon that focuses input on click"}
+{"id":"2b72fe7a","label":"fits","note":"Checks AST node is process or globalThis.process"}
+{"id":"0c70773f","label":"fits","note":"Reads API token from URL or sessionStorage and sets key"}
+{"id":"cef575df","label":"fits","note":"Avatar component rendering image, icon or initials"}
+{"id":"027bb789","label":"fits","note":"Hook registering hotkeys and returning ref and pressed check"}
+{"id":"d9bc9207","label":"fits","note":"Renders zap icon SVG"}
+{"id":"dc11fb1a","label":"fits","note":"Creates restore-pending marker file durably if absent"}
+{"id":"caf7890a","label":"fits","note":"Removes item from dismiss queue, reparenting children"}
+{"id":"47b10762","label":"fits","note":"Focuses element or applies pseudo-focus attribute"}
+{"id":"5c93b873","label":"fits","note":"Builds model manager options discovering Ollama Cloud models"}
+{"id":"44e17b60","label":"fits","note":"Builds task lifecycle events from Grok background task output"}
+{"id":"6247ddd2","label":"fits","note":"Opens local stream socket, handshaking and returning handle or null"}
+{"id":"3abdd0e2","label":"fits","note":"Returns whether system prefers dark via media query"}
+{"id":"b8135e86","label":"fits","note":"Converts settings entry into UI setting definition or null"}
+{"id":"9a3a2c72","label":"fits","note":"Extracts project name from directory path"}
+{"id":"61dfa51e","label":"fits","note":"Draws sun arc and clouds during daytime"}
+{"id":"05c1bc0a","label":"fits","note":"Generates theme color values from hue tokens with defaults"}
+{"id":"50f78049","label":"fits","note":"Converts floor form data into floor config"}
+{"id":"d957cb4d","label":"fits","note":"Computes drag velocity from recent samples"}
+{"id":"8fee8223","label":"fits","note":"Converts floor config into form data"}
+{"id":"63d8ca38","label":"fits","note":"Number field choosing controlled or uncontrolled variant"}
+{"id":"77b82e3d","label":"fits","note":"Resizable item registering itself with size limits"}
+{"id":"f5c20874","label":"fits","note":"Renders select arrow icon at end"}
+{"id":"2c4ddf31","label":"fits","note":"Returns queue positions for arrival or departure"}
+{"id":"fe186d67","label":"fits","note":"Reads and parses JSON file, null on error"}
+{"id":"18f06de5","label":"fits","note":"Android material button with tone, loading, accessibility"}
+{"id":"37422431","label":"fits","note":"View item with grow, order, gap and column styling"}
+{"id":"02cf4c44","label":"fits","note":"Subsequence fuzzy match of query in text"}
+{"id":"8b9a8e2f","label":"fits","note":"Lists session files in directory read-only, empty on error"}
+{"id":"912ecf0d","label":"fits","note":"Computes day phase and progress from hour and season"}
+{"id":"2bf0b5df","label":"fits","note":"Tabs managing own value state around controlled version"}
+{"id":"f1e5f4b8","label":"fits","note":"Adds listener to confirm dialog subscribers, returns unsubscribe"}
+{"id":"4d063744","label":"fits","note":"Controlled toggle button group handling single/multiple selection"}
+{"id":"f2c4c9ae","label":"fits","note":"Computes session context breakdown with optional snapcompact savings"}
+{"id":"505011aa","label":"fits","note":"Presence item handling enter/exit animation and release"}
+{"id":"3e7a5a76","label":"fits","note":"Maps tool name to emoji icon"}
+{"id":"97d2ba87","label":"fits","note":"Checks flyout bounds fully inside container with offset"}
+{"id":"d32a9d0a","label":"fits","note":"Loads persisted client settings into store with status tracking"}
+{"id":"6ff8a648","label":"fits","note":"Evaluates React fiber inspection script in page, returns result"}
+{"id":"76f02e49","label":"fits","note":"Toast provider managing toast queue and regions"}
+{"id":"f9e608cd","label":"fits","note":"Builds directory tree from path entries"}
+{"id":"0c29bf02","label":"fits","note":"Computes exit animation progress 0-1 from start time"}
+{"id":"6e6ce77a","label":"fits","note":"Reads stored follow-system theme flag with fallback"}
+{"id":"72373d82","label":"fits","note":"Renders gallery sections to screenshots via VHS, returns paths"}
+{"id":"24308049","label":"fits","note":"Mixes four numbers into hash modulo 100"}
+{"id":"3382c0f2","label":"fits","note":"Returns cached native review diff data rebuilt when comments change"}
+{"id":"932a8af5","label":"fits","note":"Renders zone column band, header and overflow tag"}
+{"id":"99d63932","label":"fits","note":"Hook returning current viewport"}
+{"id":"7ffd85e2","label":"fits","note":"Generates unit scale tokens from base unit"}
+{"id":"365b7429","label":"fits","note":"Sorts active threads by order key, falling back to timestamp"}
+{"id":"b3fc85b7","label":"fits","note":"Checks if session matches any floor"}
+{"id":"73bdd9be","label":"fits","note":"Controlled accordion providing context for trigger and content"}
+{"id":"ceaba061","label":"fits","note":"Formats terminal label with line range"}
+{"id":"740ebd54","label":"fits","note":"Quotes shell word for platform when unsafe chars present"}
+{"id":"f1ed8080","label":"fits","note":"Drops path points closer than threshold to previous"}
+{"id":"fbc8f26e","label":"fits","note":"Parses hex color to rgb, throwing if invalid"}
+{"id":"322371a4","label":"fits","note":"Asks user to approve, revise or abort a ratchet stage"}
+{"id":"3c3819b7","label":"fits","note":"Describes usage limit amount as text"}
+{"id":"694dc117","label":"fits","note":"Resets effort control state fields"}
+{"id":"b08ef3bd","label":"fits","note":"Renders command center walls and checkered floor tiles"}
+{"id":"4a21b93e","label":"fits","note":"Computes dark-mode variant of oklch color"}

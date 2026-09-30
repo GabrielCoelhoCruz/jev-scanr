@@ -1,0 +1,400 @@
+{"id": "409e0ef1", "label": "fits", "note": "renders a kanban column with background, header and notes"}
+{"id": "bb7e1c4d", "label": "fits", "note": "builds OTLP tracing layer or no-op when config null"}
+{"id": "a63fc654", "label": "fits", "note": "removes a preview session and recomputes active tab"}
+{"id": "55edb94f", "label": "fits", "note": "assigns stable slot numbers to sessions per bucket"}
+{"id": "753394c2", "label": "fits", "note": "builds OAuth callback flow options with redirect override validation"}
+{"id": "4b56834d", "label": "fits", "note": "extracts num_ctx from Ollama parameters string"}
+{"id": "bd68b034", "label": "fits", "note": "fetches preferences, returns empty object on failure"}
+{"id": "58a50a01", "label": "fits", "note": "renders CSS grid component from props"}
+{"id": "9c07f1de", "label": "fits", "note": "applies chroma key via flood fill or global removal"}
+{"id": "b18dd3c7", "label": "fits", "note": "renders native select component"}
+{"id": "8f240773", "label": "fits", "note": "validates a value against arktype or JSON schema context"}
+{"id": "92f779f2", "label": "fits", "note": "decodes GitLab merge request diffs JSON into patch"}
+{"id": "76b2a816", "label": "fits", "note": "context menu component opening at right-click coordinates"}
+{"id": "9cd34a30", "label": "fits", "note": "table wrapper wrapping children in body if needed"}
+{"id": "6d500915", "label": "fits", "note": "converts raw comments and reviews into PullRequestComment list"}
+{"id": "33850fe3", "label": "fits", "note": "carousel scroll control button with visibility state"}
+{"id": "fb1d8cfc", "label": "fits", "note": "zustand slice creating boss state and setters"}
+{"id": "10163c25", "label": "fits", "note": "checks db memory rows all and only match cwd"}
+{"id": "9d02caac", "label": "fits", "note": "dispatches plugin marketplace subcommands"}
+{"id": "76e03ae1", "label": "fits", "note": "decides agent spawn position based on arrival/departure queues"}
+{"id": "4aaf62ae", "label": "fits", "note": "maps generic PR state to Azure status"}
+{"id": "ac81b9dd", "label": "fits", "note": "records agent occupying an elevator spawn position"}
+{"id": "e6418455", "label": "fits", "note": "renders attention toast list with click and dismiss"}
+{"id": "a5f40161", "label": "imprecise", "note": "generic name; renders fetch tool call summary with url and badges"}
+{"id": "0a6671fd", "label": "fits", "note": "filters codex launch args down to exec-compatible ones"}
+{"id": "9631adfa", "label": "fits", "note": "renders zoom in/out/reset buttons"}
+{"id": "70de33ae", "label": "fits", "note": "transforms font weight token into variable"}
+{"id": "f079904e", "label": "fits", "note": "parses digit-only string to number or null"}
+{"id": "4264dc1e", "label": "fits", "note": "renders a toast with auto-dismiss timer"}
+{"id": "25681dbd", "label": "fits", "note": "uncontrolled toggle button wrapping controlled with state"}
+{"id": "7e187e70", "label": "fits", "note": "returns color variant for layer"}
+{"id": "0679d18a", "label": "fits", "note": "draws city buildings and lit windows"}
+{"id": "f5652b6a", "label": "fits", "note": "draws stars at night with fading alpha"}
+{"id": "7e345d86", "label": "fits", "note": "transforms typography token into several variables"}
+{"id": "561a339d", "label": "fits", "note": "renders pull request tab icon from status"}
+{"id": "743ee753", "label": "fits", "note": "ranks command palette item by search term match"}
+{"id": "d98d12ef", "label": "fits", "note": "opens or closes thread terminal state"}
+{"id": "359d1b29", "label": "fits", "note": "picks controlled or uncontrolled slider"}
+{"id": "0736ee7a", "label": "fits", "note": "sets plist key via plutil replace or insert"}
+{"id": "756f6993", "label": "fits", "note": "renders button group wrapper"}
+{"id": "f9a75a72", "label": "fits", "note": "renders task progress segments bar"}
+{"id": "6806c7a4", "label": "fits", "note": "controlled toggle button using group state"}
+{"id": "b956f6a6", "label": "fits", "note": "builds gallery preview entries for composer shapes"}
+{"id": "bbe356cb", "label": "fits", "note": "parses and validates video input references array"}
+{"id": "dcf0cd51", "label": "fits", "note": "generates theme code and writes theme css/json files"}
+{"id": "3fea087a", "label": "fits", "note": "normalizes keyboard event to key string"}
+{"id": "4cb69ad9", "label": "fits", "note": "picks random acceptance quote"}
+{"id": "777e7c9b", "label": "imprecise", "note": "builds schema from benchmark definition keys; name generic"}
+{"id": "9f9930ed", "label": "fits", "note": "builds two-letter weekday name list"}
+{"id": "7b9f83e9", "label": "fits", "note": "adds packages for bundled modules to collection"}
+{"id": "41a323f4", "label": "fits", "note": "discovers system prompt override from project/user files"}
+{"id": "c9d49464", "label": "fits", "note": "converts cron expression to editor state"}
+{"id": "caa43b4e", "label": "fits", "note": "builds status report input unless already reported"}
+{"id": "9a7fc0db", "label": "fits", "note": "detects EPERM permission error"}
+{"id": "5a9bd3d0", "label": "fits", "note": "logs debug message when DEBUG"}
+{"id": "86b17961", "label": "fits", "note": "checks IPv4 special-purpose ranges"}
+{"id": "ea31e02d", "label": "fits", "note": "computes thread row appearance styles"}
+{"id": "1b363536", "label": "fits", "note": "renders theme color picker popover"}
+{"id": "693005cf", "label": "fits", "note": "releases persisted attachment upload or cancels its job"}
+{"id": "a4dc2145", "label": "fits", "note": "maps utilization to frame index"}
+{"id": "dac09623", "label": "fits", "note": "remembers timeline if thread key and entries exist"}
+{"id": "a8b6fc06", "label": "fits", "note": "returns first queue position for type"}
+{"id": "4fa9149e", "label": "fits", "note": "checks if usage price draft is empty and new"}
+{"id": "32fbf81d", "label": "fits", "note": "renders release table row"}
+{"id": "065a0d8a", "label": "fits", "note": "container layout component"}
+{"id": "b2885423", "label": "fits", "note": "calendar year month grid"}
+{"id": "a4dd1561", "label": "fits", "note": "reads X11 clipboard via xclip or xsel"}
+{"id": "580986be", "label": "fits", "note": "iterates hotkey entries calling callback per id"}
+{"id": "94aa2296", "label": "fits", "note": "renders marquee at desk if text"}
+{"id": "c2e7cb96", "label": "fits", "note": "finds unique workspace path suffix via glob"}
+{"id": "711f1639", "label": "fits", "note": "renders activity state pill"}
+{"id": "a839259b", "label": "fits", "note": "renders navigation breadcrumb"}
+{"id": "69026f8e", "label": "fits", "note": "renders toast region for position"}
+{"id": "621f44f2", "label": "fits", "note": "resolves align style variables"}
+{"id": "1b3532f4", "label": "fits", "note": "escapes label for guidance string"}
+{"id": "6273ca5e", "label": "fits", "note": "registers dismissible layer and returns dismissibility check"}
+{"id": "f0a486e2", "label": "fits", "note": "resolves width style classes and variables"}
+{"id": "e4f9506b", "label": "fits", "note": "computes desk grid position from number"}
+{"id": "f058de06", "label": "fits", "note": "hashes MCP server params into key"}
+{"id": "5ce74c16", "label": "fits", "note": "routes click index to span candidates"}
+{"id": "c3b0d86e", "label": "fits", "note": "waits for snapshot animation destination with timeout"}
+{"id": "776eb827", "label": "fits", "note": "resolves block inset style"}
+{"id": "fd875d13", "label": "fits", "note": "finds A* path and converts to world coordinates"}
+{"id": "2a6e1f22", "label": "fits", "note": "aggregates cost series into summary view"}
+{"id": "a5f9ac1c", "label": "fits", "note": "compares keybinding shortcut contexts for equality"}
+{"id": "ddfb6b59", "label": "fits", "note": "draws thought or speech bubble graphic"}
+{"id": "2f9b8bff", "label": "fits", "note": "renders hidden input for select"}
+{"id": "78a503e4", "label": "fits", "note": "hook refreshing provider limits with state"}
+{"id": "c6f6888c", "label": "fits", "note": "imports SARIF or Codex bundle results into store"}
+{"id": "90c8eebd", "label": "fits", "note": "shuts down all LSP clients and pending ones"}
+{"id": "647efca8", "label": "fits", "note": "saves debug settings to localStorage"}
+{"id": "468040b3", "label": "fits", "note": "applies alpha to theme color as rgba"}
+{"id": "0dae9bb2", "label": "fits", "note": "renders sticky note for task"}
+{"id": "3eb3a7b6", "label": "fits", "note": "draws fallback desk rectangle"}
+{"id": "7e29374a", "label": "fits", "note": "renders mobile boss with textures"}
+{"id": "5c1d5f0b", "label": "fits", "note": "restores original lines for whitespace-only diffs"}
+{"id": "0c2b0014", "label": "fits", "note": "checks whether session repo matches a floor room"}
+{"id": "35dd83b3", "label": "fits", "note": "renders conflict region lines for scope"}
+{"id": "713d7f33", "label": "fits", "note": "strips provider compaction keys from preserve data"}
+{"id": "5edb4550", "label": "fits", "note": "radio component using group and form context"}
+{"id": "66df2ae5", "label": "fits", "note": "resolves border color class names"}
+{"id": "e1d47a45", "label": "fits", "note": "checks agent position within elevator bounds"}
+{"id": "694caa53", "label": "fits", "note": "renders safety board with success count"}
+{"id": "2eb2ad13", "label": "fits", "note": "renders desk surfaces and keyboards"}
+{"id": "da5325e1", "label": "fits", "note": "converts overlay map to viewed batch array"}
+{"id": "7cbc3911", "label": "fits", "note": "renders markdown video with asset URL"}
+{"id": "8282a487", "label": "fits", "note": "checks path is under immutable source paths"}
+{"id": "e0292f42", "label": "fits", "note": "builds wire options excluding non-wire keys"}
+{"id": "9136de88", "label": "fits", "note": "renders right sidebar with resizable panels"}
+{"id": "edeb213b", "label": "fits", "note": "formats search query demoting unsupported directives"}
+{"id": "ca90cd04", "label": "fits", "note": "hook for drag resizing size state"}
+{"id": "b5a5c369", "label": "fits", "note": "comment body with expand/collapse on overflow"}
+{"id": "e4c55578", "label": "fits", "note": "runs skills command with settings resolution"}
+{"id": "355cb678", "label": "fits", "note": "controlled checkbox group toggling values"}
+{"id": "9d65e804", "label": "fits", "note": "finds end index of string terminator"}
+{"id": "9428f4e3", "label": "fits", "note": "converts model to JSON view"}
+{"id": "13119b99", "label": "fits", "note": "dropdown menu wrapping popover"}
+{"id": "3d2e9fbf", "label": "fits", "note": "computes grid line coordinates"}
+{"id": "1b6d2706", "label": "fits", "note": "records recent run file with bounded size"}
+{"id": "8693c38f", "label": "fits", "note": "converts legacy p- selector to modern"}
+{"id": "6d26e108", "label": "fits", "note": "hook returning tabs context with panel and button ids"}
+{"id": "1f90cb94", "label": "fits", "note": "records snapshot of seen lines in edit store"}
+{"id": "86ebf1d6", "label": "fits", "note": "generates HTML export from template, theme and session data"}
+{"id": "136f4292", "label": "fits", "note": "restores db from compressed backup with integrity check"}
+{"id": "9f688182", "label": "fits", "note": "renders pizza chart of tool usage"}
+{"id": "66e04c75", "label": "fits", "note": "builds pairing URL with token in hash"}
+{"id": "b4f19afc", "label": "fits", "note": "computes next focus element data"}
+{"id": "760f1d5f", "label": "fits", "note": "returns copy of date with year set"}
+{"id": "c48acaee", "label": "fits", "note": "renders judgment state fields as text"}
+{"id": "2f6a785b", "label": "fits", "note": "toggles option selection in pending input draft"}
+{"id": "cf37bc32", "label": "fits", "note": "type guard for provider update candidates"}
+{"id": "cb13506b", "label": "fits", "note": "smooths path via collinear removal, funnel, bezier"}
+{"id": "9363abc9", "label": "fits", "note": "computes ordered fallback positions"}
+{"id": "93192005", "label": "fits", "note": "hook to lock and unlock scrolling"}
+{"id": "3f045f2d", "label": "fits", "note": "groups sessions by project and sorts them"}
+{"id": "9dffb471", "label": "fits", "note": "parses remote ref into remote and branch names"}
+{"id": "2fdaf623", "label": "fits", "note": "sets motion targets and prunes removed entries"}
+{"id": "3dc6d31d", "label": "fits", "note": "creates file tree drag mention controller"}
+{"id": "40243e83", "label": "fits", "note": "prompts for Cloudflare AI Gateway credentials to log in"}
+{"id": "90d84fcd", "label": "fits", "note": "checks whether transitions are allowed"}
+{"id": "64af2982", "label": "fits", "note": "derives weather condition from success/error counts"}
+{"id": "1eb35c1b", "label": "fits", "note": "maps Antigravity auth method to label"}
+{"id": "4950531f", "label": "fits", "note": "transforms radius token to px variable"}
+{"id": "a7b1d1bc", "label": "fits", "note": "derives account label from report metadata"}
+{"id": "47bb5b86", "label": "fits", "note": "describes text tool result view or error"}
+{"id": "bf3ba91b", "label": "imprecise", "note": "JSON-roundtrip deep copy; Date case returns \"true\" string"}
+{"id": "cce72350", "label": "fits", "note": "picks responsive value for current viewport"}
+{"id": "cc6c39dd", "label": "fits", "note": "transforms shadow token with light/dark modes"}
+{"id": "14097ad0", "label": "fits", "note": "formats date as local YYYY-MM-DD"}
+{"id": "9d7c9318", "label": "fits", "note": "parses skill invocation from text"}
+{"id": "994c7fae", "label": "fits", "note": "converts grid path to world positions"}
+{"id": "4a505ee6", "label": "fits", "note": "reads source string from composer atom node"}
+{"id": "7e6a275a", "label": "fits", "note": "builds utilization chart buckets from account series"}
+{"id": "7b1278dd", "label": "fits", "note": "reads file extension for URL content, default .txt"}
+{"id": "c0dddd95", "label": "fits", "note": "strips sanitized fragment prefixes from id"}
+{"id": "ed65a4bf", "label": "fits", "note": "renders floor loading fallback"}
+{"id": "9a3b7455", "label": "fits", "note": "renders legend row for limit account"}
+{"id": "07f86c5b", "label": "fits", "note": "parses color into light/dark oklch"}
+{"id": "3b428e2f", "label": "fits", "note": "updates agent position then recalculates collision-aware path"}
+{"id": "0dd75d00", "label": "fits", "note": "renders settings toggle switch"}
+{"id": "633f2e1d", "label": "fits", "note": "triggers browser download of data URL"}
+{"id": "f6e91c60", "label": "fits", "note": "computes flyout layout adjustment within container"}
+{"id": "00002ce4", "label": "fits", "note": "wraps context with glyph encoding codec"}
+{"id": "1da088d8", "label": "fits", "note": "form control helper caption"}
+{"id": "56ad13ed", "label": "fits", "note": "returns worktree path if not shared by other threads"}
+{"id": "02442712", "label": "fits", "note": "uncontrolled flyout wrapper with active state"}
+{"id": "c00f94bf", "label": "fits", "note": "compiles scan scope plans for rules"}
+{"id": "b97da96a", "label": "fits", "note": "renders microphone SVG icon"}
+{"id": "79b73866", "label": "fits", "note": "formats date and time for picker"}
+{"id": "089beaa0", "label": "fits", "note": "builds Gemini request tools list"}
+{"id": "60f1d72a", "label": "fits", "note": "debounced composer path search hook"}
+{"id": "be3d446a", "label": "fits", "note": "computes usage window stats from snapshot rows"}
+{"id": "27896552", "label": "fits", "note": "computes smoothed path between positions"}
+{"id": "1955cac9", "label": "fits", "note": "tokenizes source string into tokens"}
+{"id": "f225bf75", "label": "fits", "note": "resolves inline border width variable"}
+{"id": "f673b9d9", "label": "fits", "note": "paginates wrapped text into pages"}
+{"id": "5f8d5cb9", "label": "fits", "note": "switch component with form control"}
+{"id": "e9f78cc5", "label": "fits", "note": "returns project updated/created timestamp"}
+{"id": "4c9d7d79", "label": "fits", "note": "encrypts snapshot with AES-GCM for cache"}
+{"id": "bdc799af", "label": "fits", "note": "renders tool view with renderer"}
+{"id": "9472d826", "label": "fits", "note": "renders thread work log rows"}
+{"id": "80d798f8", "label": "fits", "note": "parses owner/repo name from git remote URL"}
+{"id": "7e8ae8c8", "label": "fits", "note": "returns drag coordinate from mouse or touch event"}
+{"id": "066ef27d", "label": "fits", "note": "draws agent capsule graphic with color"}
+{"id": "3b48f40c", "label": "fits", "note": "parses namespaced shorthand into git source"}
+{"id": "fb497511", "label": "fits", "note": "normalizes table cell paragraphs and header row in HTML"}
+{"id": "b9f3eb3b", "label": "fits", "note": "returns mac permission message or null"}
+{"id": "d87bc520", "label": "fits", "note": "unescapes escaped body string into UTF-8 text"}
+{"id": "84f81bf7", "label": "fits", "note": "animates door scale open/close"}
+{"id": "fb00178e", "label": "fits", "note": "tears down game runtime, animation, pixi app"}
+{"id": "f328d895", "label": "fits", "note": "renders mobile agent activity panel"}
+{"id": "9ebf707f", "label": "fits", "note": "resolves prompt cache key from body or headers"}
+{"id": "8d965f11", "label": "fits", "note": "adds or removes server in disabled list in config"}
+{"id": "3b963ab1", "label": "fits", "note": "controlled tabs component"}
+{"id": "9e7646ef", "label": "fits", "note": "loads Kokoro TTS model on given device"}
+{"id": "7f23c745", "label": "fits", "note": "plans order key changes for moving pinned thread"}
+{"id": "ea0af5f1", "label": "fits", "note": "hook computing fade side for scrollable"}
+{"id": "0614767d", "label": "fits", "note": "renders weather mode whiteboard"}
+{"id": "ebf72600", "label": "fits", "note": "returns parsed diff source character count using cache"}
+{"id": "2cda45b3", "label": "fits", "note": "sets input value natively and dispatches change event"}
+{"id": "fc9007e7", "label": "fits", "note": "loader text with completed text swap"}
+{"id": "a676811c", "label": "fits", "note": "progress bar with normalized width"}
+{"id": "a784b558", "label": "fits", "note": "loads Cursor user and project settings files"}
+{"id": "ff3d7070", "label": "fits", "note": "normalizes DPoP URL or fails with error"}
+{"id": "bd0a70d6", "label": "imprecise", "note": "plain combobox list wrapper; no virtualization in body"}
+{"id": "36bb0ebd", "label": "fits", "note": "calendar header controls"}
+{"id": "c6ca56ee", "label": "fits", "note": "collects stats sessions from archived compressed files"}
+{"id": "8d230ea0", "label": "fits", "note": "parses responses heuristic KDL node"}
+{"id": "7b2868a4", "label": "imprecise", "note": "multiplies cols/rows by cell size; nothing optimized"}
+{"id": "d17f50c5", "label": "fits", "note": "returns initial state object"}
+{"id": "74c2e121", "label": "fits", "note": "converts number, bigint or string to number"}
+{"id": "e2ae9e67", "label": "fits", "note": "visually hidden wrapper"}
+{"id": "cdae08a4", "label": "fits", "note": "pull request label picker UI"}
+{"id": "8c40dd8e", "label": "fits", "note": "executes code in VM context"}
+{"id": "5ccacb7c", "label": "fits", "note": "extracts trimmed string values from answer"}
+{"id": "84a3417f", "label": "fits", "note": "maps ACP tool status to runtime item status"}
+{"id": "84293547", "label": "fits", "note": "requests older thread turns via registry"}
+{"id": "2182ff09", "label": "fits", "note": "number input with slider"}
+{"id": "a0fcacc0", "label": "fits", "note": "dropdown submenu wrapper"}
+{"id": "e4000bbf", "label": "fits", "note": "scores token with alphanumeric swap fallback"}
+{"id": "dc7c221e", "label": "fits", "note": "filters value to record of non-empty keys with boolean values"}
+{"id": "294c1a75", "label": "fits", "note": "checks JSON schema accepts section label via properties"}
+{"id": "50fa11d7", "label": "fits", "note": "controlled radio group provider"}
+{"id": "a36e40f6", "label": "fits", "note": "returns whether toast filter enabled for event type"}
+{"id": "a3c33dfa", "label": "fits", "note": "table body wrapper"}
+{"id": "5824b1bb", "label": "fits", "note": "converts hex to oklch or throws"}
+{"id": "b4d41dcb", "label": "fits", "note": "releases elevator position held by agent"}
+{"id": "86d09a95", "label": "fits", "note": "control pill menu with long-press handling"}
+{"id": "af865bd0", "label": "fits", "note": "starts and stops animation system in effect"}
+{"id": "367b536f", "label": "fits", "note": "row to enable Cursor provider"}
+{"id": "4168d383", "label": "fits", "note": "wall clock with analog/digital modes"}
+{"id": "dbce32d0", "label": "fits", "note": "hotkeys provider only at root"}
+{"id": "12f2e12f", "label": "fits", "note": "creates secret gist via gh if available"}
+{"id": "c30aee7b", "label": "fits", "note": "skips waypoints using walkable line checks"}
+{"id": "cd6d6491", "label": "fits", "note": "renders file edit heat map"}
+{"id": "088bcbcd", "label": "fits", "note": "maps tool choice for OpenAI responses model"}
+{"id": "3ced9e7a", "label": "fits", "note": "disables scroll by blocking wheel/touch events"}
+{"id": "99f8b2eb", "label": "fits", "note": "re-registers device with preferences override"}
+{"id": "710374fd", "label": "fits", "note": "example item card with title"}
+{"id": "8e77a73e", "label": "fits", "note": "lists non-floor obstacle tiles from grid"}
+{"id": "bbb5909e", "label": "fits", "note": "cleans motion state on unmount"}
+{"id": "3b728bf2", "label": "fits", "note": "menu item aligner wrapper"}
+{"id": "4d2f965e", "label": "fits", "note": "maps status to icon character"}
+{"id": "8f33af01", "label": "fits", "note": "derives session label with fallbacks"}
+{"id": "be1e5baa", "label": "fits", "note": "derives project key from session"}
+{"id": "c372f6bc", "label": "fits", "note": "collects shake regions from session entries"}
+{"id": "e9c1d523", "label": "fits", "note": "converts agent message to title conversation turn"}
+{"id": "04e09f1e", "label": "fits", "note": "zustand slice for queue reservations"}
+{"id": "834459e9", "label": "fits", "note": "lists available plugins from marketplaces"}
+{"id": "eb31b4db", "label": "fits", "note": "builds responsive class names per viewport"}
+{"id": "8381ecbb", "label": "fits", "note": "normalizes and dedupes condition regexes"}
+{"id": "64f5e948", "label": "fits", "note": "fetches media URL as blob with error checks"}
+{"id": "23c51343", "label": "fits", "note": "picks fallback thread id after deletion"}
+{"id": "2b1065d8", "label": "fits", "note": "reads finite number at JSON path"}
+{"id": "4c1a19fb", "label": "fits", "note": "alert component"}
+{"id": "baa298f9", "label": "fits", "note": "hook managing browse path input state"}
+{"id": "7ef75baf", "label": "fits", "note": "textarea component with autogrow"}
+{"id": "060d2474", "label": "fits", "note": "renders zone furniture by kind"}
+{"id": "1c62a733", "label": "fits", "note": "transforms color token with light/dark modes"}
+{"id": "3e4a6c61", "label": "fits", "note": "shows form control error caption"}
+{"id": "4e860538", "label": "fits", "note": "renders conversation entries by role"}
+{"id": "033345fd", "label": "fits", "note": "fetches Devin model configs with timeout"}
+{"id": "a426884f", "label": "fits", "note": "reads rendered transform offset along axis"}
+{"id": "b1208e56", "label": "fits", "note": "parses items JSON response, stripping code fences"}
+{"id": "f6e71812", "label": "fits", "note": "opens PR link context menu at cursor"}
+{"id": "c6a1fe84", "label": "fits", "note": "maps agent phase to movement type"}
+{"id": "57168bb0", "label": "fits", "note": "hashes name to unsigned 32-bit number"}
+{"id": "fb31e881", "label": "fits", "note": "builds unique placeholder not present in values"}
+{"id": "85dd683f", "label": "fits", "note": "builds wss live sideband URL for call"}
+{"id": "c71873ee", "label": "fits", "note": "hook loading office textures"}
+{"id": "ac695b69", "label": "fits", "note": "checks agent position against elevator"}
+{"id": "041aa536", "label": "fits", "note": "runs Perplexity browser SSO login"}
+{"id": "0eaf510d", "label": "fits", "note": "restores missing composer file references in draft"}
+{"id": "406f1457", "label": "fits", "note": "converts camelCase to kebab-case"}
+{"id": "32257c58", "label": "fits", "note": "maps edit count ratio to heat color"}
+{"id": "cbf7fbd7", "label": "fits", "note": "decodes SPARC call instructions in place"}
+{"id": "6ea3ffab", "label": "fits", "note": "filters out excluded files by filename suffix"}
+{"id": "b5d0c6c2", "label": "fits", "note": "renders worktree indicator tooltip"}
+{"id": "28a14e8f", "label": "fits", "note": "renders command center decorations"}
+{"id": "3742473b", "label": "fits", "note": "returns row index of visual or -1"}
+{"id": "208a6c1b", "label": "fits", "note": "renders aggregate telemetry card"}
+{"id": "c64187ae", "label": "fits", "note": "loads system prompt files from project and user"}
+{"id": "65da6497", "label": "fits", "note": "builds tooltip text for PR reaction"}
+{"id": "fa670092", "label": "fits", "note": "picks light or dark on-color by WCAG contrast"}
+{"id": "5d4543bd", "label": "fits", "note": "renders kanban board mode"}
+{"id": "90952d66", "label": "fits", "note": "resolves spring transition duration and easing"}
+{"id": "5563d35a", "label": "fits", "note": "diagnostics settings screen showing crash logs"}
+{"id": "d5eb16ba", "label": "fits", "note": "renders systemd unit text for boot service"}
+{"id": "bc9a7f1f", "label": "fits", "note": "waits on eval handles and returns snapshots"}
+{"id": "12dc1a5b", "label": "fits", "note": "renders furniture for all zones"}
+{"id": "d6e7d1a6", "label": "fits", "note": "calendar keyboard navigation hook"}
+{"id": "ad36cba3", "label": "fits", "note": "picks light or dark on-color by APCA contrast"}
+{"id": "f8b3ae32", "label": "fits", "note": "file upload trigger wrapper"}
+{"id": "6feab50a", "label": "imprecise", "note": "noun name; computes daemon name and socket endpoint only"}
+{"id": "6d1eb2f0", "label": "fits", "note": "ref-counts background scope and returns release function"}
+{"id": "0529a23a", "label": "fits", "note": "draws left arm bezier"}
+{"id": "a819d72f", "label": "fits", "note": "placeholder box"}
+{"id": "142ddcfa", "label": "fits", "note": "renders zone columns"}
+{"id": "c9348db1", "label": "fits", "note": "builds JSON headers with optional API key"}
+{"id": "24946d01", "label": "fits", "note": "stat block with label and value"}
+{"id": "cead198a", "label": "fits", "note": "locks scroll on container with ref counting"}
+{"id": "da00baea", "label": "fits", "note": "builds equal-width trace scale from anchors"}
+{"id": "83eeb96a", "label": "fits", "note": "converts times list to cron expression"}
+{"id": "6aeac473", "label": "fits", "note": "reducer for toast queues"}
+{"id": "991a84e2", "label": "imprecise", "note": "marks object seen but returns whether it was already seen"}
+{"id": "feca2e90", "label": "fits", "note": "draws floor sign with label"}
+{"id": "327fc3b2", "label": "fits", "note": "finds available iOS simulator by name"}
+{"id": "a727cf22", "label": "fits", "note": "hook returning translation function and language"}
+{"id": "c38013a9", "label": "fits", "note": "parses read tool args into path, selector, range"}
+{"id": "b18d1325", "label": "fits", "note": "projects thread into agent awareness state"}
+{"id": "732a84ed", "label": "fits", "note": "creates environment RPC command atom"}
+{"id": "153f5f8b", "label": "fits", "note": "parses cell id into row and column"}
+{"id": "488464c2", "label": "fits", "note": "select component choosing native or custom"}
+{"id": "ff530819", "label": "fits", "note": "pagination picking controlled or uncontrolled"}
+{"id": "5aa9998d", "label": "fits", "note": "parses and validates a savings record line"}
+{"id": "e228d5c9", "label": "fits", "note": "extracts mermaid code blocks with hashes"}
+{"id": "6dca5233", "label": "fits", "note": "buckets rules by filters and type"}
+{"id": "5c8adef3", "label": "fits", "note": "reads Antigravity auth method with default"}
+{"id": "f3dd36d1", "label": "fits", "note": "returns previous value of a prop"}
+{"id": "746a16c5", "label": "fits", "note": "zustand debug slice with persisted settings"}
+{"id": "50cbcd54", "label": "fits", "note": "returns initial Codex scan state"}
+{"id": "fd19491f", "label": "fits", "note": "resolves publishing startup state from flags"}
+{"id": "89b7082c", "label": "fits", "note": "extracts remote status part from VCS status"}
+{"id": "1cfcc62b", "label": "fits", "note": "builds Azure CLI args for PR action"}
+{"id": "f410b38d", "label": "fits", "note": "returns padding class for browse input"}
+{"id": "058ec24b", "label": "fits", "note": "draws boss body capsule"}
+{"id": "da536cc7", "label": "fits", "note": "remembers timeline position with bounded cache"}
+{"id": "76e181a0", "label": "fits", "note": "summarizes conversation window with prompts via model"}
+{"id": "c50e3856", "label": "fits", "note": "converts oklch theme color to native color"}
+{"id": "7c1151cf", "label": "fits", "note": "renders desk with chair and accessory"}
+{"id": "05e806a0", "label": "fits", "note": "type guard for agent tool result"}
+{"id": "70caa8fe", "label": "fits", "note": "debounced PR search hook for composer"}
+{"id": "80c36c91", "label": "fits", "note": "decides whether to create thread in current project"}
+{"id": "1057ad4c", "label": "fits", "note": "renders tool entry row"}
+{"id": "ba028ff4", "label": "fits", "note": "audio preview for workspace file"}
+{"id": "0210e9d5", "label": "fits", "note": "merges incoming handoff prompt into existing draft"}
+{"id": "6a270709", "label": "fits", "note": "collects providers with policy enabled"}
+{"id": "1005b062", "label": "fits", "note": "picks environment by load-balanced host resources"}
+{"id": "9efbdf58", "label": "fits", "note": "loads debug settings from localStorage"}
+{"id": "9698d6f2", "label": "fits", "note": "input group addon with click focus"}
+{"id": "2b72fe7a", "label": "fits", "note": "detects global process object AST node"}
+{"id": "0c70773f", "label": "fits", "note": "reads API key from URL token or storage and cleans URL"}
+{"id": "cef575df", "label": "fits", "note": "avatar component"}
+{"id": "027bb789", "label": "fits", "note": "hotkeys registration hook"}
+{"id": "d9bc9207", "label": "fits", "note": "zap icon SVG"}
+{"id": "dc11fb1a", "label": "fits", "note": "creates restore-pending marker file durably"}
+{"id": "caf7890a", "label": "fits", "note": "removes queue item and reparents children"}
+{"id": "47b10762", "label": "fits", "note": "focuses element or applies pseudo focus"}
+{"id": "5c93b873", "label": "fits", "note": "builds Ollama Cloud model manager options"}
+{"id": "44e17b60", "label": "fits", "note": "builds task events from Grok background task tool calls"}
+{"id": "6247ddd2", "label": "fits", "note": "opens stream socket connection"}
+{"id": "3abdd0e2", "label": "fits", "note": "checks system dark mode preference"}
+{"id": "b8135e86", "label": "fits", "note": "converts settings entry to setting definition"}
+{"id": "9a3a2c72", "label": "fits", "note": "extracts project name from directory path"}
+{"id": "61dfa51e", "label": "fits", "note": "draws sun and clouds in daytime"}
+{"id": "05c1bc0a", "label": "fits", "note": "generates color palette values from hues"}
+{"id": "50f78049", "label": "fits", "note": "converts floor form data to floor config"}
+{"id": "d957cb4d", "label": "fits", "note": "computes drag velocity from recent samples"}
+{"id": "8fee8223", "label": "fits", "note": "converts floor config to form data"}
+{"id": "63d8ca38", "label": "fits", "note": "number field controlled/uncontrolled"}
+{"id": "77b82e3d", "label": "fits", "note": "resizable item registering with context"}
+{"id": "f5c20874", "label": "fits", "note": "select arrow end content"}
+{"id": "2c4ddf31", "label": "fits", "note": "returns queue positions for type"}
+{"id": "fe186d67", "label": "fits", "note": "reads JSON file or returns null"}
+{"id": "18f06de5", "label": "fits", "note": "Android material button with tones"}
+{"id": "37422431", "label": "fits", "note": "view item flex child"}
+{"id": "02cf4c44", "label": "fits", "note": "subsequence fuzzy match of query in text"}
+{"id": "8b9a8e2f", "label": "fits", "note": "scans session dir for sessions, empty on error"}
+{"id": "912ecf0d", "label": "fits", "note": "computes time phase and progress from hour"}
+{"id": "2bf0b5df", "label": "fits", "note": "uncontrolled tabs wrapper"}
+{"id": "f1e5f4b8", "label": "fits", "note": "subscribes listener to confirm dialog"}
+{"id": "4d063744", "label": "fits", "note": "controlled toggle button group selection"}
+{"id": "f2c4c9ae", "label": "fits", "note": "computes session context token breakdown"}
+{"id": "505011aa", "label": "fits", "note": "presence item with enter/exit animation"}
+{"id": "3e7a5a76", "label": "fits", "note": "maps tool name to emoji icon"}
+{"id": "97d2ba87", "label": "fits", "note": "checks flyout within container bounds"}
+{"id": "d32a9d0a", "label": "fits", "note": "hydrates client settings once with retry status"}
+{"id": "6ff8a648", "label": "fits", "note": "inspects React fiber via page evaluation"}
+{"id": "76f02e49", "label": "fits", "note": "toast provider with queue actions"}
+{"id": "f9e608cd", "label": "fits", "note": "builds tree of path nodes from entries"}
+{"id": "0c29bf02", "label": "fits", "note": "computes clamped exit animation progress"}
+{"id": "6e6ce77a", "label": "fits", "note": "reads stored follow-system theme preference"}
+{"id": "72373d82", "label": "fits", "note": "captures gallery screenshots using VHS"}
+{"id": "24308049", "label": "fits", "note": "mixes four numbers into hash modulo 100"}
+{"id": "3382c0f2", "label": "fits", "note": "returns cached native review diff data by comments key"}
+{"id": "932a8af5", "label": "fits", "note": "renders zone column with header and count"}
+{"id": "99d63932", "label": "fits", "note": "returns current viewport"}
+{"id": "7ffd85e2", "label": "fits", "note": "generates unit scale from base value"}
+{"id": "365b7429", "label": "fits", "note": "sorts active threads by order key"}
+{"id": "b3fc85b7", "label": "fits", "note": "checks session matches any floor"}
+{"id": "73bdd9be", "label": "fits", "note": "controlled accordion provider"}
+{"id": "ceaba061", "label": "fits", "note": "formats terminal context label with range"}
+{"id": "740ebd54", "label": "fits", "note": "quotes shell word per platform"}
+{"id": "f1ed8080", "label": "fits", "note": "removes points closer than threshold"}
+{"id": "fbc8f26e", "label": "fits", "note": "converts hex color to rgb or throws"}
+{"id": "322371a4", "label": "fits", "note": "asks interactive approval for ratchet stage"}
+{"id": "3c3819b7", "label": "fits", "note": "describes usage limit amount as text"}
+{"id": "694dc117", "label": "fits", "note": "resets OpenAI effort control state"}
+{"id": "b08ef3bd", "label": "fits", "note": "renders command center floor tiles"}
+{"id": "4a21b93e", "label": "fits", "note": "computes dark mode color from oklch"}
