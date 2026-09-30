@@ -16,5 +16,12 @@
     "minActionableAboveCut": 2,
     "mustExceedBelowCutRate": true,
     "meaning": "Top-of-ranking sample on one project. Enough for an alpha release only."
+  },
+  "release": {
+    "countsAsDefault": ["default", "default_low_precision"],
+    "stableAtLeast": 4,
+    "pivotAtMost": 2,
+    "between": "stay_alpha",
+    "meaning": "How many signals passed decides the release. At or above stableAtLeast: stable. At or below pivotAtMost: pivot to the evaluation-harness product. Anything in between, exactly 3 today: no stable release and no pivot; the current release stays an alpha and the result is recorded as it is. No threshold may change after labels exist. Not decidable until the labeler is a human or a calibrated judge."
   }
 }

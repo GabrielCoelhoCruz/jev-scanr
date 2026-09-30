@@ -29,7 +29,7 @@ A signal is **one versioned question file plus fixtures**.
    - `presence`: the option that counts as a finding.
    - `evidence`: `[]` for a new signal.
 2. **Add fixtures:** `test/fixtures/<id>/positive/` and `test/fixtures/<id>/negative/`. Each is a tiny project (a few lines to a page). The positive one should make a careful reader answer the `presence` option; the negative one should not. The offline test checks that both produce a request that asks your question.
-3. **Add cases to `evals/cases/<id>.jsonl`.** At least one `actionable` and one `no_action` case, each with a label and *who gave it* (`human`, `llm_reviewer` plus the model, or `author`). `node evals/cli.mjs audit` must pass: it checks the case set (duplicates, label leakage, both directions) and the grader (oracle, null, no-answer, induced error, served model). Author labels are sanity checks, not evidence.
+3. **Add cases to `evals/cases/<id>.jsonl`.** At least one `actionable` and one `no_action` case, each with a label and _who gave it_ (`human`, `llm_reviewer` plus the model, or `author`). `node evals/cli.mjs audit` must pass: it checks the case set (duplicates, label leakage, both directions) and the grader (oracle, null, no-answer, induced error, served model). Author labels are sanity checks, not evidence.
 4. **Check the cases against Jev once**, with your own key. It sends only those cases:
    ```sh
    node evals/cli.mjs run --yes --cap-usd 0.05 --signal <id> --out ../eval-out
@@ -46,12 +46,13 @@ Changing the text of a question or its options is a new question: bump `version`
 
 **Alpha gate** (the first seven defaults; enough for `v0.1.0-alpha` only): on one project, the 5 highest-probability cells at or above the 0.7 cut (all if fewer) plus 3 random cells below the cut, reviewed; at least 2 of the top cells actionable, and the actionable rate above the cut greater than below it.
 
-**Stable gate.** Everything is written down *before* the labels exist:
+**Stable gate.** Everything is written down _before_ the labels exist:
 
-1. **Pre-register.** Commit [`evals/gate.json`](evals/gate.json) (its SHA-256 is `b8eb59ab1315426984d757b78e0b16d58e2cf3df2b68d3bf2710c221f7854705`; `gate --expect-rule-sha` refuses any other), the sampling rule and its seed, and who will label.
+1. **Pre-register.** Commit [`evals/gate.json`](evals/gate.json) (its SHA-256 is `a5de92c48a73d87825864bfcd06462d52a9a1f133f83efe3808e0b45c6831473`; `gate --expect-rule-sha` refuses any other), the sampling rule and its seed, and who will label.
 2. **Sample at random, not from the top.** From **at least two projects** that nobody proposing the signal has used: a random sample of cells at or above the cut, stratified 0.7–0.85 and 0.85–1, with **n ≥ 8** reviewed per signal, plus the 4 cells just below the cut. Also repeat 50 requests to measure how much P moves (`variance`). If more than 20% of cells move by more than 0.05, the report shows a range and the display rule changes.
 3. **Labels from a person, or from a calibrated judge.** An LLM judge must not be Jev, must use its own rubric prompt (`evals/judge/RUBRIC.md`), must pass its three known-negative controls, and must agree with a person on at least 90% of the clear cases (at least 20 of them) on a set the judge did not see (`calibrate`). The first calibration set is the 30-card human subset of our validation experiment. Until a judge is calibrated, only human labels count. The judge's first pass is sealed (hashed) before any repository access.
 4. **The bar.** At least **50% actionable**, greater than the rate among the cells just below the cut (30–50% is allowed with a "low precision" label; under 30%, or n < 8, the signal stays experimental).
+   **The release count.** A signal with `default` or `default_low_precision` counts as DEFAULT. At least 4 DEFAULT signals: stable release. 2 or fewer: pivot to the evaluation-harness product. Exactly 3: no stable release and no pivot; the release stays an alpha and the result is recorded as it is (added after the first run of this gate, which landed on 3, before any new labels exist). With labels that are not from a person or a calibrated judge, the outcome is `not_decidable`. `gate` prints it.
 5. **Report the noise floor.** The result prints `1/sqrt(n)` next to every rate. If the rate is within the noise floor of a bar, the verdict is not decided: label more cells.
 6. **Publish** the cards, labels, scripts and the `gate` output so anyone can recount, and record the result in the signal's `evidence` with `questionVersion`.
 

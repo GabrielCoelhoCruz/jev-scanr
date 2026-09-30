@@ -18,6 +18,7 @@ node evals/cli.mjs judge-import --tasks judge-tasks.json --labels judge-answers.
   --model <judge model id> --out judge-labels.json
 
 # 4. Compare with the human labels (human-labels/1, filled in from labels-template.json)
+#    The file must say "labelerKind": "human" next to "labeler": a person's name. A file that lacks it, says llm, or names a model is rejected.
 node evals/cli.mjs calibrate --judge judge-labels.json --human human-labels.json --human-blind \
   --judge-model <judge model id> --out judge-calibration.json
 ```

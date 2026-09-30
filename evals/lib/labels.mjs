@@ -1,3 +1,5 @@
+const MODEL_LABELER =
+  /\b(?:llm|claude|opus|sonnet|haiku|gpt|gemini|jev)\b|n[ãa]o humano|not human/i;
 export const LABELS = ["actionable", "no_action", "uncertain"];
 export const key = (cardId, signalId) => `${cardId}|${signalId}`;
 
@@ -17,6 +19,10 @@ export function normalizeLabels(file, { model = null } = {}) {
           note: e.rationale,
         });
   } else if (file?.schema === "human-labels/1") {
+    if (file.labelerKind !== "human")
+      throw Error(
+        `human-labels/1 must say "labelerKind": "human" (got ${JSON.stringify(file.labelerKind ?? null)}). LLM labels go in eval-labels/1 with sourceType "llm_reviewer" and the model id in "who".`,
+      );
     type = "human";
     who = file.labeler;
     for (const l of file.labels)
@@ -35,6 +41,10 @@ export function normalizeLabels(file, { model = null } = {}) {
     throw Error("Label source type must be human, llm_reviewer or author");
   if (typeof who !== "string" || !who.trim())
     throw Error("Label file must say who labeled (person, or reviewer model)");
+  if (type === "human" && MODEL_LABELER.test(who))
+    throw Error(
+      `Labeler "${who}" looks like a model, so the file cannot count as human labels`,
+    );
   const labels = new Map();
   let unlabeled = 0;
   for (const r of rows) {

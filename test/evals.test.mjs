@@ -393,6 +393,7 @@ test("the review package and human label formats from the blind protocol load as
   });
   const human = normalizeLabels({
     schema: "human-labels/1",
+    labelerKind: "human",
     labeler: "gabriel",
     labels: [{ cardId: "a", signalId: "s", label: "", note: "" }],
   });
@@ -622,4 +623,101 @@ test("every catalog signal has starter cases in both directions, and CONTRIBUTIN
   );
   assert.equal(sets.sets[0].id, "human-30");
   assert.match(sets.sets[0].cardsSHA256, /^[a-f0-9]{64}$/);
+});
+
+test("a human-labels file must declare a human labeler and cannot be an LLM", () => {
+  const file = (extra) => ({
+    schema: "human-labels/1",
+    labels: [{ cardId: "a", signalId: "s", label: "actionable", note: "n" }],
+    ...extra,
+  });
+  assert.equal(
+    normalizeLabels(file({ labelerKind: "human", labeler: "Ana Souza" })).source
+      .type,
+    "human",
+  );
+  assert.throws(
+    () => normalizeLabels(file({ labeler: "Ana Souza" })),
+    /labelerKind/,
+  );
+  assert.throws(
+    () =>
+      normalizeLabels(file({ labelerKind: "llm", labeler: "claude-opus-5-5" })),
+    /labelerKind/,
+  );
+  assert.throws(
+    () =>
+      normalizeLabels(
+        file({
+          labeler:
+            "LLM (não humano): anthropic/claude-opus-5-5, revisor independente",
+        }),
+      ),
+    /labelerKind/,
+  );
+  assert.throws(
+    () =>
+      normalizeLabels(
+        file({ labelerKind: "human", labeler: "anthropic/claude-opus-5-5" }),
+      ),
+    /looks like a model/,
+  );
+  assert.throws(
+    () =>
+      normalizeLabels({
+        schema: "eval-labels/1",
+        sourceType: "human",
+        who: "LLM (not human)",
+        labels: [],
+      }),
+    /looks like a model/,
+  );
+  assert.equal(
+    normalizeLabels({
+      schema: "eval-labels/1",
+      sourceType: "llm_reviewer",
+      who: "anthropic/claude-opus-5-5",
+      labels: [],
+    }).source.type,
+    "llm_reviewer",
+  );
+});
+
+test("the release outcome covers the middle case and needs a decidable labeler", () => {
+  const ids = ["s1", "s2", "s3", "s4", "s5"];
+  const build = (passing, source) => {
+    const sample = [],
+      labels = [];
+    for (const [i, id] of ids.entries())
+      for (const project of ["p1", "p2"])
+        for (let j = 0; j < 4; j++) {
+          const above = `${id}-${project}-a${j}`;
+          sample.push({
+            cardId: above,
+            signalId: id,
+            project,
+            stratum: "above_cut_random",
+          });
+          labels.push({
+            cardId: above,
+            signalId: id,
+            label: i < passing ? "actionable" : "no_action",
+            note: "n",
+          });
+        }
+    return evaluateGate({
+      sample,
+      labels: normalizeLabels({
+        schema: "eval-labels/1",
+        sourceType: source,
+        who: source === "human" ? "Ana Souza" : "some-model",
+        labels,
+      }),
+    });
+  };
+  assert.equal(build(4, "human").release.outcome, "stable");
+  assert.equal(build(3, "human").release.outcome, "stay_alpha");
+  assert.equal(build(3, "human").release.defaultSignals, 3);
+  assert.equal(build(2, "human").release.outcome, "pivot");
+  assert.equal(build(4, "llm_reviewer").release.outcome, "not_decidable");
 });

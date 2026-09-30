@@ -89,6 +89,20 @@ export function evaluateGate({
       topRankedSampleIgnored: top.length,
     };
   }
+  const r = rule.release;
+  const defaults = Object.values(signals).filter((s) =>
+    r.countsAsDefault.includes(s.verdict),
+  ).length;
+  const release = {
+    defaultSignals: defaults,
+    outcome: !labelerOk
+      ? "not_decidable"
+      : defaults >= r.stableAtLeast
+        ? "stable"
+        : defaults <= r.pivotAtMost
+          ? "pivot"
+          : r.between,
+  };
   return {
     schema: "signal-gate-result/1",
     ruleSHA256: ruleSHA256(rule),
@@ -102,6 +116,7 @@ export function evaluateGate({
         }
       : null,
     unlabeledSampleRows: unlabeled.length,
+    release,
     signals,
   };
 }

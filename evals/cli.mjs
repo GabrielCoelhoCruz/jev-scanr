@@ -283,6 +283,9 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     console.log(
       `gate rule ${result.ruleSHA256.slice(0, 12)}…; labeler ${result.labeler.type} (${result.labeler.who}) ${result.labelerOk ? "accepted" : "NOT accepted"}`,
     );
+    console.log(
+      `release: ${result.release.defaultSignals} signal(s) default; outcome ${result.release.outcome}`,
+    );
     for (const [id, s] of Object.entries(result.signals))
       console.log(
         `${id}: ${s.verdict}; above cut ${s.aboveCut.actionable}/${s.aboveCut.n} (${pct(s.aboveCut.rate)} ±${pct(s.aboveCut.noiseFloor)}), ${s.aboveCut.projects} project(s); below cut ${pct(s.belowCut.rate)}${s.withinNoiseOfBar ? "; WITHIN NOISE of a bar" : ""}${s.reasons.length ? `; ${s.reasons.join("; ")}` : ""}`,
