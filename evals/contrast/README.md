@@ -60,6 +60,17 @@ Committed before any request was sent (see the commit history of this folder).
 
 With 50 and 50 units an AUC difference under roughly 0.15 cannot be detected. A null result is "no detectable difference", not "equal".
 
+## Attribution
+
+The units are derived from functions in four public repositories, each under the MIT license. `units.json` stores paths, line ranges, hashes and numbers, not their source; the excerpts are regenerated from the pinned commits by `build.mjs`. Generated units combine, rewrite or rename those functions, and the code a live run sends is that regenerated text.
+
+| Repository                                                                | License (copyright line)       | Pinned commit                              |
+| ------------------------------------------------------------------------- | ------------------------------ | ------------------------------------------ |
+| [reshaped-ui/reshaped](https://github.com/reshaped-ui/reshaped)           | MIT (Reshaped)                 | `cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1` |
+| [paulrobello/claude-office](https://github.com/paulrobello/claude-office) | MIT (Paul Robello)             | `3522c16399660ac787cd1f4ad4f3255352ec8e6c` |
+| [pingdotgg/t3code](https://github.com/pingdotgg/t3code)                   | MIT (T3 Tools Inc.)            | `0fcd5f90611451cca842689faea53b5450c022da` |
+| [can1357/oh-my-pi](https://github.com/can1357/oh-my-pi)                   | MIT (Mario Zechner; Can Bölük) | `2b023d1b80133c523d66412602d99b5427408395` |
+
 ## Files
 
 | File                            | What it is                                                                                                                                                                                          |
