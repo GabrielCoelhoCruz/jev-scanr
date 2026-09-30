@@ -20,5 +20,6 @@
     "clone_pair": "token-shingle similar pair (unit formation only)"
   },
   "primitiveDecision": "All semantic questions here need an explicit insufficient outcome, so Choice is used. Genuinely binary syntax observations are computed deterministically rather than charged as Noul questions. No Noul confidence threshold is reused for Choice.",
-  "notForBugs": "Every signal asks a narrow, observable question about code structure. None asks whether code is buggy, insecure or worth changing."
+  "notForBugs": "Every signal asks a narrow, observable question about code structure. None asks whether code is buggy, insecure or worth changing.",
+  "optIn": ["name_vs_behavior"]
 }

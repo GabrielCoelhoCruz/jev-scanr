@@ -42,8 +42,8 @@ const oracle = (cases) => (request) => {
 test("the starter case sets are valid, cover both directions and warn that author labels are only sanity checks", () => {
   const audit = auditCases(starter);
   assert.deepEqual(audit.problems, []);
-  assert.equal(audit.valid, 16);
-  assert.equal(Object.keys(audit.bySignal).length, 8);
+  assert.equal(audit.valid, 18);
+  assert.equal(Object.keys(audit.bySignal).length, 9);
   assert.ok(audit.warnings.some((w) => /author-written/.test(w)));
   assert.ok(
     Object.values(audit.bySignal).every(
@@ -107,7 +107,7 @@ test("a run writes results.jsonl, traces, errors and a summary with the noise fl
     intervalMs: 0,
   };
   const summary = await runEval(args);
-  assert.equal(calls, 16);
+  assert.equal(calls, 18);
   const s = summary.signals.deep_nesting;
   assert.equal(s.graded, 2);
   assert.equal(s.tp + s.tn, 2);
@@ -139,8 +139,8 @@ test("a run writes results.jsonl, traces, errors and a summary with the noise fl
     );
   }
   await runEval(args);
-  assert.equal(calls, 16, "resume makes no repeat calls");
-  assert.equal(readFlows(out, starter).rows.length, 16);
+  assert.equal(calls, 18, "resume makes no repeat calls");
+  assert.equal(readFlows(out, starter).rows.length, 18);
   const html = join(out, "deep_nesting", "report.html");
   execFileSync(
     process.execPath,
@@ -171,7 +171,7 @@ test("abstentions and errors are never counted as negatives, and the first error
   });
   const total = (k) =>
     Object.values(summary.signals).reduce((n, s) => n + s[k], 0);
-  assert.equal(total("abstained"), 16);
+  assert.equal(total("abstained"), 18);
   assert.equal(total("graded") + total("tn") + total("fn"), 0);
   const out2 = join(scratch(t), "eval2");
   let n = 0;
@@ -252,7 +252,7 @@ test("P variance: repeats are chosen by a frozen seed, and the registered rule r
 test("judge tasks use a different prompt from the question, carry known-negative controls, and reject a Jev judge", () => {
   const { meta, tasks } = buildJudgeTasks(itemsFromCases(starter));
   assert.equal(meta.controls, 3);
-  assert.equal(tasks.length, 19);
+  assert.equal(tasks.length, 21);
   for (const t of tasks) {
     assert.ok(
       !t.prompt.includes("evaluationRules"),

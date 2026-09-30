@@ -6,6 +6,7 @@ import { testConfigFacts } from "./config-facts.mjs";
 import { formUnits, pseudoMember, lineWindows, UNIT_ORDER } from "./units.mjs";
 import {
   catalog,
+  appliesToUnit,
   packSignals,
   requestFor,
   packBudget,
@@ -15,7 +16,7 @@ import {
   PLAN_SCHEMA,
   SCANNER_VERSION,
 } from "./plan.mjs";
-import { catalogHash, selectSignals } from "./catalog.mjs";
+import { catalogHashFor, selectSignals } from "./catalog.mjs";
 
 const PROMPT = { promptFormat: "shared-rules-v1" };
 const MIN_WINDOW_LINES = 5;
@@ -29,6 +30,9 @@ export function buildPlan(root, options = {}) {
     hard = limits.maxHardRequestBytes;
   const generated = formUnits(index, {
     includeTests: !!options.retrieval?.includeTests,
+    lowOverlap: options.retrieval?.lowOverlap,
+    nameCues:
+      !!options.retrieval?.nameCue && catalog.signals.some((s) => s.unitFilter),
     kinds: UNIT_ORDER.filter((kind) =>
       catalog.signals.some((s) => s.kinds.includes(kind)),
     ),
@@ -210,16 +214,23 @@ export function buildPlan(root, options = {}) {
       parts: 0,
       location: o.location,
     });
+  let filteredByCue = 0;
   for (const unit of generated.units) {
+    const cue = unit.facts.nameCue?.absent;
     const signals = catalog.signals
-      .filter((s) => s.kinds.includes(unit.kind))
+      .filter((s) => s.kinds.includes(unit.kind) && appliesToUnit(s, cue))
       .map((s) => s.id);
+    if (!signals.length) {
+      filteredByCue++;
+      continue;
+    }
     const result = partsFor(unit);
     if (packs.length + result.parts.length > limits.maxCandidates) {
       manifest.push({
         unitId: unit.id,
         kind: unit.kind,
         signals,
+        ...(cue === undefined ? {} : { nameCueAbsent: cue }),
         disposition: "not_packed_candidate_limit",
         parts: 0,
         location: locate(unit),
@@ -231,6 +242,7 @@ export function buildPlan(root, options = {}) {
       unitId: unit.id,
       kind: unit.kind,
       signals,
+      ...(cue === undefined ? {} : { nameCueAbsent: cue }),
       disposition: "packed",
       parts: result.parts.length,
     });
@@ -257,14 +269,17 @@ export function buildPlan(root, options = {}) {
     schema: PLAN_SCHEMA,
     scannerVersion: SCANNER_VERSION,
     catalogVersion: catalog.version,
-    catalogHash,
+    catalogHash: catalogHashFor(enabledSignals),
     enabledSignals,
     root: snapshot.root,
     policy: POLICY,
     limits,
     excluded: snapshot.excluded,
     scope: { paths: snapshot.paths },
-    retrieval: generated.options,
+    retrieval: {
+      ...generated.options,
+      ...(options.retrieval?.nameCue ? { nameCue: true } : {}),
+    },
     configurationReading:
       "Bounded JSONC config data and proven static bindings; never require/eval target config",
     snapshot: { fingerprint: hash(snapshot.files), atomic: false },
@@ -276,6 +291,9 @@ export function buildPlan(root, options = {}) {
       parseAndIndexOmissions: index.errors,
       generatorOmissions: omitted,
       unitsNotPacked: manifest.filter((m) => m.disposition !== "packed").length,
+      ...(options.retrieval?.nameCue
+        ? { unitsSkippedByNameCue: filteredByCue }
+        : {}),
       splits,
       packStatuses: Object.fromEntries(
         ["eligible", "insufficient_context"].map((s) => [
@@ -284,7 +302,7 @@ export function buildPlan(root, options = {}) {
         ]),
       ),
       meaning:
-        "Deterministic code forms units and assembles context only. No deterministic score, rank, filter or fallback candidate exists in this tool.",
+        "Deterministic code forms units, assembles context and decides which functions and pairs are asked (retrieval, docs/RETRIEVAL.md). It never scores, ranks or filters answers: no deterministic score, rank or fallback candidate exists after Jev answers.",
     },
     configFacts: {
       aliases: index.config.records,

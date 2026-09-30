@@ -16,6 +16,7 @@ import { verifyPlan } from "./plan.mjs";
 import {
   allSignals,
   defaultSignalIds,
+  optInSignalIds,
   signalCaveat,
   signalStatusLabel,
 } from "./catalog.mjs";
@@ -51,7 +52,7 @@ export const skillSource = (version = VERSION) =>
 
 export const HELP = `jev-scanr (short alias: jevs) ${VERSION}
 
-Ranks refactoring candidates in a TypeScript/JavaScript project by asking the Jev model a few narrow questions about each function or similar pair. Code decides which units are asked: it cuts the project into functions, pairs two functions only when both have at least 8 lines, are within a 2:1 size ratio and share at least 45% of their token sequences (Jaccard), reads at most 500 files per scan and skips files that look like secrets. Jev's probabilities decide what is listed and in what order.
+Ranks refactoring candidates in a TypeScript/JavaScript project by asking the Jev model a few narrow questions about each function or similar pair. Code decides which units are asked: it cuts the project into functions, pairs two functions only when both have at least 8 lines, are within a 2:1 size ratio and share at least 45% of their token sequences (Jaccard). A second source adds up to 50 pairs whose tokens overlap less (mechanical rewrites of one function) but that share the same outside names, string literals and overall shape. It reads at most 500 files per scan and skips files that look like secrets. Jev's probabilities decide what is listed and in what order.
 
 Usage
   jevs --version                                print the version
@@ -76,8 +77,16 @@ Options for scan
   --exclude a,b,c     paths (files or directories, relative to PATH) that are never read or sent
   --paths a,b         scan only these directories or files (relative to PATH). Units and their context
                       come only from them. A scan reads at most 500 files, so scan a large project in slices
-  --experimental      also ask the experimental signals (off by default; jevs signals shows which are which)
+  --experimental      also ask the experimental signals (off by default; jevs signals shows which are which).
+                      The opt-in signal name_vs_behavior is not included: name it with --signals
   --signals a,b       ask exactly these signals instead of the defaults
+  --low-overlap N     ask about up to N pairs found by the second source, which proposes functions that share the
+                      names they call and read, and their string literals, but fewer than 45% of their token
+                      sequences (default 50, 0 turns the source off). They go through clone_same_policy
+  --name-cue          name_vs_behavior only: ask just the functions whose name words are all absent from the body
+                      (about 11% to 15% of them). Off by default because it loses recall on real subtle cases: on a
+                      random real sample (evals/real) it skipped 13 of the 16 functions that two model readers
+                      called imprecise or mismatched, to save about US$0.02 per 400 functions
   --include-tests     also ask about test files (off by default). Test files that call or import an asked function are
                       still sent as context; add --exclude to keep them out
   --external-configs FILE
@@ -115,6 +124,8 @@ const options = {
   experimental: { type: "boolean" },
   signals: { type: "string" },
   "include-tests": { type: "boolean" },
+  "low-overlap": { type: "string" },
+  "name-cue": { type: "boolean" },
   "external-configs": { type: "string" },
   "list-files": { type: "boolean" },
   threshold: { type: "string" },
@@ -159,7 +170,9 @@ function signalSelection(values) {
   if (values.signals && values.experimental)
     throw Error("Use either --signals or --experimental");
   if (values.signals) return values.signals.split(",").filter(Boolean);
-  return values.experimental ? allSignals.map((s) => s.id) : defaultSignalIds;
+  return values.experimental
+    ? allSignals.map((s) => s.id).filter((id) => !optInSignalIds.includes(id))
+    : defaultSignalIds;
 }
 
 function unit(flag, text) {
@@ -194,6 +207,13 @@ function thresholds(values, plan) {
     values["cut-signal"],
     plan,
   );
+}
+
+function lowOverlapCap(text) {
+  const value = Number(text);
+  if (text === "" || !Number.isInteger(value) || value < 0 || value > 2000)
+    throw Error("--low-overlap must be an integer from 0 to 2000");
+  return value;
 }
 
 function floors(values, plan) {
@@ -328,6 +348,7 @@ function summary(plan) {
     units: plan.coverage.functionUnits + plan.coverage.pairUnits,
     functionUnits: plan.coverage.functionUnits,
     pairUnits: plan.coverage.pairUnits,
+    lowOverlapPairs: plan.coverage.lowOverlap?.candidates ?? 0,
     coverage: plan.coverage.sourceFiles ?? null,
     paths: plan.scope?.paths ?? [],
     unread: unreadByDirectory(plan),
@@ -355,7 +376,7 @@ function printSummary(plan, s) {
           .join(", ") || "none skipped"
       }`,
       ...coverageLines(s.coverage, s.paths, s.unread, s),
-      `Units: ${s.functionUnits} function${s.functionUnits === 1 ? "" : "s"}, ${s.pairUnits} similar pair${s.pairUnits === 1 ? "" : "s"}`,
+      `Units: ${s.functionUnits} function${s.functionUnits === 1 ? "" : "s"}, ${s.pairUnits} similar pair${s.pairUnits === 1 ? "" : "s"}${s.lowOverlapPairs ? ` (${s.lowOverlapPairs} from the low-overlap source)` : ""}`,
       `Requests: ${s.requests} (${s.questions} questions, ${(s.requestBytes / 1e6).toFixed(2)} MB of request text)`,
       `Estimated cost: ${usd(s.estimatedUSD)} (bytes ÷ 3 per token); worst case ${usd(s.conservativeUSD)} (one token per byte, plus one reservation)`,
       "Costs are calculated from the documented tariff, not an invoice.",
@@ -522,8 +543,15 @@ export async function main(args = process.argv.slice(2), deps = {}) {
         `  independent test: ${t.reviewedAboveCut ? `${t.actionableAboveCut}/${t.reviewedAboveCut} actionable above the cut (random sample, two repositories)` : "no cell above the cut, nothing reviewed"}`,
       );
       console.log(
-        `  dev run:          ${d.actionableAboveCut}/${d.reviewedAboveCut} (${d.corpus.split(" (")[0]}, highest-probability cells: an upper bound)`,
+        d
+          ? `  dev run:          ${d.actionableAboveCut}/${d.reviewedAboveCut} (${d.corpus.split(" (")[0]}, highest-probability cells: an upper bound)`
+          : "  dev run:          none",
       );
+      const c = sig.constructedContrast;
+      if (c)
+        console.log(
+          `  constructed test: AUC ${c.jevAUC} (${c.jevAUCInterval.join(" to ")}), ${c.units}; planted mismatches only`,
+        );
       const caveat = signalCaveat(sig);
       if (caveat) console.log(`  caveat:           ${caveat}`);
     }
@@ -548,7 +576,13 @@ export async function main(args = process.argv.slice(2), deps = {}) {
       externalConfigs: values["external-configs"]
         ? JSON.parse(readFileSync(resolve(values["external-configs"]), "utf8"))
         : [],
-      retrieval: { includeTests: !!values["include-tests"] },
+      retrieval: {
+        includeTests: !!values["include-tests"],
+        nameCue: !!values["name-cue"],
+        ...(values["low-overlap"] === undefined
+          ? {}
+          : { lowOverlap: { cap: lowOverlapCap(values["low-overlap"]) } }),
+      },
     });
     verifyPlan(plan);
     thresholds(values, plan);

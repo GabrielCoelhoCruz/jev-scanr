@@ -1,0 +1,1021 @@
+{
+  "schema": "display-cuts-derivation/1",
+  "rule": {
+    "default": {
+      "cut": 70,
+      "floor": 50
+    },
+    "cutGrid": [50, 55, 60, 65, 70],
+    "floorGrid": [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70],
+    "cutPrimaryFalseAlarm": 0.05,
+    "cutHardenedFalseAlarm": 0.1,
+    "floorPrimaryFalseAlarm": 0.1,
+    "realCellMinActionable": 0.3,
+    "realFloorMinActionable": 0.3
+  },
+  "cuts": {
+    "default": {
+      "cut": 0.7,
+      "floor": 0.5
+    },
+    "signals": {
+      "function_should_split": {
+        "cut": 0.5,
+        "floor": 0.35
+      },
+      "name_vs_behavior": {
+        "cut": 0.5,
+        "floor": 0.2
+      }
+    }
+  },
+  "signals": {
+    "function_should_split": {
+      "positiveSets": ["A"],
+      "primaryControls": "A",
+      "hardenedControls": "A2",
+      "labeledCells": 36,
+      "chosen": {
+        "cut": 0.5,
+        "floor": 0.35
+      },
+      "controlFalseAlarmAtCut": {
+        "k": 2,
+        "n": 50,
+        "rate": 0.04,
+        "wilson95": [0.011, 0.1346]
+      },
+      "positivesAtCut": {
+        "k": 19,
+        "n": 50,
+        "rate": 0.38
+      },
+      "positivesAtOldCut": {
+        "k": 8,
+        "n": 50,
+        "rate": 0.16
+      },
+      "table": [
+        {
+          "at": 0.05,
+          "positivesAtOrAbove": {
+            "k": 42,
+            "n": 50,
+            "rate": 0.84
+          },
+          "controlsAtOrAbove": {
+            "k": 23,
+            "n": 50,
+            "rate": 0.46
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 25,
+            "n": 46,
+            "rate": 0.5435
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.1,
+          "positivesAtOrAbove": {
+            "k": 37,
+            "n": 50,
+            "rate": 0.74
+          },
+          "controlsAtOrAbove": {
+            "k": 16,
+            "n": 50,
+            "rate": 0.32
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 16,
+            "n": 46,
+            "rate": 0.3478
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.15,
+          "positivesAtOrAbove": {
+            "k": 35,
+            "n": 50,
+            "rate": 0.7
+          },
+          "controlsAtOrAbove": {
+            "k": 14,
+            "n": 50,
+            "rate": 0.28
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 15,
+            "n": 46,
+            "rate": 0.3261
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.2,
+          "positivesAtOrAbove": {
+            "k": 34,
+            "n": 50,
+            "rate": 0.68
+          },
+          "controlsAtOrAbove": {
+            "k": 13,
+            "n": 50,
+            "rate": 0.26
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 12,
+            "n": 46,
+            "rate": 0.2609
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.25,
+          "positivesAtOrAbove": {
+            "k": 32,
+            "n": 50,
+            "rate": 0.64
+          },
+          "controlsAtOrAbove": {
+            "k": 9,
+            "n": 50,
+            "rate": 0.18
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 9,
+            "n": 46,
+            "rate": 0.1957
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.3,
+          "positivesAtOrAbove": {
+            "k": 30,
+            "n": 50,
+            "rate": 0.6
+          },
+          "controlsAtOrAbove": {
+            "k": 7,
+            "n": 50,
+            "rate": 0.14
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 8,
+            "n": 46,
+            "rate": 0.1739
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.35,
+          "positivesAtOrAbove": {
+            "k": 25,
+            "n": 50,
+            "rate": 0.5
+          },
+          "controlsAtOrAbove": {
+            "k": 5,
+            "n": 50,
+            "rate": 0.1
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 6,
+            "n": 46,
+            "rate": 0.1304
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.4,
+          "positivesAtOrAbove": {
+            "k": 24,
+            "n": 50,
+            "rate": 0.48
+          },
+          "controlsAtOrAbove": {
+            "k": 4,
+            "n": 50,
+            "rate": 0.08
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 5,
+            "n": 46,
+            "rate": 0.1087
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.45,
+          "positivesAtOrAbove": {
+            "k": 22,
+            "n": 50,
+            "rate": 0.44
+          },
+          "controlsAtOrAbove": {
+            "k": 4,
+            "n": 50,
+            "rate": 0.08
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 4,
+            "n": 46,
+            "rate": 0.087
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.5,
+          "positivesAtOrAbove": {
+            "k": 19,
+            "n": 50,
+            "rate": 0.38
+          },
+          "controlsAtOrAbove": {
+            "k": 2,
+            "n": 50,
+            "rate": 0.04
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 2,
+            "n": 46,
+            "rate": 0.0435
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.55,
+          "positivesAtOrAbove": {
+            "k": 18,
+            "n": 50,
+            "rate": 0.36
+          },
+          "controlsAtOrAbove": {
+            "k": 2,
+            "n": 50,
+            "rate": 0.04
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 2,
+            "n": 46,
+            "rate": 0.0435
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.6,
+          "positivesAtOrAbove": {
+            "k": 14,
+            "n": 50,
+            "rate": 0.28
+          },
+          "controlsAtOrAbove": {
+            "k": 1,
+            "n": 50,
+            "rate": 0.02
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 1,
+            "n": 46,
+            "rate": 0.0217
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.65,
+          "positivesAtOrAbove": {
+            "k": 12,
+            "n": 50,
+            "rate": 0.24
+          },
+          "controlsAtOrAbove": {
+            "k": 1,
+            "n": 50,
+            "rate": 0.02
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 1,
+            "n": 46,
+            "rate": 0.0217
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 12
+          }
+        },
+        {
+          "at": 0.7,
+          "positivesAtOrAbove": {
+            "k": 8,
+            "n": 50,
+            "rate": 0.16
+          },
+          "controlsAtOrAbove": {
+            "k": 1,
+            "n": 50,
+            "rate": 0.02
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 1,
+            "n": 46,
+            "rate": 0.0217
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 28,
+            "actionable": 10
+          }
+        }
+      ]
+    },
+    "clone_same_policy": {
+      "positiveSets": ["B"],
+      "primaryControls": "B",
+      "hardenedControls": "B2",
+      "labeledCells": 36,
+      "chosen": {
+        "cut": 0.7,
+        "floor": 0.5
+      },
+      "controlFalseAlarmAtCut": {
+        "k": 2,
+        "n": 50,
+        "rate": 0.04,
+        "wilson95": [0.011, 0.1346]
+      },
+      "positivesAtCut": {
+        "k": 49,
+        "n": 50,
+        "rate": 0.98
+      },
+      "positivesAtOldCut": {
+        "k": 49,
+        "n": 50,
+        "rate": 0.98
+      },
+      "table": [
+        {
+          "at": 0.05,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 27,
+            "n": 50,
+            "rate": 0.54
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 32,
+            "n": 50,
+            "rate": 0.64
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.1,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 19,
+            "n": 50,
+            "rate": 0.38
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 27,
+            "n": 50,
+            "rate": 0.54
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.15,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 17,
+            "n": 50,
+            "rate": 0.34
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 25,
+            "n": 50,
+            "rate": 0.5
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.2,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 14,
+            "n": 50,
+            "rate": 0.28
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 21,
+            "n": 50,
+            "rate": 0.42
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.25,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 13,
+            "n": 50,
+            "rate": 0.26
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 20,
+            "n": 50,
+            "rate": 0.4
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.3,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 12,
+            "n": 50,
+            "rate": 0.24
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 19,
+            "n": 50,
+            "rate": 0.38
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.35,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 10,
+            "n": 50,
+            "rate": 0.2
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 16,
+            "n": 50,
+            "rate": 0.32
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.4,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 9,
+            "n": 50,
+            "rate": 0.18
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 16,
+            "n": 50,
+            "rate": 0.32
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.45,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 6,
+            "n": 50,
+            "rate": 0.12
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 16,
+            "n": 50,
+            "rate": 0.32
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.5,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 5,
+            "n": 50,
+            "rate": 0.1
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 15,
+            "n": 50,
+            "rate": 0.3
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.55,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 5,
+            "n": 50,
+            "rate": 0.1
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 12,
+            "n": 50,
+            "rate": 0.24
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.6,
+          "positivesAtOrAbove": {
+            "k": 50,
+            "n": 50,
+            "rate": 1
+          },
+          "controlsAtOrAbove": {
+            "k": 5,
+            "n": 50,
+            "rate": 0.1
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 10,
+            "n": 50,
+            "rate": 0.2
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 36,
+            "actionable": 19
+          }
+        },
+        {
+          "at": 0.65,
+          "positivesAtOrAbove": {
+            "k": 49,
+            "n": 50,
+            "rate": 0.98
+          },
+          "controlsAtOrAbove": {
+            "k": 3,
+            "n": 50,
+            "rate": 0.06
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 8,
+            "n": 50,
+            "rate": 0.16
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 34,
+            "actionable": 18
+          }
+        },
+        {
+          "at": 0.7,
+          "positivesAtOrAbove": {
+            "k": 49,
+            "n": 50,
+            "rate": 0.98
+          },
+          "controlsAtOrAbove": {
+            "k": 2,
+            "n": 50,
+            "rate": 0.04
+          },
+          "hardenedControlsAtOrAbove": {
+            "k": 5,
+            "n": 50,
+            "rate": 0.1
+          },
+          "labeledCellsAtOrAbove": {
+            "n": 28,
+            "actionable": 17
+          }
+        }
+      ]
+    },
+    "name_vs_behavior": {
+      "realSample": {
+        "note": "Real-sample cells, every function asked. nameCue: only the functions the name-word cue lets through.",
+        "allFlagged": 16,
+        "allStrict": 5,
+        "cells": {
+          "all": 400,
+          "nameCue": 45
+        },
+        "flaggedThroughCue": 3,
+        "strictThroughCue": 3,
+        "atFloor": {
+          "all": {
+            "n": 15,
+            "flagged": 5,
+            "strict": 2
+          },
+          "nameCue": {
+            "n": 6,
+            "flagged": 1,
+            "strict": 1
+          }
+        },
+        "atCut": {
+          "all": {
+            "n": 2,
+            "flagged": 1,
+            "strict": 0
+          },
+          "nameCue": {
+            "n": 0,
+            "flagged": 0,
+            "strict": 0
+          }
+        }
+      },
+      "positiveSets": ["C"],
+      "primaryControls": "C",
+      "hardenedControls": null,
+      "labeledCells": 400,
+      "chosen": {
+        "cut": 0.5,
+        "floor": 0.2
+      },
+      "controlFalseAlarmAtCut": {
+        "k": 0,
+        "n": 50,
+        "rate": 0,
+        "wilson95": [0, 0.0714]
+      },
+      "positivesAtCut": {
+        "k": 29,
+        "n": 50,
+        "rate": 0.58
+      },
+      "positivesAtOldCut": {
+        "k": 19,
+        "n": 50,
+        "rate": 0.38
+      },
+      "table": [
+        {
+          "at": 0.05,
+          "positivesAtOrAbove": {
+            "k": 49,
+            "n": 50,
+            "rate": 0.98
+          },
+          "controlsAtOrAbove": {
+            "k": 9,
+            "n": 50,
+            "rate": 0.18
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 48,
+            "actionable": 7
+          }
+        },
+        {
+          "at": 0.1,
+          "positivesAtOrAbove": {
+            "k": 47,
+            "n": 50,
+            "rate": 0.94
+          },
+          "controlsAtOrAbove": {
+            "k": 7,
+            "n": 50,
+            "rate": 0.14
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 26,
+            "actionable": 7
+          }
+        },
+        {
+          "at": 0.15,
+          "positivesAtOrAbove": {
+            "k": 42,
+            "n": 50,
+            "rate": 0.84
+          },
+          "controlsAtOrAbove": {
+            "k": 4,
+            "n": 50,
+            "rate": 0.08
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 17,
+            "actionable": 5
+          }
+        },
+        {
+          "at": 0.2,
+          "positivesAtOrAbove": {
+            "k": 40,
+            "n": 50,
+            "rate": 0.8
+          },
+          "controlsAtOrAbove": {
+            "k": 3,
+            "n": 50,
+            "rate": 0.06
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 15,
+            "actionable": 5
+          }
+        },
+        {
+          "at": 0.25,
+          "positivesAtOrAbove": {
+            "k": 39,
+            "n": 50,
+            "rate": 0.78
+          },
+          "controlsAtOrAbove": {
+            "k": 3,
+            "n": 50,
+            "rate": 0.06
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 12,
+            "actionable": 4
+          }
+        },
+        {
+          "at": 0.3,
+          "positivesAtOrAbove": {
+            "k": 37,
+            "n": 50,
+            "rate": 0.74
+          },
+          "controlsAtOrAbove": {
+            "k": 2,
+            "n": 50,
+            "rate": 0.04
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 9,
+            "actionable": 3
+          }
+        },
+        {
+          "at": 0.35,
+          "positivesAtOrAbove": {
+            "k": 37,
+            "n": 50,
+            "rate": 0.74
+          },
+          "controlsAtOrAbove": {
+            "k": 2,
+            "n": 50,
+            "rate": 0.04
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 5,
+            "actionable": 1
+          }
+        },
+        {
+          "at": 0.4,
+          "positivesAtOrAbove": {
+            "k": 33,
+            "n": 50,
+            "rate": 0.66
+          },
+          "controlsAtOrAbove": {
+            "k": 0,
+            "n": 50,
+            "rate": 0
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 3,
+            "actionable": 1
+          }
+        },
+        {
+          "at": 0.45,
+          "positivesAtOrAbove": {
+            "k": 30,
+            "n": 50,
+            "rate": 0.6
+          },
+          "controlsAtOrAbove": {
+            "k": 0,
+            "n": 50,
+            "rate": 0
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 3,
+            "actionable": 1
+          }
+        },
+        {
+          "at": 0.5,
+          "positivesAtOrAbove": {
+            "k": 29,
+            "n": 50,
+            "rate": 0.58
+          },
+          "controlsAtOrAbove": {
+            "k": 0,
+            "n": 50,
+            "rate": 0
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 2,
+            "actionable": 1
+          }
+        },
+        {
+          "at": 0.55,
+          "positivesAtOrAbove": {
+            "k": 23,
+            "n": 50,
+            "rate": 0.46
+          },
+          "controlsAtOrAbove": {
+            "k": 0,
+            "n": 50,
+            "rate": 0
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 1,
+            "actionable": 0
+          }
+        },
+        {
+          "at": 0.6,
+          "positivesAtOrAbove": {
+            "k": 21,
+            "n": 50,
+            "rate": 0.42
+          },
+          "controlsAtOrAbove": {
+            "k": 0,
+            "n": 50,
+            "rate": 0
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 1,
+            "actionable": 0
+          }
+        },
+        {
+          "at": 0.65,
+          "positivesAtOrAbove": {
+            "k": 21,
+            "n": 50,
+            "rate": 0.42
+          },
+          "controlsAtOrAbove": {
+            "k": 0,
+            "n": 50,
+            "rate": 0
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 0,
+            "actionable": 0
+          }
+        },
+        {
+          "at": 0.7,
+          "positivesAtOrAbove": {
+            "k": 19,
+            "n": 50,
+            "rate": 0.38
+          },
+          "controlsAtOrAbove": {
+            "k": 0,
+            "n": 50,
+            "rate": 0
+          },
+          "hardenedControlsAtOrAbove": null,
+          "labeledCellsAtOrAbove": {
+            "n": 0,
+            "actionable": 0
+          }
+        }
+      ]
+    }
+  }
+}

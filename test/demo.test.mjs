@@ -58,6 +58,7 @@ test("the recorded findings are the seeded functions the default signals ask abo
     "importOrders:function_multiple_responsibilities",
     "importOrders:function_should_split",
     "registerUser:function_multiple_responsibilities",
+    "registerUser:function_should_split",
   ]);
   const clean = [
     "formatCurrency",
@@ -102,6 +103,7 @@ test("the README image is drawn from the recording and is a PNG of the expected 
       ["2", "function_should_split@1.0.0", "0.90", "split_candidate"],
       ["3", "function_multiple_responsibilities@1.0.0", "0.88", "multiple"],
       ["4", "function_multiple_responsibilities@1.0.0", "0.78", "multiple"],
+      ["5", "function_should_split@1.0.0", "0.52", "split_candidate"],
     ],
   );
   const root = new URL("../", import.meta.url);
@@ -113,10 +115,10 @@ test("the README image is drawn from the recording and is a PNG of the expected 
   const png = readFileSync(new URL("docs/images/demo-queue.png", root));
   assert.equal(png.subarray(1, 4).toString(), "PNG");
   assert.equal(png.readUInt32BE(16), 1680);
-  assert.equal(png.readUInt32BE(20), 1104);
+  assert.equal(png.readUInt32BE(20), 1300);
   assert.ok(png.length < 100_000);
   assert.match(
     readFileSync(new URL("README.md", root), "utf8"),
-    /!\[The four-item queue from a recorded run[^\]]*\]\(docs\/images\/demo-queue\.png\)/,
+    /!\[The five-item queue from a recorded run[^\]]*\]\(docs\/images\/demo-queue\.png\)/,
   );
 });

@@ -1,9 +1,10 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { hash } from "./core.mjs";
 
-const meta = JSON.parse(
+const { optIn, ...meta } = JSON.parse(
   readFileSync(new URL("../catalog.json", import.meta.url)),
 );
+const ordered = [...meta.order, ...optIn];
 const directory = new URL("../signals/", import.meta.url);
 const files = readdirSync(directory)
   .filter((f) => f.endsWith(".json"))
@@ -15,7 +16,7 @@ const loaded = new Map(
   }),
 );
 if (
-  hash([...loaded.keys()].sort()) !== hash([...meta.order].sort()) ||
+  hash([...loaded.keys()].sort()) !== hash([...ordered].sort()) ||
   files.some(
     (f) => f !== `${JSON.parse(readFileSync(new URL(f, directory))).id}.json`,
   )
@@ -29,12 +30,24 @@ export const signalCaveat = (signal) =>
   signal.id === "function_multiple_responsibilities"
     ? `the ${signal.independentTest.reviewedAboveCut} reviewed items all came from one repository; the gate asks for two (evals/results/validation-gate-2026-09-30.md)`
     : undefined;
-export const allSignals = meta.order.map((id) => loaded.get(id));
-export const fullCatalog = { ...meta, signals: allSignals };
-export const catalogHash = hash(fullCatalog);
+export const allSignals = ordered.map((id) => loaded.get(id));
+export const fullCatalog = { ...meta, optIn, signals: allSignals };
 export const defaultSignalIds = allSignals
   .filter((s) => s.status === "default")
   .map((s) => s.id);
+export const optInSignalIds = optIn;
+
+export const catalogHashFor = (enabled) =>
+  hash({
+    ...meta,
+    signals: ordered
+      .filter(
+        (id) =>
+          !optIn.includes(id) ||
+          (Array.isArray(enabled) && enabled.includes(id)),
+      )
+      .map((id) => loaded.get(id)),
+  });
 
 export const catalog = { ...meta, signals: [] };
 
@@ -46,7 +59,7 @@ export function selectSignals(ids = defaultSignalIds) {
     ids.some((id) => !loaded.has(id))
   )
     throw Error("Unknown or duplicate signal selection");
-  catalog.signals = meta.order
+  catalog.signals = ordered
     .filter((id) => ids.includes(id))
     .map((id) => loaded.get(id));
   return catalog.signals.map((s) => s.id);

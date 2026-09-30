@@ -1,0 +1,129 @@
+{
+  "schema": "name-cue-validation/1",
+  "seed": 20260930,
+  "sample": 300,
+  "constructed": {
+    "positives": {
+      "k": 50,
+      "n": 50,
+      "rate": 1,
+      "wilson95": [0.9286, 1]
+    },
+    "controls": {
+      "k": 50,
+      "n": 50,
+      "rate": 1,
+      "wilson95": [0.9286, 1]
+    }
+  },
+  "repos": {
+    "paulrobello/claude-office": {
+      "named": 509,
+      "selectivity": {
+        "k": 78,
+        "n": 509,
+        "rate": 0.1532,
+        "wilson95": [0.1246, 0.1871]
+      },
+      "sampled": 300,
+      "originalsPassingInSample": {
+        "k": 47,
+        "n": 300,
+        "rate": 0.1567,
+        "wilson95": [0.1199, 0.2021]
+      },
+      "renamedPassing": {
+        "k": 271,
+        "n": 300,
+        "rate": 0.9033,
+        "wilson95": [0.8646, 0.9319]
+      }
+    },
+    "reshaped-ui/reshaped": {
+      "named": 361,
+      "selectivity": {
+        "k": 78,
+        "n": 361,
+        "rate": 0.2161,
+        "wilson95": [0.1767, 0.2614]
+      },
+      "sampled": 300,
+      "originalsPassingInSample": {
+        "k": 67,
+        "n": 300,
+        "rate": 0.2233,
+        "wilson95": [0.1799, 0.2738]
+      },
+      "renamedPassing": {
+        "k": 285,
+        "n": 300,
+        "rate": 0.95,
+        "wilson95": [0.9192, 0.9695]
+      }
+    },
+    "pingdotgg/t3code": {
+      "named": 1456,
+      "selectivity": {
+        "k": 301,
+        "n": 1456,
+        "rate": 0.2067,
+        "wilson95": [0.1867, 0.2283]
+      },
+      "sampled": 300,
+      "originalsPassingInSample": {
+        "k": 56,
+        "n": 300,
+        "rate": 0.1867,
+        "wilson95": [0.1466, 0.2346]
+      },
+      "renamedPassing": {
+        "k": 275,
+        "n": 300,
+        "rate": 0.9167,
+        "wilson95": [0.8799, 0.9429]
+      }
+    },
+    "can1357/oh-my-pi": {
+      "named": 3806,
+      "selectivity": {
+        "k": 474,
+        "n": 3806,
+        "rate": 0.1245,
+        "wilson95": [0.1144, 0.1354]
+      },
+      "sampled": 300,
+      "originalsPassingInSample": {
+        "k": 47,
+        "n": 300,
+        "rate": 0.1567,
+        "wilson95": [0.1199, 0.2021]
+      },
+      "renamedPassing": {
+        "k": 270,
+        "n": 300,
+        "rate": 0.9,
+        "wilson95": [0.8608, 0.9291]
+      }
+    }
+  },
+  "pooled": {
+    "selectivity": {
+      "k": 931,
+      "n": 6132,
+      "rate": 0.1518,
+      "wilson95": [0.1431, 0.161]
+    },
+    "renamedPassing": {
+      "k": 1101,
+      "n": 1200,
+      "rate": 0.9175,
+      "wilson95": [0.9006, 0.9318]
+    },
+    "originalsPassingInSample": {
+      "k": 217,
+      "n": 1200,
+      "rate": 0.1808,
+      "wilson95": [0.1601, 0.2036]
+    }
+  }
+}

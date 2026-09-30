@@ -1,5 +1,6 @@
 import { hash } from "./core.mjs";
 import { generateCandidates } from "./candidates.mjs";
+import { nameCue } from "./name-cue.mjs";
 
 const FUNCTION_TYPES = new Set([
   "FunctionDeclaration",
@@ -64,9 +65,18 @@ export function pseudoMember(
 
 export function formUnits(
   index,
-  { includeTests = false, kinds = UNIT_ORDER } = {},
+  {
+    includeTests = false,
+    kinds = UNIT_ORDER,
+    lowOverlap,
+    nameCues = false,
+  } = {},
 ) {
-  const base = generateCandidates(index, { includeTests, recordCapped: true });
+  const base = generateCandidates(index, {
+    includeTests,
+    recordCapped: true,
+    lowOverlap,
+  });
   const units = [];
   for (const f of kinds.includes("function")
     ? index.functions.filter(
@@ -79,7 +89,11 @@ export function formUnits(
       kind: "function",
       id: hash(["function", [f.id], null]),
       members: [f],
-      facts: { lines: f.lines, provenance: "outermost_function_unit" },
+      facts: {
+        lines: f.lines,
+        provenance: "outermost_function_unit",
+        ...(nameCues ? { nameCue: nameCue(index, f) } : {}),
+      },
     });
   if (kinds.includes("clone_pair"))
     for (const c of base.candidates)
@@ -90,6 +104,9 @@ export function formUnits(
         clusterId: c.clusterId,
         facts: {
           provenance: c.facts.provenance,
+          ...(c.facts.retrievalSource
+            ? { retrievalSource: c.facts.retrievalSource }
+            : {}),
           unitFormation: "retrieval grouping only; never a score",
         },
       });

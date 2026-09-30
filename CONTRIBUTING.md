@@ -14,7 +14,7 @@ Tests are offline. They never call Jev and never need a key. Please keep it that
 
 ## Ground rules
 
-- **Jev is the only judge.** Code forms units and gathers context. It must not score, rank, filter or pick candidates. A finding's presence, order and cut come from Jev's probabilities.
+- **Jev is the only judge.** Code forms units, gathers context and decides which units are asked, with deterministic pre-filters documented in `docs/RETRIEVAL.md` (a new one needs its bias and an offline validation written down). It must not score, rank or filter Jev's answers. A finding's presence, order and cut come from Jev's probabilities.
 - **Nothing sent that the user did not choose.** No new network calls, no reading of files outside the analyzed project, no target code execution.
 - **A number without its limits is a bug.** Anything that reports a rate says how many cells, who labeled them and on what project.
 

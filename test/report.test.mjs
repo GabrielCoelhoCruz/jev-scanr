@@ -77,11 +77,14 @@ test("unanswered cells are abstentions, never scores", (t) => {
   assert.ok(Object.values(report.views).every((v) => v.scored === 0));
 });
 
-test("thresholds default to the catalog cut and reject unknown or invalid values", () => {
+test("thresholds default per signal and reject unknown or invalid values", () => {
   selectSignals();
-  const cuts = resolveThresholds();
-  assert.deepEqual(Object.keys(cuts), defaultSignalIds);
-  assert.ok(Object.values(cuts).every((v) => v === 0.7));
+  assert.deepEqual(resolveThresholds(), {
+    clone_same_policy: 0.7,
+    function_should_split: 0.5,
+    function_multiple_responsibilities: 0.7,
+  });
+  assert.deepEqual(Object.keys(resolveThresholds()), defaultSignalIds);
   assert.throws(() => resolveThresholds({ nope: 0.5 }));
   assert.throws(() => resolveThresholds({ function_should_split: 1.5 }));
   assert.throws(() => resolveThresholds({ function_should_split: "x" }));
@@ -122,7 +125,9 @@ test("near-ties are flagged with both probabilities and never gain display from 
     ),
   );
   const events = readJournal(dir, p);
-  const report = buildReport(p, events);
+  const report = buildReport(p, events, {
+    thresholds: { function_should_split: 0.7 },
+  });
   assert.equal(report.nearTies.length, 2);
   assert.ok(report.nearTies.every((n) => n.shown === false));
   assert.match(report.nearTieRule, /within 0\.01/);

@@ -19,6 +19,11 @@ export const hash = (value) =>
         : JSON.stringify(value),
     )
     .digest("hex");
+export function jaccard(a, b) {
+  let count = 0;
+  for (const x of a) if (b.has(x)) count++;
+  return count / (a.size + b.size - count || 1);
+}
 export const POLICY = Object.freeze({
   model: "jev-1.13.0",
   maxInputTokens: 65536,

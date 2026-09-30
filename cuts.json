@@ -1,0 +1,21 @@
+{
+  "schema": "display-cuts/1",
+  "meaning": "Default display cut and floor per signal. Derived by evals/cuts/derive.mjs from committed data; docs/CUTS.md explains the rule and its limits. A signal without an entry uses default. --threshold, --cut, --cut-signal, --floor and --floor-signal override these.",
+  "derivation": "docs/CUTS.md",
+  "cuts": {
+    "default": {
+      "cut": 0.7,
+      "floor": 0.5
+    },
+    "signals": {
+      "function_should_split": {
+        "cut": 0.5,
+        "floor": 0.35
+      },
+      "name_vs_behavior": {
+        "cut": 0.5,
+        "floor": 0.2
+      }
+    }
+  }
+}

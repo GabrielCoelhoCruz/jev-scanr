@@ -1,0 +1,224 @@
+{
+  "schema": "retrieval-validation/1",
+  "retrieval": {
+    "minLines": 8,
+    "minJaccard": 0.45,
+    "minSizeRatio": 0.5,
+    "cap": 50,
+    "minScore": 0.6,
+    "minSurface": 3,
+    "maxDocumentFrequency": 250
+  },
+  "sliceFiles": 440,
+  "pinned": {
+    "paulrobello/claude-office": "3522c16399660ac787cd1f4ad4f3255352ec8e6c",
+    "reshaped-ui/reshaped": "cf7ac31a5aa91ea50ae2c5fd3bb3b420329adaf1",
+    "pingdotgg/t3code": "0fcd5f90611451cca842689faea53b5450c022da",
+    "can1357/oh-my-pi": "2b023d1b80133c523d66412602d99b5427408395"
+  },
+  "pairLevel": {
+    "B": {
+      "positives": {
+        "k": 50,
+        "n": 50,
+        "rate": 1,
+        "wilson95": [0.9286, 1],
+        "reasons": {
+          "proposed": 50
+        }
+      },
+      "negatives": {
+        "k": 17,
+        "n": 50,
+        "rate": 0.34,
+        "wilson95": [0.2244, 0.4785],
+        "reasons": {
+          "proposed": 17,
+          "score": 27,
+          "small_surface": 6
+        }
+      },
+      "hardNegatives": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "reasons": {}
+      },
+      "scores": {
+        "positives": [
+          0.6066, 0.6747, 0.6982, 0.7363, 0.739, 0.7656, 0.7708, 0.783, 0.7944,
+          0.8038, 0.8067, 0.8148, 0.8158, 0.8242, 0.8336, 0.8418, 0.8427,
+          0.8523, 0.8553, 0.867, 0.8722, 0.8751, 0.893, 0.8984, 0.9007, 0.9035,
+          0.9037, 0.9074, 0.9154, 0.9198, 0.9203, 0.9296, 0.9302, 0.9302, 0.932,
+          0.9338, 0.9348, 0.9352, 0.9444, 0.957, 0.9583, 0.9608, 0.9608, 0.9609,
+          0.9649, 0.9667, 0.9668, 0.9911, 0.9921, 1
+        ],
+        "negatives": [
+          0.2308, 0.3197, 0.3214, 0.3434, 0.3463, 0.3501, 0.3632, 0.3724,
+          0.3736, 0.3938, 0.3976, 0.4061, 0.4167, 0.4305, 0.437, 0.4399, 0.4529,
+          0.4825, 0.505, 0.5135, 0.5152, 0.5163, 0.5227, 0.5417, 0.5431, 0.5952,
+          0.599, 0.6092, 0.617, 0.6409, 0.6416, 0.6424, 0.6498, 0.6514, 0.6558,
+          0.6779, 0.6837, 0.696, 0.7, 0.7083, 0.7157, 0.7238, 0.7266, 0.7629
+        ]
+      }
+    },
+    "B2": {
+      "positives": {
+        "k": 0,
+        "n": 0,
+        "rate": null,
+        "reasons": {}
+      },
+      "negatives": {
+        "k": 29,
+        "n": 50,
+        "rate": 0.58,
+        "wilson95": [0.4423, 0.7063],
+        "reasons": {
+          "proposed": 29,
+          "score": 12,
+          "small_surface": 9
+        }
+      },
+      "hardNegatives": {
+        "k": 18,
+        "n": 28,
+        "rate": 0.6429,
+        "wilson95": [0.4583, 0.7929],
+        "reasons": {
+          "proposed": 18,
+          "score": 1,
+          "small_surface": 9
+        }
+      },
+      "scores": {
+        "positives": [],
+        "negatives": [
+          0.3835, 0.4116, 0.4604, 0.478, 0.4857, 0.4921, 0.4966, 0.5151, 0.5339,
+          0.5431, 0.5719, 0.5938, 0.6012, 0.6126, 0.617, 0.6409, 0.6416, 0.6498,
+          0.6527, 0.6694, 0.6784, 0.6825, 0.6829, 0.6939, 0.6964, 0.7, 0.7157,
+          0.7175, 0.7238, 0.7265, 0.7389, 0.7495, 0.7508, 0.7518, 0.7684,
+          0.7867, 0.7889, 0.7889, 0.8037, 0.8125, 0.9056
+        ]
+      }
+    }
+  },
+  "repos": {
+    "paulrobello/claude-office": {
+      "pool": 646,
+      "planted": 8,
+      "found": 8,
+      "ranks": [1, 3, 4, 7, 8, 9, 10, 12],
+      "maxRank": 12,
+      "cap": 50,
+      "proposedLowOverlap": 50,
+      "proposedPlantedOnly": 22,
+      "proposedNatural": 28,
+      "precisionLowerBound": 0.16,
+      "sameRepoPairs": {
+        "k": 65,
+        "n": 208335,
+        "rate": 0.0003,
+        "wilson95": [0.0002, 0.0004],
+        "note": "every pair of functions of the slice with at least 8 lines, planted copies excluded, tested exhaustively",
+        "foundByIndex": 65
+      },
+      "stats": {
+        "functions": 651,
+        "comparisons": 63350,
+        "passing": 90,
+        "candidates": 50
+      },
+      "omitted": ["low_overlap_cap"]
+    },
+    "reshaped-ui/reshaped": {
+      "pool": 497,
+      "planted": 8,
+      "found": 8,
+      "ranks": [1, 3, 4, 5, 6, 9, 34, 38],
+      "maxRank": 38,
+      "cap": 50,
+      "proposedLowOverlap": 50,
+      "proposedPlantedOnly": 18,
+      "proposedNatural": 32,
+      "precisionLowerBound": 0.16,
+      "sameRepoPairs": {
+        "k": 54,
+        "n": 123256,
+        "rate": 0.0004,
+        "wilson95": [0.0003, 0.0006],
+        "note": "every pair of functions of the slice with at least 8 lines, planted copies excluded, tested exhaustively",
+        "foundByIndex": 54
+      },
+      "stats": {
+        "functions": 504,
+        "comparisons": 42663,
+        "passing": 72,
+        "candidates": 50
+      },
+      "omitted": ["low_overlap_cap"]
+    },
+    "pingdotgg/t3code": {
+      "pool": 333,
+      "planted": 17,
+      "found": 17,
+      "ranks": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 15, 16, 18, 24],
+      "maxRank": 24,
+      "cap": 50,
+      "proposedLowOverlap": 28,
+      "proposedPlantedOnly": 23,
+      "proposedNatural": 5,
+      "precisionLowerBound": 0.6071,
+      "sameRepoPairs": {
+        "k": 5,
+        "n": 55278,
+        "rate": 0.0001,
+        "wilson95": [0, 0.0002],
+        "note": "every pair of functions of the slice with at least 8 lines, planted copies excluded, tested exhaustively",
+        "foundByIndex": 5
+      },
+      "stats": {
+        "functions": 352,
+        "comparisons": 22007,
+        "passing": 28,
+        "candidates": 28
+      },
+      "omitted": []
+    },
+    "can1357/oh-my-pi": {
+      "pool": 3403,
+      "planted": 17,
+      "found": 17,
+      "ranks": [1, 2, 3, 5, 6, 7, 8, 9, 10, 12, 13, 15, 16, 17, 20, 21, 25],
+      "maxRank": 25,
+      "cap": 50,
+      "proposedLowOverlap": 50,
+      "proposedPlantedOnly": 21,
+      "proposedNatural": 29,
+      "precisionLowerBound": 0.34,
+      "sameRepoPairs": {
+        "k": 184,
+        "n": 5788503,
+        "rate": 0,
+        "wilson95": [0, 0],
+        "note": "every pair of functions of the slice with at least 8 lines, planted copies excluded, tested exhaustively",
+        "foundByIndex": 179
+      },
+      "stats": {
+        "functions": 3392,
+        "comparisons": 500000,
+        "passing": 200,
+        "candidates": 50
+      },
+      "omitted": [
+        "low_overlap_comparison_cap_remaining_unknown",
+        "low_overlap_cap"
+      ]
+    }
+  },
+  "totals": {
+    "planted": 50,
+    "found": 50,
+    "maxRank": 38
+  }
+}
