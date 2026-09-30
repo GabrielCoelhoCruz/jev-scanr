@@ -1,23 +1,30 @@
 {
   "schema": "semantic-refactor-scan-report/1",
-  "planHash": "61f3eff3513dbe54df71b0ffa418935fcddc464c6b67681d70fa0861726f1a53",
+  "planHash": "65338442af640700791096d3e4c0ed853065e13abed3cc54d1cfde1346f2bb6e",
   "catalogVersion": "0.1.0-alpha",
   "provenance": "live",
   "thresholds": {
     "clone_same_policy": 0.7,
     "function_should_split": 0.7,
-    "magic_policy_literal": 0.7,
-    "internal_duplication": 0.7,
-    "function_multiple_responsibilities": 0.7,
-    "unused_local_or_parameter": 0.7,
-    "deep_nesting": 0.7
+    "function_multiple_responsibilities": 0.7
   },
   "thresholdMeaning": "Display cut only. Jev probabilities are not bug confidence, impact or permission to edit.",
-  "cells": 85,
+  "coverage": {
+    "paths": [],
+    "sourceFiles": {
+      "inProject": 10,
+      "inScope": 10,
+      "read": 10,
+      "unreadByFileOrByteCap": 0
+    },
+    "filesWithUnindexedFunctions": 0,
+    "unitsNotPacked": 0
+  },
+  "cells": 29,
   "units": 15,
   "requests": 15,
   "statusCounts": {
-    "scored": 85
+    "scored": 29
   },
   "unitsNotPacked": 0,
   "generatorOmissions": [],
@@ -61,40 +68,8 @@
           "signalStatus": "default",
           "status": "scored",
           "choice": "cohesive",
-          "confidence": 1,
+          "confidence": 0.99,
           "positiveOption": "split_candidate",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "946e5f7b017b6018d47da395d7ddad88a02ea3f2bb94025be064a544a86003db",
-          "kind": "function",
-          "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "unexplained_policy_literal",
-          "confidence": 1,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 1,
-          "threshold": 0.7,
-          "shown": true,
-          "missingReasons": []
-        },
-        {
-          "packId": "946e5f7b017b6018d47da395d7ddad88a02ea3f2bb94025be064a544a86003db",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 1,
-          "positiveOption": "duplicated_blocks",
           "pPositive": 0,
           "threshold": 0.7,
           "shown": false,
@@ -112,38 +87,6 @@
           "confidence": 0.99,
           "positiveOption": "multiple",
           "pPositive": 0.01,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "946e5f7b017b6018d47da395d7ddad88a02ea3f2bb94025be064a544a86003db",
-          "kind": "function",
-          "split": null,
-          "signalId": "unused_local_or_parameter",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.99,
-          "positiveOption": "unused",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "946e5f7b017b6018d47da395d7ddad88a02ea3f2bb94025be064a544a86003db",
-          "kind": "function",
-          "split": null,
-          "signalId": "deep_nesting",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
-          "pPositive": 0,
           "threshold": 0.7,
           "shown": false,
           "missingReasons": []
@@ -200,38 +143,6 @@
           "packId": "59a961bf428e7d9c77f4d5a446d26dc74ac6ec35f0c3e0176a761ddadbd87281",
           "kind": "function",
           "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.74,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0.17,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "59a961bf428e7d9c77f4d5a446d26dc74ac6ec35f0c3e0176a761ddadbd87281",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.98,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "59a961bf428e7d9c77f4d5a446d26dc74ac6ec35f0c3e0176a761ddadbd87281",
-          "kind": "function",
-          "split": null,
           "signalId": "function_multiple_responsibilities",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
@@ -239,38 +150,6 @@
           "choice": "single",
           "confidence": 1,
           "positiveOption": "multiple",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "59a961bf428e7d9c77f4d5a446d26dc74ac6ec35f0c3e0176a761ddadbd87281",
-          "kind": "function",
-          "split": null,
-          "signalId": "unused_local_or_parameter",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.99,
-          "positiveOption": "unused",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "59a961bf428e7d9c77f4d5a446d26dc74ac6ec35f0c3e0176a761ddadbd87281",
-          "kind": "function",
-          "split": null,
-          "signalId": "deep_nesting",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
           "pPositive": 0,
           "threshold": 0.7,
           "shown": false,
@@ -328,38 +207,6 @@
           "packId": "dc6d4c5eb9de8f6f8d67bf6cde214374eecb50e629f521b47ec9be9d38c595f4",
           "kind": "function",
           "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.9,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0.07,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "dc6d4c5eb9de8f6f8d67bf6cde214374eecb50e629f521b47ec9be9d38c595f4",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.99,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "dc6d4c5eb9de8f6f8d67bf6cde214374eecb50e629f521b47ec9be9d38c595f4",
-          "kind": "function",
-          "split": null,
           "signalId": "function_multiple_responsibilities",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
@@ -367,38 +214,6 @@
           "choice": "single",
           "confidence": 1,
           "positiveOption": "multiple",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "dc6d4c5eb9de8f6f8d67bf6cde214374eecb50e629f521b47ec9be9d38c595f4",
-          "kind": "function",
-          "split": null,
-          "signalId": "unused_local_or_parameter",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.97,
-          "positiveOption": "unused",
-          "pPositive": 0.01,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "dc6d4c5eb9de8f6f8d67bf6cde214374eecb50e629f521b47ec9be9d38c595f4",
-          "kind": "function",
-          "split": null,
-          "signalId": "deep_nesting",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
           "pPositive": 0,
           "threshold": 0.7,
           "shown": false,
@@ -445,43 +260,11 @@
           "signalStatus": "default",
           "status": "scored",
           "choice": "split_candidate",
-          "confidence": 0.88,
+          "confidence": 0.85,
           "positiveOption": "split_candidate",
-          "pPositive": 0.92,
+          "pPositive": 0.9,
           "threshold": 0.7,
           "shown": true,
-          "missingReasons": []
-        },
-        {
-          "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
-          "kind": "function",
-          "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.63,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0.24,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.7,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0.19,
-          "threshold": 0.7,
-          "shown": false,
           "missingReasons": []
         },
         {
@@ -493,41 +276,73 @@
           "signalStatus": "default",
           "status": "scored",
           "choice": "multiple",
-          "confidence": 0.81,
+          "confidence": 0.82,
           "positiveOption": "multiple",
-          "pPositive": 0.87,
+          "pPositive": 0.88,
           "threshold": 0.7,
           "shown": true,
           "missingReasons": []
-        },
+        }
+      ]
+    },
+    {
+      "unitId": "892a12aa20b1dd467fc61718c04175327ed808687e60451de3ae90983294a488",
+      "kind": "function",
+      "location": [
         {
-          "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
+          "name": "renderInvoiceText",
+          "path": "src/invoice.ts",
+          "startLine": 7,
+          "endLine": 30,
+          "role": "focus"
+        }
+      ],
+      "catchRange": null,
+      "parts": [
+        {
+          "packId": "892a12aa20b1dd467fc61718c04175327ed808687e60451de3ae90983294a488",
           "kind": "function",
           "split": null,
-          "signalId": "unused_local_or_parameter",
+          "location": [
+            {
+              "name": "renderInvoiceText",
+              "path": "src/invoice.ts",
+              "startLine": 7,
+              "endLine": 30,
+              "role": "focus"
+            }
+          ]
+        }
+      ],
+      "signals": [
+        {
+          "packId": "892a12aa20b1dd467fc61718c04175327ed808687e60451de3ae90983294a488",
+          "kind": "function",
+          "split": null,
+          "signalId": "function_should_split",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
           "status": "scored",
-          "choice": "none",
-          "confidence": 0.83,
-          "positiveOption": "unused",
-          "pPositive": 0.1,
+          "choice": "cohesive",
+          "confidence": 0.78,
+          "positiveOption": "split_candidate",
+          "pPositive": 0.14,
           "threshold": 0.7,
           "shown": false,
           "missingReasons": []
         },
         {
-          "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
+          "packId": "892a12aa20b1dd467fc61718c04175327ed808687e60451de3ae90983294a488",
           "kind": "function",
           "split": null,
-          "signalId": "deep_nesting",
+          "signalId": "function_multiple_responsibilities",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
           "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 0.86,
-          "positiveOption": "deeply_nested",
-          "pPositive": 0.09,
+          "choice": "single",
+          "confidence": 0.92,
+          "positiveOption": "multiple",
+          "pPositive": 0.06,
           "threshold": 0.7,
           "shown": false,
           "missingReasons": []
@@ -584,38 +399,6 @@
           "packId": "2b69f3631753b997fff5da5e52e57c430816e56402f5e8a923bcaee103e33354",
           "kind": "function",
           "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.36,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0.43,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "2b69f3631753b997fff5da5e52e57c430816e56402f5e8a923bcaee103e33354",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.76,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0.16,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "2b69f3631753b997fff5da5e52e57c430816e56402f5e8a923bcaee103e33354",
-          "kind": "function",
-          "split": null,
           "signalId": "function_multiple_responsibilities",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
@@ -627,193 +410,33 @@
           "threshold": 0.7,
           "shown": false,
           "missingReasons": []
-        },
-        {
-          "packId": "2b69f3631753b997fff5da5e52e57c430816e56402f5e8a923bcaee103e33354",
-          "kind": "function",
-          "split": null,
-          "signalId": "unused_local_or_parameter",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.97,
-          "positiveOption": "unused",
-          "pPositive": 0.01,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "2b69f3631753b997fff5da5e52e57c430816e56402f5e8a923bcaee103e33354",
-          "kind": "function",
-          "split": null,
-          "signalId": "deep_nesting",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
         }
       ]
     },
     {
-      "unitId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-      "kind": "function",
-      "location": [
-        {
-          "name": "findTagged",
-          "path": "src/search.ts",
-          "startLine": 5,
-          "endLine": 21,
-          "role": "focus"
-        }
-      ],
-      "catchRange": null,
-      "parts": [
-        {
-          "packId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-          "kind": "function",
-          "split": null,
-          "location": [
-            {
-              "name": "findTagged",
-              "path": "src/search.ts",
-              "startLine": 5,
-              "endLine": 21,
-              "role": "focus"
-            }
-          ]
-        }
-      ],
-      "signals": [
-        {
-          "packId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-          "kind": "function",
-          "split": null,
-          "signalId": "function_should_split",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "cohesive",
-          "confidence": 0.84,
-          "positiveOption": "split_candidate",
-          "pPositive": 0.11,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-          "kind": "function",
-          "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.98,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0.01,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.99,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-          "kind": "function",
-          "split": null,
-          "signalId": "function_multiple_responsibilities",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "single",
-          "confidence": 1,
-          "positiveOption": "multiple",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-          "kind": "function",
-          "split": null,
-          "signalId": "unused_local_or_parameter",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.97,
-          "positiveOption": "unused",
-          "pPositive": 0.02,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-          "kind": "function",
-          "split": null,
-          "signalId": "deep_nesting",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "deeply_nested",
-          "confidence": 0.8,
-          "positiveOption": "deeply_nested",
-          "pPositive": 0.87,
-          "threshold": 0.7,
-          "shown": true,
-          "missingReasons": []
-        }
-      ]
-    },
-    {
-      "unitId": "4760ac3156937147f6c9fec1783a90e33c6ed585a488d43cdec23eef458b336f",
+      "unitId": "6cc5649ded2843926105191b0a4ec6627d494ea368e55987b1331390d14598f6",
       "kind": "function",
       "location": [
         {
           "name": "activeWithTag",
           "path": "src/search.ts",
-          "startLine": 23,
-          "endLine": 28,
+          "startLine": 1,
+          "endLine": 6,
           "role": "focus"
         }
       ],
       "catchRange": null,
       "parts": [
         {
-          "packId": "4760ac3156937147f6c9fec1783a90e33c6ed585a488d43cdec23eef458b336f",
+          "packId": "6cc5649ded2843926105191b0a4ec6627d494ea368e55987b1331390d14598f6",
           "kind": "function",
           "split": null,
           "location": [
             {
               "name": "activeWithTag",
               "path": "src/search.ts",
-              "startLine": 23,
-              "endLine": 28,
+              "startLine": 1,
+              "endLine": 6,
               "role": "focus"
             }
           ]
@@ -821,7 +444,7 @@
       ],
       "signals": [
         {
-          "packId": "4760ac3156937147f6c9fec1783a90e33c6ed585a488d43cdec23eef458b336f",
+          "packId": "6cc5649ded2843926105191b0a4ec6627d494ea368e55987b1331390d14598f6",
           "kind": "function",
           "split": null,
           "signalId": "function_should_split",
@@ -837,39 +460,7 @@
           "missingReasons": []
         },
         {
-          "packId": "4760ac3156937147f6c9fec1783a90e33c6ed585a488d43cdec23eef458b336f",
-          "kind": "function",
-          "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.99,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "4760ac3156937147f6c9fec1783a90e33c6ed585a488d43cdec23eef458b336f",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.98,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "4760ac3156937147f6c9fec1783a90e33c6ed585a488d43cdec23eef458b336f",
+          "packId": "6cc5649ded2843926105191b0a4ec6627d494ea368e55987b1331390d14598f6",
           "kind": "function",
           "split": null,
           "signalId": "function_multiple_responsibilities",
@@ -883,37 +474,69 @@
           "threshold": 0.7,
           "shown": false,
           "missingReasons": []
-        },
+        }
+      ]
+    },
+    {
+      "unitId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+      "kind": "function",
+      "location": [
         {
-          "packId": "4760ac3156937147f6c9fec1783a90e33c6ed585a488d43cdec23eef458b336f",
+          "name": "registerUser",
+          "path": "src/signup.ts",
+          "startLine": 1,
+          "endLine": 27,
+          "role": "focus"
+        }
+      ],
+      "catchRange": null,
+      "parts": [
+        {
+          "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
           "kind": "function",
           "split": null,
-          "signalId": "unused_local_or_parameter",
+          "location": [
+            {
+              "name": "registerUser",
+              "path": "src/signup.ts",
+              "startLine": 1,
+              "endLine": 27,
+              "role": "focus"
+            }
+          ]
+        }
+      ],
+      "signals": [
+        {
+          "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+          "kind": "function",
+          "split": null,
+          "signalId": "function_should_split",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
           "status": "scored",
-          "choice": "none",
-          "confidence": 0.99,
-          "positiveOption": "unused",
-          "pPositive": 0,
+          "choice": "split_candidate",
+          "confidence": 0.28,
+          "positiveOption": "split_candidate",
+          "pPositive": 0.52,
           "threshold": 0.7,
           "shown": false,
           "missingReasons": []
         },
         {
-          "packId": "4760ac3156937147f6c9fec1783a90e33c6ed585a488d43cdec23eef458b336f",
+          "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
           "kind": "function",
           "split": null,
-          "signalId": "deep_nesting",
+          "signalId": "function_multiple_responsibilities",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
           "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
-          "pPositive": 0,
+          "choice": "multiple",
+          "confidence": 0.66,
+          "positiveOption": "multiple",
+          "pPositive": 0.78,
           "threshold": 0.7,
-          "shown": false,
+          "shown": true,
           "missingReasons": []
         }
       ]
@@ -957,43 +580,11 @@
           "signalStatus": "default",
           "status": "scored",
           "choice": "cohesive",
-          "confidence": 0.63,
+          "confidence": 0.69,
           "positiveOption": "split_candidate",
-          "pPositive": 0.24,
+          "pPositive": 0.21,
           "threshold": 0.7,
           "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "af0c56f105da773d187e992f92759c4f925a0e563e886a0c6a07e88270e462ad",
-          "kind": "function",
-          "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 1,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "af0c56f105da773d187e992f92759c4f925a0e563e886a0c6a07e88270e462ad",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "duplicated_blocks",
-          "confidence": 1,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 1,
-          "threshold": 0.7,
-          "shown": true,
           "missingReasons": []
         },
         {
@@ -1005,41 +596,9 @@
           "signalStatus": "default",
           "status": "scored",
           "choice": "single",
-          "confidence": 0.95,
+          "confidence": 0.94,
           "positiveOption": "multiple",
-          "pPositive": 0.03,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "af0c56f105da773d187e992f92759c4f925a0e563e886a0c6a07e88270e462ad",
-          "kind": "function",
-          "split": null,
-          "signalId": "unused_local_or_parameter",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.93,
-          "positiveOption": "unused",
           "pPositive": 0.04,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "af0c56f105da773d187e992f92759c4f925a0e563e886a0c6a07e88270e462ad",
-          "kind": "function",
-          "split": null,
-          "signalId": "deep_nesting",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
-          "pPositive": 0,
           "threshold": 0.7,
           "shown": false,
           "missingReasons": []
@@ -1096,38 +655,6 @@
           "packId": "da0203bb6fd4b100ab142a46cc599d853d4643cc2fdc1923619aee42844d2183",
           "kind": "function",
           "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 1,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "da0203bb6fd4b100ab142a46cc599d853d4643cc2fdc1923619aee42844d2183",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.98,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "da0203bb6fd4b100ab142a46cc599d853d4643cc2fdc1923619aee42844d2183",
-          "kind": "function",
-          "split": null,
           "signalId": "function_multiple_responsibilities",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
@@ -1135,294 +662,6 @@
           "choice": "single",
           "confidence": 1,
           "positiveOption": "multiple",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "da0203bb6fd4b100ab142a46cc599d853d4643cc2fdc1923619aee42844d2183",
-          "kind": "function",
-          "split": null,
-          "signalId": "unused_local_or_parameter",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.97,
-          "positiveOption": "unused",
-          "pPositive": 0.01,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "da0203bb6fd4b100ab142a46cc599d853d4643cc2fdc1923619aee42844d2183",
-          "kind": "function",
-          "split": null,
-          "signalId": "deep_nesting",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        }
-      ]
-    },
-    {
-      "unitId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-      "kind": "function",
-      "location": [
-        {
-          "name": "tally",
-          "path": "src/tally.ts",
-          "startLine": 1,
-          "endLine": 8,
-          "role": "focus"
-        }
-      ],
-      "catchRange": null,
-      "parts": [
-        {
-          "packId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-          "kind": "function",
-          "split": null,
-          "location": [
-            {
-              "name": "tally",
-              "path": "src/tally.ts",
-              "startLine": 1,
-              "endLine": 8,
-              "role": "focus"
-            }
-          ]
-        }
-      ],
-      "signals": [
-        {
-          "packId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-          "kind": "function",
-          "split": null,
-          "signalId": "function_should_split",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "cohesive",
-          "confidence": 1,
-          "positiveOption": "split_candidate",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-          "kind": "function",
-          "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 1,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 1,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-          "kind": "function",
-          "split": null,
-          "signalId": "function_multiple_responsibilities",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "single",
-          "confidence": 0.87,
-          "positiveOption": "multiple",
-          "pPositive": 0.09,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-          "kind": "function",
-          "split": null,
-          "signalId": "unused_local_or_parameter",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "unused",
-          "confidence": 0.99,
-          "positiveOption": "unused",
-          "pPositive": 0.99,
-          "threshold": 0.7,
-          "shown": true,
-          "missingReasons": []
-        },
-        {
-          "packId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-          "kind": "function",
-          "split": null,
-          "signalId": "deep_nesting",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        }
-      ]
-    },
-    {
-      "unitId": "5d8ddfa5a317b57fa2fb7f04cb51026dc45a980140f15aaaa06510524962fd55",
-      "kind": "function",
-      "location": [
-        {
-          "name": "describeTotal",
-          "path": "src/tally.ts",
-          "startLine": 10,
-          "endLine": 16,
-          "role": "focus"
-        }
-      ],
-      "catchRange": null,
-      "parts": [
-        {
-          "packId": "5d8ddfa5a317b57fa2fb7f04cb51026dc45a980140f15aaaa06510524962fd55",
-          "kind": "function",
-          "split": null,
-          "location": [
-            {
-              "name": "describeTotal",
-              "path": "src/tally.ts",
-              "startLine": 10,
-              "endLine": 16,
-              "role": "focus"
-            }
-          ]
-        }
-      ],
-      "signals": [
-        {
-          "packId": "5d8ddfa5a317b57fa2fb7f04cb51026dc45a980140f15aaaa06510524962fd55",
-          "kind": "function",
-          "split": null,
-          "signalId": "function_should_split",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "cohesive",
-          "confidence": 1,
-          "positiveOption": "split_candidate",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "5d8ddfa5a317b57fa2fb7f04cb51026dc45a980140f15aaaa06510524962fd55",
-          "kind": "function",
-          "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 1,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "5d8ddfa5a317b57fa2fb7f04cb51026dc45a980140f15aaaa06510524962fd55",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.98,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "5d8ddfa5a317b57fa2fb7f04cb51026dc45a980140f15aaaa06510524962fd55",
-          "kind": "function",
-          "split": null,
-          "signalId": "function_multiple_responsibilities",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "single",
-          "confidence": 0.88,
-          "positiveOption": "multiple",
-          "pPositive": 0.08,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "5d8ddfa5a317b57fa2fb7f04cb51026dc45a980140f15aaaa06510524962fd55",
-          "kind": "function",
-          "split": null,
-          "signalId": "unused_local_or_parameter",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.99,
-          "positiveOption": "unused",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "5d8ddfa5a317b57fa2fb7f04cb51026dc45a980140f15aaaa06510524962fd55",
-          "kind": "function",
-          "split": null,
-          "signalId": "deep_nesting",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
           "pPositive": 0,
           "threshold": 0.7,
           "shown": false,
@@ -1480,38 +719,6 @@
           "packId": "8b891fa611d913f6090334411051c14430bd5d81f8279830d2405e843a2b5b18",
           "kind": "function",
           "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.99,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0.01,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "8b891fa611d913f6090334411051c14430bd5d81f8279830d2405e843a2b5b18",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.99,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "8b891fa611d913f6090334411051c14430bd5d81f8279830d2405e843a2b5b18",
-          "kind": "function",
-          "split": null,
           "signalId": "function_multiple_responsibilities",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
@@ -1519,38 +726,6 @@
           "choice": "single",
           "confidence": 1,
           "positiveOption": "multiple",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "8b891fa611d913f6090334411051c14430bd5d81f8279830d2405e843a2b5b18",
-          "kind": "function",
-          "split": null,
-          "signalId": "unused_local_or_parameter",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 1,
-          "positiveOption": "unused",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "8b891fa611d913f6090334411051c14430bd5d81f8279830d2405e843a2b5b18",
-          "kind": "function",
-          "split": null,
-          "signalId": "deep_nesting",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
           "pPositive": 0,
           "threshold": 0.7,
           "shown": false,
@@ -1608,38 +783,6 @@
           "packId": "74f6de7e50fdec0cab7c7fbf6789cb1eb05b0bd54b9e4ff0a51f5fe0ce7d75da",
           "kind": "function",
           "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.75,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0.16,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "74f6de7e50fdec0cab7c7fbf6789cb1eb05b0bd54b9e4ff0a51f5fe0ce7d75da",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.99,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "74f6de7e50fdec0cab7c7fbf6789cb1eb05b0bd54b9e4ff0a51f5fe0ce7d75da",
-          "kind": "function",
-          "split": null,
           "signalId": "function_multiple_responsibilities",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
@@ -1651,35 +794,67 @@
           "threshold": 0.7,
           "shown": false,
           "missingReasons": []
-        },
+        }
+      ]
+    },
+    {
+      "unitId": "1c41410c1a9605d13ee632af16d732316125a62ad136984ef1b7b850405f145c",
+      "kind": "function",
+      "location": [
         {
-          "packId": "74f6de7e50fdec0cab7c7fbf6789cb1eb05b0bd54b9e4ff0a51f5fe0ce7d75da",
+          "name": "describeTotal",
+          "path": "src/total.ts",
+          "startLine": 1,
+          "endLine": 7,
+          "role": "focus"
+        }
+      ],
+      "catchRange": null,
+      "parts": [
+        {
+          "packId": "1c41410c1a9605d13ee632af16d732316125a62ad136984ef1b7b850405f145c",
           "kind": "function",
           "split": null,
-          "signalId": "unused_local_or_parameter",
+          "location": [
+            {
+              "name": "describeTotal",
+              "path": "src/total.ts",
+              "startLine": 1,
+              "endLine": 7,
+              "role": "focus"
+            }
+          ]
+        }
+      ],
+      "signals": [
+        {
+          "packId": "1c41410c1a9605d13ee632af16d732316125a62ad136984ef1b7b850405f145c",
+          "kind": "function",
+          "split": null,
+          "signalId": "function_should_split",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
           "status": "scored",
-          "choice": "none",
-          "confidence": 0.99,
-          "positiveOption": "unused",
+          "choice": "cohesive",
+          "confidence": 1,
+          "positiveOption": "split_candidate",
           "pPositive": 0,
           "threshold": 0.7,
           "shown": false,
           "missingReasons": []
         },
         {
-          "packId": "74f6de7e50fdec0cab7c7fbf6789cb1eb05b0bd54b9e4ff0a51f5fe0ce7d75da",
+          "packId": "1c41410c1a9605d13ee632af16d732316125a62ad136984ef1b7b850405f145c",
           "kind": "function",
           "split": null,
-          "signalId": "deep_nesting",
+          "signalId": "function_multiple_responsibilities",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
           "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
-          "pPositive": 0,
+          "choice": "single",
+          "confidence": 0.91,
+          "positiveOption": "multiple",
+          "pPositive": 0.06,
           "threshold": 0.7,
           "shown": false,
           "missingReasons": []
@@ -1736,38 +911,6 @@
           "packId": "cb5189d80a9c8afbef8e65b3cae9cac1a152f0141f9881099342bf228138c58b",
           "kind": "function",
           "split": null,
-          "signalId": "magic_policy_literal",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "unexplained_policy_literal",
-          "confidence": 0.39,
-          "positiveOption": "unexplained_policy_literal",
-          "pPositive": 0.59,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "cb5189d80a9c8afbef8e65b3cae9cac1a152f0141f9881099342bf228138c58b",
-          "kind": "function",
-          "split": null,
-          "signalId": "internal_duplication",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.72,
-          "positiveOption": "duplicated_blocks",
-          "pPositive": 0.18,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "cb5189d80a9c8afbef8e65b3cae9cac1a152f0141f9881099342bf228138c58b",
-          "kind": "function",
-          "split": null,
           "signalId": "function_multiple_responsibilities",
           "signalVersion": "1.0.0",
           "signalStatus": "default",
@@ -1775,38 +918,6 @@
           "choice": "single",
           "confidence": 1,
           "positiveOption": "multiple",
-          "pPositive": 0,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "cb5189d80a9c8afbef8e65b3cae9cac1a152f0141f9881099342bf228138c58b",
-          "kind": "function",
-          "split": null,
-          "signalId": "unused_local_or_parameter",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "none",
-          "confidence": 0.97,
-          "positiveOption": "unused",
-          "pPositive": 0.02,
-          "threshold": 0.7,
-          "shown": false,
-          "missingReasons": []
-        },
-        {
-          "packId": "cb5189d80a9c8afbef8e65b3cae9cac1a152f0141f9881099342bf228138c58b",
-          "kind": "function",
-          "split": null,
-          "signalId": "deep_nesting",
-          "signalVersion": "1.0.0",
-          "signalStatus": "default",
-          "status": "scored",
-          "choice": "flat_enough",
-          "confidence": 1,
-          "positiveOption": "deeply_nested",
           "pPositive": 0,
           "threshold": 0.7,
           "shown": false,
@@ -1951,8 +1062,8 @@
         {
           "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
           "unitId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
-          "pPositive": 0.92,
-          "confidence": 0.88,
+          "pPositive": 0.9,
+          "confidence": 0.85,
           "choice": "split_candidate",
           "location": [
             {
@@ -1960,88 +1071,6 @@
               "path": "src/importer.ts",
               "startLine": 7,
               "endLine": 42,
-              "role": "focus"
-            }
-          ]
-        }
-      ],
-      "ordering": "Jev P(positive option) descending; ties by pack id. No deterministic score participates."
-    },
-    "magic_policy_literal": {
-      "threshold": 0.7,
-      "status": "default",
-      "version": "1.0.0",
-      "evidence": [
-        {
-          "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",
-          "date": "2026-09-30",
-          "scanner": "0.4.x jev-only, jev-1.13.0",
-          "sample": "top-5 cells by P at or above the 0.7 cut, plus 3 random cells below it",
-          "reviewer": "LLM (Claude Opus 5.5), pass 2 with repository access; pass 1 counts in EVIDENCE.md",
-          "aboveCutInFullRun": 72,
-          "reviewedAboveCut": 5,
-          "actionableAboveCut": 3,
-          "reviewedBelowCut": 3,
-          "actionableBelowCut": 0,
-          "note": "Reviewed by one LLM reviewer (Claude Opus 5.5) in two passes; not human truth. Cells were the highest-P above the 0.7 cut, so the rate is an upper bound.",
-          "questionVersion": "1.0.0"
-        }
-      ],
-      "scored": 14,
-      "shown": [
-        {
-          "packId": "946e5f7b017b6018d47da395d7ddad88a02ea3f2bb94025be064a544a86003db",
-          "unitId": "946e5f7b017b6018d47da395d7ddad88a02ea3f2bb94025be064a544a86003db",
-          "pPositive": 1,
-          "confidence": 1,
-          "choice": "unexplained_policy_literal",
-          "location": [
-            {
-              "name": "lateFee",
-              "path": "src/billing.ts",
-              "startLine": 1,
-              "endLine": 7,
-              "role": "focus"
-            }
-          ]
-        }
-      ],
-      "ordering": "Jev P(positive option) descending; ties by pack id. No deterministic score participates."
-    },
-    "internal_duplication": {
-      "threshold": 0.7,
-      "status": "default",
-      "version": "1.0.0",
-      "evidence": [
-        {
-          "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",
-          "date": "2026-09-30",
-          "scanner": "0.4.x jev-only, jev-1.13.0",
-          "sample": "top-5 cells by P at or above the 0.7 cut, plus 3 random cells below it",
-          "reviewer": "LLM (Claude Opus 5.5), pass 2 with repository access; pass 1 counts in EVIDENCE.md",
-          "aboveCutInFullRun": 74,
-          "reviewedAboveCut": 5,
-          "actionableAboveCut": 3,
-          "reviewedBelowCut": 3,
-          "actionableBelowCut": 0,
-          "note": "Reviewed by one LLM reviewer (Claude Opus 5.5) in two passes; not human truth. Cells were the highest-P above the 0.7 cut, so the rate is an upper bound.",
-          "questionVersion": "1.0.0"
-        }
-      ],
-      "scored": 14,
-      "shown": [
-        {
-          "packId": "af0c56f105da773d187e992f92759c4f925a0e563e886a0c6a07e88270e462ad",
-          "unitId": "af0c56f105da773d187e992f92759c4f925a0e563e886a0c6a07e88270e462ad",
-          "pPositive": 1,
-          "confidence": 1,
-          "choice": "duplicated_blocks",
-          "location": [
-            {
-              "name": "summarize",
-              "path": "src/stats.ts",
-              "startLine": 1,
-              "endLine": 20,
               "role": "focus"
             }
           ]
@@ -2074,8 +1103,8 @@
         {
           "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
           "unitId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
-          "pPositive": 0.87,
-          "confidence": 0.81,
+          "pPositive": 0.88,
+          "confidence": 0.82,
           "choice": "multiple",
           "location": [
             {
@@ -2086,85 +1115,19 @@
               "role": "focus"
             }
           ]
-        }
-      ],
-      "ordering": "Jev P(positive option) descending; ties by pack id. No deterministic score participates."
-    },
-    "unused_local_or_parameter": {
-      "threshold": 0.7,
-      "status": "default",
-      "version": "1.0.0",
-      "evidence": [
+        },
         {
-          "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",
-          "date": "2026-09-30",
-          "scanner": "0.4.x jev-only, jev-1.13.0",
-          "sample": "top-5 cells by P at or above the 0.7 cut, plus 3 random cells below it",
-          "reviewer": "LLM (Claude Opus 5.5), pass 2 with repository access; pass 1 counts in EVIDENCE.md",
-          "aboveCutInFullRun": 3,
-          "reviewedAboveCut": 3,
-          "actionableAboveCut": 2,
-          "reviewedBelowCut": 3,
-          "actionableBelowCut": 0,
-          "note": "Reviewed by one LLM reviewer (Claude Opus 5.5) in two passes; not human truth. Cells were the highest-P above the 0.7 cut, so the rate is an upper bound.",
-          "questionVersion": "1.0.0"
-        }
-      ],
-      "scored": 14,
-      "shown": [
-        {
-          "packId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-          "unitId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-          "pPositive": 0.99,
-          "confidence": 0.99,
-          "choice": "unused",
+          "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+          "unitId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+          "pPositive": 0.78,
+          "confidence": 0.66,
+          "choice": "multiple",
           "location": [
             {
-              "name": "tally",
-              "path": "src/tally.ts",
+              "name": "registerUser",
+              "path": "src/signup.ts",
               "startLine": 1,
-              "endLine": 8,
-              "role": "focus"
-            }
-          ]
-        }
-      ],
-      "ordering": "Jev P(positive option) descending; ties by pack id. No deterministic score participates."
-    },
-    "deep_nesting": {
-      "threshold": 0.7,
-      "status": "default",
-      "version": "1.0.0",
-      "evidence": [
-        {
-          "corpus": "daily-tracker (sanitized development snapshot, one TypeScript/React Native app)",
-          "date": "2026-09-30",
-          "scanner": "0.4.x jev-only, jev-1.13.0",
-          "sample": "top-5 cells by P at or above the 0.7 cut, plus 3 random cells below it",
-          "reviewer": "LLM (Claude Opus 5.5), pass 2 with repository access; pass 1 counts in EVIDENCE.md",
-          "aboveCutInFullRun": 2,
-          "reviewedAboveCut": 2,
-          "actionableAboveCut": 2,
-          "reviewedBelowCut": 3,
-          "actionableBelowCut": 0,
-          "note": "Reviewed by one LLM reviewer (Claude Opus 5.5) in two passes; not human truth. Cells were the highest-P above the 0.7 cut, so the rate is an upper bound.",
-          "questionVersion": "1.0.0"
-        }
-      ],
-      "scored": 14,
-      "shown": [
-        {
-          "packId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-          "unitId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-          "pPositive": 0.87,
-          "confidence": 0.8,
-          "choice": "deeply_nested",
-          "location": [
-            {
-              "name": "findTagged",
-              "path": "src/search.ts",
-              "startLine": 5,
-              "endLine": 21,
+              "endLine": 27,
               "role": "focus"
             }
           ]
@@ -2175,156 +1138,6 @@
   },
   "abstentions": [],
   "findings": [
-    {
-      "signalId": "internal_duplication",
-      "signalVersion": "1.0.0",
-      "signalStatus": "default",
-      "question": "Within the visible focus code, are there two or more near-identical blocks that differ only in literals or identifiers and could share one implementation?",
-      "answer": "duplicated_blocks",
-      "positiveOption": "duplicated_blocks",
-      "pPositive": 1,
-      "confidence": 1,
-      "threshold": 0.7,
-      "unitId": "af0c56f105da773d187e992f92759c4f925a0e563e886a0c6a07e88270e462ad",
-      "packId": "af0c56f105da773d187e992f92759c4f925a0e563e886a0c6a07e88270e462ad",
-      "kind": "function",
-      "split": null,
-      "location": [
-        {
-          "name": "summarize",
-          "path": "src/stats.ts",
-          "startLine": 1,
-          "endLine": 20,
-          "role": "focus"
-        }
-      ],
-      "catchRange": null,
-      "verificationReads": [
-        {
-          "path": "src/stats.ts",
-          "range": {
-            "startOffset": 7,
-            "endOffset": 566,
-            "startLine": 1,
-            "endLine": 20,
-            "encoding": "UTF-16",
-            "endExclusive": true
-          },
-          "fileSHA256": "12d48d1f1d7f05bbe9baf3b57217011730f93378a2e37eafbad21269f3b10fad",
-          "sourceSHA256": "1ffdf73d73fb3a763584a55265e232b08b79d9f9c5ee8e4b966812c0d91719db",
-          "roles": [
-            "focus"
-          ]
-        }
-      ],
-      "contextOmissions": [],
-      "packRef": {
-        "planHash": "61f3eff3513dbe54df71b0ffa418935fcddc464c6b67681d70fa0861726f1a53",
-        "packId": "af0c56f105da773d187e992f92759c4f925a0e563e886a0c6a07e88270e462ad",
-        "contentHash": "6dc9d547ccfe9412ed6bb0634ab96d942215d489bf2b41a471eb0b55661dccba"
-      },
-      "notAPatchInstruction": true
-    },
-    {
-      "signalId": "magic_policy_literal",
-      "signalVersion": "1.0.0",
-      "signalStatus": "default",
-      "question": "Does the visible focus code embed unexplained numeric or string literals that encode business policy, limits or thresholds (not trivial 0/1/empty values and not user-facing copy) without a named constant or comment?",
-      "answer": "unexplained_policy_literal",
-      "positiveOption": "unexplained_policy_literal",
-      "pPositive": 1,
-      "confidence": 1,
-      "threshold": 0.7,
-      "unitId": "946e5f7b017b6018d47da395d7ddad88a02ea3f2bb94025be064a544a86003db",
-      "packId": "946e5f7b017b6018d47da395d7ddad88a02ea3f2bb94025be064a544a86003db",
-      "kind": "function",
-      "split": null,
-      "location": [
-        {
-          "name": "lateFee",
-          "path": "src/billing.ts",
-          "startLine": 1,
-          "endLine": 7,
-          "role": "focus"
-        }
-      ],
-      "catchRange": null,
-      "verificationReads": [
-        {
-          "path": "src/billing.ts",
-          "range": {
-            "startOffset": 7,
-            "endOffset": 227,
-            "startLine": 1,
-            "endLine": 7,
-            "encoding": "UTF-16",
-            "endExclusive": true
-          },
-          "fileSHA256": "944e6206a74f9874db5262709127f37178c14cdcfb6aad4cef021fc09416abd6",
-          "sourceSHA256": "fb4266b1e1b11fdedb225dca971387e29ff99ddf4295bc57c971d6c23813e219",
-          "roles": [
-            "focus"
-          ]
-        }
-      ],
-      "contextOmissions": [],
-      "packRef": {
-        "planHash": "61f3eff3513dbe54df71b0ffa418935fcddc464c6b67681d70fa0861726f1a53",
-        "packId": "946e5f7b017b6018d47da395d7ddad88a02ea3f2bb94025be064a544a86003db",
-        "contentHash": "541e51e511c72a9635feba103acf60d3f314a18b32845033ec70a46ec9f09711"
-      },
-      "notAPatchInstruction": true
-    },
-    {
-      "signalId": "unused_local_or_parameter",
-      "signalVersion": "1.0.0",
-      "signalStatus": "default",
-      "question": "Does the visible focus code declare a local variable or parameter that is assigned or received but never read within the visible code?",
-      "answer": "unused",
-      "positiveOption": "unused",
-      "pPositive": 0.99,
-      "confidence": 0.99,
-      "threshold": 0.7,
-      "unitId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-      "packId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-      "kind": "function",
-      "split": null,
-      "location": [
-        {
-          "name": "tally",
-          "path": "src/tally.ts",
-          "startLine": 1,
-          "endLine": 8,
-          "role": "focus"
-        }
-      ],
-      "catchRange": null,
-      "verificationReads": [
-        {
-          "path": "src/tally.ts",
-          "range": {
-            "startOffset": 7,
-            "endOffset": 203,
-            "startLine": 1,
-            "endLine": 8,
-            "encoding": "UTF-16",
-            "endExclusive": true
-          },
-          "fileSHA256": "6a53bdb0dd45b21307779461b46999e8436dcfa2b6bc03dba89a1bf3722573a9",
-          "sourceSHA256": "5a76d842416cb3ca38cda464d46533888965a5832679afff6050d8ecf7baf615",
-          "roles": [
-            "focus"
-          ]
-        }
-      ],
-      "contextOmissions": [],
-      "packRef": {
-        "planHash": "61f3eff3513dbe54df71b0ffa418935fcddc464c6b67681d70fa0861726f1a53",
-        "packId": "13157d1a6493c3c737b156d1733b28709c69b36559ba9821c15d2cf148640d95",
-        "contentHash": "d0cc702fc5e17452c557da9ce3d51edcf5571f1420e6272bf03aef85196253fb"
-      },
-      "notAPatchInstruction": true
-    },
     {
       "signalId": "clone_same_policy",
       "signalVersion": "3.0.0",
@@ -2392,9 +1205,9 @@
       ],
       "contextOmissions": [],
       "packRef": {
-        "planHash": "61f3eff3513dbe54df71b0ffa418935fcddc464c6b67681d70fa0861726f1a53",
+        "planHash": "65338442af640700791096d3e4c0ed853065e13abed3cc54d1cfde1346f2bb6e",
         "packId": "ee151de3275ae37355e909dd52f530d9ff4cffed82de02d862f6273f342ab215",
-        "contentHash": "0f78eb3b704de8fa3d7580c515226fcfe85ca6ff8595da3541ba162913d04e87"
+        "contentHash": "6e76a33a6baca2d10332d6e0ee28d80c1d5900a27deee6b39415f9ba2ae59a0c"
       },
       "notAPatchInstruction": true
     },
@@ -2405,8 +1218,8 @@
       "question": "Is the section labeled focus long or dense enough that a reader must track many distinct steps, and do cohesive visible blocks exist that could each stand as a separately named function? Length alone is not enough; name the blocks in your reasoning.",
       "answer": "split_candidate",
       "positiveOption": "split_candidate",
-      "pPositive": 0.92,
-      "confidence": 0.88,
+      "pPositive": 0.9,
+      "confidence": 0.85,
       "threshold": 0.7,
       "unitId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
       "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
@@ -2458,75 +1271,9 @@
       ],
       "contextOmissions": [],
       "packRef": {
-        "planHash": "61f3eff3513dbe54df71b0ffa418935fcddc464c6b67681d70fa0861726f1a53",
+        "planHash": "65338442af640700791096d3e4c0ed853065e13abed3cc54d1cfde1346f2bb6e",
         "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
-        "contentHash": "10451dacfbca39d57a4073bb3f2a0c5e490e364bf494639267fe01b96738a49e"
-      },
-      "notAPatchInstruction": true
-    },
-    {
-      "signalId": "deep_nesting",
-      "signalVersion": "1.0.0",
-      "signalStatus": "default",
-      "question": "Does the visible focus code contain control flow nested three or more levels deep (if/loop/try/callback) that obscures its main path?",
-      "answer": "deeply_nested",
-      "positiveOption": "deeply_nested",
-      "pPositive": 0.87,
-      "confidence": 0.8,
-      "threshold": 0.7,
-      "unitId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-      "packId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-      "kind": "function",
-      "split": null,
-      "location": [
-        {
-          "name": "findTagged",
-          "path": "src/search.ts",
-          "startLine": 5,
-          "endLine": 21,
-          "role": "focus"
-        }
-      ],
-      "catchRange": null,
-      "verificationReads": [
-        {
-          "path": "src/search.ts",
-          "range": {
-            "startOffset": 7,
-            "endOffset": 74,
-            "startLine": 1,
-            "endLine": 3,
-            "encoding": "UTF-16",
-            "endExclusive": true
-          },
-          "fileSHA256": "8110bcbd87cccd390557522948ef18acb40a25c6ef4a322b6cea4793e8fb7407",
-          "sourceSHA256": "d2e50b360c16b79539e397292a2cf1499623e0a6bd2b32d8c97b45d80ef06280",
-          "roles": [
-            "local_declaration"
-          ]
-        },
-        {
-          "path": "src/search.ts",
-          "range": {
-            "startOffset": 83,
-            "endOffset": 486,
-            "startLine": 5,
-            "endLine": 21,
-            "encoding": "UTF-16",
-            "endExclusive": true
-          },
-          "fileSHA256": "8110bcbd87cccd390557522948ef18acb40a25c6ef4a322b6cea4793e8fb7407",
-          "sourceSHA256": "cdeaf5dfa7dfb56fbd68e673fc0624aa70297f4322c06d30fb856e87cb1a508d",
-          "roles": [
-            "focus"
-          ]
-        }
-      ],
-      "contextOmissions": [],
-      "packRef": {
-        "planHash": "61f3eff3513dbe54df71b0ffa418935fcddc464c6b67681d70fa0861726f1a53",
-        "packId": "f45cfbbc03507f75ed4916478f99d785ef305cb31ee188e41a5b7a147a030ce7",
-        "contentHash": "ffb70a39b9901a69c5aef1493faf40459344de3835351d06870fd2860001007f"
+        "contentHash": "efdcd4bb32f0fa35c2c01f3e9964aef389cc50272350b7fd7a1caf35ca27dca9"
       },
       "notAPatchInstruction": true
     },
@@ -2537,8 +1284,8 @@
       "question": "Does the section labeled focus perform two or more separable responsibilities (for example fetching, transforming, persisting and presenting data) that are not coordinated by one stated purpose? Judge the visible body only.",
       "answer": "multiple",
       "positiveOption": "multiple",
-      "pPositive": 0.87,
-      "confidence": 0.81,
+      "pPositive": 0.88,
+      "confidence": 0.82,
       "threshold": 0.7,
       "unitId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
       "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
@@ -2590,12 +1337,62 @@
       ],
       "contextOmissions": [],
       "packRef": {
-        "planHash": "61f3eff3513dbe54df71b0ffa418935fcddc464c6b67681d70fa0861726f1a53",
+        "planHash": "65338442af640700791096d3e4c0ed853065e13abed3cc54d1cfde1346f2bb6e",
         "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
-        "contentHash": "10451dacfbca39d57a4073bb3f2a0c5e490e364bf494639267fe01b96738a49e"
+        "contentHash": "efdcd4bb32f0fa35c2c01f3e9964aef389cc50272350b7fd7a1caf35ca27dca9"
+      },
+      "notAPatchInstruction": true
+    },
+    {
+      "signalId": "function_multiple_responsibilities",
+      "signalVersion": "1.0.0",
+      "signalStatus": "default",
+      "question": "Does the section labeled focus perform two or more separable responsibilities (for example fetching, transforming, persisting and presenting data) that are not coordinated by one stated purpose? Judge the visible body only.",
+      "answer": "multiple",
+      "positiveOption": "multiple",
+      "pPositive": 0.78,
+      "confidence": 0.66,
+      "threshold": 0.7,
+      "unitId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+      "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+      "kind": "function",
+      "split": null,
+      "location": [
+        {
+          "name": "registerUser",
+          "path": "src/signup.ts",
+          "startLine": 1,
+          "endLine": 27,
+          "role": "focus"
+        }
+      ],
+      "catchRange": null,
+      "verificationReads": [
+        {
+          "path": "src/signup.ts",
+          "range": {
+            "startOffset": 7,
+            "endOffset": 1125,
+            "startLine": 1,
+            "endLine": 27,
+            "encoding": "UTF-16",
+            "endExclusive": true
+          },
+          "fileSHA256": "d5dcab8e531e3362fc2fbcf3df16304ef0e986ce510771f00241bed6825be1b5",
+          "sourceSHA256": "65bec70e623e37954d9940e16f82f02a05ba1f0d66f65f6013f2b91f63402023",
+          "roles": [
+            "focus"
+          ]
+        }
+      ],
+      "contextOmissions": [],
+      "packRef": {
+        "planHash": "65338442af640700791096d3e4c0ed853065e13abed3cc54d1cfde1346f2bb6e",
+        "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+        "contentHash": "cf44609dbf980a87bcb12ac8d5eb6fe9b18ccff918e36647323497916c0f48b5"
       },
       "notAPatchInstruction": true
     }
   ],
-  "reportHash": "bbcaa299d57a28de739106a19fe1891b45c5f2ab0fad10c313fada59d2991593"
+  "reportHash": "4d5e30aec8c376f43c93c4a3a53ee5c918bad072b6eb779aede3e0f0277a7a05"
 }

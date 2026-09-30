@@ -4,9 +4,9 @@
   "succeeded": 15,
   "failed": 0,
   "unknownAttempts": 0,
-  "inputTokens": 27240,
-  "outputTokens": 3780,
-  "calculatedUSD": 0.0011440800000000002,
+  "inputTokens": 19754,
+  "outputTokens": 1318,
+  "calculatedUSD": 0.000829668,
   "invoiceVerified": false,
-  "finishedAtUTC": "2026-09-30T04:50:25.975Z"
+  "finishedAtUTC": "2026-09-30T16:02:46.757Z"
 }

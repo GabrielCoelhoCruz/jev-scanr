@@ -66,19 +66,19 @@ jevs scan examples/demo-app
 ```
 Units: 14 functions, 1 similar pair
 Requests: 15 (29 questions, 0.05 MB of request text)
-Estimated cost: US$0.0007 (bytes ÷ 3 per token); worst case US$0.0049 (one token per byte, plus one reservation)
+Estimated cost: US$0.0007 (bytes ÷ 3 per token); worst case US$0.0050 (one token per byte, plus one reservation)
 ```
 
-Here is an item from a **real run recorded on `jev-1.13.0`** ([`expected/`](examples/demo-app/expected/) has the receipt, journal and reports). That recording asked the seven original questions, which cost US$0.0011; four of them are now opt-in. `queue.md` lists paths, line ranges and Jev's answer, and no source:
+Here is an item from a **real run recorded on `jev-1.13.0`** with the three default signals: 15 of 15 requests answered, US$0.0008 ([`expected/`](examples/demo-app/expected/) has the receipt, journal and reports). `queue.md` lists paths, line ranges and Jev's answer, and no source:
 
 ```
-## 4. clampPercent src/percent.ts:1–14 ↔ clampVolume src/volume.ts:1–14 · clone_same_policy@3.0.0 · P=0.98
+## 1. clampPercent src/percent.ts:1–14 ↔ clampVolume src/volume.ts:1–14 · clone_same_policy@3.0.0 · P=0.98
 - Question: Do the sections labeled pair.a and pair.b implement the same kind of policy or operation…
 - Jev answer: same_policy.
 - Read first: src/percent.ts:1–14; src/volume.ts:1–14.
 ```
 
-The two functions clamp a number to a range (0 to 100 and 0 to 10), send NaN to the lowest value, and round. Whether merging them is a good idea is for you to decide; the item only says they look like the same rule written twice. Seven of the demo's functions have a problem seeded in, and the recorded run put exactly those seven at the top and none of the clean ones. That shows the output format, **not accuracy**: we wrote the problems, so they are easy. Your run will not match the recording exactly, because Jev's probabilities change from call to call.
+The two functions clamp a number to a range (0 to 100 and 0 to 10), send NaN to the lowest value, and round. Whether merging them is a good idea is for you to decide; the item only says they look like the same rule written twice. Five questions in the demo were seeded on purpose. The recording put four of them over the cut and **missed one** (`registerUser` for `function_should_split`, at 0.52), and none of the clean functions reached the cut. That shows the output format, **not accuracy**: we wrote the problems, so they are easy. Your run will not match the recording exactly, because Jev's probabilities change from call to call.
 
 ## Signals
 

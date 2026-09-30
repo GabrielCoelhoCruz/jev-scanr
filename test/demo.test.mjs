@@ -12,7 +12,7 @@ const result = json("expected/RESULT.json");
 const report = json("expected/report.json");
 
 test("the recording still matches the current pipeline and demo source", () => {
-  const plan = buildPlan(demo, { signals: receipt.signals });
+  const plan = buildPlan(demo);
   assert.equal(
     createHash("sha256")
       .update(JSON.stringify(plan.requests.map((r) => r.requestHash)))
@@ -47,20 +47,16 @@ test("the receipt was frozen before the run and the journal agrees with the resu
   assert.ok(!events.some((e) => JSON.stringify(e).includes("/home/")));
 });
 
-test("the recorded findings are the seeded functions and no clean one", () => {
-  const found = new Set(
-    report.findings.map((f) => `${f.location[0].name}:${f.signalId}`),
+test("the recorded findings are the seeded functions the default signals ask about, and no clean one", () => {
+  const found = report.findings.map(
+    (f) => `${f.location[0].name}:${f.signalId}`,
   );
-  for (const seeded of [
-    "lateFee:magic_policy_literal",
-    "importOrders:function_should_split",
-    "importOrders:function_multiple_responsibilities",
-    "summarize:internal_duplication",
+  assert.deepEqual(found.sort(), [
     "clampPercent:clone_same_policy",
-    "findTagged:deep_nesting",
-    "tally:unused_local_or_parameter",
-  ])
-    assert.ok(found.has(seeded), seeded);
+    "importOrders:function_multiple_responsibilities",
+    "importOrders:function_should_split",
+    "registerUser:function_multiple_responsibilities",
+  ]);
   const clean = [
     "formatCurrency",
     "applyDiscount",
@@ -69,6 +65,9 @@ test("the recorded findings are the seeded functions and no clean one", () => {
     "describeTotal",
     "slugify",
     "truncate",
+    "renderInvoiceText",
+    "lateFee",
+    "summarize",
   ];
   assert.deepEqual(
     report.findings.filter((f) => clean.includes(f.location[0].name)),

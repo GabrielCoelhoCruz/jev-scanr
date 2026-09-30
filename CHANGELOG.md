@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1-alpha
+
+- **The recorded demo matches the defaults.** `examples/demo-app/expected/` is one new real run (`jev-1.13.0`, 15 of 15 requests, US$0.0008 calculated) that asks only the three default signals. It flagged four of the five questions seeded on purpose and missed one (`registerUser` for `function_should_split`, 0.52); no clean function reached the cut. Before recording, two demo functions that belonged to now-experimental signals (`tally`, `findTagged`) were replaced by `registerUser` and a long but cohesive `renderInvoiceText`, keeping the request count at 15. The drift test and the README snippets follow the recording.
+- Dependencies: `ajv` 8.20.0, `prettier` 3.9.9 and `@babel/parser` 7.29.9 (the retained license notices are refreshed; the license texts did not change), and the `actions/checkout` and `actions/setup-node` v7 updates. `@babel/traverse` stays on 7.28.5: version 8 changed which functions get indexed on real code when paired with the parser 7 we use, and changed a few similar-pair units even with parser 8.
+- No change to questions, scoring or scan behavior. Plans from 0.1.0-alpha to 0.3.0-alpha still verify.
+
 ## 0.3.0-alpha
 
 **Breaking: renamed from `jev-refactor` to `jev-scanr`.** The commands are now `jev-scanr` and the short alias `jevs` (the `jr` alias is gone; `jr` is also an unrelated npm package). The GitHub repository moved to `GabrielCoelhoCruz/jev-scanr` and the old URL redirects. The agent skill is now `skills/jev-scanr/` (`npx skills add GabrielCoelhoCruz/jev-scanr --skill jev-scanr`; reinstall it to replace the old one).
