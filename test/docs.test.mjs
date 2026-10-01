@@ -54,6 +54,7 @@ test("relative links in the documentation resolve to files", () => {
     "NOTICE.md",
     "docs/architecture.md",
     "docs/RELEASING.md",
+    "docs/TROUBLESHOOTING.md",
     ...readdirSync(join(root, "evals/results")).map(
       (f) => `evals/results/${f}`,
     ),
@@ -200,6 +201,26 @@ test("public documents carry no internal wording", () => {
   }
 });
 
+test("the README's platform claim matches the CI matrix: the OSes CI tests are named as supported and Windows is called untested", () => {
+  const ci = read(".github/workflows/ci.yml");
+  const matrix = ci.match(/os:\s*\[([^\]]+)\]/);
+  assert.ok(matrix, "ci.yml declares an os matrix");
+  const tested = matrix[1]
+    .split(",")
+    .map((s) => s.trim().replace(/-latest$/, ""));
+  const readme = read("README.md");
+  const support = readme.match(/\*\*Supported platforms\.\*\*([^]*)$/m);
+  assert.ok(support, "the README names supported platforms");
+  const line = support[1];
+  for (const os of tested)
+    assert.match(
+      line,
+      new RegExp(os, "i"),
+      `README does not name CI-tested ${os}`,
+    );
+  assert.match(line, /Windows is not tested|Windows as unsupported/i);
+});
+
 test("the README has its required sections, a lead before them, related work as a link, and a signal table that matches the catalog", () => {
   const readme = read("README.md");
   for (const heading of [
@@ -268,6 +289,7 @@ test("the npm package ships the tool and its notices, not the evaluation tools o
     "src/cli.mjs",
     "src/credentials.mjs",
     "catalog.json",
+    "cuts.json",
     "skills/jev-scanr/SKILL.md",
     "LICENSE",
     "NOTICE.md",
