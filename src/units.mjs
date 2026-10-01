@@ -1,5 +1,5 @@
 import { hash } from "./core.mjs";
-import { generateCandidates } from "./candidates.mjs";
+import { generateCandidates, noCandidates } from "./candidates.mjs";
 import { nameCue } from "./name-cue.mjs";
 
 const FUNCTION_TYPES = new Set([
@@ -73,11 +73,13 @@ export function formUnits(
     unnamedCues = false,
   } = {},
 ) {
-  const base = generateCandidates(index, {
-    includeTests,
-    recordCapped: true,
-    lowOverlap,
-  });
+  const base = kinds.includes("clone_pair")
+    ? generateCandidates(index, {
+        includeTests,
+        recordCapped: true,
+        lowOverlap,
+      })
+    : noCandidates(index, { includeTests, lowOverlap });
   const units = [];
   for (const f of kinds.includes("function")
     ? index.functions.filter(

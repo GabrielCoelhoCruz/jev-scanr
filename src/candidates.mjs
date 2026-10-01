@@ -1,17 +1,13 @@
 import { hash, jaccard } from "./core.mjs";
 import { lowOverlapPairs, LOW_OVERLAP_DEFAULTS } from "./low-overlap.mjs";
 
-export function generateCandidates(
-  index,
-  {
-    minLines = 8,
-    minJaccard = 0.45,
-    minSizeRatio = 0.5,
-    includeTests = false,
-    recordCapped = false,
-    lowOverlap = {},
-  } = {},
-) {
+function retrievalOptions({
+  minLines = 8,
+  minJaccard = 0.45,
+  minSizeRatio = 0.5,
+  includeTests = false,
+  lowOverlap = {},
+} = {}) {
   const low = { ...LOW_OVERLAP_DEFAULTS, ...lowOverlap };
   if (
     !Number.isSafeInteger(minLines) ||
@@ -27,6 +23,44 @@ export function generateCandidates(
     low.maxDocumentFrequency < 2
   )
     throw Error("Invalid retrieval options");
+  return {
+    minLines,
+    minJaccard,
+    minSizeRatio,
+    includeTests,
+    lowOverlap: low,
+  };
+}
+
+export function noCandidates(index, options) {
+  return {
+    candidates: [],
+    clusters: [],
+    facts: [],
+    omitted: [],
+    stats: {
+      functionsIndexed: index.functions.length,
+      clonePool: 0,
+      comparisons: 0,
+      eligiblePairs: 0,
+      candidateCount: 0,
+      lowOverlap: { candidates: 0 },
+    },
+    options: retrievalOptions(options),
+  };
+}
+
+export function generateCandidates(
+  index,
+  { recordCapped = false, ...options } = {},
+) {
+  const {
+    minLines,
+    minJaccard,
+    minSizeRatio,
+    includeTests,
+    lowOverlap: low,
+  } = retrievalOptions(options);
   const { maxCandidates, maxComparisons } = index.snapshot.limits,
     candidates = [],
     omitted = [];
