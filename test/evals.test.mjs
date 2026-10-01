@@ -22,6 +22,7 @@ import {
 import { evaluateGate, ruleSHA256 } from "../evals/lib/gate.mjs";
 import { normalizeLabels } from "../evals/lib/labels.mjs";
 import { noiseFloor, wilson } from "../evals/lib/stats.mjs";
+import { defaultCut } from "../src/cuts.mjs";
 import { main } from "../evals/cli.mjs";
 import { readJournal } from "../src/runner.mjs";
 import { plan, scratch, run, fake, response, positive } from "./helpers.mjs";
@@ -247,6 +248,79 @@ test("P variance: repeats are chosen by a frozen seed, and the registered rule r
     /Only \d+ answered requests/,
   );
   assert.equal(compareRuns(p, events, events).cellsOverThreshold, 0);
+});
+
+test("variance re-bands at each signal's real cut from cuts.json, not the old global 0.7", async (t) => {
+  const p = plan(t);
+  const dir = join(scratch(t), "base");
+  await run(
+    p,
+    dir,
+    fake(async (r) => response(r, positive(0.8))),
+  );
+  const events = readJournal(dir, p);
+  const atRealCuts = compareRuns(p, events, events);
+  assert.equal(atRealCuts.cut, null);
+  assert.match(atRealCuts.cutMeaning, /cuts\.json/);
+  assert.equal(
+    atRealCuts.cutCrossings,
+    0,
+    "an identical re-read crosses nothing",
+  );
+  for (const [id, per] of Object.entries(atRealCuts.cutBySignal)) {
+    assert.equal(per.cut, defaultCut(id), id);
+    assert.equal(per.crossings, 0, id);
+    assert.ok(per.cells >= 0);
+  }
+  assert.ok("function_should_split" in atRealCuts.cutBySignal);
+  assert.equal(atRealCuts.cutBySignal.function_should_split.cut, 0.5);
+  assert.equal(atRealCuts.cutBySignal.clone_same_policy.cut, 0.7);
+  const overridden = compareRuns(p, events, events, { cut: 0.7 });
+  assert.equal(overridden.cut, 0.7);
+  assert.match(overridden.cutMeaning, /override cut 0\.7/);
+  assert.equal(
+    overridden.cutBySignal.function_should_split.cut,
+    0.7,
+    "an override replaces the per-signal edge everywhere",
+  );
+});
+
+test("the variance CLI forwards --cut to the re-band instead of ignoring it", async (t) => {
+  const p = plan(t);
+  const dir = join(scratch(t), "base");
+  await run(
+    p,
+    dir,
+    fake(async (r) => response(r, positive(0.8))),
+  );
+  const planFile = join(scratch(t), "plan.json");
+  writeFileSync(planFile, JSON.stringify(p));
+  const out = join(scratch(t), "variance-out");
+  await main(
+    [
+      "variance",
+      "--plan",
+      planFile,
+      "--run-dir",
+      dir,
+      "--n",
+      "1",
+      "--seed",
+      "s",
+      "--yes",
+      "--cap-usd",
+      "1",
+      "--out",
+      out,
+      "--cut",
+      "0.9",
+    ],
+    { client: fake(async (r) => response(r, positive(0.8))), intervalMs: 0 },
+  );
+  const result = JSON.parse(readFileSync(join(out, "variance.json"), "utf8"));
+  assert.equal(result.cut, 0.9, "the --cut override reaches the output");
+  assert.match(result.cutMeaning, /override cut 0\.9/);
+  process.exitCode = 0;
 });
 
 test("judge tasks use a different prompt from the question, carry known-negative controls, and reject a Jev judge", () => {

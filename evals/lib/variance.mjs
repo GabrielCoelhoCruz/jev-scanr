@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import { POLICY } from "../../src/core.mjs";
-import { catalog } from "../../src/catalog.mjs";
+import { defaultCut } from "../../src/cuts.mjs";
 import { runPlan, readJournal } from "../../src/runner.mjs";
 import { subsetPlan } from "../../src/continuation.mjs";
 import { verifyPlan, packSignals } from "../../src/plan.mjs";
@@ -26,7 +26,7 @@ export function compareRuns(
   plan,
   first,
   second,
-  { threshold = 0.05, cut = catalog.displayThresholdDefault, rule = 0.2 } = {},
+  { threshold = 0.05, cut, rule = 0.2 } = {},
 ) {
   const answers = (events) =>
     new Map(
@@ -45,7 +45,8 @@ export function compareRuns(
         y = second_[signal.id];
       if (!x || !y) continue;
       const p1 = x.probabilities[signal.presence],
-        p2 = y.probabilities[signal.presence];
+        p2 = y.probabilities[signal.presence],
+        edge = cut ?? defaultCut(signal.id);
       cells.push({
         unitId,
         signalId: signal.id,
@@ -53,7 +54,8 @@ export function compareRuns(
         p2,
         delta: Math.abs(p1 - p2),
         flip: x.choice !== y.choice,
-        crossesCut: p1 >= cut !== p2 >= cut,
+        cut: edge,
+        crossesCut: p1 >= edge !== p2 >= edge,
         insufficientOnce:
           (x.choice === "insufficient") !== (y.choice === "insufficient"),
       });
@@ -61,9 +63,24 @@ export function compareRuns(
     }
   }
   const over = cells.filter((c) => c.delta > threshold + 1e-9);
+  const bySignal = (id) => cells.filter((c) => c.signalId === id);
   return {
     threshold,
-    cut,
+    cut: cut ?? null,
+    cutMeaning:
+      cut === undefined
+        ? "Each cell is tested at its signal's default cut from cuts.json; `cut` here is null."
+        : `Every cell is tested at the override cut ${cut}, not at its signal's default from cuts.json.`,
+    cutBySignal: Object.fromEntries(
+      [...new Set(cells.map((c) => c.signalId))].sort().map((id) => [
+        id,
+        {
+          cut: cut ?? defaultCut(id),
+          cells: bySignal(id).length,
+          crossings: bySignal(id).filter((c) => c.crossesCut).length,
+        },
+      ]),
+    ),
     requests: b.size,
     cells: cells.length,
     cellsOverThreshold: over.length,

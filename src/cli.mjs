@@ -30,7 +30,13 @@ import {
   DEFAULT_CONCURRENCY,
   MAX_CONCURRENCY,
 } from "./runner.mjs";
-import { buildReport, queueMarkdown, reportMarkdown } from "./report.mjs";
+import {
+  buildReport,
+  failureBrief,
+  firstFailure,
+  queueMarkdown,
+  reportMarkdown,
+} from "./report.mjs";
 import { continuationPlan, combineRuns } from "./continuation.mjs";
 import { demoText } from "./demo.mjs";
 import {
@@ -170,7 +176,21 @@ const usd = (n) => `US$${n.toFixed(4)}`;
 function signalSelection(values) {
   if (values.signals && values.experimental)
     throw Error("Use either --signals or --experimental");
-  if (values.signals) return values.signals.split(",").filter(Boolean);
+  if (values.signals) {
+    const asked = values.signals.split(",").filter(Boolean);
+    const known = new Set(allSignals.map((s) => s.id));
+    const unknown = asked.filter((id) => !known.has(id));
+    if (unknown.length)
+      throw Error(
+        `Unknown signal in --signals: ${unknown.join(", ")}. Valid ids: ${allSignals.map((s) => s.id).join(", ")}`,
+      );
+    const duplicates = asked.filter((id, i) => asked.indexOf(id) !== i);
+    if (duplicates.length)
+      throw Error(
+        `Duplicate signal in --signals: ${[...new Set(duplicates)].join(", ")}. Name each signal once.`,
+      );
+    return asked;
+  }
   return values.experimental
     ? allSignals.map((s) => s.id).filter((id) => !optInSignalIds.includes(id))
     : defaultSignalIds;
@@ -492,7 +512,13 @@ async function execute(plan, values, deps) {
   console.log(
     `${result.complete ? "Complete" : "STOPPED (" + result.stoppedReason + ")"}: ${result.succeeded}/${result.plannedRequests} requests answered, ${usd(result.knownEstimatedUSD)} calculated cost${result.wallClockMs ? `, ${(result.wallClockMs / 1000).toFixed(0)} s wall-clock with concurrency ${result.concurrency}` : ""}, ${report.findings.length} candidates. Read ${join(out, "queue.md")}`,
   );
-  if (!result.complete) process.exitCode = 2;
+  if (!result.complete) {
+    const brief = failureBrief(firstFailure(events), {
+      stoppedReason: result.stoppedReason,
+    });
+    if (brief) console.log(brief);
+    process.exitCode = 2;
+  }
 }
 
 export async function main(args = process.argv.slice(2), deps = {}) {

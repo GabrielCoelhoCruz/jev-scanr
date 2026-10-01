@@ -34,6 +34,8 @@ node evals/cli.mjs --help
 
 Jev's probabilities are rounded to two decimals and are not reproducible from call to call, so a cut on P has a blurry edge. `variance` re-sends N answered requests once (chosen by a frozen seed) and reports how many cells moved by more than 0.05, the largest move, choice flips and cut crossings. The registered rule: if more than 20% of cells move by more than 0.05, show a range instead of a number and require P at or above the cut in two calls.
 
+A cut crossing is now measured at each signal's own default cut from `cuts.json` (0.7 for most, 0.5 for `function_should_split` and `name_vs_behavior`), not one global 0.7, because the display edges differ per signal. `variance.json` carries `cutBySignal` (the edge and crossing count per signal) and `cut`/`cutMeaning`; pass `--cut N` to re-band every cell at one override edge instead. A repeat must be measured before its crossings mean anything: the only published repeat (50 requests, 235 cells, one crossing at the 0.7 cut) was run on the prototype pipeline, and its journals are not in this repository, so this repo has no recorded repeat to re-band offline. `compareRuns` re-bands any stored journal pair offline to fill that gap when one exists; until then, treat the per-signal crossing counts as unmeasured here rather than borrowing the prototype's number.
+
 ## LLM judges
 
 - **Not the question's prompt.** The judge gets a rubric-based prompt of its own (`judge/RUBRIC.md`: the frozen actionability rubric plus one note per signal). It is never shown Jev's instructions, any probability or any model output, and the code is marked as untrusted data.

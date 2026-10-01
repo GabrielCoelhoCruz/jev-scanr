@@ -224,6 +224,58 @@ test("a stopped run still writes a partial report and exits with code 2", async 
   assert.ok((report.statusCounts.error ?? 0) > 0);
 });
 
+test("a stopped run surfaces an actionable first-error brief in the summary and report, with no secret", async (t) => {
+  const root = project(t, twoFiles),
+    out = join(scratch(t), "out");
+  const lines = [];
+  t.mock.method(console, "log", (line) => lines.push(line));
+  const marker = "SECRET_ERROR_BODY_MARKER";
+  await main(["scan", root, "--run", "--yes", "--cap-usd", "1", "--out", out], {
+    client: fake(async () => {
+      throw Object.assign(Error(marker), {
+        status: 429,
+        headers: { get: (k) => (k === "retry-after" ? "7" : null) },
+      });
+    }),
+    env: { XDG_CACHE_HOME: scratch(t) },
+  });
+  t.mock.restoreAll();
+  const text = lines.join("\n");
+  assert.match(text, /First error on .*: HTTP 429, retry-after 7s\./);
+  assert.match(text, /re-run \(jevs continue/);
+  assert.ok(!text.includes(marker), "the error body is never echoed");
+  const report = JSON.parse(readFileSync(join(out, "report.json")));
+  assert.equal(report.failure.kind, "transport_error");
+  assert.equal(report.failure.httpStatus, 429);
+  assert.equal(report.failure.retryAfterSeconds, 7);
+  assert.ok(!JSON.stringify(report).includes(marker));
+  const md = readFileSync(join(out, "report.md"), "utf8");
+  assert.match(md, /First error on .*: HTTP 429, retry-after 7s\./);
+});
+
+test("a successful run carries no failure field and an invalid --signals names the valid ids", async (t) => {
+  quiet(t);
+  const root = project(t, twoFiles),
+    out = join(scratch(t), "out");
+  await main(["scan", root, "--run", "--yes", "--cap-usd", "1", "--out", out], {
+    client: fake(async (r) => response(r, positive(0.9))),
+    env: { XDG_CACHE_HOME: scratch(t) },
+  });
+  const report = JSON.parse(readFileSync(join(out, "report.json")));
+  assert.ok(!("failure" in report), "a clean run has no failure field");
+  const cwd = scratch(t);
+  const bad = spawn(["scan", root, "--signals", "nope,clone_same_policy"], cwd);
+  assert.equal(bad.status, 1);
+  assert.match(bad.stderr, /Unknown signal in --signals: nope/);
+  assert.match(bad.stderr, /Valid ids: .*clone_same_policy/);
+  const dup = spawn(
+    ["scan", root, "--signals", "clone_same_policy,clone_same_policy"],
+    cwd,
+  );
+  assert.equal(dup.status, 1);
+  assert.match(dup.stderr, /Duplicate signal in --signals: clone_same_policy/);
+});
+
 test("--threshold changes only the display cut, and --experimental adds the experimental signal", async (t) => {
   quiet(t);
   const root = project(t, twoFiles),

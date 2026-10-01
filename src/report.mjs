@@ -365,6 +365,8 @@ export function buildReport(
     report.nearTies = nearTies;
     report.nearTieRule = `Jev probabilities are rounded to 2 decimals, so a chosen option within 0.01 of the maximum is accepted and flagged near_tie. Display depends only on the cell's own P(positive) against the cut.`;
   }
+  const failure = firstFailure(events);
+  if (failure) report.failure = failure;
   return { ...report, reportHash: hash(report) };
 }
 
@@ -388,6 +390,53 @@ const evidenceLine = (view) => {
     ? `${e.actionableAboveCut}/${e.reviewedAboveCut} actionable above the cut (${e.corpus.split(" (")[0]}, LLM reviewer)`
     : "no evidence recorded";
 };
+
+export function firstFailure(events = []) {
+  const failed = events.find(
+    (e) => e.type === "finished" && e.status === "failed",
+  );
+  if (!failed?.failure) return null;
+  const {
+    kind,
+    httpStatus,
+    validation,
+    retryAfterSeconds,
+    unitId,
+    sourcePath,
+  } = failed.failure;
+  return {
+    kind,
+    httpStatus,
+    validation,
+    retryAfterSeconds: retryAfterSeconds ?? null,
+    unitId: unitId ?? null,
+    sourcePath: sourcePath ?? null,
+  };
+}
+
+const FAILURE_NEXT_STEP = {
+  response_validation:
+    "The answer did not match the requested shape. Nothing is wrong with your key; re-run to try again.",
+  transport_error:
+    "The request never produced a usable answer (network or server). Check connectivity and the service status, then re-run.",
+};
+
+export function failureBrief(failure, { stoppedReason } = {}) {
+  if (!failure) return null;
+  const cause =
+    failure.kind === "response_validation"
+      ? `invalid answer (${failure.validation ?? "shape mismatch"})`
+      : failure.httpStatus
+        ? `HTTP ${failure.httpStatus}${failure.retryAfterSeconds ? `, retry-after ${failure.retryAfterSeconds}s` : ""}`
+        : (failure.kind ?? "request failed");
+  const where = failure.sourcePath ? ` on ${failure.sourcePath}` : "";
+  const next =
+    stoppedReason === "first_error"
+      ? "The run stopped at the first error; fix or wait, then re-run (jevs continue plans only what is missing)."
+      : (FAILURE_NEXT_STEP[failure.kind] ??
+        "Fix the cause, then re-run (jevs continue plans only what is missing).");
+  return `First error${where}: ${cause}. ${next}`;
+}
 
 export function queueMarkdown(report) {
   const uncertain = report.uncertain ?? [];
@@ -532,6 +581,10 @@ export function reportMarkdown(report, accounting = null) {
       `${report.nearTies.length} answers were near ties (chosen option within 0.01 of the maximum). They are flagged in report.json and queue.md.`,
       "",
     );
+  if (report.failure) {
+    const brief = failureBrief(report.failure);
+    if (brief) lines.push(brief, "");
+  }
   lines.push(
     "Next: open `queue.md`. Every item there is something to verify, not to apply.",
     "",

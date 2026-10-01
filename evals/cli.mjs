@@ -29,8 +29,8 @@ const HELP = `Eval tools for jev-scanr signals. See evals/README.md.
   node evals/cli.mjs run --yes --cap-usd N --out DIR [--cases PATH] [--signal ID] [--reps K] [--cut 0.7]
                                                                  live: one Jev call per case, results in the report.html layout
   node evals/cli.mjs report DIR                                  render report.html for each signal under DIR
-  node evals/cli.mjs variance --plan P --run-dir R --n 50 --seed S --yes --cap-usd N --out DIR
-                                                                 re-send N answered requests once and measure how much P moves
+  node evals/cli.mjs variance --plan P --run-dir R --n 50 --seed S --yes --cap-usd N --out DIR [--cut 0.7]
+                                                                 re-send N answered requests once and measure how much P moves; crossings use each signal's cut from cuts.json unless --cut overrides
   node evals/cli.mjs judge-tasks (--cases PATH | --cards cards.json) --out FILE
   node evals/cli.mjs judge-import --tasks FILE --labels FILE.jsonl --model NAME --out FILE
   node evals/cli.mjs calibrate --judge LABELS --human LABELS --human-blind [--judge-model NAME] --out FILE
@@ -179,6 +179,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
       capUSD: cap,
       directory: resolve(need(values.out, "--out")),
       intervalMs: deps.intervalMs ?? POLICY.minIntervalMs,
+      ...(values.cut === undefined ? {} : { cut: Number(values.cut) }),
     });
     console.log(
       `${result.cells} cells re-measured: ${result.cellsOverThreshold} moved by more than ${result.threshold} (${pct(result.shareCellsOver)} ±${pct(result.noiseFloorOfShare)}); max ${result.maxDelta.toFixed(2)}; ${result.choiceFlips} choice flips; ${result.cutCrossings} crossed the cut.`,
