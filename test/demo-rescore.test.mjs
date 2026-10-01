@@ -88,6 +88,44 @@ test("the shipped demo plan verifies, carries no machine path and holds the requ
   );
 });
 
+test("the shipped demo run reports and continues offline from the plan shipped beside it, with no key", (t) => {
+  const cwd = scratch(t);
+  const reported = run(
+    [
+      "report",
+      "--plan",
+      join(expected, "plan.json"),
+      "--run-dir",
+      expected,
+      "--out",
+      join(cwd, "report"),
+    ],
+    cwd,
+  );
+  assert.equal(reported.status, 0, reported.stderr);
+  assert.match(reported.stdout, /29 cells .* 5 candidates/);
+  const queue = readFileSync(join(cwd, "report", "queue.md"), "utf8");
+  assert.ok(queue.startsWith("# Refactor queue"));
+  assert.match(
+    queue,
+    /^## 5\. registerUser src\/signup\.ts:1–27 · function_should_split@1\.0\.0 · P=0\.52$/m,
+  );
+  const continued = run(
+    [
+      "continue",
+      "--plan",
+      join(expected, "plan.json"),
+      "--run-dir",
+      expected,
+      "--out",
+      join(cwd, "next.json"),
+    ],
+    cwd,
+  );
+  assert.equal(continued.status, 1);
+  assert.match(continued.stderr, /Nothing to continue/);
+});
+
 test("a journal recorded for another plan is refused in words, and a plan with other requests is refused as not its own", (t) => {
   const cwd = scratch(t);
   const strict = run(
