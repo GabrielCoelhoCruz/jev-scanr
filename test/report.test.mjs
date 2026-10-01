@@ -4,6 +4,8 @@ import { join } from "node:path";
 import { readJournal } from "../src/runner.mjs";
 import {
   buildReport,
+  failureBrief,
+  firstFailure,
   queueMarkdown,
   reportMarkdown,
   resolveThresholds,
@@ -126,6 +128,38 @@ test("unanswered cells are abstentions, never scores", (t) => {
   assert.equal(report.provenance, "not_run");
   assert.ok(report.abstentions.every((a) => a.status === "unattempted"));
   assert.ok(Object.values(report.views).every((v) => v.scored === 0));
+  assert.ok(!("failure" in report), "a not-run report has no failure");
+});
+
+test("firstFailure and failureBrief turn a stored failure into an actionable, secret-free line", async (t) => {
+  const { p, events } = await completed(t, undefined, { alpha: 0.95 });
+  assert.equal(firstFailure(events), null, "a clean run has no failure");
+  const validation = firstFailure([
+    {
+      type: "finished",
+      status: "failed",
+      failure: {
+        kind: "response_validation",
+        validation: "served_model_mismatch",
+        sourcePath: "src/a.ts",
+      },
+    },
+  ]);
+  assert.equal(validation.kind, "response_validation");
+  assert.equal(validation.validation, "served_model_mismatch");
+  const brief = failureBrief(validation, { stoppedReason: "first_error" });
+  assert.match(
+    brief,
+    /First error on src\/a\.ts: invalid answer \(served_model_mismatch\)/,
+  );
+  assert.match(brief, /jevs continue/);
+  const transport = failureBrief(
+    { kind: "transport_error", httpStatus: 401, sourcePath: "src/b.ts" },
+    { stoppedReason: "first_error" },
+  );
+  assert.match(transport, /First error on src\/b\.ts: HTTP 401\./);
+  assert.match(transport, /re-run \(jevs continue/);
+  assert.ok(!/api[_-]?key|bearer|token/i.test(brief + transport));
 });
 
 test("thresholds default per signal and reject unknown or invalid values", () => {
