@@ -205,20 +205,30 @@ test("the README's platform claim matches the CI matrix: the OSes CI tests are n
   const ci = read(".github/workflows/ci.yml");
   const matrix = ci.match(/os:\s*\[([^\]]+)\]/);
   assert.ok(matrix, "ci.yml declares an os matrix");
-  const tested = matrix[1]
-    .split(",")
-    .map((s) => s.trim().replace(/-latest$/, ""));
+  const tested = matrix[1].split(",").map((s) => s.trim());
   const readme = read("README.md");
-  const support = readme.match(/\*\*Supported platforms\.\*\*([^]*)$/m);
+  const support = readme.match(
+    /\*\*Supported platforms\.\*\*([^]*?)(?:\n\n|$)/,
+  );
   assert.ok(support, "the README names supported platforms");
   const line = support[1];
+  const escape = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const family = (os) =>
+    escape(os.replace(/-latest$/, "").replace(/-\d+(\.\d+)*$/, ""));
   for (const os of tested)
     assert.match(
       line,
-      new RegExp(os, "i"),
-      `README does not name CI-tested ${os}`,
+      new RegExp(
+        `${family(os)}[^.]*?(?:supported|the supported platforms)`,
+        "i",
+      ),
+      `README does not mark CI-tested ${os} as supported`,
     );
-  assert.match(line, /Windows is not tested|Windows as unsupported/i);
+  assert.match(
+    line,
+    /Windows is not tested|Windows as unsupported|Windows[^.]*?untested/i,
+    "the README calls Windows untested",
+  );
 });
 
 test("the README has its required sections, a lead before them, related work as a link, and a signal table that matches the catalog", () => {

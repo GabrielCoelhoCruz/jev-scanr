@@ -285,6 +285,44 @@ test("variance re-bands at each signal's real cut from cuts.json, not the old gl
   );
 });
 
+test("the variance CLI forwards --cut to the re-band instead of ignoring it", async (t) => {
+  const p = plan(t);
+  const dir = join(scratch(t), "base");
+  await run(
+    p,
+    dir,
+    fake(async (r) => response(r, positive(0.8))),
+  );
+  const planFile = join(scratch(t), "plan.json");
+  writeFileSync(planFile, JSON.stringify(p));
+  const out = join(scratch(t), "variance-out");
+  await main(
+    [
+      "variance",
+      "--plan",
+      planFile,
+      "--run-dir",
+      dir,
+      "--n",
+      "1",
+      "--seed",
+      "s",
+      "--yes",
+      "--cap-usd",
+      "1",
+      "--out",
+      out,
+      "--cut",
+      "0.9",
+    ],
+    { client: fake(async (r) => response(r, positive(0.8))), intervalMs: 0 },
+  );
+  const result = JSON.parse(readFileSync(join(out, "variance.json"), "utf8"));
+  assert.equal(result.cut, 0.9, "the --cut override reaches the output");
+  assert.match(result.cutMeaning, /override cut 0\.9/);
+  process.exitCode = 0;
+});
+
 test("judge tasks use a different prompt from the question, carry known-negative controls, and reject a Jev judge", () => {
   const { meta, tasks } = buildJudgeTasks(itemsFromCases(starter));
   assert.equal(meta.controls, 3);

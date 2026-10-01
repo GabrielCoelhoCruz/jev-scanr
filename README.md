@@ -179,7 +179,7 @@ node src/cli.mjs scan examples/demo-app                  # the same CLI without 
 
 Tests never call Jev and never need a key. How the pipeline works is in [`docs/architecture.md`](docs/architecture.md), and the evaluation tools are in [`evals/README.md`](evals/README.md). Contributions are welcome, especially new questions with evidence and labels from your own project: read [`CONTRIBUTING.md`](CONTRIBUTING.md), including the rule a signal must pass to be on by default. Releases are described in [`docs/RELEASING.md`](docs/RELEASING.md); the package is not published to npm. If a command fails or a run stops early, [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) maps the error to a fix.
 
-**Supported platforms.** CI runs the test suite on Linux (ubuntu) and macOS, so those are the supported platforms. Windows is not tested and is untested here: `jevs` should work wherever Node.js 24 runs, but no CI job covers it, so treat Windows as unsupported until it is tested.
+**Supported platforms.** CI runs the test suite on Linux (ubuntu) and macOS, so those are the supported platforms. Windows is not tested: `jevs` should work wherever Node.js 24 runs, but no CI job covers it, so treat Windows as unsupported until it is tested.
 
 ## Related
 
