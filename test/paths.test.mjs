@@ -183,6 +183,65 @@ test("reports carry the coverage so a partial scan cannot look complete", (t) =>
   void readFileSync;
 });
 
+test("a scan cut by the entry limit marks what it did not visit and never shows a closed percentage", (t) => {
+  const root = project(t, {
+    "a/one.ts": clone("aOne"),
+    "a/three.ts": clone("aThree", "30"),
+    "a/two.ts": clone("aTwo", "20"),
+    "b/four.ts": clone("bFour", "40"),
+    "tsconfig.json": "{}",
+    "z.ts": clone("zFn", "50"),
+  });
+  const p = buildPlan(root, { limits: { maxEntries: 3 } });
+  assert.equal(p.coverage.traversalComplete, false);
+  assert.equal(p.coverage.entriesVisited, 3);
+  assert.deepEqual(
+    p.files.filter((f) => f.status === "entry_limit"),
+    [
+      { path: "a", status: "entry_limit", unvisitedEntries: 1 },
+      { path: ".", status: "entry_limit", unvisitedEntries: 3 },
+    ],
+  );
+  const report = buildReport(p, []);
+  assert.equal(report.coverage.traversalComplete, false);
+  assert.equal(report.coverage.unvisitedEntries, 4);
+  const md = reportMarkdown(report);
+  assert.match(
+    md,
+    /Coverage: read 2 source files; the total is unknown because the scan stopped at the entry limit, with at least 4 entries not visited\./,
+  );
+  assert.doesNotMatch(md, /Coverage: read \d+ of|%\)/);
+  const lines = coverageLines(p.coverage.sourceFiles, [], [], {
+    traversalComplete: p.coverage.traversalComplete,
+    unvisitedEntries: report.coverage.unvisitedEntries,
+    entryLimit: 3,
+  }).join("\n");
+  assert.equal(
+    lines,
+    "Coverage: read 2 source files; the total is unknown because the scan stopped at the 3-entry limit (at least 4 entries were not visited).",
+  );
+
+  const old = structuredClone(p);
+  old.files = old.files.filter((f) => f.status !== "entry_limit");
+  reseal(old);
+  const oldReport = buildReport(old, []);
+  assert.equal(oldReport.coverage.unvisitedEntries, 0);
+  const oldMd = reportMarkdown(oldReport);
+  assert.match(
+    oldMd,
+    /Coverage: read 2 source files; the total is unknown because the scan stopped at the entry limit\./,
+  );
+  assert.doesNotMatch(oldMd, /100%/);
+  assert.equal(
+    coverageLines(old.coverage.sourceFiles, [], [], {
+      traversalComplete: false,
+      unvisitedEntries: 0,
+      entryLimit: 3,
+    }).join("\n"),
+    "Coverage: read 2 source files; the total is unknown because the scan stopped at the 3-entry limit.",
+  );
+});
+
 const manyFunctions = (t, n) =>
   project(t, {
     "many.ts":

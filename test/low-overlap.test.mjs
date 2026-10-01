@@ -120,6 +120,55 @@ test("a cap of 0 turns the source off", (t) => {
   assert.equal(plan.retrieval.lowOverlap.cap, 0);
 });
 
+test("function-only scans skip clone retrieval and keep its public shape", (t) => {
+  const root = project(t, rewrittenCopies);
+  const plan = buildPlan(root, { signals: ["function_should_split"] });
+  assert.deepEqual(
+    {
+      functionsIndexed: plan.coverage.functionsIndexed,
+      clonePool: plan.coverage.clonePool,
+      comparisons: plan.coverage.comparisons,
+      eligiblePairs: plan.coverage.eligiblePairs,
+      candidateCount: plan.coverage.candidateCount,
+      lowOverlap: plan.coverage.lowOverlap,
+      functionUnits: plan.coverage.functionUnits,
+      pairUnits: plan.coverage.pairUnits,
+    },
+    {
+      functionsIndexed: 11,
+      clonePool: 0,
+      comparisons: 0,
+      eligiblePairs: 0,
+      candidateCount: 0,
+      lowOverlap: { candidates: 0 },
+      functionUnits: 5,
+      pairUnits: 0,
+    },
+  );
+  assert.deepEqual(plan.clusters, []);
+  assert.deepEqual(plan.coverage.generatorOmissions, []);
+  assert.deepEqual(plan.retrieval, {
+    minLines: 8,
+    minJaccard: 0.45,
+    minSizeRatio: 0.5,
+    includeTests: false,
+    lowOverlap: {
+      cap: 50,
+      minScore: 0.6,
+      minSurface: 3,
+      maxDocumentFrequency: 250,
+    },
+  });
+  assert.throws(
+    () =>
+      buildPlan(root, {
+        signals: ["function_should_split"],
+        retrieval: { lowOverlap: { cap: -1 } },
+      }),
+    /Invalid retrieval options/,
+  );
+});
+
 test("unrelated functions and near copies stay with their own source", (t) => {
   const unrelated = candidatesOf(project(t, { "other.ts": OTHER }));
   assert.equal(unrelated.candidates.length, 0);

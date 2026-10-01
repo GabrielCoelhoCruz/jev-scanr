@@ -42,7 +42,7 @@ test("the folder `jevs demo` points to re-cuts offline, with no key and nothing 
   assert.deepEqual(readdirSync(folder).sort(), before);
   assert.match(
     readFileSync(join(out, "queue.md"), "utf8"),
-    /^## 5\. registerUser src\/signup\.ts:1–27 · function_should_split@1\.0\.0 · P=0\.52$/m,
+    /^## 3\. registerUser src\/signup\.ts:1–27 · function_should_split@1\.0\.0 · P=0\.52$/m,
   );
   const recorded = run(
     ["rescore", folder, "--cut", "0.7", "--out", join(cwd, "recorded")],

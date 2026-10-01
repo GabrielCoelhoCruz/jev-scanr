@@ -68,6 +68,57 @@ test("ordering and findings come only from Jev probabilities", async (t) => {
   assert.ok(!JSON.stringify(report).includes("deterministicScore"));
 });
 
+test("queues group by signal and compare probabilities only within each signal", async (t) => {
+  const p = plan(
+    t,
+    { "a.ts": clone("alpha") + clone("beta", "20") },
+    { signals: ["function_should_split", "name_vs_behavior"] },
+  );
+  const dir = join(scratch(t), "run");
+  await run(
+    p,
+    dir,
+    fake(async (request) =>
+      response(request, (id, signal, negative) => {
+        const name = request.state.members[0].name;
+        const probability = {
+          function_should_split: { alpha: 0.71, beta: 0.7 },
+          name_vs_behavior: { alpha: 0.99, beta: 0.69 },
+        }[id][name];
+        return {
+          choice: signal.presence,
+          probabilities: {
+            [signal.presence]: probability,
+            [negative]: 1 - probability,
+          },
+        };
+      }),
+    ),
+  );
+  const report = buildReport(p, readJournal(dir, p), {
+    thresholds: { function_should_split: 0.7, name_vs_behavior: 0.5 },
+  });
+  assert.deepEqual(
+    report.findings.map((finding) => [
+      finding.signalId,
+      finding.location[0].name,
+      finding.pPositive,
+    ]),
+    [
+      ["function_should_split", "alpha", 0.71],
+      ["function_should_split", "beta", 0.7],
+      ["name_vs_behavior", "alpha", 0.99],
+      ["name_vs_behavior", "beta", 0.69],
+    ],
+  );
+  const queue = queueMarkdown(report);
+  assert.ok(
+    queue.indexOf("**function_should_split@1.0.0 (2).**") <
+      queue.indexOf("**name_vs_behavior@0.1.0 (2).**"),
+  );
+  assert.match(queue, /P is never compared across signals/);
+});
+
 test("unanswered cells are abstentions, never scores", (t) => {
   const p = plan(t);
   const report = buildReport(p, []);

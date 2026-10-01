@@ -178,8 +178,16 @@ export function readSnapshot(
       files.push({ path: prefix, status: "unreadable_directory" });
       return;
     }
-    for (const name of children) {
-      if (++entries > limits.maxEntries) return;
+    for (const [i, name] of children.entries()) {
+      if (entries >= limits.maxEntries) {
+        files.push({
+          path: prefix || ".",
+          status: "entry_limit",
+          unvisitedEntries: children.length - i,
+        });
+        return;
+      }
+      entries++;
       const path = prefix ? `${prefix}/${name}` : name;
       if (!admissible(path)) {
         files.push({ path, status: "excluded_path" });
@@ -238,8 +246,8 @@ export function readSnapshot(
           (f) => f.status === "file_or_byte_limit",
         ).length,
       },
-      entriesVisited: Math.min(entries, limits.maxEntries),
-      traversalComplete: entries <= limits.maxEntries,
+      entriesVisited: entries,
+      traversalComplete: !files.some((f) => f.status === "entry_limit"),
       filesRead: readFiles,
       sourceBytesRead: bytes,
       snapshotAtomic: false,

@@ -266,14 +266,20 @@ const n = (x) => x.toLocaleString("en-US");
 export function coverageLines(c, paths, unread, extra = {}) {
   if (!c) return [];
   const lines = [];
-  const pct = c.inScope ? Math.round((c.read / c.inScope) * 100) : 100;
-  if (paths.length)
+  if (extra.traversalComplete === false)
     lines.push(
-      `Scope: --paths ${paths.join(",")} covers ${n(c.inScope)} of ${n(c.inProject)} source files in the project.`,
+      `Coverage: read ${n(c.read)} source files${paths.length ? ` in scope (--paths ${paths.join(",")})` : ""}; the total is unknown because the scan stopped at the ${n(extra.entryLimit)}-entry limit${extra.unvisitedEntries ? ` (at least ${n(extra.unvisitedEntries)} entries were not visited)` : ""}.`,
     );
-  lines.push(
-    `Coverage: read ${n(c.read)} of ${n(c.inScope)} source files${paths.length ? " in scope" : ""} (${pct}%).`,
-  );
+  else {
+    const pct = c.inScope ? Math.round((c.read / c.inScope) * 100) : 100;
+    if (paths.length)
+      lines.push(
+        `Scope: --paths ${paths.join(",")} covers ${n(c.inScope)} of ${n(c.inProject)} source files in the project.`,
+      );
+    lines.push(
+      `Coverage: read ${n(c.read)} of ${n(c.inScope)} source files${paths.length ? " in scope" : ""} (${pct}%).`,
+    );
+  }
   if (c.unreadByFileOrByteCap > 0)
     lines.push(
       `NOT READ because of the ${n(500)}-file / size cap (files are taken in path order): ${n(c.unreadByFileOrByteCap)} source files, in ${unread
@@ -321,6 +327,7 @@ const FILE_STATUS = {
   non_regular_or_multilink: "not a regular file",
   symlink: "symlink (never followed)",
   unsupported_config_extension: "unsupported configuration file",
+  entry_limit: "directory not fully visited (entry limit)",
 };
 const fileStatus = (k) => FILE_STATUS[k] ?? k.replaceAll("_", " ");
 
@@ -350,6 +357,12 @@ function summary(plan) {
     pairUnits: plan.coverage.pairUnits,
     lowOverlapPairs: plan.coverage.lowOverlap?.candidates ?? 0,
     coverage: plan.coverage.sourceFiles ?? null,
+    traversalComplete: plan.coverage.traversalComplete,
+    unvisitedEntries: plan.files.reduce(
+      (sum, f) => sum + (f.status === "entry_limit" ? f.unvisitedEntries : 0),
+      0,
+    ),
+    entryLimit: plan.limits.maxEntries,
     paths: plan.scope?.paths ?? [],
     unread: unreadByDirectory(plan),
     unindexed: unindexedByDirectory(plan),
@@ -371,7 +384,7 @@ function printSummary(plan, s) {
       `Signals: ${s.signals.join(", ")}`,
       `Files: ${s.files.read ?? 0} read (source and configuration), ${
         Object.entries(s.files)
-          .filter(([k]) => k !== "read" && k !== "non_source")
+          .filter(([k]) => !["read", "non_source", "entry_limit"].includes(k))
           .map(([k, v]) => `${v} ${fileStatus(k)}`)
           .join(", ") || "none skipped"
       }`,
@@ -587,7 +600,11 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     verifyPlan(plan);
     thresholds(values, plan);
     floors(values, plan);
-    if (values.paths && plan.coverage.sourceFiles?.inScope === 0)
+    if (
+      values.paths &&
+      plan.coverage.traversalComplete !== false &&
+      plan.coverage.sourceFiles?.inScope === 0
+    )
       throw Error("--paths matched no source files under PATH");
     printSummary(plan, summary(plan));
     if (values["list-files"]) {

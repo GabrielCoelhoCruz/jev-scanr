@@ -275,17 +275,20 @@ export function buildReport(
       notAPatchInstruction: true,
     };
   };
-  const byP = (a, b) =>
+  const signalRank = new Map(
+    catalog.signals.map((signal, i) => [signal.id, i]),
+  );
+  const bySignalThenP = (a, b) =>
+    signalRank.get(a.signalId) - signalRank.get(b.signalId) ||
     b.pPositive - a.pPositive ||
-    a.signalId.localeCompare(b.signalId) ||
     a.packId.localeCompare(b.packId);
   const findings = cells
     .filter((c) => c.shown)
-    .sort(byP)
+    .sort(bySignalThenP)
     .map(toFinding);
   const uncertain = cells
     .filter((c) => c.band === "uncertain")
-    .sort(byP)
+    .sort(bySignalThenP)
     .map(toFinding);
   const statusCounts = cells.reduce(
     (a, c) => ((a[c.status] = (a[c.status] ?? 0) + 1), a),
@@ -309,6 +312,14 @@ export function buildReport(
           .map((o) => o.path),
       ).size,
       unitsNotPacked: plan.coverage.unitsNotPacked ?? 0,
+      ...(plan.coverage.traversalComplete === false && {
+        traversalComplete: false,
+        unvisitedEntries: plan.files.reduce(
+          (sum, f) =>
+            sum + (f.status === "entry_limit" ? f.unvisitedEntries : 0),
+          0,
+        ),
+      }),
     },
     cells: cells.length,
     units: plan.units.length,
@@ -388,7 +399,7 @@ export function queueMarkdown(report) {
     "",
     "**How to use this file.** Hand it to a person or a coding agent. For each item, read the listed lines, answer the question yourself, and change nothing if it does not hold. `no change` is a valid outcome. Verify before editing. Signals marked *experimental* have too little evidence to trust; see EVIDENCE.md.",
     "",
-    `**Worth a look (${report.findings.length}).** Candidates at or above each signal's cut, ordered by Jev's probability for the positive option (highest first).`,
+    `**Worth a look (${report.findings.length}).** Candidates at or above each signal's cut, grouped by signal. Within a signal they are ordered by Jev's probability for the positive option (highest first). P is never compared across signals because each signal has its own question and cut.`,
     "",
   ];
   const item = (f, i, level, label = "") =>
@@ -411,8 +422,26 @@ export function queueMarkdown(report) {
         : "- **Context Jev did not get:** none recorded; dynamic or external context may still be missing.",
       "",
     );
+  const groupedItems = (items, offset, level, label = "") => {
+    for (let start = 0; start < items.length;) {
+      let end = start + 1;
+      while (
+        end < items.length &&
+        items[end].signalId === items[start].signalId
+      )
+        end++;
+      const first = items[start];
+      lines.push(
+        `**${first.signalId}@${first.signalVersion} (${end - start}).** Ordered by P within this signal only.`,
+        "",
+      );
+      for (let i = start; i < end; i++)
+        item(items[i], offset + i, level, label);
+      start = end;
+    }
+  };
   if (!report.findings.length) lines.push("None.", "");
-  report.findings.forEach((f, i) => item(f, i, "##"));
+  groupedItems(report.findings, 0, "##");
   lines.push(
     "---",
     "",
@@ -420,9 +449,7 @@ export function queueMarkdown(report) {
     "",
   );
   if (!uncertain.length) lines.push("None.", "");
-  uncertain.forEach((f, i) =>
-    item(f, report.findings.length + i, "###", " · uncertain"),
-  );
+  groupedItems(uncertain, report.findings.length, "###", " · uncertain");
   lines.push(
     "---",
     "",
@@ -461,7 +488,12 @@ export function reportMarkdown(report, accounting = null) {
   if (partial.length)
     lines.push(`Not fully covered: ${partial.join("; ")}.`, "");
   const c = report.coverage?.sourceFiles;
-  if (c)
+  if (c && report.coverage.traversalComplete === false)
+    lines.push(
+      `Coverage: read ${c.read.toLocaleString("en-US")} source files${report.coverage.paths.length ? ` in scope (--paths ${report.coverage.paths.join(",")})` : ""}; the total is unknown because the scan stopped at the entry limit${report.coverage.unvisitedEntries ? `, with at least ${report.coverage.unvisitedEntries.toLocaleString("en-US")} entries not visited` : ""}.${c.unreadByFileOrByteCap ? ` ${c.unreadByFileOrByteCap.toLocaleString("en-US")} source files were not read because of the file cap.` : ""}`,
+      "",
+    );
+  else if (c)
     lines.push(
       `Coverage: read ${c.read.toLocaleString("en-US")} of ${c.inScope.toLocaleString("en-US")} source files${report.coverage.paths.length ? ` in scope (--paths ${report.coverage.paths.join(",")}; ${c.inProject.toLocaleString("en-US")} in the project)` : ""} (${c.inScope ? Math.round((c.read / c.inScope) * 100) : 100}%).${c.unreadByFileOrByteCap ? ` ${c.unreadByFileOrByteCap.toLocaleString("en-US")} source files were not read because of the file cap.` : ""}`,
       "",

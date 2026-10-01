@@ -6,7 +6,12 @@ import { buildPlan } from "../src/build-plan.mjs";
 import { buildIndex } from "../src/index.mjs";
 import { readSnapshot } from "../src/snapshot.mjs";
 import { nameCue, nameWords } from "../src/name-cue.mjs";
-import { verifyPlan } from "../src/plan.mjs";
+import {
+  applyQuestionEligibility,
+  packBudget,
+  requestFor,
+  verifyPlan,
+} from "../src/plan.mjs";
 import { catalogHashFor, defaultSignalIds } from "../src/catalog.mjs";
 import { nameWords as contrastNameWords } from "../evals/contrast/lib/code.mjs";
 import { hash } from "../src/core.mjs";
@@ -72,6 +77,57 @@ test("without --name-cue name_vs_behavior asks every function", (t) => {
     plan.unitManifest.every((u) => !("nameCueAbsent" in u)),
     true,
   );
+});
+
+test("new plans never ask name_vs_behavior about an unnamed function", (t) => {
+  const root = project(t, {
+    "a.ts": "[1, 2].forEach((row) => { console.log(row); });\n",
+  });
+  const namingOnly = buildPlan(root, { signals: ["name_vs_behavior"] });
+  assert.equal(namingOnly.requests.length, 0);
+
+  const mixed = buildPlan(root, {
+    signals: ["function_should_split", "name_vs_behavior"],
+  });
+  assert.deepEqual(Object.keys(mixed.requests[0].request.questions), [
+    "function_should_split",
+  ]);
+  assert.deepEqual(
+    mixed.unitManifest.map((unit) => [unit.signals, unit.nameCueAbsent]),
+    [[["function_should_split"], false]],
+  );
+  assert.equal(verifyPlan(mixed), mixed);
+});
+
+test("a plan sealed before the unnamed-function rule keeps its naming question", (t) => {
+  const plan = buildPlan(
+    project(t, {
+      "a.ts": "[1, 2].forEach((row) => { console.log(row); });\n",
+    }),
+    { signals: ["function_should_split", "name_vs_behavior"] },
+  );
+  const old = structuredClone(plan);
+  delete old.units[0].facts.nameCue;
+  delete old.unitManifest[0].nameCueAbsent;
+  old.unitManifest[0].signals = ["function_should_split", "name_vs_behavior"];
+  applyQuestionEligibility(old.units[0]);
+  old.units[0].budget = packBudget(old.units[0], old.limits);
+  const request = requestFor(old.units[0]);
+  old.requests = [
+    {
+      unitId: old.units[0].id,
+      requestHash: hash(request),
+      serializedBytes: Buffer.byteLength(JSON.stringify(request)),
+      request,
+    },
+  ];
+  reseal(old);
+
+  assert.equal(verifyPlan(old), old);
+  assert.deepEqual(Object.keys(old.requests[0].request.questions), [
+    "function_should_split",
+    "name_vs_behavior",
+  ]);
 });
 
 test("with the name cue on, name_vs_behavior asks only the functions whose name words are absent from the body", (t) => {
