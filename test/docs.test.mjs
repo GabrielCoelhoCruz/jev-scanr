@@ -6,6 +6,7 @@ import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCANNER_VERSION } from "../src/plan.mjs";
 import { HELP } from "../src/cli.mjs";
+import { ruleSHA256 } from "../evals/lib/gate.mjs";
 import {
   allSignals,
   optInSignalIds,
@@ -225,7 +226,7 @@ test("the README has its required sections, a lead before them, related work as 
   assert.ok(!/jevgrep/i.test(read("NOTICE.md")));
   const rows = [
     ...readme.matchAll(
-      /^\| `([a-z_]+)`\s+\|[^|]*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|\s*([^|]*?)\s*\|$/gm,
+      /^\| `([a-z_]+)`\s+\|[^|]*\|\s*([^|]*?)\s+\|\s*([^|]*?)\s+\|$/gm,
     ),
   ];
   assert.deepEqual(
@@ -235,7 +236,7 @@ test("the README has its required sections, a lead before them, related work as 
       .filter((id) => !optInSignalIds.includes(id))
       .sort(),
   );
-  for (const [, id, status, independent, dev] of rows) {
+  for (const [, id, status, independent] of rows) {
     const s = JSON.parse(read(`signals/${id}.json`));
     assert.equal(status, signalStatusLabel(s), id);
     const t = s.independentTest;
@@ -246,9 +247,14 @@ test("the README has its required sections, a lead before them, related work as 
         : "no items",
       id,
     );
-    const e = s.evidence[0];
-    assert.equal(dev, `${e.actionableAboveCut}/${e.reviewedAboveCut}`, id);
   }
+});
+
+test("the CONTRIBUTING pre-registration hash is the rule hash the gate code computes", () => {
+  assert.ok(
+    read("CONTRIBUTING.md").includes(ruleSHA256()),
+    "CONTRIBUTING quotes a stale gate rule hash",
+  );
 });
 
 test("the npm package ships the tool and its notices, not the evaluation tools or development scripts", () => {
