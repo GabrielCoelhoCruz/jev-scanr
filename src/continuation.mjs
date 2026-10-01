@@ -1,5 +1,5 @@
-import { hash, POLICY } from "./core.mjs";
-import { verifyPlan } from "./plan.mjs";
+import { hash } from "./core.mjs";
+import { verifyPlan, estimateTotals } from "./plan.mjs";
 import { summarize } from "./runner.mjs";
 
 const sameRequests = (a, b) =>
@@ -55,29 +55,13 @@ export function subsetPlan(basePlan, requestUnitIds, extra) {
     basePlan.units.some((q) => q.unitId === p.unitId && chosen.has(q.id)),
   );
   const unitIds = new Set(units.map((p) => p.unitId));
-  const bytes = requests.reduce((n, r) => n + r.serializedBytes, 0);
   const { planHash: basePlanHash, ...base } = basePlan;
   const plan = {
     ...base,
     unitManifest: basePlan.unitManifest.filter((u) => unitIds.has(u.unitId)),
     units,
     requests,
-    estimates: {
-      ...basePlan.estimates,
-      requests: requests.length,
-      questions: requests.reduce(
-        (n, r) => n + Object.keys(r.request.questions).length,
-        0,
-      ),
-      serializedRequestBytes: bytes,
-      heuristicInputTokensBytesDiv3: Math.ceil(bytes / 3),
-      heuristicUSDBytesDiv3:
-        (Math.ceil(bytes / 3) * POLICY.inputUSDPerMillion) / 1e6,
-      USDOneBytePerTokenSensitivity: (bytes * POLICY.inputUSDPerMillion) / 1e6,
-      fullProviderReservationUSD:
-        (requests.length * POLICY.maxInputTokens * POLICY.inputUSDPerMillion) /
-        1e6,
-    },
+    estimates: estimateTotals(requests),
     ...extra(basePlanHash, requests),
   };
   return verifyPlan({ ...plan, planHash: hash(plan) });

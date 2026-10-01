@@ -312,6 +312,7 @@ export function buildReport(
           .map((o) => o.path),
       ).size,
       unitsNotPacked: plan.coverage.unitsNotPacked ?? 0,
+      packsWithoutRequest: plan.coverage.splits?.noRequestPacks ?? 0,
       ...(plan.coverage.traversalComplete === false && {
         traversalComplete: false,
         unvisitedEntries: plan.files.reduce(
@@ -532,6 +533,9 @@ export function reportMarkdown(report, accounting = null) {
       : null,
     report.coverage?.unitsNotPacked
       ? `${report.coverage.unitsNotPacked.toLocaleString("en-US")} units were not packed (unit limit)`
+      : null,
+    report.coverage?.packsWithoutRequest
+      ? `${report.coverage.packsWithoutRequest.toLocaleString("en-US")} units sent no request (abstained or no eligible question)`
       : null,
   ].filter(Boolean);
   if (partial.length)

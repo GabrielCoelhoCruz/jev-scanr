@@ -9,6 +9,26 @@ import { LIMITS, safeRelative } from "./snapshot.mjs";
 
 export { catalog };
 export const UNIT_KINDS = ["function", "function_chunk", "clone_pair"];
+export const estimateTotals = (requests) => {
+  const total = requests.reduce((n, r) => n + r.serializedBytes, 0);
+  return {
+    requests: requests.length,
+    questions: requests.reduce(
+      (n, r) => n + Object.keys(r.request.questions).length,
+      0,
+    ),
+    serializedRequestBytes: total,
+    heuristicInputTokensBytesDiv3: Math.ceil(total / 3),
+    heuristicUSDBytesDiv3:
+      (Math.ceil(total / 3) * POLICY.inputUSDPerMillion) / 1e6,
+    USDOneBytePerTokenSensitivity: (total * POLICY.inputUSDPerMillion) / 1e6,
+    fullProviderReservationUSD:
+      (requests.length * POLICY.maxInputTokens * POLICY.inputUSDPerMillion) /
+      1e6,
+    invoiceVerified: false,
+    notTokenizer: true,
+  };
+};
 export const appliesToUnit = (signal, nameCueAbsent) =>
   !signal.unitFilter || nameCueAbsent !== false;
 export function packSignals(pack) {
@@ -114,18 +134,26 @@ export function requestFor(pack, { includeIneligible = false } = {}) {
   };
 }
 export function packBudget(pack, limits) {
-  const request =
-      requestFor({ ...pack, status: "eligible" }) ??
-      requestFor({ ...pack, status: "eligible" }, { includeIneligible: true }),
-    serializedBytes = Buffer.byteLength(JSON.stringify(request));
+  const request = requestFor(pack),
+    caps = {
+      heuristicTargetTokens: 6000,
+      notTokenizer: true,
+      hardByteCap: limits.maxHardRequestBytes ?? limits.maxRequestBytes,
+      providerInputTokenCap: POLICY.maxInputTokens,
+      providerStatePlusLongestQuestionTokenCap: 32768,
+    };
+  if (!request)
+    return {
+      serializedRequestBytes: 0,
+      heuristicInputTokensBytesDiv3: 0,
+      ...caps,
+      statePlusLongestQuestionBytes: 0,
+    };
+  const serializedBytes = Buffer.byteLength(JSON.stringify(request));
   return {
     serializedRequestBytes: serializedBytes,
     heuristicInputTokensBytesDiv3: Math.ceil(serializedBytes / 3),
-    heuristicTargetTokens: 6000,
-    notTokenizer: true,
-    hardByteCap: limits.maxHardRequestBytes ?? limits.maxRequestBytes,
-    providerInputTokenCap: POLICY.maxInputTokens,
-    providerStatePlusLongestQuestionTokenCap: 32768,
+    ...caps,
     statePlusLongestQuestionBytes:
       Buffer.byteLength(JSON.stringify(request.state)) +
       Math.max(
@@ -464,7 +492,21 @@ export function verifyPlan(plan) {
         )
           throw Error("Uncovered required reference");
     const request = requestFor(base);
-    if (!request) continue;
+    if (hash(pack.budget) !== hash(packBudget(base, plan.limits)))
+      throw Error("Budget mismatch");
+    if (!request) {
+      const signals = packSignals(pack);
+      const abstained =
+        signals.length > 0 &&
+        pack.omitted.some(
+          (o) => o.what === "unit_request" && o.decisive === true,
+        );
+      const unanswered =
+        signals.length === 0 && pack.status === "insufficient_context";
+      if (!abstained && !unanswered)
+        throw Error("Pack without a request must abstain visibly");
+      continue;
+    }
     const serializedBytes = Buffer.byteLength(JSON.stringify(request));
     if (
       serializedBytes >
@@ -482,5 +524,8 @@ export function verifyPlan(plan) {
   verifyUnitManifest(plan);
   if (hash(requests) !== hash(plan.requests))
     throw Error("Request matrix mismatch");
+  const expectedEstimates = estimateTotals(requests);
+  if (!plan.estimates || hash(plan.estimates) !== hash(expectedEstimates))
+    throw Error("Estimates mismatch");
   return plan;
 }

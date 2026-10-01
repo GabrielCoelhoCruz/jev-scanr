@@ -8,6 +8,7 @@ import { readSnapshot } from "../src/snapshot.mjs";
 import { nameCue, nameWords } from "../src/name-cue.mjs";
 import {
   applyQuestionEligibility,
+  estimateTotals,
   packBudget,
   requestFor,
   verifyPlan,
@@ -121,6 +122,7 @@ test("a plan sealed before the unnamed-function rule keeps its naming question",
       request,
     },
   ];
+  old.estimates = estimateTotals(old.requests);
   reseal(old);
 
   assert.equal(verifyPlan(old), old);

@@ -13,6 +13,7 @@ import {
   applyQuestionEligibility,
   questionEligibility,
   verifyPlan,
+  estimateTotals,
   PLAN_SCHEMA,
   SCANNER_VERSION,
 } from "./plan.mjs";
@@ -66,6 +67,7 @@ export function buildPlan(root, options = {}) {
       questionGroups: 0,
       lineWindows: 0,
       abstainedUnits: 0,
+      noRequestPacks: 0,
     };
   const finalize = (pack) => {
     pack.contextVersion = "0.3.1";
@@ -254,6 +256,7 @@ export function buildPlan(root, options = {}) {
   const requests = packs.flatMap((p) => {
     const { contentHash, ...body } = p;
     const request = requestFor(body);
+    if (!request) splits.noRequestPacks++;
     return request
       ? [
           {
@@ -265,7 +268,6 @@ export function buildPlan(root, options = {}) {
         ]
       : [];
   });
-  const total = requests.reduce((n, r) => n + r.serializedBytes, 0);
   const plan = {
     schema: PLAN_SCHEMA,
     scannerVersion: SCANNER_VERSION,
@@ -315,23 +317,7 @@ export function buildPlan(root, options = {}) {
     clusters: generated.clusters,
     units: packs,
     requests,
-    estimates: {
-      requests: requests.length,
-      questions: requests.reduce(
-        (n, r) => n + Object.keys(r.request.questions).length,
-        0,
-      ),
-      serializedRequestBytes: total,
-      heuristicInputTokensBytesDiv3: Math.ceil(total / 3),
-      heuristicUSDBytesDiv3:
-        (Math.ceil(total / 3) * POLICY.inputUSDPerMillion) / 1e6,
-      USDOneBytePerTokenSensitivity: (total * POLICY.inputUSDPerMillion) / 1e6,
-      fullProviderReservationUSD:
-        (requests.length * POLICY.maxInputTokens * POLICY.inputUSDPerMillion) /
-        1e6,
-      invoiceVerified: false,
-      notTokenizer: true,
-    },
+    estimates: estimateTotals(requests),
   };
   const sealed = { ...plan, planHash: hash(plan) };
   return verifyPlan(sealed);
