@@ -309,6 +309,14 @@ export function buildReport(
           .map((o) => o.path),
       ).size,
       unitsNotPacked: plan.coverage.unitsNotPacked ?? 0,
+      ...(plan.coverage.traversalComplete === false && {
+        traversalComplete: false,
+        unvisitedEntries: plan.files.reduce(
+          (sum, f) =>
+            sum + (f.status === "entry_limit" ? f.unvisitedEntries : 0),
+          0,
+        ),
+      }),
     },
     cells: cells.length,
     units: plan.units.length,
@@ -461,7 +469,12 @@ export function reportMarkdown(report, accounting = null) {
   if (partial.length)
     lines.push(`Not fully covered: ${partial.join("; ")}.`, "");
   const c = report.coverage?.sourceFiles;
-  if (c)
+  if (c && report.coverage.traversalComplete === false)
+    lines.push(
+      `Coverage: read ${c.read.toLocaleString("en-US")} source files${report.coverage.paths.length ? ` in scope (--paths ${report.coverage.paths.join(",")})` : ""}; the total is unknown because the scan stopped at the entry limit${report.coverage.unvisitedEntries ? `, with at least ${report.coverage.unvisitedEntries.toLocaleString("en-US")} entries not visited` : ""}.${c.unreadByFileOrByteCap ? ` ${c.unreadByFileOrByteCap.toLocaleString("en-US")} source files were not read because of the file cap.` : ""}`,
+      "",
+    );
+  else if (c)
     lines.push(
       `Coverage: read ${c.read.toLocaleString("en-US")} of ${c.inScope.toLocaleString("en-US")} source files${report.coverage.paths.length ? ` in scope (--paths ${report.coverage.paths.join(",")}; ${c.inProject.toLocaleString("en-US")} in the project)` : ""} (${c.inScope ? Math.round((c.read / c.inScope) * 100) : 100}%).${c.unreadByFileOrByteCap ? ` ${c.unreadByFileOrByteCap.toLocaleString("en-US")} source files were not read because of the file cap.` : ""}`,
       "",
