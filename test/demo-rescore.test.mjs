@@ -88,9 +88,9 @@ test("the shipped demo plan verifies, carries no machine path and holds the requ
   );
 });
 
-test("a journal recorded for another plan is refused in words, and a plan with other requests is refused as not its own", (t) => {
+test("the shipped demo run reports and continues offline from the plan shipped beside it, with no key", (t) => {
   const cwd = scratch(t);
-  const strict = run(
+  const reported = run(
     [
       "report",
       "--plan",
@@ -98,18 +98,50 @@ test("a journal recorded for another plan is refused in words, and a plan with o
       "--run-dir",
       expected,
       "--out",
-      join(cwd, "r"),
+      join(cwd, "report"),
     ],
     cwd,
   );
-  assert.equal(strict.status, 1);
+  assert.equal(reported.status, 0, reported.stderr);
+  assert.match(reported.stdout, /29 cells, 5 candidates/);
+  const queue = readFileSync(join(cwd, "report", "queue.md"), "utf8");
+  assert.ok(queue.startsWith("# Refactor queue"));
   assert.match(
-    strict.stderr,
-    /^Error: This journal was recorded for plan 65338442[0-9a-f]{4}…, but the plan given is [0-9a-f]{12}… \(scanner 0\.\d+\.\d+-alpha, root examples\/demo-app\)\. Use the plan\.json stored next to the run\n$/,
+    queue,
+    /^## 5\. registerUser src\/signup\.ts:1–27 · function_should_split@1\.0\.0 · P=0\.52$/m,
   );
+  const continued = run(
+    [
+      "continue",
+      "--plan",
+      join(expected, "plan.json"),
+      "--run-dir",
+      expected,
+      "--out",
+      join(cwd, "next.json"),
+    ],
+    cwd,
+  );
+  assert.equal(continued.status, 1);
+  assert.match(continued.stderr, /Nothing to continue/);
+});
+
+test("a journal whose answers belong to other requests is refused in words, through report and rescore alike", (t) => {
+  const cwd = scratch(t);
   const foreign = join(cwd, "foreign.json");
   writeFileSync(foreign, JSON.stringify(buildPlan(project(t, twoFiles))));
-  const rebound = run(
+  const refused =
+    /^Error: The plan given has no request with the content this run answered \(unit [0-9a-f]{12}…\)\. It was not built from the same code, so the stored answers do not belong to it\n$/;
+  for (const args of [
+    [
+      "report",
+      "--plan",
+      foreign,
+      "--run-dir",
+      expected,
+      "--out",
+      join(cwd, "r"),
+    ],
     [
       "rescore",
       expected,
@@ -120,11 +152,9 @@ test("a journal recorded for another plan is refused in words, and a plan with o
       "--out",
       join(cwd, "x"),
     ],
-    cwd,
-  );
-  assert.equal(rebound.status, 1);
-  assert.match(
-    rebound.stderr,
-    /^Error: The plan given has no request with the content this run answered \(unit [0-9a-f]{12}…\)\. It was not built from the same code, so the stored answers do not belong to it\n$/,
-  );
+  ]) {
+    const result = run(args, cwd);
+    assert.equal(result.status, 1);
+    assert.match(result.stderr, refused);
+  }
 });
