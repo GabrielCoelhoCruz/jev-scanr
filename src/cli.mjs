@@ -63,12 +63,13 @@ Usage
   jevs scan PATH --run --yes --cap-usd N [options]
                                                 sends source excerpts to the Jev API and writes the report
   jevs report --plan PLAN --run-dir RUN --out DIR [--threshold 0.7] [--floor 0.5]
-                                                write the report for a stored plan and run, from its stored answers
+                                                write the report for a stored plan and run (RUN is a run folder or
+                                                a scan output folder), from its stored answers
   jevs rescore RUN [--cut N] [--floor N] [--cut-signal ID=N] [--floor-signal ID=N]
                                                 re-cut an existing run folder from its stored answers: no API call, no key;
                                                 writes RUN/rescored-<settings>/ (queue.md, report.md, report.json), never overwrites
   jevs continue --plan PLAN --run-dir RUN --out NEWPLAN
-                                                plan only the requests without an accepted answer
+                                                plan only the requests without an accepted answer (RUN as in report)
   jevs run --plan PLAN --out DIR --cap-usd N --yes
                                                 run an existing plan
   jevs signals                                  list the catalog and its evidence
@@ -397,6 +398,9 @@ function filesToSend(plan) {
   };
 }
 
+const journalDir = (path) =>
+  existsSync(join(path, "run", "journal.jsonl")) ? join(path, "run") : path;
+
 function writeReport(plan, events, out, extra = {}) {
   const report = buildReport(plan, events, {
     thresholds: extra.thresholds ?? {},
@@ -626,7 +630,15 @@ export async function main(args = process.argv.slice(2), deps = {}) {
       JSON.parse(readFileSync(resolve(values.plan), "utf8")),
     );
     const next = continuationPlan(plan, [
-      { plan, events: readJournal(resolve(values["run-dir"]), plan) },
+      {
+        plan,
+        events: readJournal(
+          journalDir(resolve(values["run-dir"])),
+          plan,
+          undefined,
+          { rebind: true },
+        ),
+      },
     ]);
     writeNew(outside(plan.root, values.out), next);
     printSummary(next, summary(next));
@@ -639,10 +651,13 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     );
     if (plan.continuationOf)
       throw Error("Report a continuation through its base plan");
-    let events = values["run-dir"]
-      ? readJournal(resolve(values["run-dir"]), plan)
+    const journal = values["run-dir"]
+      ? journalDir(resolve(values["run-dir"]))
+      : null;
+    let events = journal
+      ? readJournal(journal, plan, undefined, { rebind: true })
       : [];
-    if (values["run-dir"] && !events.length) throw Error("No recorded run");
+    if (journal && !events.length) throw Error(`No recorded run at ${journal}`);
     let runs = null,
       accounting = values["run-dir"] ? summarize(events, plan) : null;
     if (values["continuation-plan"] || values["continuation-run"]) {
@@ -659,7 +674,12 @@ export async function main(args = process.argv.slice(2), deps = {}) {
         { plan, events },
         {
           plan: next,
-          events: readJournal(resolve(values["continuation-run"]), next),
+          events: readJournal(
+            journalDir(resolve(values["continuation-run"])),
+            next,
+            undefined,
+            { rebind: true },
+          ),
         },
       ]));
       accounting = runs;
@@ -690,9 +710,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     const plan = verifyPlan(JSON.parse(readFileSync(planPath, "utf8")));
     if (plan.continuationOf)
       throw Error("Rescore a continuation with jevs report and its base plan");
-    const journal = existsSync(join(run, "run", "journal.jsonl"))
-      ? join(run, "run")
-      : run;
+    const journal = journalDir(run);
     const events = readJournal(journal, plan, undefined, { rebind: true });
     if (!events.length) throw Error(`No recorded answers in ${journal}`);
     const cuts = thresholds(values, plan),

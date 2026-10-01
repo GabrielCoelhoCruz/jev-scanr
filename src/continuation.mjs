@@ -2,15 +2,25 @@ import { hash, POLICY } from "./core.mjs";
 import { verifyPlan } from "./plan.mjs";
 import { summarize } from "./runner.mjs";
 
+const sameRequests = (a, b) =>
+  hash(a.requests.map((r) => [r.unitId, r.requestHash])) ===
+  hash(b.requests.map((r) => [r.unitId, r.requestHash]));
+
+const answersBelongTo = (plan, events) =>
+  events
+    .filter((e) => e.type === "reserved")
+    .every((e) =>
+      plan.requests.some(
+        (r) => r.unitId === e.unitId && r.requestHash === e.requestHash,
+      ),
+    );
+
 function mergeFinished(basePlan, runs) {
   const baseUnits = new Set(basePlan.requests.map((r) => r.unitId));
   const outcomes = new Map(),
     superseded = [];
   runs.forEach(({ plan, events }, runIndex) => {
-    if (
-      events[0]?.type !== "initialized" ||
-      events[0].planHash !== plan.planHash
-    )
+    if (events[0]?.type !== "initialized" || !answersBelongTo(plan, events))
       throw Error("Run journal does not belong to its plan");
     if (events[0].mode !== runs[0].events[0].mode)
       throw Error("Combined runs must share one mode");
@@ -77,7 +87,7 @@ export function continuationPlan(basePlan, priorRuns) {
   verifyPlan(basePlan);
   if (basePlan.continuationOf || basePlan.repeatOf)
     throw Error("Continuations extend one base plan");
-  if (priorRuns[0]?.plan.planHash !== basePlan.planHash)
+  if (!priorRuns[0] || !sameRequests(priorRuns[0].plan, basePlan))
     throw Error("The first prior run must be the base plan");
   const { outcomes } = mergeFinished(basePlan, priorRuns);
   const missing = basePlan.requests
@@ -108,13 +118,10 @@ export function continuationPlan(basePlan, priorRuns) {
 
 export function combineRuns(basePlan, runs) {
   verifyPlan(basePlan);
-  if (runs[0]?.plan.planHash !== basePlan.planHash)
+  if (!runs[0] || !sameRequests(runs[0].plan, basePlan))
     throw Error("The first run must be the base plan");
   runs.slice(1).forEach(({ plan }, i) => {
-    if (
-      continuationPlan(basePlan, runs.slice(0, i + 1)).planHash !==
-      plan.planHash
-    )
+    if (!sameRequests(continuationPlan(basePlan, runs.slice(0, i + 1)), plan))
       throw Error("Continuation plan does not match the prior runs");
   });
   const { outcomes, superseded } = mergeFinished(basePlan, runs);
