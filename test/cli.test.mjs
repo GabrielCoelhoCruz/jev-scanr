@@ -71,6 +71,28 @@ test("a scan is a dry run by default: it prints the estimate, needs no key and w
   assert.match(listed.stdout, /Files sent only as context for those \(0;/);
 });
 
+test("a dry-run scan of an oversized function windowed into chunks completes without a key and never crashes", (t) => {
+  const lines = Array.from(
+    { length: 1200 },
+    (_, i) => `  const value${i} = input * ${i} + ${"1".repeat(20)};`,
+  ).join("\n");
+  const root = project(t, {
+    "huge.ts": `export function huge(input: number) {\n${lines}\n  return value1;\n}\n`,
+    "user.ts":
+      "import {huge} from './huge';\nexport function useHuge(){ return huge(2) }\n",
+  });
+  const cwd = scratch(t);
+  const result = spawn(["scan", root], cwd);
+  assert.equal(result.status, 0, result.stderr);
+  assert.doesNotMatch(result.stderr, /Cannot read properties of null/);
+  assert.match(result.stdout, /Requests: \d+/);
+  assert.match(
+    result.stdout,
+    /Dry run: nothing was sent and nothing was written/,
+  );
+  assert.deepEqual(readdirSync(cwd), []);
+});
+
 test("--list-files separates the files asked about from the files sent only as context, and test files can be context", async (t) => {
   const dir = project(t, {
     "src/price.ts": clone("price"),

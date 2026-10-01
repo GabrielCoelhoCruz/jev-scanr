@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { buildPlan as build } from "../src/build-plan.mjs";
 import { packSignals, verifyPlan } from "../src/plan.mjs";
 import { buildReport } from "../src/report.mjs";
-import { project, clone } from "./helpers.mjs";
+import { project, clone, reseal } from "./helpers.mjs";
 
 const SEVEN = [
   "clone_same_policy",
@@ -187,5 +187,118 @@ test("the hard cap cannot be below the trim target or above its ceiling", (t) =>
   assert.throws(
     () => buildPlan(root, { limits: { maxHardRequestBytes: 64001 } }),
     /Invalid lowered limit/,
+  );
+});
+
+const oversized = (t) =>
+  project(t, {
+    "huge.ts": longFunction(1200),
+    "user.ts":
+      "import {huge} from './huge';\nexport function useHuge(){ return huge(2) }\n",
+  });
+
+test("an oversized function windowed into chunks never crashes, and every pack that sends no request has a zero budget", (t) => {
+  const root = oversized(t);
+  const plan = build(root);
+  const chunks = plan.units.filter((p) => p.kind === "function_chunk");
+  assert.ok(chunks.length >= 2, "the function is split into line windows");
+  const sent = new Set(plan.requests.map((r) => r.unitId));
+  for (const pack of plan.units) {
+    const budget = pack.budget;
+    if (sent.has(pack.id)) assert.ok(budget.serializedRequestBytes > 0);
+    else {
+      assert.equal(budget.serializedRequestBytes, 0, pack.kind);
+      assert.equal(budget.heuristicInputTokensBytesDiv3, 0);
+      assert.equal(budget.statePlusLongestQuestionBytes, 0);
+    }
+  }
+  verifyPlan(plan);
+});
+
+test("chunks with no eligible signal abstain visibly instead of vanishing, and totals exclude their absent requests", (t) => {
+  const root = oversized(t);
+  const plan = build(root);
+  const chunks = plan.units.filter((p) => p.kind === "function_chunk");
+  const signalless = chunks.filter((p) => packSignals(p).length === 0);
+  assert.ok(
+    signalless.length >= 1,
+    "default signals leave no chunkable question",
+  );
+  for (const pack of signalless) {
+    assert.equal(pack.status, "insufficient_context");
+    assert.deepEqual(pack.questionEligibility, {});
+    assert.ok(plan.requests.every((r) => r.unitId !== pack.id));
+  }
+  assert.equal(
+    plan.coverage.splits.noRequestPacks,
+    plan.units.filter((p) => plan.requests.every((r) => r.unitId !== p.id))
+      .length,
+  );
+  const sentBytes = plan.requests.reduce((n, r) => n + r.serializedBytes, 0);
+  assert.equal(plan.estimates.serializedRequestBytes, sentBytes);
+  assert.equal(plan.estimates.requests, plan.requests.length);
+  const report = buildReport(plan, []);
+  assert.equal(
+    report.coverage.packsWithoutRequest,
+    plan.coverage.splits.noRequestPacks,
+  );
+  assert.ok(
+    plan.units
+      .filter((p) => plan.requests.every((r) => r.unitId !== p.id))
+      .every(
+        (p) =>
+          p.status === "insufficient_context" &&
+          (packSignals(p).length === 0 ||
+            p.omitted.some(
+              (o) => o.what === "unit_request" && o.decisive === true,
+            )),
+      ),
+    "every pack without a request is either signalless or an explicit abstention",
+  );
+});
+
+test("totals a plan claims must match the requests it actually holds", (t) => {
+  const root = project(t, { "a.ts": clone("a") });
+  const plan = buildPlan(root);
+  const edit = (fn) => {
+    const c = structuredClone(plan);
+    fn(c);
+    return reseal(c);
+  };
+  assert.throws(
+    () =>
+      verifyPlan(
+        edit((c) => {
+          c.estimates.requests += 1;
+        }),
+      ),
+    /Estimates mismatch/,
+  );
+  assert.throws(
+    () =>
+      verifyPlan(
+        edit((c) => {
+          delete c.estimates;
+        }),
+      ),
+    /Estimates mismatch/,
+  );
+  assert.throws(
+    () =>
+      verifyPlan(
+        edit((c) => {
+          c.estimates.serializedRequestBytes += 1;
+        }),
+      ),
+    /Estimates mismatch/,
+  );
+  assert.throws(
+    () =>
+      verifyPlan(
+        edit((c) => {
+          c.units[0].budget.serializedRequestBytes += 1;
+        }),
+      ),
+    /Pack integrity mismatch|Budget mismatch/,
   );
 });
