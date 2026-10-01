@@ -70,6 +70,7 @@ export function formUnits(
     kinds = UNIT_ORDER,
     lowOverlap,
     nameCues = false,
+    unnamedCues = false,
   } = {},
 ) {
   const base = generateCandidates(index, {
@@ -92,7 +93,9 @@ export function formUnits(
       facts: {
         lines: f.lines,
         provenance: "outermost_function_unit",
-        ...(nameCues ? { nameCue: nameCue(index, f) } : {}),
+        ...(nameCues || (unnamedCues && f.name === null)
+          ? { nameCue: nameCue(index, f) }
+          : {}),
       },
     });
   if (kinds.includes("clone_pair"))
