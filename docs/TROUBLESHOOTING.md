@@ -2,9 +2,9 @@
 
 Every command here is offline unless it says otherwise. `jevs --help` lists the flags.
 
-## A run stops early (`STOPPED (first_error)`, exit code 2)
+## A run stops early (`STOPPED (…)`, exit code 2)
 
-A live run stops at the first error and writes a partial report. The summary and `report.md` name the first error: its class, the HTTP status when there is one, and the next step. `report.json` carries the same detail in `failure`, without the error body (bodies can echo a credential, so they are never persisted).
+A live run stops at the first error and writes a partial report. When the stop is an error, the summary and `report.md` name the first error: its class, the HTTP status when there is one, and the next step. `report.json` carries the same detail in `failure`, without the error body (bodies can echo a credential, so they are never persisted). A stop can also be the budget cap, which is not an error and has no `failure` entry; its reason is in the summary line.
 
 - **`HTTP 401` / `HTTP 403` (transport error).** The key was refused. Run `jevs auth` to save a working key, or set `TYPESAFE_API_KEY` in the environment. `jevs auth --remove` deletes a saved key. The key is never a command-line option and never appears in a report, a journal or an error line.
 - **`HTTP 429` (rate limited).** The service asked you to slow down. The `retry-after` seconds are recorded in `report.json` `failure.retryAfterSeconds`; there are no automatic retries. Wait, then `jevs continue` to plan only what is missing and re-run.

@@ -24,7 +24,7 @@ jobs:
         run: |
           set -euo pipefail
           npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP"
-          tgz=$(ls "$RUNNER_TEMP"/jev-scanr-*.tgz)
+          tgz=$(ls "$RUNNER_TEMP"/jev-scanr-*.tgz | head -1)
           smoke="$RUNNER_TEMP/smoke"
           rm -rf "$smoke" && mkdir -p "$smoke"
           cd "$smoke"
