@@ -108,7 +108,7 @@ test("the shipped demo run reports and continues offline from the plan shipped b
   assert.ok(queue.startsWith("# Refactor queue"));
   assert.match(
     queue,
-    /^## 5\. registerUser src\/signup\.ts:1–27 · function_should_split@1\.0\.0 · P=0\.52$/m,
+    /^## 5\. registerUser src\/signup\.ts:1–27 · function_multiple_responsibilities@1\.0\.0 · P=0\.78$/m,
   );
   const continued = run(
     [
