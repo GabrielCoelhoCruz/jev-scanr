@@ -32,4 +32,5 @@ jobs:
           npm install "$tgz" --ignore-scripts --no-audit --no-fund >/dev/null
           env -u TYPESAFE_API_KEY HOME="$smoke" ./node_modules/.bin/jevs --version
           env -u TYPESAFE_API_KEY HOME="$smoke" ./node_modules/.bin/jevs demo >/dev/null
-          echo "packed install ran --version and demo without TYPESAFE_API_KEY"
+          env -u TYPESAFE_API_KEY HOME="$smoke" ./node_modules/.bin/jevs baseline --report ./node_modules/jev-scanr/examples/demo-app/expected/report.json --top 5 --out ./smoke-baseline >/dev/null
+          echo "packed install ran --version, demo and baseline without TYPESAFE_API_KEY"
