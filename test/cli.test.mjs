@@ -578,9 +578,9 @@ test("demo replays the recorded run offline: no key, nothing written, labeled as
     [
       "## 1. clampPercent src/percent.ts:1–14 ↔ clampVolume src/volume.ts:1–14 · clone_same_policy@3.0.0 · P=0.98",
       "## 2. importOrders src/importer.ts:7–42 · function_should_split@1.0.0 · P=0.90",
-      "## 3. importOrders src/importer.ts:7–42 · function_multiple_responsibilities@1.0.0 · P=0.88",
-      "## 4. registerUser src/signup.ts:1–27 · function_multiple_responsibilities@1.0.0 · P=0.78",
-      "## 5. registerUser src/signup.ts:1–27 · function_should_split@1.0.0 · P=0.52",
+      "## 3. registerUser src/signup.ts:1–27 · function_should_split@1.0.0 · P=0.52",
+      "## 4. importOrders src/importer.ts:7–42 · function_multiple_responsibilities@1.0.0 · P=0.88",
+      "## 5. registerUser src/signup.ts:1–27 · function_multiple_responsibilities@1.0.0 · P=0.78",
     ],
   );
   assert.match(result.stdout, /hypotheses from one Jev answer each/);

@@ -4,7 +4,9 @@
 
 **How to use this file.** Hand it to a person or a coding agent. For each item, read the listed lines, answer the question yourself, and change nothing if it does not hold. `no change` is a valid outcome. Verify before editing. Signals marked *experimental* have too little evidence to trust; see EVIDENCE.md.
 
-**Worth a look (5).** Candidates at or above each signal's cut, ordered by Jev's probability for the positive option (highest first).
+**Worth a look (5).** Candidates at or above each signal's cut, grouped by signal. Within a signal they are ordered by Jev's probability for the positive option (highest first). P is never compared across signals because each signal has its own question and cut.
+
+**clone_same_policy@3.0.0 (1).** Ordered by P within this signal only.
 
 ## 1. clampPercent src/percent.ts:1–14 ↔ clampVolume src/volume.ts:1–14 · clone_same_policy@3.0.0 · P=0.98
 
@@ -13,6 +15,8 @@
 - **Read first:** src/percent.ts:1–14; src/volume.ts:1–14.
 - **Context Jev did not get:** none recorded; dynamic or external context may still be missing.
 
+**function_should_split@1.0.0 (2).** Ordered by P within this signal only.
+
 ## 2. importOrders src/importer.ts:7–42 · function_should_split@1.0.0 · P=0.90
 
 - **Question:** Is the section labeled focus long or dense enough that a reader must track many distinct steps, and do cohesive visible blocks exist that could each stand as a separately named function? Length alone is not enough; name the blocks in your reasoning.
@@ -20,24 +24,26 @@
 - **Read first:** src/importer.ts:7–42; src/importer.ts:1–5.
 - **Context Jev did not get:** none recorded; dynamic or external context may still be missing.
 
-## 3. importOrders src/importer.ts:7–42 · function_multiple_responsibilities@1.0.0 · P=0.88
+## 3. registerUser src/signup.ts:1–27 · function_should_split@1.0.0 · P=0.52
+
+- **Question:** Is the section labeled focus long or dense enough that a reader must track many distinct steps, and do cohesive visible blocks exist that could each stand as a separately named function? Length alone is not enough; name the blocks in your reasoning.
+- **Jev answer:** split_candidate.
+- **Read first:** src/signup.ts:1–27.
+- **Context Jev did not get:** none recorded; dynamic or external context may still be missing.
+
+**function_multiple_responsibilities@1.0.0 (2).** Ordered by P within this signal only.
+
+## 4. importOrders src/importer.ts:7–42 · function_multiple_responsibilities@1.0.0 · P=0.88
 
 - **Question:** Does the section labeled focus perform two or more separable responsibilities (for example fetching, transforming, persisting and presenting data) that are not coordinated by one stated purpose? Judge the visible body only.
 - **Jev answer:** multiple.
 - **Read first:** src/importer.ts:7–42; src/importer.ts:1–5.
 - **Context Jev did not get:** none recorded; dynamic or external context may still be missing.
 
-## 4. registerUser src/signup.ts:1–27 · function_multiple_responsibilities@1.0.0 · P=0.78
+## 5. registerUser src/signup.ts:1–27 · function_multiple_responsibilities@1.0.0 · P=0.78
 
 - **Question:** Does the section labeled focus perform two or more separable responsibilities (for example fetching, transforming, persisting and presenting data) that are not coordinated by one stated purpose? Judge the visible body only.
 - **Jev answer:** multiple.
-- **Read first:** src/signup.ts:1–27.
-- **Context Jev did not get:** none recorded; dynamic or external context may still be missing.
-
-## 5. registerUser src/signup.ts:1–27 · function_should_split@1.0.0 · P=0.52
-
-- **Question:** Is the section labeled focus long or dense enough that a reader must track many distinct steps, and do cohesive visible blocks exist that could each stand as a separately named function? Length alone is not enough; name the blocks in your reasoning.
-- **Jev answer:** split_candidate.
 - **Read first:** src/signup.ts:1–27.
 - **Context Jev did not get:** none recorded; dynamic or external context may still be missing.
 

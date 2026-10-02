@@ -23,7 +23,8 @@
       "unreadByFileOrByteCap": 0
     },
     "filesWithUnindexedFunctions": 0,
-    "unitsNotPacked": 0
+    "unitsNotPacked": 0,
+    "packsWithoutRequest": 0
   },
   "cells": 29,
   "units": 15,
@@ -1367,6 +1368,58 @@
       "notAPatchInstruction": true
     },
     {
+      "signalId": "function_should_split",
+      "signalVersion": "1.0.0",
+      "signalStatus": "default",
+      "question": "Is the section labeled focus long or dense enough that a reader must track many distinct steps, and do cohesive visible blocks exist that could each stand as a separately named function? Length alone is not enough; name the blocks in your reasoning.",
+      "answer": "split_candidate",
+      "positiveOption": "split_candidate",
+      "pPositive": 0.52,
+      "confidence": 0.28,
+      "threshold": 0.5,
+      "floor": 0.35,
+      "band": "worth_a_look",
+      "unitId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+      "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+      "kind": "function",
+      "split": null,
+      "location": [
+        {
+          "name": "registerUser",
+          "path": "src/signup.ts",
+          "startLine": 1,
+          "endLine": 27,
+          "role": "focus"
+        }
+      ],
+      "catchRange": null,
+      "verificationReads": [
+        {
+          "path": "src/signup.ts",
+          "range": {
+            "startOffset": 7,
+            "endOffset": 1125,
+            "startLine": 1,
+            "endLine": 27,
+            "encoding": "UTF-16",
+            "endExclusive": true
+          },
+          "fileSHA256": "d5dcab8e531e3362fc2fbcf3df16304ef0e986ce510771f00241bed6825be1b5",
+          "sourceSHA256": "65bec70e623e37954d9940e16f82f02a05ba1f0d66f65f6013f2b91f63402023",
+          "roles": [
+            "focus"
+          ]
+        }
+      ],
+      "contextOmissions": [],
+      "packRef": {
+        "planHash": "65338442af640700791096d3e4c0ed853065e13abed3cc54d1cfde1346f2bb6e",
+        "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
+        "contentHash": "cf44609dbf980a87bcb12ac8d5eb6fe9b18ccff918e36647323497916c0f48b5"
+      },
+      "notAPatchInstruction": true
+    },
+    {
       "signalId": "function_multiple_responsibilities",
       "signalVersion": "1.0.0",
       "signalStatus": "default",
@@ -1485,58 +1538,6 @@
         "contentHash": "cf44609dbf980a87bcb12ac8d5eb6fe9b18ccff918e36647323497916c0f48b5"
       },
       "notAPatchInstruction": true
-    },
-    {
-      "signalId": "function_should_split",
-      "signalVersion": "1.0.0",
-      "signalStatus": "default",
-      "question": "Is the section labeled focus long or dense enough that a reader must track many distinct steps, and do cohesive visible blocks exist that could each stand as a separately named function? Length alone is not enough; name the blocks in your reasoning.",
-      "answer": "split_candidate",
-      "positiveOption": "split_candidate",
-      "pPositive": 0.52,
-      "confidence": 0.28,
-      "threshold": 0.5,
-      "floor": 0.35,
-      "band": "worth_a_look",
-      "unitId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
-      "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
-      "kind": "function",
-      "split": null,
-      "location": [
-        {
-          "name": "registerUser",
-          "path": "src/signup.ts",
-          "startLine": 1,
-          "endLine": 27,
-          "role": "focus"
-        }
-      ],
-      "catchRange": null,
-      "verificationReads": [
-        {
-          "path": "src/signup.ts",
-          "range": {
-            "startOffset": 7,
-            "endOffset": 1125,
-            "startLine": 1,
-            "endLine": 27,
-            "encoding": "UTF-16",
-            "endExclusive": true
-          },
-          "fileSHA256": "d5dcab8e531e3362fc2fbcf3df16304ef0e986ce510771f00241bed6825be1b5",
-          "sourceSHA256": "65bec70e623e37954d9940e16f82f02a05ba1f0d66f65f6013f2b91f63402023",
-          "roles": [
-            "focus"
-          ]
-        }
-      ],
-      "contextOmissions": [],
-      "packRef": {
-        "planHash": "65338442af640700791096d3e4c0ed853065e13abed3cc54d1cfde1346f2bb6e",
-        "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
-        "contentHash": "cf44609dbf980a87bcb12ac8d5eb6fe9b18ccff918e36647323497916c0f48b5"
-      },
-      "notAPatchInstruction": true
     }
   ],
   "uncertain": [],
@@ -1562,5 +1563,5 @@
       "below": 24
     }
   },
-  "reportHash": "2dae899b5020a16cba8eb26dff94cad077c39cfbda0f59a5d51232b29636d605"
+  "reportHash": "8fcbb098a5bc3d9abefb640d05f50b538198461a4bc33cbe04d8956a5394d344"
 }
