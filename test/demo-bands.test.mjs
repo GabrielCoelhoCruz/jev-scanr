@@ -20,9 +20,9 @@ test("at the per-signal default cuts the recorded demo lists registerUser's spli
     [
       ["clampPercent", "clone_same_policy", 0.98],
       ["importOrders", "function_should_split", 0.9],
+      ["registerUser", "function_should_split", 0.52],
       ["importOrders", "function_multiple_responsibilities", 0.88],
       ["registerUser", "function_multiple_responsibilities", 0.78],
-      ["registerUser", "function_should_split", 0.52],
     ],
   );
   assert.deepEqual(report.bands.edges.function_should_split, {
@@ -35,9 +35,9 @@ test("the recorded queue.md lists five numbered items, then the empty uncertain 
   assert.deepEqual(queue.match(/^## .*$/gm), [
     "## 1. clampPercent src/percent.ts:1–14 ↔ clampVolume src/volume.ts:1–14 · clone_same_policy@3.0.0 · P=0.98",
     "## 2. importOrders src/importer.ts:7–42 · function_should_split@1.0.0 · P=0.90",
-    "## 3. importOrders src/importer.ts:7–42 · function_multiple_responsibilities@1.0.0 · P=0.88",
-    "## 4. registerUser src/signup.ts:1–27 · function_multiple_responsibilities@1.0.0 · P=0.78",
-    "## 5. registerUser src/signup.ts:1–27 · function_should_split@1.0.0 · P=0.52",
+    "## 3. registerUser src/signup.ts:1–27 · function_should_split@1.0.0 · P=0.52",
+    "## 4. importOrders src/importer.ts:7–42 · function_multiple_responsibilities@1.0.0 · P=0.88",
+    "## 5. registerUser src/signup.ts:1–27 · function_multiple_responsibilities@1.0.0 · P=0.78",
   ]);
   assert.deepEqual(
     queue.match(

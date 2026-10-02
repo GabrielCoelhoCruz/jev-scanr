@@ -126,9 +126,9 @@ test("the README image is drawn from the recording and is a PNG of the expected 
     [
       ["1", "clone_same_policy@3.0.0", "0.98", "same_policy"],
       ["2", "function_should_split@1.0.0", "0.90", "split_candidate"],
-      ["3", "function_multiple_responsibilities@1.0.0", "0.88", "multiple"],
-      ["4", "function_multiple_responsibilities@1.0.0", "0.78", "multiple"],
-      ["5", "function_should_split@1.0.0", "0.52", "split_candidate"],
+      ["3", "function_should_split@1.0.0", "0.52", "split_candidate"],
+      ["4", "function_multiple_responsibilities@1.0.0", "0.88", "multiple"],
+      ["5", "function_multiple_responsibilities@1.0.0", "0.78", "multiple"],
     ],
   );
   const root = new URL("../", import.meta.url);
