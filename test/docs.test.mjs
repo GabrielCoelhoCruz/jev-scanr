@@ -310,6 +310,7 @@ test("the npm package ships the tool and its notices, not the evaluation tools o
     "examples/demo-app/expected/RESULT.json",
     "examples/demo-app/expected/journal.jsonl",
     "examples/demo-app/expected/plan.json",
+    "examples/demo-app/expected/report.json",
   ])
     assert.ok(files.includes(must), must);
   for (const f of files)
@@ -325,6 +326,7 @@ test("the npm package ships the tool and its notices, not the evaluation tools o
       "examples/demo-app/expected/journal.jsonl",
       "examples/demo-app/expected/plan.json",
       "examples/demo-app/expected/queue.md",
+      "examples/demo-app/expected/report.json",
     ],
   );
 });

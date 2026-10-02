@@ -11,7 +11,7 @@ import { spawn } from "node:child_process";
 import { resolve, join, basename } from "node:path";
 import { pathToFileURL } from "node:url";
 import { parseArgs as nodeParseArgs } from "node:util";
-import { writeNew, outside, POLICY } from "./core.mjs";
+import { writeNew, outside, POLICY, hash } from "./core.mjs";
 import { verifyPlan } from "./plan.mjs";
 import {
   allSignals,
@@ -39,6 +39,7 @@ import {
 } from "./report.mjs";
 import { continuationPlan, combineRuns } from "./continuation.mjs";
 import { demoText } from "./demo.mjs";
+import { baselineMarkdown, buildBaseline } from "./baseline.mjs";
 import {
   credentialsPath,
   readSecret,
@@ -74,6 +75,11 @@ Usage
   jevs rescore RUN [--cut N] [--floor N] [--cut-signal ID=N] [--floor-signal ID=N]
                                                 re-cut an existing run folder from its stored answers: no API call, no key;
                                                 writes RUN/rescored-<settings>/ (queue.md, report.md, report.json), never overwrites
+  jevs baseline --report FILE [--top N] --out DIR
+                                                compare, offline in one report.json, the length ranking of its functions with
+                                                Jev's ranking on function_should_split: orderings, positions, top-N overlap and
+                                                gaps. No labels, no API call, no key; writes DIR/baseline.json and
+                                                DIR/baseline.md, never overwrites
   jevs continue --plan PLAN --run-dir RUN --out NEWPLAN
                                                 plan only the requests without an accepted answer (RUN as in report)
   jevs run --plan PLAN --out DIR --cap-usd N --yes
@@ -144,6 +150,8 @@ const options = {
   remove: { type: "boolean" },
   "continuation-plan": { type: "string" },
   "continuation-run": { type: "string" },
+  report: { type: "string" },
+  top: { type: "string" },
 };
 
 export function parseArgs(args) {
@@ -789,6 +797,42 @@ export async function main(args = process.argv.slice(2), deps = {}) {
     const b = report.bands.counts;
     console.log(
       `Rescored from stored answers (no API call, no key): ${b.worth_a_look} worth a look, ${b.uncertain} uncertain, ${b.below} below the band. Read ${join(out, "queue.md")}`,
+    );
+    return;
+  }
+  if (command === "baseline") {
+    if (positionals.length)
+      throw Error("baseline takes no PATH; pass the report with --report");
+    if (!values.report || !values.out)
+      throw Error("--report and --out required");
+    const top = values.top === undefined ? 5 : Number(values.top);
+    if (!Number.isInteger(top) || top < 1)
+      throw Error("--top must be a positive integer");
+    const reportPath = resolve(values.report);
+    if (!existsSync(reportPath))
+      throw Error(`No such report file: ${reportPath}`);
+    let text;
+    try {
+      text = readFileSync(reportPath, "utf8");
+    } catch (e) {
+      throw Error(`Could not read ${reportPath}: ${e.message}`);
+    }
+    let report;
+    try {
+      report = JSON.parse(text);
+    } catch (e) {
+      throw Error(`${reportPath} is not valid JSON: ${e.message}`);
+    }
+    const result = buildBaseline(report, { top });
+    result.inputs.reportSha256 = hash(Buffer.from(text, "utf8"));
+    const out = resolve(values.out);
+    if (existsSync(out))
+      throw Error(`${out} exists; choose a new --out. Nothing was overwritten`);
+    writeNew(join(out, "baseline.json"), result);
+    writeNew(join(out, "baseline.md"), baselineMarkdown(result));
+    const c = result.census;
+    console.log(
+      `Baseline from stored answers (no API call, no key): ${c.scored} of ${c.functionBlocks} function blocks scored for ${result.signal}, ${c.gaps.length} gap${c.gaps.length === 1 ? "" : "s"}, top-${top} overlap ${result.overlap.count}. Read ${join(out, "baseline.md")}`,
     );
     return;
   }
