@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 import { buildPlan } from "../src/build-plan.mjs";
 import { recordedRun, demoText, demoFooter } from "../src/demo.mjs";
 import { renderDemoSvg, parseQueue } from "../scripts/render-demo-image.mjs";
+import { regenerateDemoReports } from "../scripts/regenerate-demo-reports.mjs";
 
 const demo = new URL("../examples/demo-app/", import.meta.url).pathname;
 const read = (p) => readFileSync(demo + p, "utf8");
@@ -24,6 +25,30 @@ test("the recording still matches the current pipeline and demo source", () => {
   );
   assert.equal(plan.estimates.requests, receipt.requests);
   assert.deepEqual(plan.enabledSignals, receipt.signals);
+});
+
+test("the stored artifacts are exactly what the current pipeline regenerates from the recording", () => {
+  const regenerated = regenerateDemoReports();
+  assert.deepEqual(
+    regenerated.plan,
+    json("expected/plan.json"),
+    "expected/plan.json is stale: run node scripts/regenerate-demo-reports.mjs",
+  );
+  assert.deepEqual(
+    regenerated.report,
+    json("expected/report.json"),
+    "expected/report.json is stale (its reportHash no longer covers its own content): run node scripts/regenerate-demo-reports.mjs",
+  );
+  assert.equal(
+    read("expected/report.md"),
+    regenerated.reportMarkdown,
+    "expected/report.md is stale: run node scripts/regenerate-demo-reports.mjs",
+  );
+  assert.equal(
+    read("expected/queue.md"),
+    regenerated.queueMarkdown,
+    "expected/queue.md is stale: run node scripts/regenerate-demo-reports.mjs",
+  );
 });
 
 test("the receipt was frozen before the run and the journal agrees with the result", () => {
