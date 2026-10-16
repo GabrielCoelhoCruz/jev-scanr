@@ -10,7 +10,19 @@ if [ -n "$live_cap" ] && [ -z "$live_key" ]; then
   exit 1
 fi
 repo="$(git rev-parse --show-toplevel)"
-test "$(git -C "$repo" rev-parse HEAD)" = "$sha"
+if [ "$(git -C "$repo" rev-parse HEAD)" != "$sha" ]; then
+  echo "HEAD is not $sha" >&2
+  exit 1
+fi
+if [ -n "$(git -C "$repo" status --porcelain)$(git -C "$repo" status --porcelain --ignored -- examples/demo-app)" ]; then
+  echo 'the checkout has local changes; the helper packs the working tree, so commit or remove them first' >&2
+  git -C "$repo" status --short --ignored -- . ':!node_modules' >&2
+  exit 1
+fi
+if ! GIT_TERMINAL_PROMPT=0 git ls-remote --heads --tags https://github.com/GabrielCoelhoCruz/jev-scanr.git | cut -f1 | grep -qx "$sha"; then
+  echo "$sha is not a branch or tag tip on GitHub; push it first" >&2
+  exit 1
+fi
 test ! -e "$proof"
 mkdir -p "$proof"
 proof="$(cd "$proof" && pwd)"
@@ -40,11 +52,7 @@ run() {
 
 command -v unshare >/dev/null
 unshare -Urn true
-if [ "$(npm --version | cut -d. -f1)" -ge 12 ]; then
-  export npm_config_allow_git=all
-  echo "npm $(npm --version) refuses git package specs by default; npx ran with npm_config_allow_git=all" >> "$proof/commands.log"
-fi
-run npx-demo npx --yes "github:GabrielCoelhoCruz/jev-scanr#$sha" demo
+run npx-demo npx --yes --allow-git=all "github:GabrielCoelhoCruz/jev-scanr#$sha" demo
 grep -q 'RECORDED RUN' "$proof/npx-demo.stdout"
 grep -q '^## 1\.' "$proof/npx-demo.stdout"
 run pack npm pack --ignore-scripts --json --pack-destination "$temp"
@@ -52,6 +60,15 @@ tarball="$(find "$temp" -maxdepth 1 -name 'jev-scanr-*.tgz' -print -quit)"
 test -n "$tarball"
 tar -tzf "$tarball" > "$proof/package-files.txt"
 grep -qx 'package/cuts.json' "$proof/package-files.txt"
+mkdir "$temp/unpacked"
+tar -xzf "$tarball" -C "$temp/unpacked"
+while read -r entry; do
+  if [ "$(git -C "$repo" rev-parse --verify --quiet "$sha:${entry#package/}")" != "$(git hash-object --no-filters "$temp/unpacked/$entry")" ]; then
+    echo "packed ${entry#package/} differs from its file at $sha" >&2
+    exit 1
+  fi
+done < "$proof/package-files.txt"
+echo "every packed file equals its blob at $sha" >> "$proof/commands.log"
 run install npm install --prefix "$temp/install" "$tarball" --ignore-scripts --no-audit --no-fund
 bin="$temp/install/node_modules/.bin/jevs"
 expected="$temp/install/node_modules/jev-scanr/examples/demo-app/expected"

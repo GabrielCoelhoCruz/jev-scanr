@@ -9,7 +9,7 @@ The first-time visitor downloads an exact GitHub commit and sees the recorded qu
 
 ## How to get to it (user POV)
 
-Run `npx --yes github:GabrielCoelhoCruz/jev-scanr#<exact SHA> demo`. For the local tarball, run `jevs demo` after installing it.
+Run `npx --yes --allow-git=all github:GabrielCoelhoCruz/jev-scanr#<exact SHA> demo`. For the local tarball, run `jevs demo` after installing it.
 
 ## Driving it with the CLI
 
@@ -17,4 +17,4 @@ Preconditions: publish the exact commit to GitHub. Run `bash skills/verify-jev-s
 
 ## Gotchas
 
-npm 12 and later refuse `github:` specs unless git fetches are allowed (`--allow-git=all`), so the plain README command fails there with `EALLOWGIT`; the helper sets `npm_config_allow_git=all` and logs it. Node 24's bundled npm 11 does not need it. An old npm cache can make a GitHub installation look successful. The helper uses a fresh cache and an isolated HOME. The printed probabilities are from a saved synthetic run, not new accuracy evidence.
+npm 12 refuses `github:` specs with `EALLOWGIT` unless the command allows git fetches. The helper passes `--allow-git=all` to that one npx command, as the README does; npm 11.19.0 accepts the same flag. Nothing changes the npm configuration. An old npm cache can make a GitHub installation look successful. The helper uses a fresh cache and an isolated HOME. The printed probabilities are from a saved synthetic run, not new accuracy evidence.
