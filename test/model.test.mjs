@@ -245,3 +245,41 @@ test("a journal whose served model disagrees with its stored answer is refused",
   writeFileSync(path, lines.join("\n") + "\n");
   assert.throws(() => readJournal(dir, p), /WAL model provenance mismatch/);
 });
+
+test("a failed pinned event whose served model disagrees with the observed version is refused", async (t) => {
+  const p = plan(t, twoFiles, { model: "jev-1.13.0" });
+  const dir = join(scratch(t), "run");
+  await run(
+    p,
+    dir,
+    fake(async (r) => ({ ...response(r), model: "jev-1.14.0" })),
+  );
+  const path = join(dir, "journal.jsonl");
+  const original = readFileSync(path, "utf8");
+  const forge = (served) => {
+    let previousHash = null;
+    const lines = original
+      .trim()
+      .split("\n")
+      .map((line) => {
+        const { eventHash, ...body } = JSON.parse(line);
+        if (body.type === "finished") body.servedModel = served;
+        body.previousHash = previousHash;
+        previousHash = hash(body);
+        return JSON.stringify({ ...body, eventHash: previousHash });
+      });
+    writeFileSync(path, lines.join("\n") + "\n");
+  };
+  assert.deepEqual(
+    finished(dir, p).map((e) => [
+      e.failure.validation,
+      e.failure.diagnostic.observed,
+      e.servedModel,
+    ]),
+    [["unexpected_model", { type: "enum", value: "jev-1.14.0" }, "jev-1.14.0"]],
+  );
+  for (const served of ["jev-9.9.9", null]) {
+    forge(served);
+    assert.throws(() => readJournal(dir, p), /WAL model provenance mismatch/);
+  }
+});
