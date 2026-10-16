@@ -62,11 +62,32 @@ test("a chosen option within 0.01 of the maximum is accepted; further away is no
   );
 });
 
+test("an alias request accepts a concrete served version; a pinned one accepts only itself", (t) => {
+  const alias = request(t);
+  assert.equal(alias.model, "jev-latest");
+  const served = response(alias);
+  assert.equal(served.model, "jev-1.14.0");
+  validateResponse(alias, served);
+  for (const reported of ["jev-latest", "jev-preview", "jev-1.14", null, 1.14])
+    failure(alias, (d) => (d.model = reported), "unresolved_model");
+  const pinned = { ...alias, model: "jev-1.13.0" };
+  validateResponse(pinned, response(pinned));
+  failure(pinned, (d) => (d.model = "jev-latest"), "unexpected_model");
+  const data = { ...response(pinned), model: "jev-1.14.0" };
+  assert.throws(
+    () => validateResponse(pinned, data),
+    (e) =>
+      e.diagnostic.code === "unexpected_model" &&
+      e.diagnostic.expected === "jev-1.13.0" &&
+      e.diagnostic.observed.value === "jev-1.14.0",
+  );
+});
+
 test("structural problems are diagnosed by code without echoing values", (t) => {
   const req = request(t),
     id = "function_should_split";
   failure(req, (d) => delete d.model, "model_required");
-  failure(req, (d) => (d.model = "other"), "unexpected_model");
+  failure(req, (d) => (d.model = "other"), "unresolved_model");
   failure(req, (d) => delete d.usage, "usage_object_required");
   failure(req, (d) => (d.answers = {}), "answer_set_mismatch");
   failure(req, (d) => (d.answers[id].type = "text"), "choice_type_invalid");

@@ -20,7 +20,7 @@ Until the package is published to npm, never run `npx jev-scanr` or `npx jevs` (
 
 Without installing, use `npx --allow-git=all github:GabrielCoelhoCruz/jev-scanr <command>`. npm 12 refuses git sources unless the command allows them; the flag covers that one command and changes no npm configuration.
 
-A dry run needs no key. A live run needs the user's own TypeSafe API key. If none is configured, ask the user to run `jevs auth` in their own terminal, or to set `TYPESAFE_API_KEY`. Authentication is interactive. **Never ask for the key in chat, never put it in a command line, and never write it into a file.**
+Scans request `jev-latest` by default. If the user needs results comparable with an earlier run, or with the default cuts derived on `jev-1.13.0`, add `--model jev-1.13.0`. `report.md` names the requested model and the version that served each answer. A dry run needs no key. A live run needs the user's own TypeSafe API key. If none is configured, ask the user to run `jevs auth` in their own terminal, or to set `TYPESAFE_API_KEY`. Authentication is interactive. **Never ask for the key in chat, never put it in a command line, and never write it into a file.**
 
 ## When to run it
 

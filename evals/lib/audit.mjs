@@ -1,16 +1,22 @@
 import { mkdtempSync, existsSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { POLICY } from "../../src/core.mjs";
+import { isConcreteModel } from "../../src/core.mjs";
 import { allSignals } from "../../src/catalog.mjs";
 import { runEval, expectedOf, readFlows } from "./eval-run.mjs";
 
 const signalOf = (id) => allSignals.find((s) => s.id === id);
+export const SYNTHETIC_SERVED_MODEL = "jev-0.0.0";
 
 export function answerFor(
   request,
   positiveP,
-  { choice, model = POLICY.model } = {},
+  {
+    choice,
+    model = isConcreteModel(request.model)
+      ? request.model
+      : SYNTHETIC_SERVED_MODEL,
+  } = {},
 ) {
   const answers = {};
   for (const [id, q] of Object.entries(request.questions)) {

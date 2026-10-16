@@ -1,6 +1,7 @@
 # Scan report
 
 Provenance: **live**. Plan `65338442af64…`, catalog 0.1.0-alpha, signals: clone_same_policy, function_should_split, function_multiple_responsibilities.
+Model: requested `jev-1.13.0`; served jev-1.13.0 (15 responses).
 29 cells (unit × question): 29 scored. 5 at or above the display cut. 15 units in 15 requests.
 
 The display cut is a display setting, not a calibration. Jev probabilities are rounded to two decimals, are not reproducible from call to call, and are not the chance of a bug or of a worthwhile change.

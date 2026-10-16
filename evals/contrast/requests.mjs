@@ -57,7 +57,9 @@ export function buildRequests(doc, projectDir) {
       const probe = { ...pack, status: "eligible", contextVersion: "0.3.1" };
       probe.questionEligibility = questionEligibility(probe);
       return Buffer.byteLength(
-        JSON.stringify(requestFor(probe, { includeIneligible: true })),
+        JSON.stringify(
+          requestFor(probe, POLICY.model, { includeIneligible: true }),
+        ),
       );
     };
     const byPath = new Map();
@@ -100,7 +102,7 @@ export function buildRequests(doc, projectDir) {
         contextVersion: "0.3.1",
       };
       applyQuestionEligibility(pack);
-      const request = requestFor(pack);
+      const request = requestFor(pack, POLICY.model);
       if (!request)
         throw Error(`${setId}/${u.id}: no request (${pack.status})`);
       const serializedBytes = Buffer.byteLength(JSON.stringify(request));

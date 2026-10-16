@@ -25,7 +25,7 @@ export function jaccard(a, b) {
   return count / (a.size + b.size - count || 1);
 }
 export const POLICY = Object.freeze({
-  model: "jev-1.13.0",
+  model: "jev-latest",
   maxInputTokens: 65536,
   inputUSDPerMillion: 0.042,
   outputUSDPerMillion: 0,
@@ -34,6 +34,50 @@ export const POLICY = Object.freeze({
   concurrency: 1,
   retries: 0,
 });
+const MODEL_ID = /^jev-(?:\d+\.\d+\.\d+|[a-z][a-z0-9-]*)$/;
+const CONCRETE_MODEL = /^jev-\d+\.\d+\.\d+$/;
+export const isConcreteModel = (value) =>
+  typeof value === "string" && CONCRETE_MODEL.test(value);
+export function policyFor(model) {
+  if (typeof model !== "string" || !MODEL_ID.test(model))
+    throw Error(
+      "--model must be a pinned Jev version such as jev-1.14.0 or an alias such as jev-latest",
+    );
+  return Object.freeze({ ...POLICY, model });
+}
+export function servedModel(requested, reported) {
+  const served = isConcreteModel(reported) ? reported : null;
+  if (isConcreteModel(requested))
+    return {
+      served,
+      problem: reported === requested ? null : "unexpected_model",
+    };
+  return { served, problem: served ? null : "unresolved_model" };
+}
+export const servedModelOf = (event) =>
+  event.status === "succeeded"
+    ? event.response.model
+    : isConcreteModel(event.servedModel)
+      ? event.servedModel
+      : null;
+
+export function modelProvenance(events, plan) {
+  const finished = events.filter((e) => e.type === "finished");
+  const servedModels = {};
+  for (const e of finished) {
+    const served = servedModelOf(e);
+    if (served) servedModels[served] = (servedModels[served] ?? 0) + 1;
+  }
+  return {
+    requestedModel: plan.policy.model,
+    servedModels: Object.fromEntries(
+      Object.entries(servedModels).sort(([a], [b]) => a.localeCompare(b)),
+    ),
+    responsesWithoutServedModel: finished.filter((e) => !servedModelOf(e))
+      .length,
+  };
+}
+
 const SECRET_PATTERNS = [
   /-----BEGIN (?:[A-Z ]*PRIVATE KEY)-----/i,
   /(?:api[_-]?key|password|secret|token)['"`]?\s*[:=]\s*['"`][^'"`\s]{12,}['"`]/i,

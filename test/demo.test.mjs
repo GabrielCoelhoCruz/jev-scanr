@@ -15,7 +15,8 @@ const result = json("expected/RESULT.json");
 const report = json("expected/report.json");
 
 test("the recording still matches the current pipeline and demo source", () => {
-  const plan = buildPlan(demo);
+  const plan = buildPlan(demo, { model: receipt.model });
+  assert.equal(plan.policy.model, "jev-1.13.0");
   assert.equal(
     createHash("sha256")
       .update(JSON.stringify(plan.requests.map((r) => r.requestHash)))

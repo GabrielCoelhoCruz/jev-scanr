@@ -110,6 +110,9 @@ Options for scan
   --run               send the excerpts to the Jev API instead of a dry run; needs --yes and --cap-usd
   --yes               consent to send source excerpts to the Jev API
   --cap-usd N         refuse to start if the worst-case cost exceeds N US dollars
+  --model ID          model named in every request (default jev-latest, an alias TypeSafe moves to each new stable
+                      release). Pin a version such as jev-1.13.0 to match the version the default cuts came from.
+                      Each answer records the served version; a pinned run stops if another version answers
   --concurrency N     live runs: up to N requests in flight (1 to 32, default 8). A token-bucket limiter keeps the
                       rate under Jev's documented limits (about 40 requests and 100K tokens per second, at 80%).
                       Any error, 429 included, stops the run; there are no automatic retries
@@ -152,6 +155,7 @@ const options = {
   "continuation-run": { type: "string" },
   report: { type: "string" },
   top: { type: "string" },
+  model: { type: "string" },
 };
 
 export function parseArgs(args) {
@@ -409,7 +413,7 @@ function summary(plan) {
 function printSummary(plan, s) {
   console.log(
     [
-      `Plan ${s.planHash.slice(0, 12)}… · model ${POLICY.model} at US$${POLICY.inputUSDPerMillion}/M input tokens`,
+      `Plan ${s.planHash.slice(0, 12)}… · requested model ${plan.policy.model} at US$${POLICY.inputUSDPerMillion}/M input tokens (a live run records the served version of each answer)`,
       `Signals: ${s.signals.join(", ")}`,
       `Files: ${s.files.read ?? 0} read (source and configuration), ${
         Object.entries(s.files)
@@ -518,7 +522,7 @@ async function execute(plan, values, deps) {
     accounting: result,
   });
   console.log(
-    `${result.complete ? "Complete" : "STOPPED (" + result.stoppedReason + ")"}: ${result.succeeded}/${result.plannedRequests} requests answered, ${usd(result.knownEstimatedUSD)} calculated cost${result.wallClockMs ? `, ${(result.wallClockMs / 1000).toFixed(0)} s wall-clock with concurrency ${result.concurrency}` : ""}, ${report.findings.length} candidates. Read ${join(out, "queue.md")}`,
+    `${result.complete ? "Complete" : "STOPPED (" + result.stoppedReason + ")"}: ${result.succeeded}/${result.plannedRequests} requests answered (requested ${result.requestedModel}, served ${Object.keys(result.servedModels).join(", ") || "none"}), ${usd(result.knownEstimatedUSD)} calculated cost${result.wallClockMs ? `, ${(result.wallClockMs / 1000).toFixed(0)} s wall-clock with concurrency ${result.concurrency}` : ""}, ${report.findings.length} candidates. Read ${join(out, "queue.md")}`,
   );
   if (!result.complete) {
     const brief = failureBrief(firstFailure(events), {
@@ -621,6 +625,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
         `PATH must be a directory, but ${target} is a file. To scan one file, pass its directory as PATH and the file with --paths.`,
       );
     const plan = buildPlan(positionals[0], {
+      model: values.model,
       signals: signalSelection(values),
       excluded: values.exclude ? values.exclude.split(",").filter(Boolean) : [],
       paths: values.paths ? values.paths.split(",").filter(Boolean) : [],

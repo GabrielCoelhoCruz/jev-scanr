@@ -1,4 +1,4 @@
-import { hash } from "./core.mjs";
+import { hash, modelProvenance, servedModelOf } from "./core.mjs";
 import { VALIDATION_POLICY } from "./validation.mjs";
 import { verifyPlan, catalog, packSignals } from "./plan.mjs";
 import { defaultCut, defaultFloor } from "./cuts.mjs";
@@ -129,6 +129,7 @@ export function buildReport(
         band: bandOf(p, thresholds[signal.id], floors[signal.id]),
         shown: p !== null && p >= thresholds[signal.id],
         missingReasons: eligibility.missingReasons,
+        servedModel: event ? servedModelOf(event) : null,
       });
     }
   const packById = new Map(plan.units.map((p) => [p.id, p]));
@@ -247,6 +248,7 @@ export function buildReport(
       positiveOption: c.positiveOption,
       pPositive: c.pPositive,
       confidence: c.confidence,
+      servedModel: c.servedModel,
       threshold: c.threshold,
       floor: c.floor,
       band: c.band,
@@ -299,6 +301,7 @@ export function buildReport(
     planHash: plan.planHash,
     catalogVersion: plan.catalogVersion,
     provenance,
+    ...modelProvenance(events, plan),
     thresholds,
     floors,
     thresholdMeaning:
@@ -511,11 +514,26 @@ export function queueMarkdown(report) {
   return lines.join("\n");
 }
 
+export function modelLine({
+  requestedModel,
+  servedModels,
+  responsesWithoutServedModel,
+}) {
+  const served = Object.entries(servedModels)
+    .map(([id, n]) => `${id} (${n} response${n === 1 ? "" : "s"})`)
+    .join(", ");
+  const unknown = responsesWithoutServedModel
+    ? `; ${responsesWithoutServedModel} finished attempt${responsesWithoutServedModel === 1 ? "" : "s"} without a served model`
+    : "";
+  return `Model: requested \`${requestedModel}\`; served ${served || "none (no answer was recorded)"}${unknown}.`;
+}
+
 export function reportMarkdown(report, accounting = null) {
   const lines = [
     "# Scan report",
     "",
     `Provenance: **${report.provenance}**. Plan \`${report.planHash.slice(0, 12)}…\`, catalog ${report.catalogVersion}, signals: ${Object.keys(report.views).join(", ")}.`,
+    modelLine(report),
     `${report.cells} cells (unit × question): ${Object.entries(
       report.statusCounts,
     )
