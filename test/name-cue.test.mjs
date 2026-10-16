@@ -112,8 +112,8 @@ test("a plan sealed before the unnamed-function rule keeps its naming question",
   delete old.unitManifest[0].nameCueAbsent;
   old.unitManifest[0].signals = ["function_should_split", "name_vs_behavior"];
   applyQuestionEligibility(old.units[0]);
-  old.units[0].budget = packBudget(old.units[0], old.limits);
-  const request = requestFor(old.units[0]);
+  old.units[0].budget = packBudget(old.units[0], old.limits, old.policy.model);
+  const request = requestFor(old.units[0], old.policy.model);
   old.requests = [
     {
       unitId: old.units[0].id,

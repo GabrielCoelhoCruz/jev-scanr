@@ -11,7 +11,7 @@ import {
 } from "node:fs";
 import { createHash } from "node:crypto";
 import { join, resolve } from "node:path";
-import { POLICY } from "../src/core.mjs";
+import { POLICY, isConcreteModel } from "../src/core.mjs";
 import { buildPlan } from "../src/build-plan.mjs";
 import { reservationUSD, readJournal, summarize } from "../src/runner.mjs";
 import { catalogHashFor } from "../src/catalog.mjs";
@@ -42,21 +42,23 @@ const value = (name) => args[args.indexOf(name) + 1];
 const out = resolve(value("--out") ?? "");
 const cap = Number(value("--cap-usd"));
 const priceChecked = value("--price-checked");
+const model = value("--model");
 if (
   !args.includes("--yes") ||
   !value("--out") ||
   !Number.isFinite(cap) ||
   cap <= 0 ||
-  !priceChecked
+  !priceChecked ||
+  !isConcreteModel(model)
 )
   throw Error(
-    "Usage: node scripts/record-demo.mjs --yes --cap-usd 0.02 --price-checked YYYY-MM-DD --out DIR\nRecords one real Jev pass over examples/demo-app with your TYPESAFE_API_KEY: freeze receipt first, one pass, no retries, stop on the first error.",
+    "Usage: node scripts/record-demo.mjs --yes --cap-usd 0.02 --price-checked YYYY-MM-DD --model jev-X.Y.Z --out DIR\nRecords one real Jev pass over examples/demo-app with your TYPESAFE_API_KEY: freeze receipt first, one pass, no retries, stop on the first error. The recording pins one version, so every answer must come from it.",
   );
 if (!process.env.TYPESAFE_API_KEY)
   throw Error("Set TYPESAFE_API_KEY in the environment");
 if (existsSync(out)) throw Error("Output directory must be new");
 
-const plan = buildPlan(demo);
+const plan = buildPlan(demo, { model });
 const e = plan.estimates;
 const conservativeUSD = e.USDOneBytePerTokenSensitivity + reservationUSD;
 if (conservativeUSD > cap) throw Error("Worst-case cost exceeds the cap");
@@ -76,7 +78,7 @@ writeFileSync(
         catalogHash: catalogHashFor(plan.enabledSignals),
       },
       demoContentSHA256: contentHash(["examples/demo-app/src"]),
-      model: POLICY.model,
+      model,
       tariffUSDPerMillionInput: POLICY.inputUSDPerMillion,
       priceConfirmed: `docs.typesafe.ai/models.md checked ${priceChecked}`,
       signals: plan.enabledSignals,
@@ -104,7 +106,18 @@ chmodSync(receiptPath, 0o400);
 
 const run = join(out, "run");
 await main(
-  ["scan", demo, "--run", "--yes", "--cap-usd", String(cap), "--out", run],
+  [
+    "scan",
+    demo,
+    "--model",
+    model,
+    "--run",
+    "--yes",
+    "--cap-usd",
+    String(cap),
+    "--out",
+    run,
+  ],
   {},
 );
 const journal = join(run, "run", "journal.jsonl");
@@ -122,6 +135,8 @@ writeFileSync(
       inputTokens: summary.knownInputTokens,
       outputTokens: summary.knownOutputTokens,
       calculatedUSD: summary.knownEstimatedUSD,
+      requestedModel: summary.requestedModel,
+      servedModels: summary.servedModels,
       invoiceVerified: false,
       finishedAtUTC: new Date().toISOString(),
     },

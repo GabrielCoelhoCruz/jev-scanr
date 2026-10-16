@@ -3,6 +3,11 @@
   "planHash": "65338442af640700791096d3e4c0ed853065e13abed3cc54d1cfde1346f2bb6e",
   "catalogVersion": "0.1.0-alpha",
   "provenance": "live",
+  "requestedModel": "jev-1.13.0",
+  "servedModels": {
+    "jev-1.13.0": 15
+  },
+  "finishedWithoutServedModel": 0,
   "thresholds": {
     "clone_same_policy": 0.7,
     "function_should_split": 0.5,
@@ -81,7 +86,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "946e5f7b017b6018d47da395d7ddad88a02ea3f2bb94025be064a544a86003db",
@@ -99,7 +105,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -149,7 +156,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "59a961bf428e7d9c77f4d5a446d26dc74ac6ec35f0c3e0176a761ddadbd87281",
@@ -167,7 +175,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -217,7 +226,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "dc6d4c5eb9de8f6f8d67bf6cde214374eecb50e629f521b47ec9be9d38c595f4",
@@ -235,7 +245,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -285,7 +296,8 @@
           "floor": 0.35,
           "band": "worth_a_look",
           "shown": true,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "c3f79ad958d2921ec9bd92dc89caaab971b3faf1b18a610dcb1e5ed349275c56",
@@ -303,7 +315,8 @@
           "floor": 0.5,
           "band": "worth_a_look",
           "shown": true,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -353,7 +366,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "892a12aa20b1dd467fc61718c04175327ed808687e60451de3ae90983294a488",
@@ -371,7 +385,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -421,7 +436,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "2b69f3631753b997fff5da5e52e57c430816e56402f5e8a923bcaee103e33354",
@@ -439,7 +455,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -489,7 +506,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "6cc5649ded2843926105191b0a4ec6627d494ea368e55987b1331390d14598f6",
@@ -507,7 +525,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -557,7 +576,8 @@
           "floor": 0.35,
           "band": "worth_a_look",
           "shown": true,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "1a07b328da6ee637d18b18d8397696f65986e4beb8fced333ec905f39fb79e6d",
@@ -575,7 +595,8 @@
           "floor": 0.5,
           "band": "worth_a_look",
           "shown": true,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -625,7 +646,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "af0c56f105da773d187e992f92759c4f925a0e563e886a0c6a07e88270e462ad",
@@ -643,7 +665,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -693,7 +716,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "da0203bb6fd4b100ab142a46cc599d853d4643cc2fdc1923619aee42844d2183",
@@ -711,7 +735,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -761,7 +786,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "8b891fa611d913f6090334411051c14430bd5d81f8279830d2405e843a2b5b18",
@@ -779,7 +805,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -829,7 +856,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "74f6de7e50fdec0cab7c7fbf6789cb1eb05b0bd54b9e4ff0a51f5fe0ce7d75da",
@@ -847,7 +875,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -897,7 +926,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "1c41410c1a9605d13ee632af16d732316125a62ad136984ef1b7b850405f145c",
@@ -915,7 +945,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -965,7 +996,8 @@
           "floor": 0.35,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         },
         {
           "packId": "cb5189d80a9c8afbef8e65b3cae9cac1a152f0141f9881099342bf228138c58b",
@@ -983,7 +1015,8 @@
           "floor": 0.5,
           "band": "below",
           "shown": false,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     },
@@ -1047,7 +1080,8 @@
           "floor": 0.5,
           "band": "worth_a_look",
           "shown": true,
-          "missingReasons": []
+          "missingReasons": [],
+          "servedModel": "jev-1.13.0"
         }
       ]
     }
@@ -1233,6 +1267,7 @@
       "positiveOption": "same_policy",
       "pPositive": 0.98,
       "confidence": 0.97,
+      "servedModel": "jev-1.13.0",
       "threshold": 0.7,
       "floor": 0.5,
       "band": "worth_a_look",
@@ -1308,6 +1343,7 @@
       "positiveOption": "split_candidate",
       "pPositive": 0.9,
       "confidence": 0.85,
+      "servedModel": "jev-1.13.0",
       "threshold": 0.5,
       "floor": 0.35,
       "band": "worth_a_look",
@@ -1376,6 +1412,7 @@
       "positiveOption": "split_candidate",
       "pPositive": 0.52,
       "confidence": 0.28,
+      "servedModel": "jev-1.13.0",
       "threshold": 0.5,
       "floor": 0.35,
       "band": "worth_a_look",
@@ -1428,6 +1465,7 @@
       "positiveOption": "multiple",
       "pPositive": 0.88,
       "confidence": 0.82,
+      "servedModel": "jev-1.13.0",
       "threshold": 0.7,
       "floor": 0.5,
       "band": "worth_a_look",
@@ -1496,6 +1534,7 @@
       "positiveOption": "multiple",
       "pPositive": 0.78,
       "confidence": 0.66,
+      "servedModel": "jev-1.13.0",
       "threshold": 0.7,
       "floor": 0.5,
       "band": "worth_a_look",
@@ -1563,5 +1602,5 @@
       "below": 24
     }
   },
-  "reportHash": "8fcbb098a5bc3d9abefb640d05f50b538198461a4bc33cbe04d8956a5394d344"
+  "reportHash": "9e85b1302da73e7071401fcec18c837795c36b252a67e84513a9eebf40ed8ced"
 }

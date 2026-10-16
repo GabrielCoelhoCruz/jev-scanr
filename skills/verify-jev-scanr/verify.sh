@@ -88,6 +88,7 @@ run installed-demo "$bin" demo
 grep -q 'RECORDED RUN' "$proof/installed-demo.stdout"
 run dry-scan unshare -Urn "$bin" scan "$repo/examples/demo-app" --out "$temp/dry-output"
 grep -q 'Dry run: nothing was sent and nothing was written' "$proof/dry-scan.stdout"
+grep -q '· requested model jev-preview at ' "$proof/dry-scan.stdout"
 test ! -e "$temp/dry-output"
 echo 'dry-scan output directory absent; external networking disabled by unshare -Urn' >> "$proof/commands.log"
 run rescore "$bin" rescore "$expected" --cut 0.6 --out "$proof/rescore-output"
@@ -105,6 +106,18 @@ for path in "$proof/rescore-output/queue.md" "$proof/rescore-output/report.json"
 done
 node -e 'const fs=require("fs"),crypto=require("crypto");const [report,result]=process.argv.slice(1);const original=crypto.createHash("sha256").update(fs.readFileSync(report)).digest("hex");if(JSON.parse(fs.readFileSync(result)).inputs.reportSha256!==original)process.exit(1)' "$expected/report.json" "$proof/baseline-output/baseline.json"
 grep -q 'It does not measure the quality' "$proof/baseline-output/baseline.md"
+node -e 'const fs=require("fs");const r=JSON.parse(fs.readFileSync(process.argv[1]));if(r.requestedModel!=="jev-1.13.0"||JSON.stringify(r.servedModels)!==JSON.stringify({"jev-1.13.0":15})||r.finishedWithoutServedModel!==0||r.findings.some(f=>f.servedModel!=="jev-1.13.0"))process.exit(1)' "$proof/report-output/report.json"
+grep -qF 'Model: requested `jev-1.13.0`; served jev-1.13.0 (15 responses).' "$proof/report-output/report.md"
+echo 'offline report keeps the recording requested model jev-1.13.0 and its served model separately' >> "$proof/commands.log"
+printf '%q ' "$bin" report --plan "$expected/plan.json" --run-dir "$expected" --out "$proof/report-model-conflict" --model jev-preview >> "$proof/commands.log"
+printf '\n' >> "$proof/commands.log"
+if "$bin" report --plan "$expected/plan.json" --run-dir "$expected" --out "$proof/report-model-conflict" --model jev-preview > "$proof/report-model-conflict.stdout" 2> "$proof/report-model-conflict.stderr"; then
+  echo 'report accepted a --model that conflicts with the saved plan' >&2
+  exit 1
+fi
+grep -qF 'does not match the saved plan, which requests jev-1.13.0' "$proof/report-model-conflict.stderr"
+test ! -e "$proof/report-model-conflict"
+echo 'installed report refuses a --model that conflicts with the saved jev-1.13.0 plan and writes nothing' >> "$proof/commands.log"
 find "$expected" -type f -print0 | sort -z | xargs -0 sha256sum > "$proof/recording-after.sha256"
 cmp "$proof/recording-before.sha256" "$proof/recording-after.sha256"
 echo 'recorded files unchanged; proof retained' >> "$proof/commands.log"
@@ -113,6 +126,6 @@ if [ -n "$live_cap" ]; then
   test -s "$proof/live-scan/report.json"
   test -s "$proof/live-scan/queue.md"
   test ! -e "$temp/config/jev-scanr"
-  node -e 'const fs=require("fs");const d=process.argv[1];const plan=JSON.parse(fs.readFileSync(d+"/plan.json"));const f=fs.readFileSync(d+"/run/journal.jsonl","utf8").trim().split("\n").map(JSON.parse).filter(e=>e.type==="finished");const s={model:plan.policy.model,planned:plan.requests.length,finished:f.length,succeeded:f.filter(e=>e.status==="succeeded"&&e.response.model===plan.policy.model).length,inputTokens:f.reduce((a,e)=>a+(e.usage?.input_tokens??0),0)};fs.writeFileSync(d+"/../live-summary.json",JSON.stringify(s,null,2)+"\n");if(s.finished!==s.planned||s.succeeded!==s.planned)process.exit(1)' "$proof/live-scan"
-  echo 'live scan answered every planned request with the plan model; key passed only through the environment' >> "$proof/commands.log"
+  node -e 'const fs=require("fs");const d=process.argv[1];const plan=JSON.parse(fs.readFileSync(d+"/plan.json"));const f=fs.readFileSync(d+"/run/journal.jsonl","utf8").trim().split("\n").map(JSON.parse).filter(e=>e.type==="finished");const requested=plan.policy.model,pinned=/^jev-\d+\.\d+\.\d+$/,served={};for(const e of f)if(e.servedModel)served[e.servedModel]=(served[e.servedModel]??0)+1;const ok=e=>e.status==="succeeded"&&e.requestedModel===requested&&pinned.test(e.servedModel)&&e.servedModel===e.response.model&&(!pinned.test(requested)||e.servedModel===requested);const s={requestedModel:requested,servedModels:served,planned:plan.requests.length,finished:f.length,succeeded:f.filter(ok).length,inputTokens:f.reduce((a,e)=>a+(e.usage?.input_tokens??0),0)};fs.writeFileSync(d+"/../live-summary.json",JSON.stringify(s,null,2)+"\n");if(s.finished!==s.planned||s.succeeded!==s.planned)process.exit(1)' "$proof/live-scan"
+  echo 'live scan answered every planned request; each answer records the requested model and a concrete served version; key passed only through the environment' >> "$proof/commands.log"
 fi

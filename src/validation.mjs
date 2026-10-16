@@ -1,4 +1,4 @@
-import { POLICY } from "./core.mjs";
+import { POLICY, isConcreteModel, servedModel } from "./core.mjs";
 
 export const VALIDATION_POLICY = Object.freeze({
   sumTolerance: 0.02,
@@ -55,10 +55,21 @@ export function validateResponse(request, data) {
   };
   if (!object(data))
     fail("response_object_required", null, "$", "object", data);
+  const expectedModel = isConcreteModel(request.model)
+    ? request.model
+    : `a pinned jev-X.Y.Z version resolving ${request.model}`;
   if (!own(data, "model"))
-    fail("model_required", null, "$.model", POLICY.model, undefined);
-  if (data.model !== POLICY.model)
-    fail("unexpected_model", null, "$.model", POLICY.model, data.model);
+    fail("model_required", null, "$.model", expectedModel, undefined);
+  const { served, problem } = servedModel(request.model, data.model);
+  if (problem)
+    fail(
+      problem,
+      null,
+      "$.model",
+      expectedModel,
+      data.model,
+      served ? [served] : [],
+    );
   if (!object(data.usage))
     fail(
       "usage_object_required",

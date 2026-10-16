@@ -1,7 +1,7 @@
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, dirname } from "node:path";
-import { POLICY, hash } from "../src/core.mjs";
+import { hash, isConcreteModel } from "../src/core.mjs";
 import { allSignals } from "../src/catalog.mjs";
 import { buildPlan } from "../src/build-plan.mjs";
 import { makeClient, runPlan } from "../src/runner.mjs";
@@ -78,8 +78,9 @@ export function answers(request, decide = () => null) {
   );
 }
 
+export const FAKE_ALIAS_TARGET = "jev-1.14.0";
 export const response = (request, decide) => ({
-  model: POLICY.model,
+  model: isConcreteModel(request.model) ? request.model : FAKE_ALIAS_TARGET,
   answers: answers(request, decide),
   usage: { input_tokens: 100, output_tokens: 10 },
 });

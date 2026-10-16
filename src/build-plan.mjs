@@ -1,4 +1,4 @@
-import { hash, POLICY } from "./core.mjs";
+import { hash, POLICY, policyFor } from "./core.mjs";
 import { readSnapshot } from "./snapshot.mjs";
 import { buildIndex } from "./index.mjs";
 import { makePack } from "./packs.mjs";
@@ -24,6 +24,7 @@ const MIN_WINDOW_LINES = 5;
 
 export function buildPlan(root, options = {}) {
   const enabledSignals = selectSignals(options.signals);
+  const policy = policyFor(options.model ?? POLICY.model);
   const snapshot = readSnapshot(root, options),
     index = buildIndex(snapshot),
     limits = snapshot.limits,
@@ -48,7 +49,9 @@ export function buildPlan(root, options = {}) {
     };
     probe.questionEligibility = questionEligibility(probe);
     return Buffer.byteLength(
-      JSON.stringify(requestFor(probe, { includeIneligible: true })),
+      JSON.stringify(
+        requestFor(probe, policy.model, { includeIneligible: true }),
+      ),
     );
   };
   const build = (unit, unitId) => ({
@@ -72,7 +75,7 @@ export function buildPlan(root, options = {}) {
   const finalize = (pack) => {
     pack.contextVersion = "0.3.1";
     applyQuestionEligibility(pack);
-    pack.budget = packBudget(pack, limits);
+    pack.budget = packBudget(pack, limits, policy.model);
     if (pack.status === "eligible" && pack.budget.serializedRequestBytes > hard)
       throw Error("Internal error: eligible pack exceeds the request cap");
     const { contentHash, ...body } = pack;
@@ -255,7 +258,7 @@ export function buildPlan(root, options = {}) {
   }
   const requests = packs.flatMap((p) => {
     const { contentHash, ...body } = p;
-    const request = requestFor(body);
+    const request = requestFor(body, policy.model);
     if (!request) splits.noRequestPacks++;
     return request
       ? [
@@ -275,7 +278,7 @@ export function buildPlan(root, options = {}) {
     catalogHash: catalogHashFor(enabledSignals),
     enabledSignals,
     root: snapshot.root,
-    policy: POLICY,
+    policy,
     limits,
     excluded: snapshot.excluded,
     scope: { paths: snapshot.paths },

@@ -12,7 +12,15 @@ import {
   lstatSync,
 } from "node:fs";
 import { join } from "node:path";
-import { hash, POLICY, outside, syncDirectory, writeNew } from "./core.mjs";
+import {
+  hash,
+  POLICY,
+  isConcreteModel,
+  modelProvenance,
+  outside,
+  syncDirectory,
+  writeNew,
+} from "./core.mjs";
 import { verifyPlan } from "./plan.mjs";
 import { createLimiter, RATE_LIMITS } from "./limiter.mjs";
 import {
@@ -43,6 +51,9 @@ export function makeClient({ fetch, apiKey } = {}) {
     throw Error("Unsafe SDK configuration");
   return client;
 }
+
+const observedModel = (diagnostic) =>
+  diagnostic?.observed?.type === "enum" ? diagnostic.observed.value : null;
 
 export function readJournal(
   directory,
@@ -130,11 +141,22 @@ export function readJournal(
         !["succeeded", "failed"].includes(event.status)
       )
         throw Error("Invalid WAL completion");
+      const { request } = requests.get(event.unitId);
       if (event.status === "succeeded") {
-        validateResponse(requests.get(event.unitId).request, event.response);
+        validateResponse(request, event.response);
         if (hash(event.usage) !== hash(knownUsage(event.response)))
           throw Error("WAL usage mismatch");
       }
+      if (
+        ("requestedModel" in event || "servedModel" in event) &&
+        (event.requestedModel !== request.model ||
+          (event.servedModel !== null && !isConcreteModel(event.servedModel)) ||
+          (event.status === "succeeded" &&
+            event.servedModel !== event.response.model) ||
+          (event.failure?.validation === "unexpected_model" &&
+            event.servedModel !== observedModel(event.failure.diagnostic)))
+      )
+        throw Error("WAL model provenance mismatch");
       finished.add(event.unitId);
       pending.delete(event.unitId);
     } else if (event.type === "stopped") terminal = true;
@@ -200,6 +222,7 @@ export function summarize(events, plan) {
           Date.parse(events[0].recordedAt)
         : null,
     sdkRetries: 0,
+    ...modelProvenance(events, plan),
   };
 }
 
@@ -297,7 +320,7 @@ export async function runPlan({
         planHash: plan.planHash,
         mode,
         capUSD,
-        policy: POLICY,
+        policy: plan.policy,
         concurrency,
         recordedAt: new Date().toISOString(),
       });
@@ -386,6 +409,8 @@ export async function runPlan({
         latencyMs: performance.now() - started,
         usage,
         response: response ?? null,
+        requestedModel: item.request.model,
+        servedModel: isConcreteModel(data?.model) ? data.model : null,
         rawResponseHash: data ? hash(data) : null,
         failure,
         recordedAt: new Date().toISOString(),

@@ -360,7 +360,7 @@ const fakeRequests = (n) =>
     };
   });
 const answerFor = (p) => ({
-  model: POLICY.model,
+  model: "jev-1.14.0",
   usage: { input_tokens: 1300, output_tokens: 5 },
   answers: {
     name_vs_behavior: {
@@ -522,7 +522,7 @@ test("the committed live run reproduces its stored analysis, every answer has an
   assert.equal(finished.length, 300);
   for (const e of finished) {
     assert.equal(e.status, "succeeded");
-    assert.equal(e.response.model, POLICY.model);
+    assert.equal(e.response.model, "jev-1.13.0");
     assert.ok(
       "insufficient" in Object.values(e.response.answers)[0].probabilities,
     );

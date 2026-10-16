@@ -11,7 +11,10 @@ import { buildReport, queueMarkdown, reportMarkdown } from "../src/report.mjs";
 export function regenerateDemoReports() {
   const demo = new URL("../examples/demo-app/", import.meta.url).pathname;
   const expected = join(demo, "expected");
-  const plan = buildPlan(demo);
+  const { model } = JSON.parse(
+    readFileSync(join(expected, "RECEIPT.json"), "utf8"),
+  );
+  const plan = buildPlan(demo, { model });
   const events = readFileSync(join(expected, "journal.jsonl"), "utf8")
     .trim()
     .split("\n")

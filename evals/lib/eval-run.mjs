@@ -17,6 +17,7 @@ import { noiseFloor, rate, wilson } from "./stats.mjs";
 
 const FAILURE_CLASSES = {
   unexpected_model: "served_model_mismatch",
+  unresolved_model: "served_model_mismatch",
   model_required: "served_model_mismatch",
 };
 

@@ -3,9 +3,13 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { execFileSync } from "node:child_process";
-import { POLICY } from "../src/core.mjs";
 import { auditCases, loadCases } from "../evals/lib/cases.mjs";
-import { answerFor, fakeClient, graderChecks } from "../evals/lib/audit.mjs";
+import {
+  answerFor,
+  fakeClient,
+  graderChecks,
+  SYNTHETIC_SERVED_MODEL,
+} from "../evals/lib/audit.mjs";
 import { readFlows, runEval } from "../evals/lib/eval-run.mjs";
 import {
   chooseRepeats,
@@ -122,7 +126,10 @@ test("a run writes results.jsonl, traces, errors and a summary with the noise fl
   assert.equal(rows.length, 2);
   for (const r of rows) {
     assert.ok(
-      r.prompt_id && r.prompt && r.status === "ok" && r.model === POLICY.model,
+      r.prompt_id &&
+        r.prompt &&
+        r.status === "ok" &&
+        r.model === SYNTHETIC_SERVED_MODEL,
     );
     assert.ok(
       typeof r.grade.correct === "number" &&

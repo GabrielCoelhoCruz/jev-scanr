@@ -11,6 +11,8 @@ Each signal has its own default display cut and floor, stored in [`cuts.json`](.
 
 The other experimental signals have no constructed data and keep 0.7 and 0.5.
 
+All of these cuts were derived on `jev-1.13.0`. Scans now request `jev-preview` by default, which TypeSafe pointed at `jev-1.14.0` on 2026-10-16, and the cuts were not recalibrated for that version. One comparison is known: on an 18-unit `clone_same_policy` sample, at the default 0.7 cut, `jev-1.14.0` showed 16 items where `jev-1.13.0` showed 12, and false positives rose from 5 to 7. An LLM labeled that sample, and an earlier `jev-1.13.0` run selected its pool, so it measures neither general quality nor the other signals. Expect the default queue to differ from a `jev-1.13.0` run, possibly with more false positives. To keep the calibrated setting, pin `--model jev-1.13.0`. `report.json` names the served version of each finding.
+
 ## Why `name_vs_behavior` has a low floor
 
 On the 400-function real sample Jev answered `name_fits` for 399 and put no function at 0.7 or above; the highest P was 0.60. A single 0.7 cut would have made the signal silent on that code. The 16 functions a model labeler called imprecise or mismatched sit between 0.00 and 0.50 (mean P 0.119, against 0.023 for the other 384). The 5 `mismatch` functions sit at 0.30, 0.20, 0.11, 0.01 and 0.01, so none of them clears 0.5 either. The planted renames of the constructed set do: 29 of 50 reach 0.5.

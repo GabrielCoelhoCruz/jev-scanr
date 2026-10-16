@@ -16,7 +16,7 @@ import {
 } from "node:fs";
 import { join } from "node:path";
 import { parseArgs } from "node:util";
-import { hash, POLICY } from "../../src/core.mjs";
+import { hash, POLICY, policyFor } from "../../src/core.mjs";
 import { resolveApiKey } from "../../src/credentials.mjs";
 import {
   knownUsage,
@@ -85,7 +85,7 @@ export async function runContrast({
       type: "initialized",
       mode: "live",
       capUSD,
-      policy: POLICY,
+      policy: policyFor(plan.model),
       concurrency: 1,
       requestsHash: hash(order.map((r) => r.requestHash)),
       receipt: plan,

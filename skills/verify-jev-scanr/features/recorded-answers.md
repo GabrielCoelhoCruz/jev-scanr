@@ -6,6 +6,8 @@ A visitor can change the cut or regenerate a report from a recorded run without 
 
 - `rescore` writes a new queue with different bands.
 - `report` writes a new queue and report from the saved plan and journal.
+- The regenerated report keeps the recording's requested model and served model apart: `requestedModel: "jev-1.13.0"`, `servedModels: {"jev-1.13.0": 15}`, and `servedModel` on each finding. The served value comes from the stored answers, not from the request.
+- `report --model jev-preview` on that saved `jev-1.13.0` plan stops with an error that names both models, and writes no output directory.
 
 ## How to get to it (user POV)
 
@@ -13,7 +15,7 @@ Use `jevs rescore <installed package>/examples/demo-app/expected --cut 0.6 --out
 
 ## Driving it with the CLI
 
-Preconditions: use the installed package and its recorded files. Run `bash skills/verify-jev-scanr/verify.sh "$(git rev-parse HEAD)" "$HOME/.capy/work/scanr-proof-$(date +%s)"`. Inspect `rescore.stdout`, `report.stdout`, and the two resulting directories in the proof directory. Require `queue.md` and `report.json` in each output directory.
+Preconditions: use the installed package and its recorded files. Run `bash skills/verify-jev-scanr/verify.sh "$(git rev-parse HEAD)" "$HOME/.capy/work/scanr-proof-$(date +%s)"`. Inspect `rescore.stdout`, `report.stdout`, and the two resulting directories in the proof directory. Require `queue.md` and `report.json` in each output directory. The helper checks the model fields of `report-output/report.json` and the `Model:` line of `report-output/report.md`. It also reads `report-model-conflict.stderr` and checks that `report-model-conflict` does not exist.
 
 ## Gotchas
 

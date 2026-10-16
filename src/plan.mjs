@@ -1,4 +1,4 @@
-import { hash, POLICY, secretLike } from "./core.mjs";
+import { hash, POLICY, policyFor, secretLike } from "./core.mjs";
 import {
   catalog,
   catalogHashFor,
@@ -64,7 +64,7 @@ export function applyQuestionEligibility(pack) {
     ? "eligible"
     : "insufficient_context";
 }
-export function requestFor(pack, { includeIneligible = false } = {}) {
+export function requestFor(pack, model, { includeIneligible = false } = {}) {
   if (pack.status !== "eligible") return null;
   const selectedSignals = packSignals(pack).filter(
     (s) =>
@@ -126,15 +126,15 @@ export function requestFor(pack, { includeIneligible = false } = {}) {
     uncertainties: pack.uncertainties,
   };
   return {
-    model: POLICY.model,
+    model,
     state,
     questions: Object.fromEntries(
       selectedSignals.map((s) => [s.id, question(s)]),
     ),
   };
 }
-export function packBudget(pack, limits) {
-  const request = requestFor(pack),
+export function packBudget(pack, limits, model) {
+  const request = requestFor(pack, model),
     caps = {
       heuristicTargetTokens: 6000,
       notTokenizer: true,
@@ -315,6 +315,14 @@ export const COMPATIBLE_PLAN_VERSIONS = [
   SCANNER_VERSION,
 ];
 
+function samePolicy(policy) {
+  try {
+    return hash(policy) === hash(policyFor(policy?.model));
+  } catch {
+    return false;
+  }
+}
+
 export function verifyPlan(plan) {
   const { planHash, ...body } = plan;
   if (
@@ -322,9 +330,10 @@ export function verifyPlan(plan) {
     plan.schema !== PLAN_SCHEMA ||
     !COMPATIBLE_PLAN_VERSIONS.includes(plan.scannerVersion) ||
     plan.catalogHash !== catalogHashFor(plan.enabledSignals) ||
-    hash(plan.policy) !== hash(POLICY)
+    !samePolicy(plan.policy)
   )
     throw Error("Plan/version integrity mismatch");
+  const model = plan.policy.model;
   selectSignals(plan.enabledSignals);
   if (
     plan.scope !== undefined &&
@@ -491,8 +500,8 @@ export function verifyPlan(plan) {
           )
         )
           throw Error("Uncovered required reference");
-    const request = requestFor(base);
-    if (hash(pack.budget) !== hash(packBudget(base, plan.limits)))
+    const request = requestFor(base, model);
+    if (hash(pack.budget) !== hash(packBudget(base, plan.limits, model)))
       throw Error("Budget mismatch");
     if (!request) {
       const signals = packSignals(pack);

@@ -6,7 +6,7 @@ A user with a TypeSafe key scans a project and gets a queue from real Jev answer
 
 - `scan --run --yes --cap-usd N` refuses a worst case above the cap, then sends each planned request once.
 - The run folder holds `plan.json`, `run/journal.jsonl`, `report.json` and `queue.md`.
-- Every answer comes from the model the plan names.
+- Every answer records the requested model from the plan and the concrete version that served it. A pinned plan accepts only that version. An alias plan, such as the default `jev-preview` or `jev-latest`, accepts any concrete `jev-X.Y.Z` version and never stores the alias as served.
 
 ## How to get to it (user POV)
 
@@ -14,7 +14,7 @@ Set `TYPESAFE_API_KEY`, then run `jevs scan <project> --run --yes --cap-usd 0.01
 
 ## Driving it with the CLI
 
-Preconditions: an approved budget, the key in the environment, and a published commit. Run `bash skills/verify-jev-scanr/verify.sh "$(git rev-parse HEAD)" "$HOME/.capy/work/scanr-proof-$(date +%s)" 0.01`. The bundled demo app plans 15 requests, about 20,000 input tokens. Read `live-summary.json`: `planned`, `finished` and `succeeded` must be equal, and `model` must be the model you meant to test. Read `live-scan/queue.md` for the items.
+Preconditions: an approved budget, the key in the environment, and a published commit. Run `bash skills/verify-jev-scanr/verify.sh "$(git rev-parse HEAD)" "$HOME/.capy/work/scanr-proof-$(date +%s)" 0.01`. The bundled demo app plans 15 requests, about 20,000 input tokens. Read `live-summary.json`: `planned`, `finished` and `succeeded` must be equal. `requestedModel` must be the model you meant to request, and `servedModels` lists each concrete version that answered with its count. Report both values, since `jev-preview` can resolve to a different version on another day. Read `live-scan/queue.md` for the items.
 
 ## Gotchas
 
