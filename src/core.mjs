@@ -73,7 +73,7 @@ export function modelProvenance(events, plan) {
     servedModels: Object.fromEntries(
       Object.entries(servedModels).sort(([a], [b]) => a.localeCompare(b)),
     ),
-    responsesWithoutServedModel: finished.filter((e) => !servedModelOf(e))
+    finishedWithoutServedModel: finished.filter((e) => !servedModelOf(e))
       .length,
   };
 }

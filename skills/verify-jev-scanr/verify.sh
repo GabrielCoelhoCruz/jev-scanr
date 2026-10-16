@@ -106,7 +106,7 @@ for path in "$proof/rescore-output/queue.md" "$proof/rescore-output/report.json"
 done
 node -e 'const fs=require("fs"),crypto=require("crypto");const [report,result]=process.argv.slice(1);const original=crypto.createHash("sha256").update(fs.readFileSync(report)).digest("hex");if(JSON.parse(fs.readFileSync(result)).inputs.reportSha256!==original)process.exit(1)' "$expected/report.json" "$proof/baseline-output/baseline.json"
 grep -q 'It does not measure the quality' "$proof/baseline-output/baseline.md"
-node -e 'const fs=require("fs");const r=JSON.parse(fs.readFileSync(process.argv[1]));if(r.requestedModel!=="jev-1.13.0"||JSON.stringify(r.servedModels)!==JSON.stringify({"jev-1.13.0":15})||r.responsesWithoutServedModel!==0||r.findings.some(f=>f.servedModel!=="jev-1.13.0"))process.exit(1)' "$proof/report-output/report.json"
+node -e 'const fs=require("fs");const r=JSON.parse(fs.readFileSync(process.argv[1]));if(r.requestedModel!=="jev-1.13.0"||JSON.stringify(r.servedModels)!==JSON.stringify({"jev-1.13.0":15})||r.finishedWithoutServedModel!==0||r.findings.some(f=>f.servedModel!=="jev-1.13.0"))process.exit(1)' "$proof/report-output/report.json"
 grep -qF 'Model: requested `jev-1.13.0`; served jev-1.13.0 (15 responses).' "$proof/report-output/report.md"
 echo 'offline report keeps the recording requested model jev-1.13.0 and its served model separately' >> "$proof/commands.log"
 find "$expected" -type f -print0 | sort -z | xargs -0 sha256sum > "$proof/recording-after.sha256"

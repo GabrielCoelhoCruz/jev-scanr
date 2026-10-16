@@ -1,4 +1,9 @@
-import { hash, modelProvenance, servedModelOf } from "./core.mjs";
+import {
+  hash,
+  isConcreteModel,
+  modelProvenance,
+  servedModelOf,
+} from "./core.mjs";
 import { VALIDATION_POLICY } from "./validation.mjs";
 import { verifyPlan, catalog, packSignals } from "./plan.mjs";
 import { defaultCut, defaultFloor } from "./cuts.mjs";
@@ -517,13 +522,17 @@ export function queueMarkdown(report) {
 export function modelLine({
   requestedModel,
   servedModels,
-  responsesWithoutServedModel,
+  finishedWithoutServedModel,
 }) {
+  const pinned = isConcreteModel(requestedModel);
   const served = Object.entries(servedModels)
-    .map(([id, n]) => `${id} (${n} response${n === 1 ? "" : "s"})`)
+    .map(
+      ([id, n]) =>
+        `${id} (${n} response${n === 1 ? "" : "s"}${pinned && id !== requestedModel ? ", rejected: not the pinned version" : ""})`,
+    )
     .join(", ");
-  const unknown = responsesWithoutServedModel
-    ? `; ${responsesWithoutServedModel} finished attempt${responsesWithoutServedModel === 1 ? "" : "s"} without a served model`
+  const unknown = finishedWithoutServedModel
+    ? `; ${finishedWithoutServedModel} finished attempt${finishedWithoutServedModel === 1 ? "" : "s"} without a served model`
     : "";
   return `Model: requested \`${requestedModel}\`; served ${served || "none (no answer was recorded)"}${unknown}.`;
 }

@@ -65,7 +65,7 @@ test("an alias run keeps the requested alias and the concrete served version apa
     [
       result.requestedModel,
       result.servedModels,
-      result.responsesWithoutServedModel,
+      result.finishedWithoutServedModel,
     ],
     ["jev-latest", { "jev-1.14.0": p.requests.length }, 0],
   );
@@ -126,6 +126,10 @@ test("a pinned run stops on another served version and records which one answere
     ],
     ["failed", "unexpected_model", "jev-1.13.0", "jev-1.14.0", null],
   );
+  assert.match(
+    reportMarkdown(buildReport(p, readJournal(dir, p))),
+    /^Model: requested `jev-1\.13\.0`; served jev-1\.14\.0 \(1 response, rejected: not the pinned version\)\.$/m,
+  );
 });
 
 test("an alias reply without a concrete version fails and is never filled with the alias", async (t) => {
@@ -156,7 +160,7 @@ test("an alias reply without a concrete version fails and is never filled with t
       ],
     );
     assert.deepEqual(
-      [result.servedModels, result.responsesWithoutServedModel],
+      [result.servedModels, result.finishedWithoutServedModel],
       [{}, 1],
     );
   }
@@ -170,7 +174,7 @@ test("a dry run reports the requested model and no served model", (t) => {
       report.provenance,
       report.requestedModel,
       report.servedModels,
-      report.responsesWithoutServedModel,
+      report.finishedWithoutServedModel,
     ],
     ["not_run", "jev-latest", {}, 0],
   );
@@ -216,7 +220,7 @@ test("the jev-1.13.0 recording still reads; its served model comes from the answ
   assert.deepEqual(modelProvenance(events, p), {
     requestedModel: "jev-1.13.0",
     servedModels: { "jev-1.13.0": 15 },
-    responsesWithoutServedModel: 0,
+    finishedWithoutServedModel: 0,
   });
   assert.equal(summarize(events, p).requestedModel, "jev-1.13.0");
 });
