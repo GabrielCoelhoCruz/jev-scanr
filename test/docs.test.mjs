@@ -294,7 +294,13 @@ test("the npm package ships the tool and its notices, not the evaluation tools o
     ["pack", "--dry-run", "--json", "--ignore-scripts"],
     { cwd: root, encoding: "utf8" },
   );
-  const files = JSON.parse(out)[0].files.map((f) => f.path);
+  const packed = JSON.parse(out);
+  const packs = Array.isArray(packed) ? packed : Object.values(packed);
+  assert.deepEqual(
+    packs.map((p) => p.name),
+    ["jev-scanr"],
+  );
+  const files = packs[0].files.map((f) => f.path);
   for (const must of [
     "src/cli.mjs",
     "src/credentials.mjs",
