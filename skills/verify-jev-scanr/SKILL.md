@@ -1,6 +1,6 @@
 ---
 name: verify-jev-scanr
-description: Verify the jev-scanr CLI as an installed GitHub package, including the pinned npx demo, offline replay, dry scan, and baseline. Use after changing its CLI, packaging, or recorded output.
+description: Verify the jev-scanr CLI as an installed GitHub package, including the pinned npx demo, offline replay, dry scan, baseline, and an opt-in paid live scan. Use after changing its CLI, packaging, model, or recorded output.
 ---
 
 # Verify jev-scanr as a visitor
@@ -11,11 +11,11 @@ Use Node 24 or newer and npm. From a checkout whose commit exists on GitHub, run
 
 ## Doctor
 
-Run `node --version && npm --version && git rev-parse HEAD && git status --short && command -v unshare`. Confirm Node is at least 24, the intended commit is on GitHub, the checkout is the version you meant to test, and Linux network namespaces work with `unshare -Urn true`. On another operating system, arrange equivalent outbound network isolation before claiming that a dry run makes no requests. The helper fails rather than asserting network isolation without it.
+Run `node --version && npm --version && git rev-parse HEAD && git status --short && git ls-remote origin | grep "$(git rev-parse HEAD)" && command -v unshare`. Confirm Node is at least 24, the intended commit is on GitHub, the checkout is the version you meant to test, and Linux network namespaces work with `unshare -Urn true`. On another operating system, arrange equivalent outbound network isolation before claiming that a dry run makes no requests. The helper fails rather than asserting network isolation without it.
 
 ## Drive
 
-Read [the feature map](features/README.md) before choosing a path. The helper runs the published entry point `npx --yes github:GabrielCoelhoCruz/jev-scanr#<exact SHA> demo` with a new npm cache, plus the locally packed CLI. It exercises `--version`, `demo`, `scan` without `--run`, `rescore`, `report`, and `baseline`. The recorded demo has its own source files and answers; no new Jev request is allowed in this workflow.
+Read [the feature map](features/README.md) before choosing a path. The helper runs the published entry point `npx --yes github:GabrielCoelhoCruz/jev-scanr#<exact SHA> demo` with a new npm cache, plus the locally packed CLI. It exercises `--version`, `demo`, `scan` without `--run`, `rescore`, `report`, and `baseline`. The recorded demo has its own source files and answers, and these paths send no Jev request. A third argument, a cap in US dollars such as `0.01`, adds the paid [live scan](features/live-scan.md) of the demo app; it needs `TYPESAFE_API_KEY` in the environment. Run it only with an approved budget, and count its requests against that budget. The offline proof and the live scan are separate results; neither stands in for the other.
 
 ## Evidence
 
@@ -27,4 +27,4 @@ The helper removes only its own temporary installation, npm cache, and isolated 
 
 ## Helpers
 
-`verify.sh` is the executable entry point above. On a shared machine, acquire its heavy-job lock around the whole command. It also checks that an installed CLI's baseline excludes synthetic private fields from both outputs. It does not call `scan --run`, `run`, `continue`, `auth`, `skill`, or the recording script. On an unsupported network-isolation host, document the missing check and use a host-level network block before testing the dry-run claim.
+`verify.sh` is the executable entry point above. On a shared machine, acquire its heavy-job lock around the whole command. It also checks that an installed CLI's baseline excludes synthetic private fields from both outputs. Without the third argument it does not call `scan --run`. It never calls `run`, `continue`, `auth`, `skill`, or the recording script; the feature map lists them as not tested. On an unsupported network-isolation host, document the missing check and use a host-level network block before testing the dry-run claim.

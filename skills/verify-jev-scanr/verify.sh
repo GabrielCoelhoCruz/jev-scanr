@@ -3,6 +3,12 @@ set -euo pipefail
 
 sha="${1:?pass the exact published commit SHA}"
 proof="${2:?pass a new evidence directory}"
+live_cap="${3:-}"
+live_key="${TYPESAFE_API_KEY:-}"
+if [ -n "$live_cap" ] && [ -z "$live_key" ]; then
+  echo 'a live scan needs TYPESAFE_API_KEY in the environment' >&2
+  exit 1
+fi
 repo="$(git rev-parse --show-toplevel)"
 test "$(git -C "$repo" rev-parse HEAD)" = "$sha"
 test ! -e "$proof"
@@ -15,6 +21,7 @@ mkdir -p "$temp/home" "$temp/config" "$temp/cache" "$temp/npm-cache" "$temp/inst
 export HOME="$temp/home" XDG_CONFIG_HOME="$temp/config" XDG_CACHE_HOME="$temp/cache" npm_config_cache="$temp/npm-cache"
 export npm_config_userconfig="$temp/home/.npmrc" npm_config_globalconfig="$temp/home/global.npmrc"
 unset TYPESAFE_API_KEY NPM_TOKEN NODE_AUTH_TOKEN
+with_key() { TYPESAFE_API_KEY="$live_key" "$@"; }
 
 run() {
   name="$1"
@@ -72,3 +79,11 @@ grep -q 'It does not measure the quality' "$proof/baseline-output/baseline.md"
 find "$expected" -type f -print0 | sort -z | xargs -0 sha256sum > "$proof/recording-after.sha256"
 cmp "$proof/recording-before.sha256" "$proof/recording-after.sha256"
 echo 'recorded files unchanged; proof retained' >> "$proof/commands.log"
+if [ -n "$live_cap" ]; then
+  run live-scan with_key "$bin" scan "$repo/examples/demo-app" --run --yes --cap-usd "$live_cap" --out "$proof/live-scan"
+  test -s "$proof/live-scan/report.json"
+  test -s "$proof/live-scan/queue.md"
+  test ! -e "$temp/config/jev-scanr"
+  node -e 'const fs=require("fs");const d=process.argv[1];const plan=JSON.parse(fs.readFileSync(d+"/plan.json"));const f=fs.readFileSync(d+"/run/journal.jsonl","utf8").trim().split("\n").map(JSON.parse).filter(e=>e.type==="finished");const s={model:plan.policy.model,planned:plan.requests.length,finished:f.length,succeeded:f.filter(e=>e.status==="succeeded"&&e.response.model===plan.policy.model).length,inputTokens:f.reduce((a,e)=>a+(e.usage?.input_tokens??0),0)};fs.writeFileSync(d+"/../live-summary.json",JSON.stringify(s,null,2)+"\n");if(s.finished!==s.planned||s.succeeded!==s.planned)process.exit(1)' "$proof/live-scan"
+  echo 'live scan answered every planned request with the plan model; key passed only through the environment' >> "$proof/commands.log"
+fi
