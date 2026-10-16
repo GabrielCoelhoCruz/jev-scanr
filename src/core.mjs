@@ -25,7 +25,7 @@ export function jaccard(a, b) {
   return count / (a.size + b.size - count || 1);
 }
 export const POLICY = Object.freeze({
-  model: "jev-1.13.0",
+  model: "jev-1.14.0",
   maxInputTokens: 65536,
   inputUSDPerMillion: 0.042,
   outputUSDPerMillion: 0,

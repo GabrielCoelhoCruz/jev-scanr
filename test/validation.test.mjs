@@ -41,6 +41,20 @@ const tweak = (req, id, choiceP, maxP, chosenIsPositive = true) => {
   return data;
 };
 
+test("the served model must be the model the request named", (t) => {
+  const current = request(t);
+  assert.equal(current.model, "jev-1.14.0");
+  validateResponse(current, response(current));
+  const stored = { ...current, model: "jev-1.13.0" };
+  validateResponse(stored, { ...response(stored), model: "jev-1.13.0" });
+  assert.throws(
+    () => validateResponse(stored, response(current)),
+    (e) =>
+      e.diagnostic.code === "unexpected_model" &&
+      e.diagnostic.expected === "jev-1.13.0",
+  );
+});
+
 test("validation policy is fixed", () => {
   assert.deepEqual(VALIDATION_POLICY, {
     sumTolerance: 0.02,

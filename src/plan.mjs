@@ -317,7 +317,7 @@ export const COMPATIBLE_PLAN_VERSIONS = [
   "0.3.1-alpha",
   SCANNER_VERSION,
 ];
-export const COMPATIBLE_MODELS = [POLICY.model];
+export const COMPATIBLE_MODELS = ["jev-1.13.0", POLICY.model];
 
 export function verifyPlan(plan) {
   const { planHash, ...body } = plan;

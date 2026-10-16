@@ -20,7 +20,7 @@ node evals/cli.mjs --help
   - **Null.** An always-negative answer must get zero recall, and an always-positive one zero specificity.
   - **No answer is not a negative.** A model that says `insufficient` is counted as _abstained_, never as a true or false negative. Abstentions and errors are reported next to the rates.
   - **An error is not a zero.** An API failure is written to `errors.jsonl` with a failure class and stops the run. It is not a graded failure. There are no retries.
-  - **Served model.** A response from any model other than `jev-1.13.0` is rejected and recorded as `served_model_mismatch`.
+  - **Served model.** A response from any model other than the one the request named (`jev-1.14.0` for new plans) is rejected and recorded as `served_model_mismatch`.
 
 ## Free baseline
 

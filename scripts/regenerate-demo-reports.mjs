@@ -8,10 +8,23 @@ import { hash } from "../src/core.mjs";
 import { summarize } from "../src/runner.mjs";
 import { buildReport, queueMarkdown, reportMarkdown } from "../src/report.mjs";
 
+export function planForModel(plan, model) {
+  const { planHash: _sealed, ...body } = plan;
+  const requests = body.requests.map((r) => {
+    const request = { ...r.request, model };
+    return { ...r, requestHash: hash(request), request };
+  });
+  const next = { ...body, policy: { ...body.policy, model }, requests };
+  return verifyPlan({ ...next, planHash: hash(next) });
+}
+
 export function regenerateDemoReports() {
   const demo = new URL("../examples/demo-app/", import.meta.url).pathname;
   const expected = join(demo, "expected");
-  const plan = buildPlan(demo);
+  const { model } = JSON.parse(
+    readFileSync(join(expected, "RECEIPT.json"), "utf8"),
+  );
+  const plan = planForModel(buildPlan(demo), model);
   const events = readFileSync(join(expected, "journal.jsonl"), "utf8")
     .trim()
     .split("\n")

@@ -522,7 +522,7 @@ test("the committed live run reproduces its stored analysis, every answer has an
   assert.equal(finished.length, 300);
   for (const e of finished) {
     assert.equal(e.status, "succeeded");
-    assert.equal(e.response.model, POLICY.model);
+    assert.equal(e.response.model, "jev-1.13.0");
     assert.ok(
       "insufficient" in Object.values(e.response.answers)[0].probabilities,
     );

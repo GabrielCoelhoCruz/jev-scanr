@@ -5,7 +5,11 @@ import { readFileSync } from "node:fs";
 import { buildPlan } from "../src/build-plan.mjs";
 import { recordedRun, demoText, demoFooter } from "../src/demo.mjs";
 import { renderDemoSvg, parseQueue } from "../scripts/render-demo-image.mjs";
-import { regenerateDemoReports } from "../scripts/regenerate-demo-reports.mjs";
+import {
+  regenerateDemoReports,
+  planForModel,
+} from "../scripts/regenerate-demo-reports.mjs";
+import { COMPATIBLE_MODELS } from "../src/plan.mjs";
 
 const demo = new URL("../examples/demo-app/", import.meta.url).pathname;
 const read = (p) => readFileSync(demo + p, "utf8");
@@ -15,7 +19,11 @@ const result = json("expected/RESULT.json");
 const report = json("expected/report.json");
 
 test("the recording still matches the current pipeline and demo source", () => {
-  const plan = buildPlan(demo);
+  assert.ok(
+    COMPATIBLE_MODELS.includes(receipt.model),
+    "a model upgrade must keep the model that recorded the demo in COMPATIBLE_MODELS, or re-record",
+  );
+  const plan = planForModel(buildPlan(demo), receipt.model);
   assert.equal(
     createHash("sha256")
       .update(JSON.stringify(plan.requests.map((r) => r.requestHash)))
@@ -25,6 +33,20 @@ test("the recording still matches the current pipeline and demo source", () => {
   );
   assert.equal(plan.estimates.requests, receipt.requests);
   assert.deepEqual(plan.enabledSignals, receipt.signals);
+});
+
+test("a plan sealed under the earlier jev-1.13.0 verifies, an unknown model does not", () => {
+  const current = buildPlan(demo);
+  assert.equal(current.policy.model, "jev-1.14.0");
+  const stored = planForModel(current, "jev-1.13.0");
+  assert.deepEqual(
+    [...new Set(stored.requests.map((r) => r.request.model))],
+    ["jev-1.13.0"],
+  );
+  assert.throws(
+    () => planForModel(current, "jev-1.12.0"),
+    /Plan\/version integrity mismatch/,
+  );
 });
 
 test("the stored artifacts are exactly what the current pipeline regenerates from the recording", () => {
