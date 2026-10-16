@@ -11,7 +11,7 @@ import {
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const helper = fileURLToPath(
@@ -24,7 +24,7 @@ const realGit = execFileSync("sh", ["-c", "command -v git"], {
   encoding: "utf8",
 }).trim();
 
-function verifyPackage(t, { tracked = [], ignored = null }) {
+function verifyPackage(t, { tracked = [], ignored = null, exclude = null }) {
   const root = mkdtempSync(join(tmpdir(), "verify-pack-"));
   t.after(() => rmSync(root, { recursive: true, force: true }));
   const repo = join(root, "repo");
@@ -57,8 +57,15 @@ function verifyPackage(t, { tracked = [], ignored = null }) {
     "-m",
     "fixture",
   );
-  if (ignored)
-    writeFileSync(join(repo, "src", ignored), "PUBLIC_SENTINEL_NOT_A_SECRET\n");
+  if (exclude) {
+    mkdirSync(join(repo, ".git", "info"), { recursive: true });
+    writeFileSync(join(repo, ".git", "info", "exclude"), exclude);
+  }
+  if (ignored) {
+    const file = join(repo, "src", ignored);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, "PUBLIC_SENTINEL_NOT_A_SECRET\n");
+  }
   const stub = (file, body) => {
     writeFileSync(join(bin, file), `#!/bin/sh\n${body}\n`);
     chmodSync(join(bin, file), 0o755);
@@ -80,6 +87,10 @@ function verifyPackage(t, { tracked = [], ignored = null }) {
   });
   return {
     status: result.status,
+    stderr: result.stderr,
+    listing: existsSync(join(proof, "package-files.txt"))
+      ? readFileSync(join(proof, "package-files.txt"), "utf8")
+      : "",
     log: existsSync(join(proof, "commands.log"))
       ? readFileSync(join(proof, "commands.log"), "utf8")
       : "",
@@ -117,3 +128,28 @@ for (const name of [
     },
   );
 }
+
+test(
+  "verify.sh refuses an ignored file whose newline splits it into two tracked names before npm install",
+  { skip: !gnuTar && "verify.sh lists the tarball with GNU tar" },
+  (t) => {
+    const run = verifyPackage(t, {
+      tracked: ["core.mjs", "demo.mjs"],
+      ignored: "core.mjs\npackage/src/demo.mjs",
+      exclude: "/src/core.mjs?package/\n",
+    });
+    assert.equal(run.status, 1);
+    assert.match(run.log, /^pack exit=0$/m);
+    assert.equal(
+      run.listing.split("\n").filter((line) => line === "package/src/core.mjs")
+        .length,
+      2,
+    );
+    assert.doesNotMatch(run.log, /every packed file equals/);
+    assert.equal(run.installed, false);
+    assert.match(
+      run.stderr,
+      /the package listing has 7 lines for 6 regular files/,
+    );
+  },
+);
