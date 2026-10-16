@@ -22,7 +22,8 @@ export function demoBanner({ receipt, result }) {
   ].join("\n");
 }
 
-export const NPX_COMMAND = "npx github:GabrielCoelhoCruz/jev-scanr";
+export const NPX_COMMAND =
+  "npx --allow-git=all github:GabrielCoelhoCruz/jev-scanr";
 
 export function demoFooter({ viaNpx = false } = {}) {
   const command = viaNpx ? NPX_COMMAND : "jevs";

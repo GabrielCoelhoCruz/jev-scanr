@@ -3,8 +3,26 @@ set -euo pipefail
 
 sha="${1:?pass the exact published commit SHA}"
 proof="${2:?pass a new evidence directory}"
+live_cap="${3:-}"
+live_key="${TYPESAFE_API_KEY:-}"
+if [ -n "$live_cap" ] && [ -z "$live_key" ]; then
+  echo 'a live scan needs TYPESAFE_API_KEY in the environment' >&2
+  exit 1
+fi
 repo="$(git rev-parse --show-toplevel)"
-test "$(git -C "$repo" rev-parse HEAD)" = "$sha"
+if [ "$(git -C "$repo" rev-parse HEAD)" != "$sha" ]; then
+  echo "HEAD is not $sha" >&2
+  exit 1
+fi
+if [ -n "$(git -C "$repo" status --porcelain)$(git -C "$repo" status --porcelain --ignored -- examples/demo-app)" ]; then
+  echo 'the checkout has local changes; the helper packs the working tree, so commit or remove them first' >&2
+  git -C "$repo" status --short --ignored -- . ':!node_modules' >&2
+  exit 1
+fi
+if ! GIT_TERMINAL_PROMPT=0 git ls-remote --heads --tags https://github.com/GabrielCoelhoCruz/jev-scanr.git | cut -f1 | grep -qx "$sha"; then
+  echo "$sha is not a branch or tag tip on GitHub; push it first" >&2
+  exit 1
+fi
 test ! -e "$proof"
 mkdir -p "$proof"
 proof="$(cd "$proof" && pwd)"
@@ -15,6 +33,7 @@ mkdir -p "$temp/home" "$temp/config" "$temp/cache" "$temp/npm-cache" "$temp/inst
 export HOME="$temp/home" XDG_CONFIG_HOME="$temp/config" XDG_CACHE_HOME="$temp/cache" npm_config_cache="$temp/npm-cache"
 export npm_config_userconfig="$temp/home/.npmrc" npm_config_globalconfig="$temp/home/global.npmrc"
 unset TYPESAFE_API_KEY NPM_TOKEN NODE_AUTH_TOKEN
+with_key() { TYPESAFE_API_KEY="$live_key" "$@"; }
 
 run() {
   name="$1"
@@ -33,14 +52,31 @@ run() {
 
 command -v unshare >/dev/null
 unshare -Urn true
-run npx-demo npx --yes "github:GabrielCoelhoCruz/jev-scanr#$sha" demo
+run npx-demo npx --yes --allow-git=all "github:GabrielCoelhoCruz/jev-scanr#$sha" demo
 grep -q 'RECORDED RUN' "$proof/npx-demo.stdout"
 grep -q '^## 1\.' "$proof/npx-demo.stdout"
 run pack npm pack --ignore-scripts --json --pack-destination "$temp"
 tarball="$(find "$temp" -maxdepth 1 -name 'jev-scanr-*.tgz' -print -quit)"
 test -n "$tarball"
-tar -tzf "$tarball" > "$proof/package-files.txt"
+tar --quoting-style=literal -tzf "$tarball" > "$proof/package-files.txt"
 grep -qx 'package/cuts.json' "$proof/package-files.txt"
+mkdir "$temp/unpacked"
+tar -xzf "$tarball" -C "$temp/unpacked"
+listed="$(wc -l < "$proof/package-files.txt")"
+extracted="$(find "$temp/unpacked" -type f -printf . | wc -c)"
+if [ "$listed" -ne "$extracted" ]; then
+  echo "the package listing has $listed lines for $extracted regular files, so a packed name contains a newline or an entry is not a regular file" >&2
+  exit 1
+fi
+while IFS= read -r entry; do
+  want="$(git -C "$repo" rev-parse --verify --quiet "$sha:${entry#package/}")" || want=
+  got="$(git hash-object --no-filters "$temp/unpacked/$entry")" || got=
+  if [ -z "$want" ] || [ "$want" != "$got" ]; then
+    echo "packed ${entry#package/} has no identical blob at $sha" >&2
+    exit 1
+  fi
+done < "$proof/package-files.txt"
+echo "every packed file equals its blob at $sha" >> "$proof/commands.log"
 run install npm install --prefix "$temp/install" "$tarball" --ignore-scripts --no-audit --no-fund
 bin="$temp/install/node_modules/.bin/jevs"
 expected="$temp/install/node_modules/jev-scanr/examples/demo-app/expected"
@@ -72,3 +108,11 @@ grep -q 'It does not measure the quality' "$proof/baseline-output/baseline.md"
 find "$expected" -type f -print0 | sort -z | xargs -0 sha256sum > "$proof/recording-after.sha256"
 cmp "$proof/recording-before.sha256" "$proof/recording-after.sha256"
 echo 'recorded files unchanged; proof retained' >> "$proof/commands.log"
+if [ -n "$live_cap" ]; then
+  run live-scan with_key "$bin" scan "$repo/examples/demo-app" --run --yes --cap-usd "$live_cap" --out "$proof/live-scan"
+  test -s "$proof/live-scan/report.json"
+  test -s "$proof/live-scan/queue.md"
+  test ! -e "$temp/config/jev-scanr"
+  node -e 'const fs=require("fs");const d=process.argv[1];const plan=JSON.parse(fs.readFileSync(d+"/plan.json"));const f=fs.readFileSync(d+"/run/journal.jsonl","utf8").trim().split("\n").map(JSON.parse).filter(e=>e.type==="finished");const s={model:plan.policy.model,planned:plan.requests.length,finished:f.length,succeeded:f.filter(e=>e.status==="succeeded"&&e.response.model===plan.policy.model).length,inputTokens:f.reduce((a,e)=>a+(e.usage?.input_tokens??0),0)};fs.writeFileSync(d+"/../live-summary.json",JSON.stringify(s,null,2)+"\n");if(s.finished!==s.planned||s.succeeded!==s.planned)process.exit(1)' "$proof/live-scan"
+  echo 'live scan answered every planned request with the plan model; key passed only through the environment' >> "$proof/commands.log"
+fi
