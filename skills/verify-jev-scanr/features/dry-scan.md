@@ -6,7 +6,7 @@ A visitor estimates the requests and cost of scanning the bundled project before
 
 - `scan` prints counts and an estimated cost without creating the proposed output folder.
 - External networking is unavailable to this process during the scan.
-- The summary names the requested model, `jev-latest` by default, and no served model, because nothing is sent.
+- The summary names the requested model, `jev-preview` by default, and no served model, because nothing is sent.
 
 ## How to get to it (user POV)
 
@@ -14,7 +14,7 @@ After installing the tarball, run `jevs scan examples/demo-app --out <new direct
 
 ## Driving it with the CLI
 
-Preconditions: run the doctor and start from a clean evidence directory. Run `bash skills/verify-jev-scanr/verify.sh "$(git rev-parse HEAD)" "$HOME/.capy/work/scanr-proof-$(date +%s)"`. Read `dry-scan.stdout` for the request count, `· requested model jev-latest at`, and `Dry run: nothing was sent and nothing was written.` Require the proposed output directory to be absent in `commands.log`.
+Preconditions: run the doctor and start from a clean evidence directory. Run `bash skills/verify-jev-scanr/verify.sh "$(git rev-parse HEAD)" "$HOME/.capy/work/scanr-proof-$(date +%s)"`. Read `dry-scan.stdout` for the request count, `· requested model jev-preview at`, and `Dry run: nothing was sent and nothing was written.` Require the proposed output directory to be absent in `commands.log`.
 
 ## Gotchas
 

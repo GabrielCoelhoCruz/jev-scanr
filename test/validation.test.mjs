@@ -64,7 +64,7 @@ test("a chosen option within 0.01 of the maximum is accepted; further away is no
 
 test("an alias request accepts a concrete served version; a pinned one accepts only itself", (t) => {
   const alias = request(t);
-  assert.equal(alias.model, "jev-latest");
+  assert.equal(alias.model, "jev-preview");
   const served = response(alias);
   assert.equal(served.model, "jev-1.14.0");
   validateResponse(alias, served);

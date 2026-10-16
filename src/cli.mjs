@@ -110,9 +110,11 @@ Options for scan
   --run               send the excerpts to the Jev API instead of a dry run; needs --yes and --cap-usd
   --yes               consent to send source excerpts to the Jev API
   --cap-usd N         refuse to start if the worst-case cost exceeds N US dollars
-  --model ID          model named in every request (default jev-latest, an alias TypeSafe moves to each new stable
-                      release). Pin a version such as jev-1.13.0 to match the version the default cuts came from.
-                      Each answer records the served version; a pinned run stops if another version answers
+  --model ID          model named in every request (default jev-preview, an alias TypeSafe moves to its most recent
+                      release, official or not). jev-latest names the most recent stable release. Pin a version such
+                      as jev-1.13.0 to match the version the default cuts came from. Each answer records the served
+                      version; a pinned run stops if another version answers. A saved plan keeps its model: run,
+                      continue, report and rescore refuse a --model that differs from it
   --concurrency N     live runs: up to N requests in flight (1 to 32, default 8). A token-bucket limiter keeps the
                       rate under Jev's documented limits (about 40 requests and 100K tokens per second, at 80%).
                       Any error, 429 included, stops the run; there are no automatic retries

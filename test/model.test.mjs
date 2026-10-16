@@ -24,12 +24,20 @@ const expected = new URL("../examples/demo-app/expected/", import.meta.url)
 const finished = (dir, p) =>
   readJournal(dir, p).filter((e) => e.type === "finished");
 
-test("the default plan requests jev-latest and --model pins one version in every request", (t) => {
+test("the default plan requests jev-preview and --model names jev-latest or pins one version in every request", (t) => {
   const latest = plan(t);
-  assert.equal(latest.policy.model, "jev-latest");
+  assert.equal(latest.policy.model, "jev-preview");
   assert.deepEqual(
     [...new Set(latest.requests.map((r) => r.request.model))],
-    ["jev-latest"],
+    ["jev-preview"],
+  );
+  const stable = plan(t, twoFiles, { model: "jev-latest" });
+  assert.deepEqual(
+    [
+      stable.policy.model,
+      ...new Set(stable.requests.map((r) => r.request.model)),
+    ],
+    ["jev-latest", "jev-latest"],
   );
   const pinned = plan(t, twoFiles, { model: "jev-1.13.0" });
   assert.equal(pinned.policy.model, "jev-1.13.0");
@@ -40,7 +48,7 @@ test("the default plan requests jev-latest and --model pins one version in every
   assert.notEqual(pinned.planHash, latest.planHash);
   assert.throws(
     () => plan(t, twoFiles, { model: "jev-1.14" }),
-    /pinned Jev version such as jev-1\.14\.0 or an alias such as jev-latest/,
+    /pinned Jev version such as jev-1\.14\.0 or an alias such as jev-preview or jev-latest/,
   );
   const forged = reseal({
     ...structuredClone(latest),
@@ -67,7 +75,7 @@ test("an alias run keeps the requested alias and the concrete served version apa
       result.servedModels,
       result.finishedWithoutServedModel,
     ],
-    ["jev-latest", { "jev-1.14.0": p.requests.length }, 0],
+    ["jev-preview", { "jev-1.14.0": p.requests.length }, 0],
   );
   const events = finished(dir, p);
   assert.deepEqual(
@@ -78,22 +86,22 @@ test("an alias run keeps the requested alias and the concrete served version apa
         ),
       ),
     ],
-    ["jev-latest|jev-1.14.0|jev-1.14.0"],
+    ["jev-preview|jev-1.14.0|jev-1.14.0"],
   );
-  assert.equal(readJournal(dir, p)[0].policy.model, "jev-latest");
+  assert.equal(readJournal(dir, p)[0].policy.model, "jev-preview");
   const report = buildReport(p, readJournal(dir, p), {
     thresholds: { clone_same_policy: 0 },
   });
   assert.deepEqual(
     [report.requestedModel, report.servedModels],
-    ["jev-latest", { "jev-1.14.0": p.requests.length }],
+    ["jev-preview", { "jev-1.14.0": p.requests.length }],
   );
   assert.ok(report.findings.length > 0);
   assert.ok(report.findings.every((f) => f.servedModel === "jev-1.14.0"));
   assert.match(
     reportMarkdown(report),
     new RegExp(
-      `^Model: requested \`jev-latest\`; served jev-1\\.14\\.0 \\(${p.requests.length} responses\\)\\.$`,
+      `^Model: requested \`jev-preview\`; served jev-1\\.14\\.0 \\(${p.requests.length} responses\\)\\.$`,
       "m",
     ),
   );
@@ -133,7 +141,7 @@ test("a pinned run stops on another served version and records which one answere
 });
 
 test("an alias reply without a concrete version fails and is never filled with the alias", async (t) => {
-  for (const reported of ["jev-latest", "jev-1.14", undefined]) {
+  for (const reported of ["jev-preview", "jev-latest", "jev-1.14", undefined]) {
     const p = plan(t);
     const dir = join(scratch(t), "run");
     const result = await run(
@@ -155,7 +163,7 @@ test("an alias reply without a concrete version fails and is never filled with t
       [
         "first_error",
         reported === undefined ? "model_required" : "unresolved_model",
-        "jev-latest",
+        "jev-preview",
         null,
       ],
     );
@@ -176,11 +184,11 @@ test("a dry run reports the requested model and no served model", (t) => {
       report.servedModels,
       report.finishedWithoutServedModel,
     ],
-    ["not_run", "jev-latest", {}, 0],
+    ["not_run", "jev-preview", {}, 0],
   );
   assert.match(
     reportMarkdown(report),
-    /^Model: requested `jev-latest`; served none \(no answer was recorded\)\.$/m,
+    /^Model: requested `jev-preview`; served none \(no answer was recorded\)\.$/m,
   );
   const dir = project(t, twoFiles);
   const dry = spawnSync(

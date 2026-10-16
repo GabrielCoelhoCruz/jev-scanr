@@ -25,7 +25,7 @@ export function jaccard(a, b) {
   return count / (a.size + b.size - count || 1);
 }
 export const POLICY = Object.freeze({
-  model: "jev-latest",
+  model: "jev-preview",
   maxInputTokens: 65536,
   inputUSDPerMillion: 0.042,
   outputUSDPerMillion: 0,
@@ -41,7 +41,7 @@ export const isConcreteModel = (value) =>
 export function policyFor(model) {
   if (typeof model !== "string" || !MODEL_ID.test(model))
     throw Error(
-      "--model must be a pinned Jev version such as jev-1.14.0 or an alias such as jev-latest",
+      "--model must be a pinned Jev version such as jev-1.14.0 or an alias such as jev-preview or jev-latest",
     );
   return Object.freeze({ ...POLICY, model });
 }

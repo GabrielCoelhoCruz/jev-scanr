@@ -88,7 +88,7 @@ run installed-demo "$bin" demo
 grep -q 'RECORDED RUN' "$proof/installed-demo.stdout"
 run dry-scan unshare -Urn "$bin" scan "$repo/examples/demo-app" --out "$temp/dry-output"
 grep -q 'Dry run: nothing was sent and nothing was written' "$proof/dry-scan.stdout"
-grep -q '· requested model jev-latest at ' "$proof/dry-scan.stdout"
+grep -q '· requested model jev-preview at ' "$proof/dry-scan.stdout"
 test ! -e "$temp/dry-output"
 echo 'dry-scan output directory absent; external networking disabled by unshare -Urn' >> "$proof/commands.log"
 run rescore "$bin" rescore "$expected" --cut 0.6 --out "$proof/rescore-output"

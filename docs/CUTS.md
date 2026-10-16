@@ -11,7 +11,7 @@ Each signal has its own default display cut and floor, stored in [`cuts.json`](.
 
 The other experimental signals have no constructed data and keep 0.7 and 0.5.
 
-All of these cuts were derived on `jev-1.13.0`. Scans now request `jev-latest` by default, and the cuts were not recalibrated for another version. When the alias moves, the same cut can show more or fewer items, including more false positives. To keep the calibrated setting, pin `--model jev-1.13.0`. `report.json` names the served version of each finding.
+All of these cuts were derived on `jev-1.13.0`. Scans now request `jev-preview` by default, which TypeSafe pointed at `jev-1.14.0` on 2026-10-16, and the cuts were not recalibrated for that version. One comparison is known: on an 18-unit `clone_same_policy` sample, at the default 0.7 cut, `jev-1.14.0` showed 16 items where `jev-1.13.0` showed 12, and false positives rose from 5 to 7. An LLM labeled that sample, and an earlier `jev-1.13.0` run selected its pool, so it measures neither general quality nor the other signals. Expect the default queue to differ from a `jev-1.13.0` run, possibly with more false positives. To keep the calibrated setting, pin `--model jev-1.13.0`. `report.json` names the served version of each finding.
 
 ## Why `name_vs_behavior` has a low floor
 
