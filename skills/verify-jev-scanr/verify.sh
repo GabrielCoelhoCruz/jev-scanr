@@ -58,13 +58,15 @@ grep -q '^## 1\.' "$proof/npx-demo.stdout"
 run pack npm pack --ignore-scripts --json --pack-destination "$temp"
 tarball="$(find "$temp" -maxdepth 1 -name 'jev-scanr-*.tgz' -print -quit)"
 test -n "$tarball"
-tar -tzf "$tarball" > "$proof/package-files.txt"
+tar --quoting-style=literal -tzf "$tarball" > "$proof/package-files.txt"
 grep -qx 'package/cuts.json' "$proof/package-files.txt"
 mkdir "$temp/unpacked"
 tar -xzf "$tarball" -C "$temp/unpacked"
-while read -r entry; do
-  if [ "$(git -C "$repo" rev-parse --verify --quiet "$sha:${entry#package/}")" != "$(git hash-object --no-filters "$temp/unpacked/$entry")" ]; then
-    echo "packed ${entry#package/} differs from its file at $sha" >&2
+while IFS= read -r entry; do
+  want="$(git -C "$repo" rev-parse --verify --quiet "$sha:${entry#package/}")" || want=
+  got="$(git hash-object --no-filters "$temp/unpacked/$entry")" || got=
+  if [ -z "$want" ] || [ "$want" != "$got" ]; then
+    echo "packed ${entry#package/} has no identical blob at $sha" >&2
     exit 1
   fi
 done < "$proof/package-files.txt"
