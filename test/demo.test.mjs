@@ -114,7 +114,7 @@ test("the replay text is the recorded queue between a banner and a footer", () =
   );
   assert.ok(
     demoFooter({ viaNpx: true }).includes(
-      "free dry run that sends nothing: npx github:GabrielCoelhoCruz/jev-scanr scan .",
+      "free dry run that sends nothing: npx --allow-git=all github:GabrielCoelhoCruz/jev-scanr scan .",
     ),
   );
 });

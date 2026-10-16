@@ -130,7 +130,10 @@ test("no document runs an npm package named jr, jevs or jev-scanr through npx", 
         `${relative(root, file)}: ${line.trim()}`,
       );
   }
-  assert.match(read("README.md"), /npx github:GabrielCoelhoCruz\/jev-scanr/);
+  assert.match(
+    read("README.md"),
+    /npx --allow-git=all github:GabrielCoelhoCruz\/jev-scanr/,
+  );
 });
 
 test("the old names survive only as history", () => {
@@ -350,10 +353,10 @@ test("the README quotes the recorded run's own figures, offers the no-key demo b
     `US$${result.calculatedUSD.toFixed(4)}`,
   ])
     assert.ok(top.includes(figure), `README top lacks ${figure}`);
-  assert.ok(
-    readme.indexOf("npx github:GabrielCoelhoCruz/jev-scanr demo") <
-      readme.indexOf("## Quickstart"),
+  const demoAt = readme.indexOf(
+    "npx --allow-git=all github:GabrielCoelhoCruz/jev-scanr demo",
   );
+  assert.ok(demoAt >= 0 && demoAt < readme.indexOf("## Quickstart"));
   assert.ok(
     readme.indexOf("## Try it without a key") < readme.indexOf("## Quickstart"),
   );

@@ -16,8 +16,10 @@ Jev's whole job here is to answer one narrow question about one function, or one
 ## Try it without a key
 
 ```sh
-npx github:GabrielCoelhoCruz/jev-scanr demo     # replays the recorded run below: no key, no Jev call
+npx --allow-git=all github:GabrielCoelhoCruz/jev-scanr demo     # replays the recorded run below: no key, no Jev call
 ```
+
+`--allow-git=all` lets this one command fetch the package from GitHub. npm 12 refuses git sources without it, and npm 11 accepts it. The flag changes no npm configuration, so your other npm commands keep their defaults. Pass it only for a repository you trust, because npx downloads that repository's code and runs it.
 
 The command needs no key and calls no API; npx itself downloads the package from GitHub. Use it exactly as written: the package is not on npm yet, and plain `npx jevs` would run an unrelated package, so never run that (details under [Quickstart](#quickstart)). Once installed, the same replay is `jevs demo`.
 
@@ -45,14 +47,16 @@ The other columns describe how each approach generally works; we did not run the
 ## Quickstart
 
 ```sh
-npm install -g github:GabrielCoelhoCruz/jev-scanr#v0.4.0-alpha   # not on npm yet; needs Node.js 24+
-jevs auth                                                        # saves your TypeSafe key, or: export TYPESAFE_API_KEY=...
-jevs scan .                                                      # dry run: units, requests, cost estimate; sends nothing
+npm install -g --allow-git=all github:GabrielCoelhoCruz/jev-scanr#v0.4.0-alpha   # not on npm yet; needs Node.js 24+
+jevs auth                                                                        # saves your TypeSafe key, or: export TYPESAFE_API_KEY=...
+jevs scan .                                                                      # dry run: units, requests, cost estimate; sends nothing
 ```
 
 The dry run needs no key, so the first and third commands work before you have one. `jevs` is short for `jev-scanr`. A live run needs your own [TypeSafe](https://docs.typesafe.ai) API key and starts only when you add `--run --yes --cap-usd N`.
 
-**Until the package is published to npm, do not run `npx jev-scanr` or `npx jevs`:** npx would fetch whatever package owns that name on npm, which is not this project. Run it without installing with `npx github:GabrielCoelhoCruz/jev-scanr scan .`, or install as above and use the `jevs` and `jev-scanr` commands. (`jr` was this project's short alias before 0.3.0-alpha; it is an unrelated package on npm, so never run `npx jr`.)
+**Until the package is published to npm, do not run `npx jev-scanr` or `npx jevs`:** npx would fetch whatever package owns that name on npm, which is not this project. Install as above and use the `jevs` and `jev-scanr` commands. (`jr` was this project's short alias before 0.3.0-alpha; it is an unrelated package on npm, so never run `npx jr`.)
+
+To run it without installing, use `npx --allow-git=all github:GabrielCoelhoCruz/jev-scanr scan .`. The flag works as in [Try it without a key](#try-it-without-a-key): it covers that one command.
 
 _Renamed from `jev-refactor` in 0.3.0-alpha: the old GitHub URL redirects, the commands are now `jev-scanr` and `jevs`, and `jevs auth` moves an existing `jev-refactor` key to the new config directory._
 

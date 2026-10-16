@@ -12,11 +12,13 @@ description: Use when the user asks for refactoring candidates, cleanup targets,
 Check for `jevs` with `command -v jevs`. If it is missing, install it with Node.js 24+:
 
 ```sh
-npm install -g github:GabrielCoelhoCruz/jev-scanr#v0.4.0-alpha
+npm install -g --allow-git=all github:GabrielCoelhoCruz/jev-scanr#v0.4.0-alpha
 jevs --version
 ```
 
-Until the package is published to npm, never run `npx jev-scanr` or `npx jevs` (npx would fetch whatever package owns that name), and never run `npx jr` (an unrelated package). Without installing, use `npx github:GabrielCoelhoCruz/jev-scanr <command>`.
+Until the package is published to npm, never run `npx jev-scanr` or `npx jevs` (npx would fetch whatever package owns that name), and never run `npx jr` (an unrelated package).
+
+Without installing, use `npx --allow-git=all github:GabrielCoelhoCruz/jev-scanr <command>`. npm 12 refuses git sources unless the command allows them; the flag covers that one command and changes no npm configuration.
 
 A dry run needs no key. A live run needs the user's own TypeSafe API key. If none is configured, ask the user to run `jevs auth` in their own terminal, or to set `TYPESAFE_API_KEY`. Authentication is interactive. **Never ask for the key in chat, never put it in a command line, and never write it into a file.**
 

@@ -598,7 +598,7 @@ test("demo run through npx shows the npx commands, because jevs is not on the PA
   const cwd = scratch(t);
   const result = spawn(["demo"], cwd, { HOME: cwd, npm_command: "exec" });
   assert.equal(result.status, 0, result.stderr);
-  const npx = "npx github:GabrielCoelhoCruz/jev-scanr";
+  const npx = "npx --allow-git=all github:GabrielCoelhoCruz/jev-scanr";
   assert.deepEqual(
     result.stdout
       .trimEnd()
