@@ -64,7 +64,10 @@ export function applyQuestionEligibility(pack) {
     ? "eligible"
     : "insufficient_context";
 }
-export function requestFor(pack, { includeIneligible = false } = {}) {
+export function requestFor(
+  pack,
+  { includeIneligible = false, model = POLICY.model } = {},
+) {
   if (pack.status !== "eligible") return null;
   const selectedSignals = packSignals(pack).filter(
     (s) =>
@@ -126,7 +129,7 @@ export function requestFor(pack, { includeIneligible = false } = {}) {
     uncertainties: pack.uncertainties,
   };
   return {
-    model: POLICY.model,
+    model,
     state,
     questions: Object.fromEntries(
       selectedSignals.map((s) => [s.id, question(s)]),
@@ -314,6 +317,7 @@ export const COMPATIBLE_PLAN_VERSIONS = [
   "0.3.1-alpha",
   SCANNER_VERSION,
 ];
+export const COMPATIBLE_MODELS = [POLICY.model];
 
 export function verifyPlan(plan) {
   const { planHash, ...body } = plan;
@@ -322,7 +326,9 @@ export function verifyPlan(plan) {
     plan.schema !== PLAN_SCHEMA ||
     !COMPATIBLE_PLAN_VERSIONS.includes(plan.scannerVersion) ||
     plan.catalogHash !== catalogHashFor(plan.enabledSignals) ||
-    hash(plan.policy) !== hash(POLICY)
+    !COMPATIBLE_MODELS.some(
+      (model) => hash(plan.policy) === hash({ ...POLICY, model }),
+    )
   )
     throw Error("Plan/version integrity mismatch");
   selectSignals(plan.enabledSignals);
@@ -491,7 +497,7 @@ export function verifyPlan(plan) {
           )
         )
           throw Error("Uncovered required reference");
-    const request = requestFor(base);
+    const request = requestFor(base, { model: plan.policy.model });
     if (hash(pack.budget) !== hash(packBudget(base, plan.limits)))
       throw Error("Budget mismatch");
     if (!request) {

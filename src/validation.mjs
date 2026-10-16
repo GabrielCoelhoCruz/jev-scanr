@@ -56,9 +56,9 @@ export function validateResponse(request, data) {
   if (!object(data))
     fail("response_object_required", null, "$", "object", data);
   if (!own(data, "model"))
-    fail("model_required", null, "$.model", POLICY.model, undefined);
-  if (data.model !== POLICY.model)
-    fail("unexpected_model", null, "$.model", POLICY.model, data.model);
+    fail("model_required", null, "$.model", request.model, undefined);
+  if (data.model !== request.model)
+    fail("unexpected_model", null, "$.model", request.model, data.model);
   if (!object(data.usage))
     fail(
       "usage_object_required",
