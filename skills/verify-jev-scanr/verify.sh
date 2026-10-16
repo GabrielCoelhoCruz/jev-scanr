@@ -40,6 +40,10 @@ run() {
 
 command -v unshare >/dev/null
 unshare -Urn true
+if [ "$(npm --version | cut -d. -f1)" -ge 12 ]; then
+  export npm_config_allow_git=all
+  echo "npm $(npm --version) refuses git package specs by default; npx ran with npm_config_allow_git=all" >> "$proof/commands.log"
+fi
 run npx-demo npx --yes "github:GabrielCoelhoCruz/jev-scanr#$sha" demo
 grep -q 'RECORDED RUN' "$proof/npx-demo.stdout"
 grep -q '^## 1\.' "$proof/npx-demo.stdout"
