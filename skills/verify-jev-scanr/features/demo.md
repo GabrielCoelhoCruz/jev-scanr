@@ -17,4 +17,4 @@ Preconditions: publish the exact commit to GitHub. Run `bash skills/verify-jev-s
 
 ## Gotchas
 
-An old npm cache can make a GitHub installation look successful. The helper uses a fresh cache and an isolated HOME. The printed probabilities are from a saved synthetic run, not new accuracy evidence.
+npm 12 and later refuse `github:` specs unless git fetches are allowed (`--allow-git=all`), so the plain README command fails there with `EALLOWGIT`; the helper sets `npm_config_allow_git=all` and logs it. Node 24's bundled npm 11 does not need it. An old npm cache can make a GitHub installation look successful. The helper uses a fresh cache and an isolated HOME. The printed probabilities are from a saved synthetic run, not new accuracy evidence.
