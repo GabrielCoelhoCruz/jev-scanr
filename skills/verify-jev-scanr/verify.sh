@@ -109,6 +109,15 @@ grep -q 'It does not measure the quality' "$proof/baseline-output/baseline.md"
 node -e 'const fs=require("fs");const r=JSON.parse(fs.readFileSync(process.argv[1]));if(r.requestedModel!=="jev-1.13.0"||JSON.stringify(r.servedModels)!==JSON.stringify({"jev-1.13.0":15})||r.finishedWithoutServedModel!==0||r.findings.some(f=>f.servedModel!=="jev-1.13.0"))process.exit(1)' "$proof/report-output/report.json"
 grep -qF 'Model: requested `jev-1.13.0`; served jev-1.13.0 (15 responses).' "$proof/report-output/report.md"
 echo 'offline report keeps the recording requested model jev-1.13.0 and its served model separately' >> "$proof/commands.log"
+printf '%q ' "$bin" report --plan "$expected/plan.json" --run-dir "$expected" --out "$proof/report-model-conflict" --model jev-preview >> "$proof/commands.log"
+printf '\n' >> "$proof/commands.log"
+if "$bin" report --plan "$expected/plan.json" --run-dir "$expected" --out "$proof/report-model-conflict" --model jev-preview > "$proof/report-model-conflict.stdout" 2> "$proof/report-model-conflict.stderr"; then
+  echo 'report accepted a --model that conflicts with the saved plan' >&2
+  exit 1
+fi
+grep -qF 'does not match the saved plan, which requests jev-1.13.0' "$proof/report-model-conflict.stderr"
+test ! -e "$proof/report-model-conflict"
+echo 'installed report refuses a --model that conflicts with the saved jev-1.13.0 plan and writes nothing' >> "$proof/commands.log"
 find "$expected" -type f -print0 | sort -z | xargs -0 sha256sum > "$proof/recording-after.sha256"
 cmp "$proof/recording-before.sha256" "$proof/recording-after.sha256"
 echo 'recorded files unchanged; proof retained' >> "$proof/commands.log"
