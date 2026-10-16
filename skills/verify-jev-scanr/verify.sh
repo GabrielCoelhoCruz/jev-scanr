@@ -62,6 +62,12 @@ tar --quoting-style=literal -tzf "$tarball" > "$proof/package-files.txt"
 grep -qx 'package/cuts.json' "$proof/package-files.txt"
 mkdir "$temp/unpacked"
 tar -xzf "$tarball" -C "$temp/unpacked"
+listed="$(wc -l < "$proof/package-files.txt")"
+extracted="$(find "$temp/unpacked" -type f -printf . | wc -c)"
+if [ "$listed" -ne "$extracted" ]; then
+  echo "the package listing has $listed lines for $extracted regular files, so a packed name contains a newline or an entry is not a regular file" >&2
+  exit 1
+fi
 while IFS= read -r entry; do
   want="$(git -C "$repo" rev-parse --verify --quiet "$sha:${entry#package/}")" || want=
   got="$(git hash-object --no-filters "$temp/unpacked/$entry")" || got=
