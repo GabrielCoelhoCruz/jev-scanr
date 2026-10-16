@@ -79,7 +79,7 @@ const flags = (kind, model) => [
 const escape = (s) => s.replaceAll(".", "\\.");
 const refusal = (flag, model) =>
   new RegExp(
-    `^--model ${escape(flag)} does not match the saved plan, which requests ${escape(model)}\\. .*jevs scan PATH --model ${escape(flag)}`,
+    `^Error: --model ${escape(flag)} does not match the saved plan, which requests ${escape(model)}\\. .*jevs scan PATH --model ${escape(flag)}`,
   );
 
 for (const kind of KINDS)

@@ -443,6 +443,15 @@ function filesToSend(plan) {
   };
 }
 
+function readPlan(path, values) {
+  const plan = verifyPlan(JSON.parse(readFileSync(path, "utf8")));
+  if (values.model !== undefined && values.model !== plan.policy.model)
+    throw Error(
+      `--model ${values.model} does not match the saved plan, which requests ${plan.policy.model}. A saved plan keeps the model it was built with, and nothing was sent or written. To request ${values.model}, build a new plan: jevs scan PATH --model ${values.model}`,
+    );
+  return plan;
+}
+
 const journalDir = (path) =>
   existsSync(join(path, "run", "journal.jsonl")) ? join(path, "run") : path;
 
@@ -673,18 +682,12 @@ export async function main(args = process.argv.slice(2), deps = {}) {
   }
   if (command === "run") {
     if (!values.plan) throw Error("--plan required");
-    return execute(
-      verifyPlan(JSON.parse(readFileSync(resolve(values.plan), "utf8"))),
-      values,
-      deps,
-    );
+    return execute(readPlan(resolve(values.plan), values), values, deps);
   }
   if (command === "continue") {
     if (!values.plan || !values["run-dir"] || !values.out)
       throw Error("--plan, --run-dir and --out required");
-    const plan = verifyPlan(
-      JSON.parse(readFileSync(resolve(values.plan), "utf8")),
-    );
+    const plan = readPlan(resolve(values.plan), values);
     const next = continuationPlan(plan, [
       {
         plan,
@@ -702,9 +705,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
   }
   if (command === "report") {
     if (!values.plan || !values.out) throw Error("--plan and --out required");
-    const plan = verifyPlan(
-      JSON.parse(readFileSync(resolve(values.plan), "utf8")),
-    );
+    const plan = readPlan(resolve(values.plan), values);
     if (plan.continuationOf)
       throw Error("Report a continuation through its base plan");
     const journal = values["run-dir"]
@@ -723,9 +724,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
         !values["continuation-run"]
       )
         throw Error("Continuation needs the base run, its plan and its run");
-      const next = verifyPlan(
-        JSON.parse(readFileSync(resolve(values["continuation-plan"]), "utf8")),
-      );
+      const next = readPlan(resolve(values["continuation-plan"]), values);
       ({ events, accounting: runs } = combineRuns(plan, [
         { plan, events },
         {
@@ -763,7 +762,7 @@ export async function main(args = process.argv.slice(2), deps = {}) {
       throw Error(
         `No plan at ${planPath}. rescore reads the plan.json and run/ that a scan wrote, or pass --plan`,
       );
-    const plan = verifyPlan(JSON.parse(readFileSync(planPath, "utf8")));
+    const plan = readPlan(planPath, values);
     if (plan.continuationOf)
       throw Error("Rescore a continuation with jevs report and its base plan");
     const journal = journalDir(run);

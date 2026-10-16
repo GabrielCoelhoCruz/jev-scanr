@@ -52,6 +52,9 @@ export function makeClient({ fetch, apiKey } = {}) {
   return client;
 }
 
+const observedModel = (diagnostic) =>
+  diagnostic?.observed?.type === "enum" ? diagnostic.observed.value : null;
+
 export function readJournal(
   directory,
   plan,
@@ -149,7 +152,9 @@ export function readJournal(
         (event.requestedModel !== request.model ||
           (event.servedModel !== null && !isConcreteModel(event.servedModel)) ||
           (event.status === "succeeded" &&
-            event.servedModel !== event.response.model))
+            event.servedModel !== event.response.model) ||
+          (event.failure?.validation === "unexpected_model" &&
+            event.servedModel !== observedModel(event.failure.diagnostic)))
       )
         throw Error("WAL model provenance mismatch");
       finished.add(event.unitId);
